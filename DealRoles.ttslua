@@ -1,0 +1,120 @@
+--[[
+DealRoles
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.1.4'
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Coral', 'Lavender', 'Navy', 'Lime', 'Maroon'}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,168/255,149/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
+
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+POS = {}
+for k,v in pairs(COLORS_ALL) do
+    POS[v] = radius(15, ANGLE[v], 1.1)
+    POS[v][3] = POS[v][3] + 100
+end
+
+NIGHT_HELPER_GUID = '8133a2'
+MODE_SELECTOR_GUID = '884de8'
+CUSTOM_IMPORTER_GUID = 'f79557'
+
+------------------Variables
+seatedPlayers = {} --ordered in order of COLORS
+for k,v in pairs(COLORS_ALL) do
+    seatedPlayers[v] = false
+end
+
+
+------------------Functions
+function onLoad(save_state)
+    local data = {click_function = 'dealToPlayers', function_owner = self,
+    label = 'Deal', tooltip = 'This button will deal the roles in the order inside the bag.\n[aaaaaa](the first role will go to white, then brown, etc if those players are seated)[-]\nMake sure to randomize the bag if you want deals to be dealt out randomly',
+    position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5},
+    width = 2000, height = 1000, font_size = 800}
+    self.createButton(data)
+end
+
+function dealToPlayers(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    local objectsInBag = self.getObjects()
+    local params, obj, role
+    local roles = {}
+    local allObjs = getAllObjects()
+    local tokenBag, tokenBagTable
+    local size, takeIndex
+    local players = Global.call('updatePlayers')
+
+    for k,v in pairs(allObjs) do
+        if string.match(v.getName(), ': Status Tokens') then
+            tokenBag = v
+            break
+        end
+    end
+
+    if self.getQuantity() == 0 then
+        printToColor('ERROR: No roles in the bag.', color, {1,0,0})
+        return
+    end
+
+    for k,v in pairs(COLORS_ALL) do
+        if players[v] ~= nil then
+            params = {
+                callback_function =  function(obj) take_callback(obj, v) end,
+                position = POS[v],
+                rotation = {0, 180, 0}
+            }
+
+            obj = self.takeObject(params)
+            role = obj.getName()
+            roles[v] = role
+            players[v].print('Your role is ' .. role..'!')
+            tokenBagTable = tokenBag.getObjects()
+            size = tokenBag.getQuantity()
+            for j = size,1,-1 do
+                if tokenBagTable[j].name == role then
+                    params = {index = j-1, position = POS[v], rotation = {0, 180, 0}}
+                    --params.position.y = params.position.y + 1
+                    tokenBag.takeObject(params)
+                end
+            end
+        end
+    end
+    Global.setTable('roles', roles)
+    Global.call('refreshUI')
+    Global.call('unlockAliveTokens')
+    Global.call('checkSeatedPlayers')
+    Global.setVar('started', true)
+
+    local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    if nightHelper then
+        nightHelper.call('import')
+    end
+
+    local modeSelector = getObjectFromGUID(MODE_SELECTOR_GUID)
+    if modeSelector then
+        modeSelector.destruct()
+    end
+
+    local customImporter = getObjectFromGUID(CUSTOM_IMPORTER_GUID)
+    if customImporter then
+        local mode = Global.getVar('mode')
+        if mode ~= 'CU' then
+            customImporter.destruct()
+        end
+    end
+    self.destruct()
+end
+
+function take_callback(object_spawned, color)
+    object_spawned.setColorTint(COLORS_RGB[color])
+    object_spawned.setLock(true)
+end

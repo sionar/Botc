@@ -1,0 +1,216 @@
+--[[
+Team Tool
+Made by Unreal_ed, modified by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.2.0'
+TEAMS = {'Clubs', 'Spades', 'Diamonds', 'Hearts'}
+
+
+------------------Variables
+joiningPlayer = { -- used to store a player reference that's trying to join a team
+    Clubs = 0, --0 used as a non-player value
+    Spades = 0,
+    Diamonds = 0,
+    Hearts = 0,
+}
+jokersDefault = false
+
+------------------Functions
+function onLoad(save_state)
+    self.interactable = false
+    local data = {click_function = 'joinClubsTeam', function_owner = self,
+    label = ' ', tooltip = 'Click here to join the Clubs team to discuss privately',
+    position = {5.7, 3.5, 3}, scale = {0.5, 0.5, 0.5},
+    width = 2000, height = 1800, font_size = 400,
+    color = {1,1,1, 0}}
+    self.createButton(data)
+    data = {click_function  = 'joinSpadesTeam', function_owner = self,
+    label = ' ', tooltip = 'Click here to join the Spades team to discuss privately',
+    position = {1.9, 3.5, 3}, scale = {0.5, 0.5, 0.5},
+    width = 2000, height = 1800, font_size = 400,
+    color = {1,1,1, 0}}
+    self.createButton(data)
+    data = {click_function = 'joinDiamondsTeam', function_owner = self,
+    label = ' ', tooltip = 'Click here to join the Diamonds team to discuss privately',
+    position = {-1.87, 3.5, 3}, scale = {0.5, 0.5, 0.5},
+    width = 2000, height = 1800, font_size = 400,
+    color = {1,1,1, 0}}
+    self.createButton(data)
+    data = {click_function = 'joinHeartsTeam', function_owner = self,
+    label = ' ', tooltip = 'Click here to join the Hearts team to discuss privately',
+    position = {-5.7, 3.5, 3}, scale = {0.5, 0.5, 0.5},
+    width = 2000, height = 1800, font_size = 400,
+    color = {1,1,1, 0}}
+    self.createButton(data)
+
+    data = {click_function = 'defaultTeamToggle', function_owner = self,
+    label = 'Make Jokers\nDefault Team', tooltip = 'Make Jokers the default team',
+    position = {0, 3.5, 7}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
+    width = 5700, height = 1300, font_size = 600, alignment = 3}
+    self.createButton(data)
+
+    data = {click_function = 'leaveTeam', function_owner = self,
+    label = 'Leave Team', tooltip = 'Leave Team',
+    position = {0, 3.5, 5}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
+    width = 5700, height = 1300, font_size = 800, alignment = 3}
+    self.createButton(data)
+end
+
+function onPlayerChangeColor(playerColor)
+    refreshUI()
+end
+
+function defaultTeamToggle(clickedObject, playerColor)
+    if Player[playerColor].admin then
+        local allPlayers = Player.getPlayers()
+        if jokersDefault == false then
+            jokersDefault = true
+            self.editButton({index = 4, label = 'Make None\nDefault Team', tooltip = 'Make None the default team'})
+            for k,v in pairs(allPlayers) do
+                v.team = 'Jokers'
+            end
+        else
+            jokersDefault = false
+            self.editButton({index = 4, label = 'Make Jokers\nDefault Team', tooltip = 'Make Jokers the default team'})
+            for k,v in pairs(allPlayers) do
+                v.team = 'None'
+            end
+        end
+    end
+end
+
+function leaveTeam(clickedObject, playerColor)
+    if jokersDefault then
+        defaultTeam = 'Jokers'
+    else
+        defaultTeam = 'None'
+    end
+    if Player[playerColor].team ~= defaultTeam then
+        Player[playerColor].team = defaultTeam
+    end
+    refreshUI()
+end
+
+function joinClubsTeam(obj, color, alt)     tryToJoinTeam(color, 'Clubs') end
+function joinSpadesTeam(obj, color, alt)    tryToJoinTeam(color, 'Spades') end
+function joinDiamondsTeam(obj, color, alt)  tryToJoinTeam(color, 'Diamonds') end
+function joinHeartsTeam(obj, color, alt)    tryToJoinTeam(color, 'Hearts') end
+function joinJokersTeam(obj, color, alt)    tryToJoinTeam(color, 'Jokers') end
+
+function tryToJoinTeam(colorJoining, team)
+    local players = Global.call('updatePlayers')
+    local player = players[colorJoining]
+    local teamEmpty = true
+    local exitedTeam
+
+    if colorJoining == 'Black' then
+        Player[colorJoining].team = team
+        refreshUI()
+        return
+    end
+
+    -- do nothing if player is trying to join his own team
+    if player.team == team then
+        player.print('You are already in this team', {1,0,0})
+        return
+    end
+
+    --check if any player is in the team
+    for k,v in pairs(players) do
+        if v.team == team then
+            teamEmpty = false
+        end
+    end
+
+    -- check how many players are left in the team...
+    exitedTeam = player.team --the team being left by the player
+
+    if teamEmpty == true then
+        player.team = team
+        refreshUI()
+    else
+        UI.setAttribute('text' ..team, 'text', player.steam_name ..' wants to join your team. Allow them?')
+        UI.setAttribute('teamConfirmation' ..team, 'active', 'true')
+        player.print('Asking the '..team.. ' team if you can join them.')
+        joiningPlayer[team] = player
+    end
+end
+
+-- make the list of players in the team match who's in the team and be listed from the top
+function refreshUI()
+    local name, team
+    local inTeam = {Clubs = 0, Spades = 0, Diamonds = 0, Hearts = 0}
+    local players = Global.call('updatePlayers')
+    if Player['Black'].seated then
+        players['Black'] = Player['Black']
+    end
+    for k,v in pairs(TEAMS) do
+        for i = 1,9 do
+            self.UI.setAttribute(v .. i ..'Image', 'image', 'empty')
+            self.UI.setAttribute(v .. i ..'Text', 'text', ' ')
+        end
+    end
+    for k,v in pairs(players) do
+        if v.seated then
+            team = v.team
+            name = v.steam_name
+            if team ~= 'None' and team ~= 'Jokers' then
+                inTeam[team] = inTeam[team] + 1
+                self.UI.setAttribute(team .. inTeam[team] .. 'Image', 'image', k)
+                self.UI.setAttribute(team .. inTeam[team] ..'Text', 'text', name)
+            end
+        end
+    end
+end
+
+function yesClubs()     confirmJoin('Clubs')    end
+function yesDiamonds()  confirmJoin('Diamonds') end
+function yesHearts()    confirmJoin('Hearts')   end
+function yesJokers()    confirmJoin('Jokers')   end
+function yesSpades()    confirmJoin('Spades')   end
+
+function noClubs()      denyJoin('Clubs')   end
+function noDiamonds()   denyJoin('Diamonds')end
+function noHearts()     denyJoin('Hearts')  end
+function noJokers()     denyJoin('Jokers')  end
+function noSpades()     denyJoin('Spades')  end
+
+function confirmJoin(team)
+    joiningPlayer[team].team = team
+    UI.setAttribute('teamConfirmation' ..team, 'active', 'false')
+
+    refreshUI()
+    joiningPlayer[team] = 0
+end
+
+function denyJoin(team)
+    UI.setAttribute('teamConfirmation' ..team, 'active', 'false')
+    joiningPlayer[team].print('The '..team..' team did not want you to join their private conversation', {1,0,0})
+    joiningPlayer[team] = 0
+end
+
+function removeAllFromTeams()
+    local players = Player.getPlayers()
+    local defaultTeam
+    if jokersDefault then
+        defaultTeam = 'Jokers'
+    else
+        defaultTeam = 'None'
+    end
+
+    for k,v in pairs(players) do
+        if v.team ~= defaultTeam then
+            v.team = defaultTeam
+        end
+    end
+    refreshUI()
+end
+
+function joinTeamUI(params)
+    local color = params.color
+    local team = params.team
+    tryToJoinTeam(color, team)
+end

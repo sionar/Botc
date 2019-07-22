@@ -1,0 +1,215 @@
+--[[
+Mode Selector
+Made by SilentxDream, modified by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.2.3'
+PLAYER_DIST = {{0,0,0},{1,0,0},{2,0,0},{3,0,0},{3,0,1},{3,1,1},{5,0,1},{5,1,1},{5,2,1},{7,0,2},{7,1,2},{7,2,2},{9,0,3},{9,1,3},{9,2,3}} --layout: player count = {townsfolk, outsiders, minions}
+ROLE_BAG_GUID = '43ecc9'
+IMAGES =
+	{	'http://cloud-3.steamusercontent.com/ugc/797617446107843079/7677650B00049180B0FDB9559C7378D92D1EC71E/',
+		'http://cloud-3.steamusercontent.com/ugc/797617446107844007/D60E88729E4D84F8D3641C13544D25666C1EBD8D/',
+		'http://cloud-3.steamusercontent.com/ugc/797617446107844573/ADF99592C83B02972A209CC7F907D84E718F8400/',
+		'http://cloud-3.steamusercontent.com/ugc/797616701730417884/F3A30C6D96D5EFBD981451E8905B4526E0B4E34B/',
+	}
+
+
+------------------Variables
+dist = {}
+
+
+------------------Functions
+function onLoad()
+	self.createButton({
+		click_function = 'setup',
+		label = 'Automated Start',
+		function_owner = self,
+		position = {0,0.1,-1.325},
+		width = 1250,
+		height = 275,
+		font_size = 150,
+		tooltip = 'Automatically deal random roles into the bag.',
+	})
+
+    self.createButton({
+		click_function = 'leftMode',
+		label = '←',
+		function_owner = self,
+		position = {-1,0.1,0.85},
+		width = 250,
+		height = 200,
+		font_size = 150,
+		tooltip = 'Go to previous mode',
+	})
+
+	self.createButton({
+		click_function = 'rightMode',
+		label = '→',
+		function_owner = self,
+		position = {1,0.1,0.85},
+		width = 250,
+		height = 200,
+		font_size = 150,
+		tooltip = 'Go to the next mode',
+	})
+	self.setLock(true)
+end
+
+function leftMode(clickedObject, playerColor)
+	if playerColor ~= 'Black' then
+		return
+	end
+
+    local mode = Global.getVar('mode')
+    if mode == 'TB' then
+        Global.setVar('mode', 'CU')
+    elseif mode == 'BM' then
+        Global.setVar('mode', 'TB')
+    elseif mode == 'SV' then
+        Global.setVar('mode', 'BM')
+	elseif mode == 'CU' then
+		Global.setVar('mode', 'SV')
+    end
+	setBagStates()
+end
+
+function rightMode(clickedObject, playerColor)
+	if playerColor ~= 'Black' then
+		return
+	end
+    local mode = Global.getVar('mode')
+    if mode == 'TB' then
+        Global.setVar('mode', 'BM')
+    elseif mode == 'BM' then
+        Global.setVar('mode', 'SV')
+    elseif mode == 'SV' then
+        Global.setVar('mode', 'CU')
+	elseif mode == 'CU' then
+		Global.setVar('mode', 'TB')
+    end
+	setBagStates()
+end
+
+function setBagStates()
+    local mode = Global.getVar('mode')
+    local objs = getAllObjects()
+	local params = {}
+
+    local stateValue = 1
+    if mode == 'TB' then
+        stateValue = 1
+    elseif mode == 'BM' then
+        stateValue = 2
+    elseif mode == 'SV' then
+        stateValue = 3
+	elseif mode == 'CU' then
+		stateValue = 4
+    end
+    for k,v in pairs(objs) do
+        if string.match(v.getName(), ': Townsfolk')
+		or string.match(v.getName(), ': Outsiders')
+		or string.match(v.getName(), ': Minions')
+		or string.match(v.getName(), ': Demons')
+		or string.match(v.getName(), ': Status Tokens')
+		or string.match(v.getName(), ': Travellers')
+		or string.match(v.getName(), ': Roles')
+		or string.match(v.getName(), ': Reference') then
+            if v.getStateId() ~= stateValue then
+                v.setState(stateValue)
+            end
+        end
+    end
+	Global.call('showExtensionUI')
+	params = {
+		image = IMAGES[stateValue],
+		type = 2,
+		thickness = 0.10,
+	}
+	self.setCustomObject(params)
+	self.reload()
+end
+
+function setup(clickedObject, playerColor)
+	if playerColor ~= 'Black' then
+		return
+	end
+    local playerCount = Global.getVar('currPlayers')
+	local mode = Global.getVar('mode')
+    if playerCount < 5  then
+        broadcastToColor('You must have at least 5 players sitting at the table to play (Storyteller not included)', 'Black', stringColorToRGB('Red'))
+        return false
+	end
+	if (mode == 'BM' or mode == 'SV') and playerCount < 7 then
+		broadcastToColor('Note: At least 7 players are recommended for Bad Moon Rising and Sects & Violets.', 'Black', stringColorToRGB('Red'))
+	end
+    local objs = getAllObjects()
+    local roleBag, townBag, outsiderBag, minionBag, demonBag
+    local roleBagPos
+	local takeObj
+
+    roleBag = getObjectFromGUID(ROLE_BAG_GUID)
+    if roleBag == nil then
+        printToColor('ERROR: Deal bag not found.', 'Black', {1,0,0})
+        return
+    end
+    roleBagPos = roleBag.getPosition()
+    roleBagPos['y'] = roleBagPos['y'] + 6
+
+    for k,v in pairs(objs) do
+        if string.match(v.getName(), ': Demons') then
+            demonBag = v
+        elseif string.match(v.getName(), ': Minions') then
+            minionBag = v
+        elseif string.match(v.getName(), ': Outsiders') then
+            outsiderBag = v
+        elseif string.match(v.getName(), ': Townsfolk') then
+            townBag = v
+        end
+    end
+
+    dist = PLAYER_DIST[playerCount]
+    demonBag.shuffle()
+    adjustOutsiders(demonBag, 1)
+    takeObj = demonBag.takeObject({
+        position          = {0, -0.15, -25},
+        smooth            = true,
+        flip              = false,
+    })
+	roleBag.putObject(takeObj)
+
+    minionBag.shuffle()
+    adjustOutsiders(minionBag, dist[3])
+	for i = 1, dist[3] do
+        takeObj = minionBag.takeObject({position = {0,-0.15, -25}, smooth = true, flip = false})
+		roleBag.putObject(takeObj)
+	end
+
+    townBag.shuffle()
+	for i = 1, dist[1] do
+        takeObj = townBag.takeObject({position = roleBagPos, smooth = true, flip = false})
+		roleBag.putObject(takeObj)
+    end
+
+
+    outsiderBag.shuffle()
+	for i = 1, dist[2] do
+        takeObj = outsiderBag.takeObject({position = roleBagPos, smooth = true, flip = false})
+		roleBag.putObject(takeObj)
+    end
+	self.destruct()
+end
+
+function adjustOutsiders(bag, count)
+    local tab = bag.getObjects()
+    for i = 1, count do
+        if tab[#tab - i + 1].name == 'Fang Gu' or tab[#tab - i + 1].name == 'Godfather' then
+            dist[2] = dist[2] + 1
+            dist[1] = dist[1] - 1
+        elseif tab[#tab - i + 1].name == 'Baron' then
+            dist[2] = dist[2] + 2
+            dist[1] = dist[1] - 2
+        end
+    end
+end

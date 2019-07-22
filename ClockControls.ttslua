@@ -1,0 +1,600 @@
+--[[
+Clock Controls
+Made by Unreal_ed, modified by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.4.1'
+UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+BLACK_ZONES = {{guid = 'cf55c7', scale = {80.1, 30, 80.1}}, {guid = '3c9b1d', scale = {50, 10, 66}}}
+CLOCK_GUID = '0d5f75'
+PURPLE_HAND_GUID = '88ad59'
+BLUE_HAND_GUID = '12ad6f'
+RED_HAND_GUID = 'eaee43'
+TEAM_TOOL_GUID = '6fbc83'
+HAND_ROTATION = {White = 217.5, Brown = 232.5, Red = 247.5, Orange = 262.5, Yellow = 277.5, Green = 292.5, Teal = 307.5, Blue = 322.5, Purple = 337.5, Pink = 352.5, Magenta = 7.5, Lavender = 22.5, Navy = 37.5, Cyan = 52.5, Mint = 67.5, Lime = 82.5, Peach = 97.5, Coral = 112.5, Maroon = 127.5, Silver = 142.5, None = 180}
+COLORS_EX_HEX = {Magenta = {255/255, 0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0,0,128/255}, Cyan = {73/255, 213/255,253/255}, Mint = {137/255, 195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255, 212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255, 190/255,190/255}}
+
+------------------Variables
+pointedPlayer = 'None'
+mode = 'Clock'
+rotating = false
+rotationRate = 10
+degreesRotated = 0
+tolerance = 3 -- how few degrees off of the perfect rotation degrees will register for locking the voting cards
+grimShow = false
+shortcutsOn = true
+extension = false
+seatLock = false
+votingMode = ''
+
+
+------------------Functions
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        extension = save['e']
+        seatLock = save['s']
+    end
+    local clock = getObjectFromGUID(CLOCK_GUID)
+    local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
+    local redHand = getObjectFromGUID(RED_HAND_GUID)
+    local blueHand = getObjectFromGUID(BLUE_HAND_GUID)
+    clock.interactable = false
+    purpleHand.interactable = false
+    redHand.interactable = false
+    blueHand.interactable = false
+
+    local params = {click_function = 'toggleClockNom', function_owner = self,
+    label = 'Show Clock', position = {0, 1, 0}, scale = UI_SCALE,
+    color = {0, 1, 0}, width = 2100, height = 500, font_size = 400}
+    self.createButton(params)
+
+    params = {click_function = 'toggleClockMovement', function_owner = self,
+    label = 'Start Clock', position = {0, 1, 1.2}, scale = {0, 0, 0},
+    color = {0, 1, 0}, width = 2100, height = 500, font_size = 400}
+    self.createButton(params)
+
+    params = {input_function = 'setRotValue', function_owner = self, label = 'Rotation Value',
+    position = {0, 1, 0.6}, scale = UI_SCALE,
+    width = 800, height = 500, font_size = 400,
+    tooltip = 'How fast the hour hand rotates\n(in degrees per second)', alignment = 3, value = '10'}
+    self.createInput(params)
+
+    params = {click_function = 'minusRot', function_owner = self, label = '-',
+    position = {-0.85, 1, 0.6}, scale = UI_SCALE,
+    width = 500, height = 500, font_size = 400, alignment = 3}
+    self.createButton(params)
+
+    params = {click_function = 'plusRot', function_owner = self, label = '+',
+    position = {0.85, 1, 0.6}, scale = UI_SCALE,
+    width = 500, height = 500, font_size = 400, alignment = 3}
+    self.createButton(params)
+
+    params = {click_function = 'toggleModes', function_owner = self,
+    label = 'Clock Mode', position = {0, 1, -1.2}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 2100, height = 500, font_size = 400, tooltip = 'Left Click: Switch to Blindfold Mode\nRight Click: Switch to Mute Mode'}
+    self.createButton(params)
+
+    params = {click_function = 'toggleHiddenZones', function_owner = self,
+    label = 'Show\nGrimoire', position = {-2.35, 1, -1.2}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Click this to show the grimoire.'}
+    self.createButton(params)
+
+    params = {click_function = 'toggleShortcuts', function_owner = self,
+    label = 'Shortcuts\nON', position = {2.35, 1, -1.2}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Click this to disable shortcuts.\nSee the notebook for shortcut hotkeys.'}
+    self.createButton(params)
+
+    params = {click_function = 'toggleClockExile', function_owner = self,
+    label = 'Exile\nMode', position = {2.35, 1, 0}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Show the clock for exiling a traveller.'}
+    self.createButton(params)
+
+    params = {click_function = 'toggleExSeatLock', function_owner = self,
+    label = 'Lock\nExtension Seats', position = {-2.35, 1, 0}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 150, tooltip = 'Prevent people from joining the extension seats.'}
+    self.createButton(params)
+
+    for i, c in ipairs(COLORS) do
+        params = {click_function = 'pointTo'..c, function_owner = self, label = ' ',
+        position = {-5.7 + 0.6*(i-1), 1, -0.6}, scale = UI_SCALE,
+        width = 500, height = 500, font_size = 400,
+        color = c, tooltip = 'Point the clock to '..c}
+        self.createButton(params)
+    end
+    for i, c in ipairs(COLORS_EX) do
+        params = {click_function = 'pointTo'..c, function_owner = self, label = ' ',
+        position = {0.3 + 0.6*(i-1), 1, -0.6}, scale = UI_SCALE,
+        width = 500, height = 500, font_size = 400,
+        color = COLORS_EX_HEX[c], tooltip = 'Point the clock to '..c}
+        self.createButton(params)
+    end
+    Wait.time(hideGrimoire, 5)
+end
+
+function onSave()
+    local save = {}
+    save['s'] = seatLock
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function onFixedUpdate()
+    if rotating and degreesRotated < 360 then
+        local hand = getObjectFromGUID(PURPLE_HAND_GUID)
+        currentRot = hand.getRotation()
+        hand.setRotation({currentRot.x, currentRot.y + rotationRate*Time.fixed_delta_time, currentRot.z})
+        degreesRotated = degreesRotated + rotationRate*Time.fixed_delta_time
+
+        local params = {}
+
+        for k,v in pairs(COLORS_ALL) do
+            if currentRot.y > HAND_ROTATION[v] - tolerance*2 and currentRot.y < HAND_ROTATION[v] - tolerance then
+                params.color = v
+            end
+        end
+        if params.color ~= nil then
+            Global.call('setVoteLock', params)
+        end
+    elseif rotating and degreesRotated >= 360 then -- if it's done rotating
+        degreesRotated = 0
+        toggleClockMovement()
+        Global.call('updateVoteResults', {voteMode = votingMode})
+    end
+end
+
+function toggleClockNom(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    toggleClock('execution')
+end
+
+function toggleClockExile(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    toggleClock('exile')
+end
+
+function toggleClock(vm)
+    local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
+    local redHand = getObjectFromGUID(RED_HAND_GUID)
+    local blueHand = getObjectFromGUID(BLUE_HAND_GUID)
+    local clock = getObjectFromGUID(CLOCK_GUID)
+    local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+
+    if clock.getScale().x ~= 0 then --if clock is CURRENTLY up
+        purpleHand.setScale({0, 1, 0})
+        purpleHand.setPosition({0,-20, 0})
+        redHand.setScale({0, 1, 0})
+        redHand.setPosition({0,-20, 0})
+        blueHand.setScale({0, 1, 0})
+        blueHand.setPosition({0,-20, 0})
+        clock.setScale({0, 1, 0})
+        clock.setPosition({0, -20, 0})
+        UI.setAttribute('nomMenu', 'active', 'false')
+        UI.setAttribute('colorSelection', 'active', 'false')
+
+        if vm == 'execution' or mode == 'Clock' then
+            self.editButton({index = 0, label = 'Show Clock', color = {0, 1, 0}})
+        end
+        self.editButton({index = 1, scale = {0, 0, 0}})
+        self.editButton({index = 7, label = 'Exile Mode', tooltip = 'Show the clock for exiling a traveller.'})
+
+        Global.call('toggleLockAliveAndVoteTokens', false)
+        Global.call('hideVoteButtons')
+        Global.call('hideVotehands')
+        setNotes('')
+        votingMode = ''
+
+        if rotating == true then --if clock's rotating
+            toggleClockMovement() --stop rotating clock
+        end
+    else -- if clock is CURRENTLY down
+        Global.call('showVoteButtons', {voteMode = vm})
+        Global.call('resetVotes', {voteMode = vm})
+        teamTool.call('removeAllFromTeams')
+        votingMode = vm
+
+        purpleHand.setScale({7.5, 1, 7.5})
+        purpleHand.setPosition({0, 1, 0})
+        redHand.setScale({7.4, 1, 7.4})
+        redHand.setPosition({0, 1.2, 0})
+        blueHand.setScale({5, 1, 5})
+        blueHand.setPosition({0, 1.4, 0})
+        clock.setScale({35, 1, 35})
+        clock.setPosition({0, 1, 0})
+        UI.setAttribute('nomMenu', 'active', 'true')
+        UI.setAttribute('colorSelection', 'active', 'false')
+
+        if votingMode == 'execution' or votingMode == 'Clock' then
+            self.editButton({index = 0, label = 'Hide Clock', color = {1, 0, 0}})
+        end
+        self.editButton({index = 1, scale = UI_SCALE})
+        self.editButton({index = 7, label = 'Hide Clock', tooltip = 'Hide the clock.'})
+
+        pointHand({handGUID = PURPLE_HAND_GUID, color = 'None'})
+        pointHand({handGUID = RED_HAND_GUID, color = 'None'})
+        pointHand({handGUID = BLUE_HAND_GUID, color = 'None'})
+    end
+end
+
+function toggleClockMovement()
+    if pointedPlayer == 'None' then
+        broadcastToColor('Pick a player to nominate with the nomination buttons.', 'Black', 'Red')
+        return
+    end
+
+    local actionStr, numAlive, numPlayers, votesNeeded
+    local players
+
+    if votingMode == 'execution' then
+        actionStr = 'execute'
+    else
+        actionStr = 'exile'
+    end
+
+    if rotating == false then -- if hand was rotating
+        players = Global.call('updatePlayers')
+        toggleClockMovementButton(rotating)
+        rotating = true
+        Global.call('toggleLockAliveAndVoteTokens', true)
+        numAlive = Global.getVar('numAlive')
+        numPlayers = Global.getVar('numPlayers')
+        if votingMode == 'execution' then
+            votesNeeded = math.ceil(numAlive/2)
+        else
+            votesNeeded = math.ceil(numPlayers/2)
+        end
+        if players[pointedPlayer] ~= nil then
+            broadcastToAll('Start voting now! '.. votesNeeded ..' votes are needed to ' .. actionStr .. ' ' .. pointedPlayer .. '.', 'Red')
+        end
+    else -- if hand was NOT rotating
+        toggleClockMovementButton(rotating)
+        rotating = false
+        Global.call('toggleLockAliveAndVoteTokens', false)
+    end
+end
+
+function muteAll(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    local allPlayers = Player.getPlayers()
+    for k, v in pairs(allPlayers) do
+        if v.color ~= 'Black' then
+            v.mute()
+        end
+    end
+end
+
+function toggleClockMovementButton(currentlyRotating)
+    if currentlyRotating == false then
+        self.editButton({index = 1, label = 'Stop Clock', color = {1, 0, 0}})
+    else
+        self.editButton({index = 1, label = 'Start Clock', color = {0, 1, 0}})
+    end
+end
+
+function pointHand(params)
+    local handGUID = params.handGUID
+    local color = params.color
+    local hand = getObjectFromGUID(handGUID)
+    local rotValue = HAND_ROTATION[color]
+    hand.setRotationSmooth({0, rotValue, 180})
+    degreesRotated = 0
+    pointedPlayer = color
+end
+
+for k,v in pairs(COLORS_ALL) do
+    _G['pointTo' .. v] = function(obj, col)
+        local players = Global.call('updatePlayers')
+        if players[v] == nil then
+            return
+        end
+        local clock = getObjectFromGUID(CLOCK_GUID)
+        if clock.getScale().x == 0 then
+            return
+        end
+        pointHand({handGUID = RED_HAND_GUID, color = v})
+        pointHand({handGUID = PURPLE_HAND_GUID, color = v})
+        local callParams = {}
+        callParams.player = 'Black'
+        callParams.target = v
+        Global.call('nominated', callParams)
+    end
+end
+
+function setRotValue(obj, color, value, stillEditing)
+    if not stillEditing then
+        rotationRate = value
+    end
+end
+
+function plusRot(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    rotationRate = rotationRate + 5
+    self.editInput({
+        index          = 0,
+        value          = rotationRate,
+    })
+end
+
+function minusRot(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    rotationRate = rotationRate - 5
+    self.editInput({
+        index          = 0,
+        value          = rotationRate,
+    })
+end
+
+function toggleModes(clickedObject, playerColor, altClick)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    if mode == 'Clock' and not altClick or mode == 'Blind' and altClick then -- Switching to Blindfold Mode
+        self.editButton({
+            index          = 4, -- the mode toggle button
+            label          = 'Mute Mode',
+            width          = 2100,
+            color          = {1, 0, 0},
+            font_color     = {0, 0, 0},
+            tooltip        = 'Left Click: Switch to Blindfold Mode\nRight Click: Switch to Clock Mode'
+        })
+        self.editButton({
+            index          = 0,
+            click_function = 'muteAll',
+            label          = 'Mute All',
+            width          = 2100,
+            color          = {0, 1, 0},
+            font_color     = {0, 0, 0},
+        })
+
+        for i, c in ipairs(COLORS_ALL) do
+            self.editButton({
+                index          = 8 + i,
+                click_function = 'mute'..c,
+                tooltip        = 'Mute '..c,
+            })
+        end
+
+        mode = 'Mute'
+    elseif mode == 'Mute' and not altClick or mode == 'Clock' and altClick then
+        self.editButton({
+            index          = 4, -- the mode toggle button
+            label          = 'Blindfold Mode',
+            width          = 2700,
+            color          = {0, 0, 0},
+            font_color     = {1, 1, 1},
+            tooltip        = 'Left Click: Switch to Clock Mode\nRight Click: Switch to Mute Mode'
+        })
+        self.editButton({
+            index          = 0,
+            click_function = 'blindfoldAll',
+            label          = 'Blindfold All',
+            width          = 2300,
+            color          = {0, 1, 0},
+            font_color     = {0, 0, 0},
+        })
+
+        for i, c in ipairs(COLORS_ALL) do
+            self.editButton({
+                index          = 8 + i,
+                click_function = 'blindfold'..c,
+                tooltip        = 'Blindfold player '..c,
+            })
+        end
+
+        mode = 'Blind'
+    else
+        self.editButton({
+            index          = 4, -- the mode toggle button
+            label          = 'Clock Mode',
+            width          = 2100,
+            color          = {1, 1, 1},
+            font_color     = {0, 0, 0},
+            tooltip        = 'Left Click: Switch to Mute Mode\nRight Click: Switch to Blindfold Mode'
+        })
+        local clock = getObjectFromGUID(CLOCK_GUID)
+        if clock.getScale().x ~= 0 then --if clock is CURRENTLY up
+            self.editButton({
+                index          = 0,
+                click_function = 'toggleClockNom',
+                label          = 'Hide Clock',
+                width          = 2100,
+                color          = {0, 1, 0},
+                font_color     = {0, 0, 0},
+            })
+        else
+            self.editButton({
+                index          = 0,
+                click_function = 'toggleClockNom',
+                label          = 'Show Clock',
+                width          = 2100,
+                color          = {0, 1, 0},
+                font_color     = {0, 0, 0},
+            })
+        end
+
+        for i, c in ipairs(COLORS_ALL) do
+            self.editButton({
+                index          = 8 + i,
+                click_function = 'pointTo'..c,
+                tooltip        = 'Point the clock to '..c,
+            })
+        end
+
+        mode = 'Clock'
+    end
+end
+
+function toggleBlindfold(color)
+    local players = Global.call('updatePlayers')
+    local player = players[color]
+    if player == nil then
+        return
+    end
+
+    if player.blindfolded == true then
+        player.blindfolded = false
+    else
+        player.blindfolded = true
+    end
+end
+
+for k,v in pairs(COLORS_ALL) do
+    _G['blindfold' .. v] = function(obj, col)
+        if col == 'Black' then
+            toggleBlindfold(v)
+        end
+    end
+end
+
+function blindfoldAll(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local allPlayers = Player.getPlayers()
+    for k, v in pairs(allPlayers) do
+        if v.color ~= 'Black' then
+            v.blindfolded = not v.blindfolded
+        end
+    end
+end
+
+for k,v in pairs(COLORS_ALL) do
+    _G['mute' .. v] = function(obj, col)
+        if col == 'Black' then
+            local players = Global.call('updatePlayers')
+            local player = players[v]
+            if player ~= nil then
+                player.mute()
+            end
+        end
+    end
+end
+
+function toggleShortcuts(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    shortcutsOn = not shortcutsOn
+    if shortcutsOn then
+        self.editButton({
+            index          = 6,
+            label          = 'Shortcuts\nON',
+            tooltip        = 'Click this to disable shortcuts.\nSee the notebook for shortcut hotkeys.',
+        })
+        Player['Black'].print('Shortcuts have been enabled.')
+    else
+        self.editButton({
+            index          = 6,
+            label          = 'Shortcuts\nOFF',
+            tooltip        = 'Click this to enable shortcuts.\nSee the notebook for shortcut hotkeys.',
+        })
+        Player['Black'].print('Shortcuts have been disabled.')
+    end
+end
+
+function toggleHiddenZones(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        if grimShow == false then
+            showGrimoire()
+        else
+            hideGrimoire()
+        end
+    end
+end
+
+function showGrimoire()
+    local zoneObj
+    grimShow = true
+    for k,v in pairs(BLACK_ZONES) do
+        zoneObj = getObjectFromGUID(v.guid)
+        zoneObj.setScale({0,0,0})
+    end
+    self.editButton({
+        index          = 5,
+        label          = 'Hide\nGrimoire',
+        tooltip        = 'Click this to hide the grimoire.',
+    })
+end
+
+function hideGrimoire()
+    local zoneObj
+    grimShow = false
+    for k,v in pairs(BLACK_ZONES) do
+        zoneObj = getObjectFromGUID(v.guid)
+        zoneObj.setScale(v.scale)
+    end
+    self.editButton({
+        index          = 5,
+        label          = 'Show\nGrimoire',
+        tooltip        = 'Click this to show the grimoire.',
+    })
+end
+
+function toggleExSeatLock(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        if seatLock == false then
+            seatLock = true
+            self.editButton({
+                index          = 8,
+                label          = 'Unlock\nExtension Seats',
+                tooltip        = 'Allow people to join the extension seats.',
+            })
+            printToColor('Extension seats are locked.', playerColor, {1,1,1})
+        else
+            seatLock = false
+            self.editButton({
+                index          = 8,
+                label          = 'Lock\nExtension Seats',
+                tooltip        = 'Prevent people from joining the extension seats.',
+            })
+            printToColor('Extension seats are unlocked.', playerColor, {1,1,1})
+        end
+    end
+end
+
+function onScriptingButtonUp(index, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    if not shortcutsOn then
+        broadcastToColor('Shortcuts are turned off', 'Black', {0.6, 0.6, 0.6})
+    else
+        if index == 1 then
+            minusRot(_, 'Black')
+        elseif index == 2 then
+            toggleClockMovement()
+        elseif index == 3 then
+            plusRot(_, 'Black')
+        elseif index == 5 then
+            if mode == 'Clock' then
+                toggleClockNom(_, playerColor)
+            elseif mode == 'Blind' then
+                blindfoldAll(_, playerColor)
+            else
+                muteAll(_, playerColor)
+            end
+        elseif index == 8 then
+            toggleModes(_, playerColor)
+        end
+    end
+end

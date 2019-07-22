@@ -1,0 +1,828 @@
+<Defaults>
+    <Button class="buttons" resizeTextForBestFit="true" colors="#ff0000|#ff8888|#aa0000|#000000"/>
+    <Panel class="panels" rectAlignment= "UpperRight" offsetXY="-200 -80" width="20%" height="8%" display="false"/>
+    <Image class="aliveImages" width="20" height="20"/>
+    <Image class="aliveImages" width="20" height="20"/>
+    <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840" fontStyle="Bold"/>
+	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
+</Defaults>
+
+<Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
+    <Text id="textClubs" text="Do you want to allow  to join?" resizeTextForBestFit="true" rectAlignment="UpperCenter"
+        alignment="UpperCenter" color="#ffffff" fontSize="20" height="30%"></Text>
+    <HorizontalLayout spacing="20" rectAlignment="LowerCenter" height="70%">
+        <Button id="yes" class="buttons" text="Yes" onClick="6fbc83/yesClubs" colors="#00ff00|#88ff88|#00aa00|#000000"></Button>
+        <Button id="no" class="buttons" text="No" onClick="6fbc83/noClubs" ></Button>
+    </HorizontalLayout>
+</Panel>
+
+<Panel id="teamConfirmationDiamonds" class="panels" visibility="Diamonds" active="false">
+    <Text id="textDiamonds" text="Do you want to allow  to join?" resizeTextForBestFit="true" rectAlignment="UpperCenter"
+        alignment="UpperCenter" color="#ffffff" fontSize="20" height="30%"></Text>
+    <HorizontalLayout spacing="20" rectAlignment="LowerCenter" height="70%">
+        <Button id="yes" class="buttons" text="Yes" onClick="6fbc83/yesDiamonds" colors="#00ff00|#88ff88|#00aa00|#000000"></Button>
+        <Button id="no" class="buttons" text="No" onClick="6fbc83/noDiamonds" ></Button>
+    </HorizontalLayout>
+</Panel>
+
+<Panel id="teamConfirmationHearts" class="panels" visibility="Hearts" active="false">
+    <Text id="textHearts" text="Do you want to allow  to join?" resizeTextForBestFit="true" rectAlignment="UpperCenter"
+        alignment="UpperCenter" color="#ffffff" fontSize="20" height="30%"></Text>
+    <HorizontalLayout spacing="20" rectAlignment="LowerCenter" height="70%">
+        <Button id="yes" class="buttons" text="Yes" onClick="6fbc83/yesHearts" colors="#00ff00|#88ff88|#00aa00|#000000"></Button>
+        <Button id="no" class="buttons" text="No" onClick="6fbc83/noHearts" ></Button>
+    </HorizontalLayout>
+</Panel>
+
+<Panel id="teamConfirmationSpades" class="panels" visibility="Spades" active="false">
+    <Text id="textSpades" text="Do you want to allow  to join?" resizeTextForBestFit="true" rectAlignment="UpperCenter"
+        alignment="UpperCenter" color="#ffffff" fontSize="20" height="30%"></Text>
+    <HorizontalLayout spacing="20" rectAlignment="LowerCenter" height="70%">
+        <Button id="yes" class="buttons" text="Yes" onClick="6fbc83/yesSpades" colors="#00ff00|#88ff88|#00aa00|#000000"></Button>
+        <Button id="no" class="buttons" text="No" onClick="6fbc83/noSpades" ></Button>
+    </HorizontalLayout>
+</Panel>
+
+<Panel id="aliveDisplay"
+    rectAlignment = "UpperRight"
+    offsetXY = "-300 -10"
+    width = "30"
+    height = "680">
+    <VerticalLayout>
+        <Panel class="alivePanels"></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage1" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage2" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage3" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage4" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage5" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage6" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage7" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage8" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage9" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage10" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage11" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage12" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage13" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage14" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage15" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage16" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage17" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage18" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage19" image="empty" ></Image></Panel>
+        <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage20" image="empty" ></Image></Panel>
+    </VerticalLayout>
+</Panel>
+
+<VerticalLayout padding="0 0 100 0" width="30%" rectAlignment="UpperLeft" childAlignment="UpperCenter" childForceExpandHeight="false">
+   <Text class="outline" id="playerWhite" color="#FFFFFF" fontSize="28"></Text>
+   <Text class="outline" id="playerBrown" color="#703A16" fontSize="28"></Text>
+   <Text class="outline" id="playerRed" color="#DA1917" fontSize="28"></Text>
+   <Text class="outline" id="playerOrange" color="#F3631C" fontSize="28"></Text>
+   <Text class="outline" id="playerYellow" color="#E6E42B" fontSize="28"></Text>
+   <Text class="outline" id="playerGreen" color="#30B22A" fontSize="28"></Text>
+   <Text class="outline" id="playerTeal" color="#20B09A" fontSize="28"></Text>
+   <Text class="outline" id="playerBlue" color="#1E87FF" fontSize="28"></Text>
+   <Text class="outline" id="playerPurple" color="#9F1FEF" fontSize="28"></Text>
+   <Text class="outline" id="playerPink" color="#F36FCD" fontSize="28"></Text>
+</VerticalLayout>
+
+<HorizontalLayout
+	id = "nomMenu"
+	height = "65"
+	width = "425"
+	rectAlignment = "UpperCenter"
+	offsetXY = "0 -75"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "Grey"
+    active = "false"
+	>
+    <Button
+        id="greyNominated"
+		onClick = "nominatedDropdown"
+        colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
+        textColor = "#FF0000"
+		fontStyle = "Bold"
+		text = "Select color&#xA;to nominate"
+        fontSize = "18"
+    ></Button>
+	<Button
+		class = "tp50"
+		id = "greyVote"
+		onClick = "voteUI"
+		text = "Vote"
+		textColor = "Black"
+		fontSize = "40"
+	></Button>
+	<Button
+		class = "tp50"
+		id = "greyNominate"
+		onClick = "nominateUI"
+		text = "Become&#xA;Nominator"
+		textColor = "#0000FF"
+		fontSize = "20"
+	></Button>
+</HorizontalLayout>
+
+<TableLayout
+	id = "colorSelection"
+	cellSpacing = "2.5"
+	height = "200"
+    width = "425"
+    rectAlignment = "UpperCenter"
+    visibility = "Grey"
+    offsetXY = "0 -150"
+    active = "false"
+	>
+	<Row>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectWhite"
+				text = "White"
+				colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectBrown"
+				text = "Brown"
+				colors = "#703A1680|#703A16FF|#703A1680|#703A1680"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectRed"
+				text = "Red"
+				colors = "#DA191780|#DA1917FF|#DA191780|#DA191780"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectOrange"
+				text = "Orange"
+				colors = "#F3631C80|#F3631CFF|#F3631C80|#F3631C80"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectYellow"
+				text = "Yellow"
+				colors = "#E6E42B80|#E6E42BFF|#E6E42B80|#E6E42B80"
+			></Button>
+		</Cell>
+	</Row>
+    <Row>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectGreen"
+                text = "Green"
+                colors = "#30B22A80|#30B22AFF|#30B22A80|#30B22A80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectTeal"
+                text = "Teal"
+                colors = "#20B09A80|#20B09AFF|#20B09A80|#20B09A80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectBlue"
+                text = "Blue"
+                colors = "#1E87FF80|#1E87FFFF|#1E87FF80|#1E87FF80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectPurple"
+                text = "Purple"
+                colors = "#9F1FEF80|#9F1FEFFF|#9F1FEF80|#9F1FEF80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectPink"
+                text = "Pink"
+                colors = "#F46FCD80|#F46FCDFF|#F46FCD80|#F46FCD80"
+            ></Button>
+        </Cell>
+    </Row>
+    <Row>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectMagenta"
+                text = "Magenta"
+                colors = "#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectLavender"
+                text = "Lavender"
+                colors = "#967BB680|#967BB6FF|#967BB680|#967BB680"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectNavy"
+                text = "Navy"
+                colors = "#00008080|#000080FF|#00008080|#00008080"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectCyan"
+                text = "Cyan"
+                colors = "#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectMint"
+                text = "Coral"
+                colors = "#89C38180|#89C381FF|#89C38180|#89C38180"
+            ></Button>
+        </Cell>
+    </Row>
+	<Row>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectLime"
+				text = "Lime"
+				colors = "#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectPeace"
+				text = "Peach"
+				colors = "#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectCoral"
+				text = "Coral"
+				colors = "#89C38180|#89C381FF|#89C38180|#89C38180"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectMaroon"
+				text = "Maroon"
+				colors = "#80000080|#800000FF|#80000080|#80000080"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectSilver"
+				text = "Silver"
+				colors = "#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
+			></Button>
+		</Cell>
+	</Row>
+</TableLayout>
+
+<Text
+    class="outline"
+    id="decalText"
+    color="#FFFFFF"
+    fontSize="20"
+    height = "138"
+	width = "150"
+    rectAlignment = "LowerCenter"
+    offsetXY = "230 7"
+    visibility = "Grey"
+    active = "false"
+    >
+    Place Decal
+</Text>
+
+<VerticalLayout
+    id = "placeDecalTB"
+	height = "138"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "230 7"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "Grey"
+    active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
+    >
+    <Text class="outline" id="decalFiller1" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalTB"
+        onValueChanged = "decalUI"
+        >
+        <Option selected="true">None</Option>
+        <Option>Washerwoman</Option>
+        <Option>Librarian</Option>
+        <Option>Investigator</Option>
+        <Option>Chef</Option>
+        <Option>Empath</Option>
+        <Option>Fortune_Teller</Option>
+        <Option>Undertaker</Option>
+        <Option>Monk</Option>
+        <Option>Ravenkeeper</Option>
+        <Option>Virgin</Option>
+        <Option>Slayer</Option>
+        <Option>Soldier</Option>
+        <Option>Mayor</Option>
+        <Option>Butler</Option>
+        <Option>Drunk</Option>
+        <Option>Recluse</Option>
+        <Option>Saint</Option>
+        <Option>Poisoner</Option>
+        <Option>Spy</Option>
+        <Option>Scarlet_Woman</Option>
+        <Option>Baron</Option>
+        <Option>Imp</Option>
+        <Option>Scapegoat</Option>
+        <Option>Gunslinger</Option>
+        <Option>Beggar</Option>
+        <Option>Bureaucrat</Option>
+        <Option>Thief</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalBM"
+	height = "130"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "230 7"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "Grey"
+    active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
+    >
+    <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalBM"
+        onValueChanged = "decalUI"
+        >
+        <Option selected="true">None</Option>
+        <Option>Grandmother</Option>
+        <Option>Sailor</Option>
+        <Option>Chambermaid</Option>
+        <Option>Exorcist</Option>
+        <Option>Innkeeper</Option>
+        <Option>Gambler</Option>
+        <Option>Gossip</Option>
+        <Option>Courtier</Option>
+        <Option>Professor</Option>
+        <Option>Minstrel</Option>
+        <Option>Tea_Lady</Option>
+        <Option>Pacifist</Option>
+        <Option>Fool</Option>
+        <Option>Tinker</Option>
+        <Option>Regent</Option>
+        <Option>Goon</Option>
+        <Option>Lunatic</Option>
+        <Option>Godfather</Option>
+        <Option>Devils_Advocate</Option>
+        <Option>Assassin</Option>
+        <Option>Mastermind</Option>
+        <Option>Zombuul</Option>
+        <Option>Pukka</Option>
+        <Option>Shabaloth</Option>
+        <Option>Po</Option>
+        <Option>Apprentice</Option>
+        <Option>Matron</Option>
+        <Option>Voudon</Option>
+        <Option>Judge</Option>
+        <Option>Bishop</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalSV"
+	height = "130"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "230 7"
+	childAlignment = "MiddleCenter"
+	spacing = "-5"
+	visibility = "Grey"
+    active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
+    >
+    <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalSV"
+        onValueChanged = "decalUI"
+        >
+        <Option>Clockmaker</Option>
+        <Option>Dreamer</Option>
+        <Option>Snake_Charmer</Option>
+        <Option>Mathematician</Option>
+        <Option>Flowergirl</Option>
+        <Option>Town_Crier</Option>
+        <Option>Oracle</Option>
+        <Option>Savant</Option>
+        <Option>Seamstress</Option>
+        <Option>Philosopher</Option>
+        <Option>Artist</Option>
+        <Option>Juggler</Option>
+        <Option>Sage</Option>
+        <Option>Mutant</Option>
+        <Option>Sweetheart</Option>
+        <Option>Barber</Option>
+        <Option>Klutz</Option>
+        <Option>Evil_Twin</Option>
+        <Option>Witch</Option>
+        <Option>Cerenovus</Option>
+        <Option>Pit_Hag</Option>
+        <Option>Fang_Gu</Option>
+        <Option>Vigormortis</Option>
+        <Option>No_Dashii</Option>
+        <Option>Vortox</Option>
+        <Option>Butcher</Option>
+        <Option>Bone_Collector</Option>
+        <Option>Harlot</Option>
+        <Option>Barista</Option>
+        <Option>Deviant</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalCU"
+	height = "130"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "230 7"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "Grey"
+    active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
+    >
+    <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalCU"
+        onValueChanged = "decalUI"
+        >
+        <Option selected="true">None</Option>
+        <Option>Apprentice</Option>
+        <Option>Artist</Option>
+        <Option>Assassin</Option>
+        <Option>Barber</Option>
+        <Option>Barista</Option>
+        <Option>Baron</Option>
+        <Option>Beggar</Option>
+        <Option>Bishop</Option>
+        <Option>Bone_Collector</Option>
+        <Option>Bureaucrat</Option>
+        <Option>Butcher</Option>
+        <Option>Butler</Option>
+        <Option>Cerenovus</Option>
+        <Option>Chambermaid</Option>
+        <Option>Chef</Option>
+        <Option>Clockmaker</Option>
+        <Option>Courtier</Option>
+        <Option>Deviant</Option>
+        <Option>Devils_Advocate</Option>
+        <Option>Dreamer</Option>
+        <Option>Drunk</Option>
+        <Option>Empath</Option>
+        <Option>Evil_Twin</Option>
+        <Option>Exorcist</Option>
+        <Option>Fang_Gu</Option>
+        <Option>Flowergirl</Option>
+        <Option>Fool</Option>
+        <Option>Fortune_Teller</Option>
+        <Option>Gambler</Option>
+        <Option>Godfather</Option>
+        <Option>Goon</Option>
+        <Option>Gossip</Option>
+        <Option>Grandmother</Option>
+        <Option>Gunslinger</Option>
+        <Option>Harlot</Option>
+        <Option>Imp</Option>
+        <Option>Innkeeper</Option>
+        <Option>Investigator</Option>
+        <Option>Judge</Option>
+        <Option>Juggler</Option>
+        <Option>Klutz</Option>
+        <Option>Librarian</Option>
+        <Option>Lunatic</Option>
+        <Option>Mastermind</Option>
+        <Option>Mathematician</Option>
+        <Option>Matron</Option>
+        <Option>Mayor</Option>
+        <Option>Minstrel</Option>
+        <Option>Monk</Option>
+        <Option>Mutant</Option>
+        <Option>No_Dashii</Option>
+        <Option>Oracle</Option>
+        <Option>Pacifist</Option>
+        <Option>Philosopher</Option>
+        <Option>Pit_Hag</Option>
+        <Option>Po</Option>
+        <Option>Poisoner</Option>
+        <Option>Professor</Option>
+        <Option>Pukka</Option>
+        <Option>Ravenkeeper</Option>
+        <Option>Recluse</Option>
+        <Option>Regent</Option>
+        <Option>Sage</Option>
+        <Option>Sailor</Option>
+        <Option>Saint</Option>
+        <Option>Savant</Option>
+        <Option>Scapegoat</Option>
+        <Option>Scarlet_Woman</Option>
+        <Option>Seamstress</Option>
+        <Option>Shabaloth</Option>
+        <Option>Slayer</Option>
+        <Option>Snake_Charmer</Option>
+        <Option>Soldier</Option>
+        <Option>Spy</Option>
+        <Option>Sweetheart</Option>
+        <Option>Tea_Lady</Option>
+        <Option>Thief</Option>
+        <Option>Tinker</Option>
+        <Option>Town_Crier</Option>
+        <Option>Undertaker</Option>
+        <Option>Vigormortis</Option>
+        <Option>Virgin</Option>
+        <Option>Vortox</Option>
+        <Option>Voudon</Option>
+        <Option>Washerwoman</Option>
+        <Option>Witch</Option>
+        <Option>Zombuul</Option>
+    </Dropdown>
+</VerticalLayout>
+
+
+<TableLayout
+	id = "sit"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+	<Row>
+        <Cell>
+            <Button
+        		id = "Magenta"
+        		onClick = "sitUI"
+        		text = "Sit in Magenta"
+                class = "tp50"
+                fontSize = "15"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Lavender"
+        		onClick = "sitUI"
+        		text = "Sit in Lavender"
+                class = "tp50"
+                fontSize = "15"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Navy"
+        		onClick = "sitUI"
+        		text = "Sit in Navy"
+                class = "tp50"
+                fontSize = "15"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Cyan"
+        		onClick = "sitUI"
+        		text = "Sit in Cyan"
+                class = "tp50"
+                fontSize = "15"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Mint"
+        		onClick = "sitUI"
+        		text = "Sit in Mint"
+                class = "tp50"
+                fontSize = "15"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+    </Row>
+    <Row>
+        <Cell>
+            <Button
+        		id = "Lime"
+        		onClick = "sitUI"
+        		text = "Sit in Lime"
+                class = "tp50"
+                fontSize = "15"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Peach"
+        		onClick = "sitUI"
+        		text = "Sit in Peach"
+                class = "tp50"
+                fontSize = "15"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Coral"
+        		onClick = "sitUI"
+        		text = "Sit in Coral"
+                class = "tp50"
+                fontSize = "15"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Maroon"
+        		onClick = "sitUI"
+        		text = "Sit in Maroon"
+                class = "tp50"
+                fontSize = "15"
+                colors="#80000080|#800000FF|#80000080|#80000080"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Silver"
+        		onClick = "sitUI"
+        		text = "Sit in Silver"
+                class = "tp50"
+                fontSize = "15"
+                colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<HorizontalLayout
+	id = "teamMenu"
+	height = "50"
+	width = "200"
+	offsetXY = "0 70"
+	rectAlignment = "LowerCenter"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "Grey"
+    active = "false"
+	>
+	<Image
+		id = "Clubs"
+		image = "Club"
+		tooltip = "Click here to join the Clubs team to discuss privately"
+		tooltipPosition = "Above"
+		onClick = "joinTeamUI"
+	></Image>
+		<Image
+		id = "Spades"
+		image = "Spade"
+		tooltip = "Click here to join the Spades team to discuss privately"
+		tooltipPosition = "Above"
+		onClick = "joinTeamUI"
+	></Image>
+		<Image
+		id = "Diamonds"
+		image = "Diamond"
+		tooltip = "Click here to join the Diamonds team to discuss privately"
+		tooltipPosition = "Above"
+		onClick = "joinTeamUI"
+	></Image>
+		<Image
+		id = "Hearts"
+		image = "Heart"
+		tooltip = "Click here to join the Hearts team to discuss privately"
+		tooltipPosition = "Above"
+		onClick = "joinTeamUI"
+	></Image>
+</HorizontalLayout>
+
+<Button
+    class = "tp50"
+    height = "60"
+    width = "200"
+    id = "leaveTeam"
+    onClick = "leaveTeamUI"
+    text = "Leave Team"
+	rectAlignment = "LowerCenter"
+    textColor = "black"
+    fontSize = "30"
+    visibility = "Grey"
+    offsetXY = "0 7"
+    active = "false"
+></Button>
+
+<TableLayout
+    id = "blackMessage"
+    height = "100"
+    width = "300"
+    rectAlignment = "LowerCenter"
+    visibility = "Black"
+    offsetXY = "0 10"
+    active = "false"
+    >
+    <!-- Row 1 -->
+    <Row>
+        <Cell>
+            <Dropdown
+                id="colorSitDropdown"
+                onValueChanged="colorSitUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+			<Option>Lime</Option>
+            <Option>Peach</Option>
+            <Option>Cora</Option>
+            <Option>Maroon</Option>
+            <Option>Silver</Option>
+            </Dropdown>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sendMessageButton"
+                onClick = "sendMessageUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+				text = "Send"
+				fontSize = "15"
+                >
+            </Button>
+        </Cell>
+    </Row>
+    <Row>
+        <Cell columnSpan = "2">
+            <InputField
+                id = "messageInput"
+                onEndEdit = "messageInputUI"
+                placeholder = "Send a message to one of the players sitting in one of the extended colors."
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                >
+            </InputField>
+        </Cell>
+    </Row>
+</TableLayout>

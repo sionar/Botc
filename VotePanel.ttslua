@@ -1,0 +1,102 @@
+--[[
+Night Tool
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.1.0'
+
+
+------------------Functions
+function createButtons()
+    local params = {}
+    local color = self.getDescription()
+
+    params = {click_function = 'nominated', function_owner = self, label = 'Nominate\n'..color, position = {-3, 0.6, 0}, color = {1, 1, 1}, font_color = {1,0,0}, width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable being nominated'}
+    self.createButton(params)
+
+    params = {click_function = 'vote', function_owner = self, label = 'Vote', position = {0, 0.6, 0}, color = {1, 1, 1}, width = 1000, height = 500, font_size = 400}
+    self.createButton(params)
+
+    params = {click_function = 'nominate', function_owner = self, label = 'Become\nNominator', position = {3, 0.6, 0}, color = {1, 1, 1}, font_color = {0,0,1},  width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable allowing nomination'}
+    self.createButton(params)
+end
+
+function vote(clickedButton, playerColor)
+    local color = self.getDescription()
+    local callParams = {}
+    if playerColor == color or playerColor == 'Black' then
+        callParams.voter = color
+        Global.call('vote', callParams)
+    end
+end
+
+function nominate(clickedButton, playerColor, rightClick)
+    if not rightClick then
+        local color = self.getDescription()
+        local callParams = {}
+        if playerColor == color or playerColor == 'Black' then
+            callParams.nominator = color
+            Global.call('nominate', callParams)
+        end
+    else
+        if playerColor == 'Black' then
+            toggleDisableNominate()
+        end
+    end
+end
+
+function nominated(clickedButton, playerColor, rightClick)
+    if not rightClick then
+        local color = self.getDescription()
+        local callParams = {}
+        callParams.player = playerColor
+        callParams.target = color
+        Global.call('nominated', callParams)
+    else
+        if playerColor == 'Black' then
+            toggleDisableNominated()
+        end
+    end
+end
+
+function toggleDisableNominate()
+    local canNominate = Global.getTable('canNominate')
+    local color = self.getDescription()
+    local buttonParams = {}
+    if canNominate[color] == true then
+        canNominate[color] = false
+        buttonParams.index = 2
+        buttonParams.color = {0,0,0}
+        buttonParams.font_color = {0,0,0}
+    else
+        canNominate[color] = true
+        buttonParams.index = 2
+        buttonParams.color = {1,1,1}
+        buttonParams.font_color = {0,0,0}
+    end
+    self.editButton(buttonParams)
+    Global.setTable('canNominate', canNominate)
+    Global.call('resetCurrentNominations')
+end
+
+function toggleDisableNominated()
+    local canBeNominated = Global.getTable('canBeNominated')
+    local color = self.getDescription()
+    local buttonParams = {}
+    if canBeNominated[color] == true then
+        canBeNominated[color] = false
+        buttonParams.index = 0
+        buttonParams.color = {0,0,0}
+        buttonParams.font_color = {0,0,0}
+    else
+        canBeNominated[color] = true
+        buttonParams.index = 0
+        buttonParams.color = {1,1,1}
+        buttonParams.font_color = {0,0,0}
+    end
+    self.editButton(buttonParams)
+    Global.setTable('canBeNominated', canBeNominated)
+    Global.call('resetCurrentNominations')
+end

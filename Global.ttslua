@@ -1,0 +1,1126 @@
+--[[
+Blood in the Clocktower Scripted
+Made by Unreal_ed, modified by Sionar
+UI code borrowed from Lost Savage and SilentxDream
+--]]
+
+
+------------------Constants
+MOD_NAME = 'Blood on the Clocktower Ex'
+VERSION = '14.0.0'
+DEBUG = false
+START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nType \'help\' in chat to see the list of chat commands.\n\nType \'h\' in chat to show the vote history.\n\nType \'r\' in chat to show your role.\n\nType \'v\' in chat to show the version number.\n\nAs the storyteller, type !Magenta, !Lavender, etc... to privately message those players.'
+HELP_MESSAGE = 'Type \'help\' in chat to see the list of chat commands.\nType \'h\' in chat to show the vote history.\nType \'r\' in chat to show your role.\nType \'v\' in chat to show the version number.\nAs the storyteller, type !Magenta, !Lavender, etc... to privately message those players.'
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[000080]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[329A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
+COLORS_EX_HEX = {Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,168/255,149/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
+
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+VOTEHAND_SHOW_POS = {}
+VOTEHAND_HIDE_POS = {}
+VOTEHAND_SHOW_SCALE = {3,1,3}
+VOTEHAND_HIDE_SCALE = {0,0,0}
+AVATAR_POS = {}
+AVATAR_ROT = {}
+DECAL_POS = {}
+DECAL_ROT = {}
+ALIVE_BASE_POS = {}
+ALIVE_TOKEN_POS = {}
+VOTE_PANEL_POS = {}
+ROT = {}
+ROLE_SHEET_POS = {}
+
+for k,v in pairs(COLORS_ALL) do
+    VOTEHAND_SHOW_POS[v] = radius(60, ANGLE[v], 5)
+    VOTEHAND_HIDE_POS[v] = radius(90, ANGLE[v], -5)
+    AVATAR_POS[v] = radius(102, ANGLE[v], 8.5)
+    AVATAR_ROT[v] = {180, ANGLE[v], 180}
+    DECAL_POS[v] = radius(60, ANGLE[v], 1.1)
+    DECAL_ROT[v] = {90, ANGLE[v] - 180, 0}
+    ALIVE_BASE_POS[v] = radius(70, ANGLE[v], 1)
+    ALIVE_TOKEN_POS[v] = radius(70, ANGLE[v], 1.16)
+    VOTE_PANEL_POS[v] = radius(76, ANGLE[v], 0.8)
+    ROT[v] = {0, ANGLE[v], 0}
+    ROLE_SHEET_POS[v] = radius(86,ANGLE[v], 1)
+end
+
+TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
+TABLE_GUIDS = {'7f1f5f'}
+ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
+ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
+VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
+VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
+ZONE_GUIDS = {White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Black = 'cf55c7'}
+CLOCK_CONTROLS_GUID = '184d11'
+TEAM_TOOL_GUID = '6fbc83'
+PURPLE_HAND_GUID = '88ad59'
+BLUE_HAND_GUID = '12ad6f'
+RED_HAND_GUID = 'eaee43'
+CLOCK_GUID = '0d5f75'
+PLAYER_DIST_GUIDS = {'7527ae', 'b74480'}
+
+
+------------------Variables
+numAlive = 0
+numPlayers = 0
+currAlive = 0
+currVotes = 0
+currPlayers = 0
+teamToolReloaded = false
+mode = 'TB'
+currentNominator = ''
+currentNominated = ''
+history = '[FFFFFF]Vote History:[-]'
+roles = {}
+aliveTokens = {}
+allAliveTokens = {}
+canNominate = {}
+canBeNominated = {}
+living = {}
+hasVote = {}
+voted = {}
+voteLock = {}
+voteButtonsOn = {}
+
+for k,v in pairs(COLORS_ALL) do
+    aliveTokens[v] = {object = 0, vote = 0}
+    allAliveTokens[v] = {object = 0, vote = 0}
+    canNominate[v] = true
+    canBeNominated[v] = true
+    living[v] = true
+    hasVote[v] = true
+    voted[v] = false
+    voteLock[v] = false
+end
+
+players = {}
+playersEx = {}
+playersExIds = {}
+avatarGuids = {}
+for k,v in pairs(COLORS_EX) do
+    playersEx[v] = nil
+    playersExIds[v] = nil
+    avatarGuids[v] = nil
+end
+
+uiColor = ''
+uiMsg = ''
+colorTable = false
+started = false
+customSet = false
+
+
+------------------Functions
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        started = save['s'] or started
+        mode = save['m'] or mode
+        roles = save['r'] or roles
+        history = save['h'] or history
+        playersExIds = save['p'] or playersExIds
+        avatarGuids = save['a'] or avatarGuids
+        customSet = save['c'] or customSet
+    end
+
+    setNotes(START_MESSAGE)
+
+    local obj, colors
+    for k,v in pairs(TABLE_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+        end
+    end
+    for k,v in pairs(VOTE_PANEL_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = true
+            obj.setPositionSmooth(VOTE_PANEL_POS[k])
+            obj.setRotationSmooth(ROT[k])
+        end
+    end
+    for k,v in pairs(ALIVE_BASE_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+            obj.setPositionSmooth(ALIVE_BASE_POS[k])
+            obj.setRotation(ROT[k])
+        end
+    end
+    if not started then
+        for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+            obj = getObjectFromGUID(v)
+            if obj then
+                obj.setLock(true)
+                obj.interactable = false
+                obj.setPositionSmooth(ALIVE_TOKEN_POS[k])
+                obj.setRotation(ROT[k])
+            end
+        end
+    end
+    for k,v in pairs(VOTEHAND_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+            obj.setPositionSmooth(VOTEHAND_HIDE_POS[k])
+            obj.setRotationSmooth(ROT[k])
+            obj.setScale(VOTEHAND_HIDE_SCALE)
+            obj.setLock(true)
+        end
+    end
+    for k,v in pairs(TEXT_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+        end
+    end
+    obj = getObjectFromGUID(TEXT_GUIDS['Version'])
+    obj.setValue('v ' .. VERSION)
+
+    refreshUI()
+    updatePlayers()
+    showExtensionUI()
+    Wait.time(refreshObjects,10)
+
+    -- check if players are alive, dead, and have a vote token regularly
+    Wait.time(function()
+        updatePlayers()
+        for k,v in pairs(COLORS_ALL) do
+            if players[v] ~= nil then --check only for seated players
+                getCurrentAliveAndVoteTokens(v)
+            end
+            getAllAliveAndVoteTokens(v) --Populate the allAliveTokens table for locking all tokens
+        end
+        handleLifeUI()
+    end, 2, -1)
+end
+
+function onSave()
+    local save = {}
+    save['s'] = started
+    save['m'] = mode
+    save['r'] = roles
+    save['h'] = history
+    save['p'] = playersExIds
+    save['a'] = avatarGuids
+    save['c'] = customSet
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function onPlayerChangeColor(color)
+    refreshUI()
+    updatePlayers()
+end
+
+function onChat(message, player)
+    local args = {} -- The arguments following a command
+    local command, msg, len
+
+    for v in string.gmatch(message, "%S+") do
+            args[#args + 1] = v
+    end
+
+    if args[1] ~= nil then
+        command = string.lower(args[1])
+        len = string.len(command)
+        msg = string.sub(message, len + 2)
+    end
+
+    if command == 'help' then
+        player.print(HELP_MESSAGE)
+        return false
+    elseif command == 'h' then
+        player.print(history)
+        return false
+    elseif command == 'r' then
+        updatePlayers()
+        local role, char
+        for k,v in pairs(players) do
+            if v.steam_id == player.steam_id then
+                role = roles[k]
+                if role == nil then
+                    player.print('You do not have a role.')
+                    return false
+                else
+                    char = string.gsub(role, ' ', '_')
+                    player.print('Your role is ' .. role .. '!')
+                    player.print(role .. ' - ' .. CHARACTERS[char].Description)
+                    return false
+                end
+            end
+        end
+        player.print('You do not have a role.')
+        return false
+    elseif command == 'v' then
+        player.print('Version ' .. VERSION)
+        return false
+    elseif command == '!magenta' then
+        if player.color == 'Black' then
+            chatMessage('Magenta', msg)
+        end
+        return false
+    elseif command == '!lavender' then
+        if player.color == 'Black' then
+            chatMessage('Lavender', msg)
+        end
+        return false
+    elseif command == '!navy' then
+        if player.color == 'Black' then
+            chatMessage('Navy', msg)
+        end
+        return false
+    elseif command == '!cyan' then
+        if player.color == 'Black' then
+            chatMessage('Cyan', msg)
+        end
+        return false
+    elseif command == '!mint' then
+        if player.color == 'Black' then
+            chatMessage('Mint', msg)
+        end
+        return false
+    elseif command == '!lime' then
+        if player.color == 'Black' then
+            chatMessage('Lime', msg)
+        end
+        return false
+    elseif command == '!peach' then
+        if player.color == 'Black' then
+            chatMessage('Peach', msg)
+        end
+        return false
+    elseif command == '!coral' then
+        if player.color == 'Black' then
+            chatMessage('Coral', msg)
+        end
+        return false
+    elseif command == '!maroon' then
+        if player.color == 'Black' then
+            chatMessage('Maroon', msg)
+        end
+        return false
+    elseif command == '!silver' then
+        if player.color == 'Black' then
+            chatMessage('Silver', msg)
+        end
+        return false
+    elseif command == 'debug' and DEBUG then
+        return false
+    end
+
+    for k,v in pairs(COLORS_EX) do
+        if playersExIds[v] == player.steam_id then
+            printToAll(COLORS_BBC[v] .. player.steam_name .. ':[-] ' .. message)
+            return false
+        end
+    end
+end
+
+function chatMessage(color, message)
+    updatePlayers()
+    local player = players[color]
+    if player ~= nil then
+        local msg = COLORS_BBC[color] .. '<' .. color .. '>[-] [000000]' .. Player['Black'].steam_name .. ':[-] ' .. message
+        player.print(msg)
+        Player['Black'].print(msg)
+    else
+        Player['Black'].print('Nobody is sitting in ' .. color .. '.', {1,0,0})
+    end
+end
+
+function refreshUI()
+    for _, playerColor in pairs(COLORS) do
+        UI.setAttribute('player' .. playerColor, 'visibility', playerColor)
+        if roles[playerColor] then
+            UI.setValue('player' .. playerColor, 'Your role is ' .. roles[playerColor] .. '!')
+        end
+    end
+end
+
+function unlockAliveTokens()
+    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.setLock(false)
+            obj.interactable = true
+        end
+    end
+end
+
+function checkSeatedPlayers()
+    local obj
+    updatePlayers()
+    for k,v in pairs(COLORS) do
+        if not Player[v].seated then
+            obj = getObjectFromGUID(ZONE_GUIDS[v])
+            obj.setValue('Black')
+            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            obj.destruct()
+        end
+    end
+    for k,v in pairs(COLORS_EX) do
+        if players[v] == nil then
+            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            if obj then
+                obj.destruct()
+            end
+        end
+    end
+end
+
+function refreshObjects()
+    local obj
+    obj = getObjectFromGUID(TEAM_TOOL_GUID)
+    if obj then
+        obj.reload()
+    end
+
+    for k,v in pairs(VOTEHAND_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.reload()
+        end
+    end
+
+    Wait.time(lockObjects, 5)
+end
+
+function lockObjects()
+    local obj
+    obj = getObjectFromGUID(TEAM_TOOL_GUID)
+    if obj then
+        obj.interactable = false
+    end
+
+    for k,v in pairs(VOTEHAND_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+        end
+    end
+end
+
+function getCurrentAliveAndVoteTokens(color)
+    local base = getObjectFromGUID(ALIVE_BASE_GUIDS[color])
+    local pos = base.getPosition()
+    local objectsFound = Physics.cast({
+        origin       = pos,
+        direction    = {0, 1, 0},
+        type         = 1, -- int (1: Ray, 2: Sphere, 3: Box),
+        max_distance = 3,
+        debug        = false-- bool (true = visualize cast),
+    }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
+
+    for i, hit in ipairs(objectsFound) do
+        if hit.hit_object.getName() == 'Alive Token' then
+            aliveTokens[color].object = hit.hit_object
+        elseif hit.hit_object.getName() == 'Vote Token' then
+            aliveTokens[color].vote = hit.hit_object
+        end
+        if #objectsFound == 1 then
+            aliveTokens[color].vote = 0
+        end
+    end
+end
+
+function getAllAliveAndVoteTokens(color)
+    local base = getObjectFromGUID(ALIVE_BASE_GUIDS[color])
+    if not base then
+        return
+    end
+    local pos = base.getPosition()
+    local objectsFound = Physics.cast({
+        origin       = pos,
+        direction    = {0, 1, 0},
+        type         = 1, -- int (1: Ray, 2: Sphere, 3: Box),
+        max_distance = 3,
+        debug        = false-- bool (true = visualize cast),
+    }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
+
+    for i, hit in ipairs(objectsFound) do
+        if hit.hit_object.getName() == 'Alive Token' then
+            allAliveTokens[color].object = hit.hit_object
+        elseif hit.hit_object.getName() == 'Vote Token' then
+            allAliveTokens[color].vote = hit.hit_object
+        end
+        if #objectsFound == 1 then
+            allAliveTokens[color].vote = 0
+        end
+    end
+end
+
+function handleLifeUI()
+    numAlive = 0
+    numPlayers = 0
+    local numberOfSkipped = 0 -- number of players not seated
+    local numberOfVotes = 0
+    local votesNeeded = 0
+    local playerDist
+
+    for i=1, 20 do
+        if aliveTokens[COLORS_ALL[i]].object ~= 0 and players[COLORS_ALL[i]] ~= nil then
+            numPlayers = numPlayers + 1
+            if aliveTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
+                if aliveTokens[COLORS_ALL[i]].vote ~= 0 then -- ..then if a vote token is present
+                    UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'deadWithVote'..i)  -- counting skipped players to only make last images transparent
+                    numberOfVotes = numberOfVotes + 1
+                else
+                    UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'deadNoVote') -- counting skipped players to only make last images transparent
+                end
+            else
+                UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'alive'..i) -- counting skipped players to only make last images transparent
+                numAlive = numAlive +1
+                numberOfVotes = numberOfVotes + 1
+            end
+        else
+            numberOfSkipped = numberOfSkipped +1
+            UI.setAttribute('aliveImage'..21 - numberOfSkipped, 'image', 'empty') -- starting from 11 to work backwards through list of aliveImage
+        end
+    end
+    votesNeeded = math.ceil(numAlive/2)
+    if currPlayers ~= numAlive or currVotes ~= numberOfVotes then
+        for k,v in pairs(PLAYER_DIST_GUIDS) do
+            playerDist = getObjectFromGUID(v)
+            if playerDist then
+                playerDist.call('updatePlayerDist', {num = numAlive})
+                playerDist.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
+            end
+        end
+    end
+    currPlayers = numAlive
+    currVotes = numberOfVotes
+end
+
+-- called by the clock
+function toggleLockAliveAndVoteTokens(locking) --locking is a boolean
+    for i=1,20 do
+        if allAliveTokens[COLORS_ALL[i]].object ~= 0 then
+            allAliveTokens[COLORS_ALL[i]].object.setLock(locking)
+
+            if allAliveTokens[COLORS_ALL[i]].vote ~= 0 then
+                allAliveTokens[COLORS_ALL[i]].vote.setLock(locking)
+            end
+        end
+    end
+end
+
+function vote(params)
+    local voter = params.voter
+    local handObj = getObjectFromGUID(VOTEHAND_GUIDS[voter])
+    if not voteLock[voter] then
+        if voted[voter] then
+            voted[voter] = false
+            params.index = 1
+            params.color = {1,1,1}
+            params.font_color = {0,0,0}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
+            handObj.setScale({0,1,0})
+            handObj.setPosition(VOTEHAND_HIDE_POS[voter])
+        else
+            voted[voter] = true
+            params.index = 1
+            params.color = {236/255,229/255,44/255}
+            params.font_color = {1,1,1}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
+            handObj.setScale(VOTEHAND_SHOW_SCALE)
+            handObj.setPositionSmooth(VOTEHAND_SHOW_POS[voter])
+        end
+    end
+end
+
+function setVoteLock(params)
+    voteLock[params.color] = true
+end
+
+function nominate(params)
+    local nominator = params.nominator
+    local params = {}
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if canNominate[nominator] == false then
+        return
+    end
+
+    if currentNominator == '' then
+        currentNominator = nominator
+        params.index = 2
+        params.color = {0,0,1}
+        params.font_color = {1,1,1}
+        getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
+        clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = nominator})
+        UI.setAttribute('colorSelection','active',false)
+        colorTable = false
+    elseif currentNominator == nominator then
+        currentNominator = ''
+        params.index = 2
+        params.color = {1,1,1}
+        params.font_color = {0,0,1}
+        getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
+        clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = 'None'})
+        if currentNominated ~= '' then
+            params.index = 0
+            params.color = {1,1,1}
+            params.font_color = {1,0,0}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(params)
+            currentNominated = ''
+            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+        end
+        UI.setAttribute('colorSelection','active',false)
+        colorTable = false
+    else
+        updatePlayers()
+        if players[v] ~= nil then
+            players[v].print(currentNominator .. ' is currently in the process of nominating a player. Please wait.', {1,0,0})
+        end
+    end
+end
+
+function nominated(params)
+    local player = params.player
+    local target = params.target
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local buttonParams = {}
+
+    if (player == currentNominator or player == 'Black') and canBeNominated[target] then
+        if currentNominated == '' then
+            currentNominated = target
+            buttonParams.index = 0
+            buttonParams.color = {1,0,0}
+            buttonParams.font_color = {1,1,1}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = target})
+        elseif currentNominated == target then
+            currentNominated = ''
+            buttonParams.index = 0
+            buttonParams.color = {1,1,1}
+            buttonParams.font_color = {1,0,0}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+        else
+            buttonParams.index = 0
+            buttonParams.color = {1,1,1}
+            buttonParams.font_color = {1,0,0}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+            currentNominated = target
+            buttonParams.color = {1,0,0}
+            buttonParams.font_color = {1,1,1}
+            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = target})
+        end
+    end
+end
+
+function resetCurrentNominations()
+    local buttonParams = {}
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+
+    if currentNominator ~= '' and canNominate[currentNominator] == true then
+        buttonParams.index = 2
+        buttonParams.color = {1,1,1}
+        buttonParams.font_color = {0,0,1}
+        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominator]).editButton(buttonParams)
+    end
+    if currentNominated ~= '' and canBeNominated[currentNominated] == true then
+        buttonParams.index = 0
+        buttonParams.color = {1,1,1}
+        buttonParams.font_color = {1,0,0}
+        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+    end
+    currentNominator = ''
+    currentNominated = ''
+    clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = 'None'})
+    clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
+    clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+end
+
+function checkLiving()
+    for k,v in pairs(COLORS_ALL) do
+        if aliveTokens[v].object ~= 0 then
+            if aliveTokens[v].object.is_face_down == true then -- if life token is face down...
+                living[v] = false
+                if aliveTokens[v].vote ~= 0 then -- ..then if a vote token is present
+                    hasVote[v] = true
+                else
+                    hasVote[v] = false
+                end
+            else
+                hasVote[v] = true
+                living[v] = true
+            end
+        end
+    end
+end
+
+function hideVoteButtons()
+    local votePanel
+    for k,v in pairs(VOTE_PANEL_GUIDS) do
+        votePanel = getObjectFromGUID(v)
+        votePanel.clearButtons()
+    end
+    for k,v in pairs(COLORS_ALL) do
+        voteButtonsOn[v] = false
+    end
+end
+
+function showVoteButtons(params)
+    local voteMode = params.voteMode
+    local votePanel
+    local buttonParams = {}
+    currentNominator = ''
+    currentNominated = ''
+
+    checkLiving()
+    updatePlayers()
+    for k,v in pairs(COLORS_ALL) do
+        if players[v] ~= nil then
+            votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+            votePanel.call('createButtons')
+            voteButtonsOn[v] = true
+            canNominate[v] = true
+            canBeNominated[v] = true
+            voted[v] = false
+
+            if voteMode == 'execution' then
+                if not living[v] then
+                    buttonParams.color = {0,0,0}
+                    buttonParams.font_color = {0,0,0}
+                    buttonParams.index = 2
+                    getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                    canNominate[v] = false
+                    if mode == 'TB' or mode == 'SV' then
+                        buttonParams.index = 0
+                        getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                        canBeNominated[v] = false
+                    end
+                end
+                if not hasVote[v] then
+                    buttonParams.color = {0,0,0}
+                    buttonParams.font_color = {0,0,0}
+                    buttonParams.index = 1
+                    getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                end
+            end
+        else
+            voteButtonsOn[v] = false
+        end
+    end
+end
+
+function updateVoteResults(params)
+    local vM = params.voteMode
+    local numVotes = 0
+    local nominationString = '[888888]Nomination: ' .. COLORS_BBC[currentNominator] .. currentNominator .. ' [888888]> ' .. COLORS_BBC[currentNominated] .. currentNominated .. '[-]\n'
+    local voterString = '[888888]Voters:[-]'
+    local actionStr
+
+    if vM == 'execution' then
+        actionStr = 'execute'
+    else
+        actionStr = 'exile'
+    end
+
+    for k,v in pairs(COLORS_ALL) do
+        if voted[v] then
+            numVotes = numVotes + 1
+            voterString = voterString .. ' ' .. COLORS_BBC[v] .. v .. '[-]'
+        end
+    end
+    if numVotes == 1 then
+        broadcastToAll('Votes are in! '.. numVotes ..' player voted to '.. actionStr .. ' ' .. currentNominated ..'!', {1,0,0})
+    else
+        broadcastToAll('Votes are in! '.. numVotes ..' players voted to '.. actionStr .. ' ' .. currentNominated ..'!', {1,0,0})
+    end
+    if numVotes == 0 then
+        voterString = '[888888]Voters: None[-]'
+    end
+    broadcastToAll(voterString, {1,1,1})
+    history = history .. '\n' .. nominationString .. voterString .. '\n'
+    setNotes(nominationString .. voterString)
+
+    updateNominations()
+    resetVotes({voteMode = vM})
+end
+
+function updateNominations()
+    canNominate[currentNominator] = false
+    canBeNominated[currentNominated] = false
+    local buttonParams = {}
+    buttonParams.color = {0,0,0}
+    buttonParams.font_color = {0,0,0}
+    buttonParams.index = 2
+    if currentNominator ~= '' then
+        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominator]).editButton(buttonParams)
+    end
+    buttonParams.index = 0
+    if currentNominated ~= '' then
+        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+    end
+    currentNominator = ''
+    currentNominated = ''
+    for k,v in pairs(COLORS_ALL) do
+        if voted[v] and not living[v] then
+            hasVote[v] = false
+        end
+    end
+end
+
+function resetVotes(params)
+    local buttonParams = {}
+    local handObj
+    for k,v in pairs(COLORS_ALL) do
+        if players[v] ~= nil and voteButtonsOn[v] then
+            if hasVote[v] or params.voteMode == 'exile' then
+                buttonParams.color = {1,1,1}
+                buttonParams.font_color = {0,0,0}
+                buttonParams.index = 1
+                getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                voteLock[v] = false
+            else
+                buttonParams.color = {0,0,0}
+                buttonParams.font_color = {0,0,0}
+                buttonParams.index = 1
+                getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                voteLock[v] = true
+            end
+        else
+            voteLock[v] = false
+        end
+        voted[v] = false
+    end
+    hideVotehands()
+end
+
+function hideVotehands()
+    local handObj
+    for k,v in pairs(COLORS_ALL) do
+        handObj = getObjectFromGUID(VOTEHAND_GUIDS[v])
+        handObj.setScale({0,1,0})
+        handObj.setPosition(VOTEHAND_HIDE_POS[v])
+    end
+end
+
+function updatePlayers()
+    local allPlayers = Player.getPlayers()
+    local found
+    local textObj
+
+    for k,v in pairs(COLORS) do
+        if Player[v].seated then
+            players[v] = Player[v]
+        else
+            players[v] = nil
+        end
+    end
+    for k,v in pairs(COLORS_EX) do
+        if playersExIds[v] == nil then    --no id for that color
+            playersEx[v] = nil
+        else
+            found = nil
+            for k1,v1 in pairs(allPlayers) do
+                if v1.steam_id == playersExIds[v] and v1.color == 'Grey' then
+                    found = v1
+                    break
+                end
+            end
+            if found == nil then        --cannot find player with that id
+                playersExIds[v] = nil
+                playersEx[v] = nil
+                textObj = getObjectFromGUID(TEXT_GUIDS[v])
+                textObj.setValue(' ')
+                deleteAvatar(v)
+            else
+                playersEx[v] = found
+            end
+        end
+        players[v] = playersEx[v]
+    end
+    return players
+end
+
+
+------------------Grey UI
+function sitUI(player, value, id)
+    local textObj
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local seatLock = clockControls.getVar('seatLock')
+
+    updatePlayers()
+    if playersEx[id] == nil then
+        for k,v in pairs(playersEx) do
+            if v ~= nil and v.steam_id == player.steam_id then
+                player.print('You are already sitting in a seat.')
+                return
+            end
+        end
+        if seatLock then
+            player.print('Extension seats are locked.')
+            return
+        end
+        player.print('You are now sitting in ' .. id)
+        playersExIds[id] = player.steam_id
+        playersEx[id] = player
+        textObj = getObjectFromGUID(TEXT_GUIDS[id])
+        textObj.setValue(player.steam_name)
+        generateAvatar(id)
+        printToAll(player.steam_name .. ' is color ' .. id .. '.', COLORS_EX_HEX[id])
+    else
+        if player.steam_id == playersEx[id].steam_id then
+            player.print('You are no longer sitting in ' .. id)
+            playersEx[id] = nil
+            playersExIds[id] = nil
+            textObj = getObjectFromGUID(TEXT_GUIDS[id])
+            textObj.setValue(' ')
+            deleteAvatar(id)
+        else
+            player.print('Someone is already sitting in ' .. id)
+        end
+    end
+end
+
+function voteUI(player, value, id)
+    local found = false
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+    if not found then
+        return
+    end
+    local clock = getObjectFromGUID(CLOCK_GUID)
+    local scale = clock.getScale()
+    if scale.x == 0 then
+        return
+    end
+
+    local callParams = {}
+    callParams.voter = found
+    vote(callParams)
+end
+
+function nominatedDropdown(player, value, id)
+    local found = false
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+
+    if not found or found ~= currentNominator then
+        return
+    end
+
+	if (colorTable) then --colorSelection is visible
+		UI.setAttribute('colorSelection','active',false)
+		colorTable = false
+	else --colorSelection is NOT visible
+		UI.setAttribute('colorSelection','active',true)
+		colorTable = true
+	end
+end
+
+function nominateUI(player, value, id)
+    local found = false
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+    if not found then
+        return
+    end
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local rotating = clockControls.getVar('rotating')
+    if rotating then
+        return
+    end
+
+    local callParams = {}
+    callParams.nominator = found
+    nominate(callParams)
+end
+
+function nominatedUI(player, value, id)
+    local found = false
+    local target = UI.getAttribute(id, 'text')
+
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+
+    if not found then
+        return
+    end
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local rotating = clockControls.getVar('rotating')
+    if rotating then
+        return
+    end
+    updatePlayers()
+    if players[target] == nil or found ~= currentNominator then
+        return
+    end
+    local callParams = {}
+    callParams.player = found
+    callParams.target = target
+    nominated(callParams)
+    UI.setAttribute('colorSelection','active',false)
+    colorTable = false
+end
+
+function joinTeamUI(player, value, id)
+    local found = false
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+    if not found then
+        return
+    end
+    local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+    local params = {color = found, team = id}
+    teamTool.call('joinTeamUI', params)
+end
+
+function leaveTeamUI(player, value, id)
+    local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+    local jokersDefault = teamTool.getVar('jokersDefault')
+    local defaultTeam
+
+    if jokersDefault then
+        defaultTeam = 'Jokers'
+    else
+        defaultTeam = 'None'
+    end
+
+    if player.team ~= defaultTeam then
+        player.team = defaultTeam
+        local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+        teamTool.call('refreshUI')
+    end
+end
+
+function showExtensionUI()
+    UI.setAttribute('sit', 'active', 'true')
+    UI.setAttribute('teamMenu', 'active', 'true')
+    UI.setAttribute('leaveTeam', 'active', 'true')
+    UI.setAttribute('blackMessage', 'active', 'true')
+    UI.setAttribute('placeDecalTB', 'active', 'false')
+    UI.setAttribute('placeDecalBM', 'active', 'false')
+    UI.setAttribute('placeDecalSV', 'active', 'false')
+    UI.setAttribute('placeDecalCU', 'active', 'false')
+    UI.setAttribute('decalText', 'active', 'true')
+    UI.setAttribute('placeDecal'.. mode, 'active', 'true')
+end
+
+function generateAvatar(color)
+    local objParam = {
+        type = "Custom_Model",
+        position = AVATAR_POS[color],
+        rotation = AVATAR_ROT[color],
+        scale = {2.5, 2.5, 2.5},
+        callback = "avatarCallback",
+        sound = false
+    }
+    local obj
+    if avatarGuids[color] then
+        obj = getObjectFromGUID(avatarGuids[color])
+        obj.destruct()
+    end
+    local avatar = spawnObject(objParam)
+    avatar.setLock(true)
+    avatar.setDescription(color .. " Avatar")
+    avatar.interactable = false
+    local customParam = {
+        diffuse = generateAvatarImageUrl(playersEx[color].steam_id),
+        mesh = "http://cloud-3.steamusercontent.com/ugc/933813375177509684/900B7683E01C43C394C408BC38E034B305F1B3AA/",
+        collider = "http://cloud-3.steamusercontent.com/ugc/487893695356616224/E3E39A827C062914E4185D8757A81D4D14892B8B/",
+        type = 0,
+        material = 3
+    }
+    avatar.setCustomObject(customParam)
+end
+
+function avatarCallback(objIn, paramsIn)
+	local color = string.gsub(objIn.getDescription(), " Avatar", "")
+	avatarGuids[color] = objIn.getGUID()
+end
+
+function generateAvatarImageUrl(steamId)
+   return string.format("http://steam-tts.bclass.info/avatar/?i=%s&s=l", steamId)
+end
+
+function deleteAvatar(color)
+    if avatarGuids[color] then
+        obj = getObjectFromGUID(avatarGuids[color])
+        obj.destruct()
+        avatarGuids[color] = nil
+    end
+end
+
+function colorSitUI(player, value, id)
+	uiColor = value
+end
+
+function messageInputUI(player, value, id)
+    uiMsg = value
+end
+
+function sendMessageUI(blackPlayer, value, id)
+    updatePlayers()
+    local player = players[uiColor]
+    if player ~= nil then
+        local msg = COLORS_BBC[uiColor] .. '<' .. uiColor .. '>[-] [000000]' .. blackPlayer.steam_name .. ':[-] ' .. uiMsg
+        player.print(msg)
+        blackPlayer.print(msg)
+    else
+        blackPlayer.print('Nobody is sitting in ' .. uiColor .. '.', {1,0,0})
+    end
+end
+
+function decalUI(player, value, id)
+    updatePlayers()
+    local found = false
+    local params = {}
+    local tableObj = getObjectFromGUID('8e1176')
+    for k,v in pairs(playersEx) do
+        if v ~= nil and v.steam_id == player.steam_id then
+            found = k
+        end
+    end
+    if not found then
+        return
+    end
+    local globalDecals = Global.getDecals()
+    if globalDecals ~= nil then
+        for i = #globalDecals,1,-1 do
+            if math.abs(globalDecals[i].position[1] - DECAL_POS[found][1]) < 0.01 then
+                table.remove(globalDecals,i)
+            end
+        end
+        Global.setDecals({})
+        Global.setDecals(globalDecals)
+    end
+    if value ~= "None" then
+        params.name = value
+        params.url = DECAL_URLS[value]
+        params.position = DECAL_POS[found]
+        params.rotation = DECAL_ROT[found]
+        params.scale = {8,8,8}
+        Global.addDecal(params)
+    end
+end

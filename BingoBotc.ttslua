@@ -1,0 +1,493 @@
+--[[
+Blood on the Clocktower Bingo
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.4.4'
+NAME = 'BotC Bingo'
+START_POS = {x = -100, y = 1.1, z = 30}
+X_POS = {}
+Z_POS = {}
+POS_START = -1.1
+POS_INC = POS_START * -2 / 4
+BOX_SIZE = 280
+for i = 1,5 do
+    X_POS[i] = POS_START + (i-1) * POS_INC
+    Z_POS[i] = POS_START + (i-1) * POS_INC
+end
+SCALE = {1.93,1,1.93}
+COLOR = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COORD =
+{
+    White = {pos = {-35.61, -0.15, -44.95}, rot = {0, 225, 0}},
+    Brown = {pos = {-53.40, -0.15, -21.24}, rot = {0, 255, 0}},
+    Red = {pos = {-56.77, -0.15, 8.35}, rot = {0, 285, 0}},
+    Orange = {pos = {-45.08, -0.15, 35.60}, rot = {0, 315, 0}},
+    Yellow = {pos = {-21.19, -0.15, 53.34}, rot = {0, 345, 0}},
+    Green = {pos = {8.43, -0.15, 56.83}, rot = {0, 15, 0}},
+    Teal = {pos = {35.70, -0.15, 45.11}, rot = {0, 45, 0}},
+    Blue = {pos = {53.43, -0.15, 21.21}, rot = {0, 75, 0}},
+    Purple = {pos = {56.88, -0.15, -8.33}, rot = {0, 105, 0}},
+    Pink = {pos = {45.08, -0.15, -35.62}, rot = {0, 135, 0}},
+}
+
+BOOK =
+{
+    'Player leaves right after game starts',
+    'Two players claim the same role',
+    'Good misvotes on last day and loses',
+    'Demon executed day one',
+    'Game ends with no dead evil',
+    'Town lynches every dead evil',
+    '"Is this an all town game?"',
+    'Two evils in conflict',
+    'Player revised role claim twice during same day',
+
+    'Poisoner targets Imp during night',
+    'Town dies to unclaimed Virgin',
+    'Spy dies to Virgin',
+    'Non-poisoned Empath finds two evils',
+    'Soldier gets targetted by demon',
+    'Ravenkeeper ability activates',
+    'Imp wins after killing himself',
+    'Town wins via Mayor',
+    'Virgin nominates self and dies',
+    'Town executes Saint',
+    'Slayer kills Demon',
+    'Scarlet Woman becomes Imp after execution',
+    'Fortune Teller is their own red herring',
+    'Slayer kills Recluse',
+    'Mayor malfunctions last day and town loses',
+    'Monk saves a player',
+
+    'Nobody dies three days in a row',
+    'Game ends in stalemate',
+    'Player gets executed three times',
+    'Devils Advocate saves Demon',
+    'Devils Advocate saves a good player',
+    'Mastermind win',
+    'Lunatic ends the game without realizing his role',
+    'Professor resurrects town',
+    'Courtier poisons demon',
+    'Minstrel blocks a triple Po kill',
+    'Shabbaloth resurrects two+ players',
+    'Zombuul kills himself at night',
+    'Goon switches alignment two+ times',
+    'Tea lady saves a town',
+    'Exorcist continuously blocks demon',
+    'Sailor executed and saved by his own ability',
+    'Grandmother dies from Demon killing grandchild',
+    'Regent kills a good player',
+    'Player killed by Gossip',
+
+    'Town executes good twin',
+    'Vortox wins via zero executions',
+    'Player dies to madness',
+    'Mutant is never executed by the storyteller',
+    'Snake Charmer swaps to demon and wins',
+    'Philosopher becomes an outsider and wins',
+    'Philosopher makes a player drunk',
+    'Pit-Hag transforms own demon',
+    'Player dies to Witch day one',
+    'Klutz guesses wrong and loses',
+    'Cerenovus targets the demon',
+    'Fang Gu converts multiple outsiders',
+    'Sage ability triggers',
+    'Juggler successfully juggles five players',
+    'Dead player executed from madness',
+}
+
+
+
+------------------Variables
+phrase = {}
+selected = {}
+for i = 1,25 do
+    selected[i] = false
+end
+player_id = nil
+selfColor = nil
+title = 'BotC Bingo'
+player_name = nil
+tint = {0,0,0}
+direction = true
+timerID = nil
+
+------------------Functions
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        phrase = save['p'] or phrase
+        selected = save['s'] or selected
+        player_id = save['id']
+        selfColor = save['c']
+        title = save['t'] or title
+        tint = save['tint'] or tint
+        timerID = save['tid'] or timerID
+    end
+    self.use_grid = false
+    self.use_snap_points = false
+    refreshButtons()
+    setSquares()
+    moveBoard()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    if player_id ~= nil then
+        checkStarted()
+    end
+end
+
+function onSave()
+    local save = {}
+    save['p'] = phrase
+    save['s'] = selected
+    save['id'] = player_id
+    save['c'] = selfColor
+    save['t'] = title
+    save['tint'] = tint
+    save['tid'] = timerID
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function checkStarted()
+    Wait.time(checkStartedTimer, 5)
+end
+
+function checkStartedTimer()
+    local started = Global.getVar('started')
+    if started then
+        relocateBoard()
+    else
+        checkStarted()
+    end
+end
+
+function moveBoard()
+    local global_name = Global.getVar('MOD_NAME')
+    if global_name == 'Blood on the Clocktower Scripted' then
+        if player_id == nil then
+            local tab = getAllObjects()
+            local foundTab = {}
+            for _, v in pairs(tab) do
+                if string.match(v.getName(), NAME) then
+                    table.insert(foundTab,1,v)
+                end
+            end
+            self.setPositionSmooth({START_POS['x'], START_POS['y'], START_POS['z'] + (#foundTab-1) * 30})
+            self.setLock(true)
+        end
+    end
+end
+
+function giveBoard(clickedButton, playerColor, index)
+    if Player[playerColor].admin then
+        local color = COLOR[index]
+        if not Player[color].seated then
+            broadcastToColor('ERROR: Player not seated.', playerColor, {1,0,0})
+        else
+            self.setPositionSmooth(COORD[color].pos)
+            self.setRotationSmooth(COORD[color].rot)
+            self.setScale(SCALE)
+            player_id = Player[color].steam_id
+            player_name = Player[color].steam_name
+            title = player_name .. '\'s Bingo Board'
+            self.setName(title)
+            self.editButton({index= 25, label = title})
+            for i = 29,38 do
+                self.removeButton(i)
+            end
+            selfColor = color
+            shuffleSquares()
+            checkStarted()
+        end
+    end
+end
+
+function relocateBoard()
+    local players = getSeatedPlayers()
+    local found = false
+    for k,v in pairs(players) do
+        if Player[v].steam_id == player_id then
+            found = true
+            selfColor = v
+            player_name = Player[v].steam_name
+            break
+        end
+    end
+    if found then
+        self.setPositionSmooth(COORD[selfColor].pos)
+        self.setRotationSmooth(COORD[selfColor].rot)
+    else
+        self.destruct()
+    end
+end
+
+for k = 1,10 do
+    _G['giveBoard' .. k] = function(obj, col)
+        giveBoard(obj, col, k)
+    end
+end
+
+function ij(clickedButton, playerColor, i, j)
+    local ind = (i - 1) * 5 + (j - 1) + 1
+    selected[ind] = not selected[ind]
+    if selected[ind] then
+        self.editButton({index= ind - 1, color= {i/5,0.5,j/5}, font_color = {1,1,1}})
+    else
+        self.editButton({index= ind - 1, color= {1,1,1}, font_color = {0,0,0}})
+    end
+    checkBingo(i, j)
+end
+
+for i = 1,5 do
+    for j = 1,5 do
+        _G['ij' .. i .. j] =
+            function(obj, col)
+                ij(obj, col, i, j)
+            end
+    end
+end
+
+function checkBingo(i, j)
+    local indices = {}
+    local strings = {}
+    local gotBingo = false
+    local buttonTable = self.getButtons()
+    local type
+
+    suspendTint()
+    if selected[5*(i-1) + 1] and selected[5*(i-1) + 2] and selected[5*(i-1) + 3] and selected[5*(i-1) + 4] and selected[5*(i-1) + 5] then
+        gotBingo = true
+        indices = {5*(i-1) + 1, 5*(i-1) + 2, 5*(i-1) + 3, 5*(i-1) + 4, 5*(i-1) + 5}
+        type = 'column'
+    elseif selected[5*0 + j] and selected[5*1 + j] and selected[5*2 + j] and selected[5*3 + j] and selected[5*4 + j] then
+        gotBingo = true
+        indices = {5*0 + j, 5*1 + j, 5*2 + j, 5*3 + j, 5*4 + j}
+        type = 'row'
+    end
+
+    local square = (i-1) * 5 + j
+    if (square == 1 or square == 7 or square == 13 or square == 19 or square == 25) and selected[1] and selected[7] and selected[13] and selected[19] and selected[25] then
+        gotBingo = true
+        indices = {1, 7, 13, 19, 25}
+        type = 'd1'
+    end
+    if (square == 5 or square == 9 or square == 13 or square == 17 or square == 21) and selected[5] and selected[9] and selected[13] and selected[17] and selected[21] then
+        gotBingo = true
+        indices = {5, 9, 13, 17, 21}
+        type = 'd2'
+    end
+    if gotBingo then
+        if title == 'BotC Bingo' then
+            broadcastToAll('Thats a bingo!', {1,1,1})
+        else
+            broadcastToAll(player_name.. ' got a bingo!', stringColorToRGB(selfColor))
+        end
+        printToAll('Squares:', {1,1,1})
+        for i = 1,5 do
+            strings[i] = string.gsub(phrase[indices[i]], '\n', ' ')
+            printToAll(strings[i], buttonTable[indices[i]].color)
+        end
+        changeTint(i, j, type)
+    end
+end
+
+function nullFunc() end
+
+function setSquares()
+    local x,y
+    phrase[13] = 'Free Square'
+    for i = 0, 24 do
+        self.editButton({index = i, label = format(phrase[i+1]), tooltip = format(phrase[i+1])})
+        if selected[i+1] then
+            x = math.ceil((i+1)/5)/5
+            y = (i%5 + 1)/5
+            self.editButton({index = i, color = {x,0.5,y}, font_color = {1,1,1}})
+        end
+    end
+    self.editButton({index = 12, color = {0.6,0.5,0.6}, font_color = {1,1,1}})
+    selected[13] = true
+end
+
+function shuffleSquaresFunc(clickedButton, playerColor)
+    if Player[playerColor].admin then
+        shuffleSquares()
+    end
+end
+
+function shuffleSquares()
+    local temp, randNum
+    clearSquares()
+    for i = 1, #BOOK do
+        phrase[i] = BOOK[i]
+    end
+
+    for i = #BOOK, 1, -1 do
+        randNum = math.random(1, i)
+        temp = phrase[randNum]
+        phrase[randNum] = phrase[i]
+        phrase[i] = temp
+    end
+    phrase[13] = 'Free\nSquare'
+    setSquares()
+    suspendTint()
+end
+
+function clearSquares()
+    suspendTint()
+    for i = 0, 24 do
+        selected[i+1] = false
+        self.editButton({index = i, color = {1,1,1}, font_color = {0,0,0}})
+    end
+end
+
+function toggleLock()
+    if player_id ~= nil then
+        if self.getLock() then
+            self.setLock(false)
+        else
+            self.setLock(true)
+            self.setPositionSmooth(COORD[selfColor].pos)
+            self.setRotationSmooth(COORD[selfColor].rot)
+        end
+    end
+end
+
+function format(string)
+    local lineMax = 14
+    local result
+    local lineLen = 0
+    local output = ''
+
+    for word in string.gmatch(string, '%g+') do
+        if lineLen + string.len(word) + 1 > lineMax then
+            output = output .. '\n' .. word
+            lineLen = string.len(word)
+        else
+            if lineLen == 0 then
+                output = output .. word
+                lineLen = lineLen + string.len(word)
+            else
+                output = output .. ' ' .. word
+                lineLen = lineLen + 1 + string.len(word)
+            end
+        end
+    end
+    return output
+end
+
+function refreshButtons()
+    self.clearButtons()
+
+    for i = 1,5 do
+        for j = 1,5 do
+            local buttonParam = {click_function = 'ij' .. i .. j, label = '', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+                position = {X_POS[i],0.2,Z_POS[j]}, rotation = {0,0,0}, width = BOX_SIZE, height = BOX_SIZE, font_size = 35}
+            self.createButton(buttonParam)
+        end
+    end
+
+    local buttonParam = {click_function = 'nullFunc', label = title, color = {0,0,0,1}, font_color = stringColorToRGB('Blue'), function_owner = self,
+        position = {0,0.2,-1.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'clearSquares', label = 'Clear\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'shuffleSquaresFunc', label = 'Shuffle\nSquares', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'toggleLock', label = 'Toggle\nLock', color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.8,0.2,1.6}, rotation = {0,0,0}, width = 300, height = 200, font_size = 60}
+    self.createButton(buttonParam)
+
+    if player_id == nil then
+        local inc = -0.2
+        for i = 1,10 do
+            local buttonParam = {click_function = 'giveBoard'..i, color = stringColorToRGB(COLOR[i]), function_owner = self,
+                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 100, height = 100, font_size = 60, tooltip = 'Give board to ' .. COLOR[i]}
+            self.createButton(buttonParam)
+        end
+    end
+end
+
+function changeTint(i, j, type)
+    tint = {0,0.5,0}
+    if type == 'd2' then
+        tint[1] = 1
+    end
+    direction = true
+    timerID = Wait.time(function() colorTint(i,j,type) end, 0.01, -1)
+end
+
+function colorTint(i, j, type)
+    if type == 'row' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, j/5})
+    elseif type == 'column' then
+        if direction then
+            tint[3] = tint[3] + 0.01
+            if tint[3] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[3] = tint[3] - 0.01
+            if tint[3] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({i/5, 0.5, tint[3]})
+    elseif type == 'd1' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            tint[3] = tint[3] + 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            tint[3] = tint[3] - 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, tint[3]})
+    elseif type == 'd2' then
+        if direction then
+            tint[1] = tint[1] + 0.01
+            tint[3] = tint[3] - 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            tint[3] = tint[3] + 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint({tint[1], 0.5, tint[3]})
+    end
+end
+
+function suspendTint()
+    if timerID then
+        Wait.stop(timerID)
+        self.setColorTint({0,0,0})
+        timerID = nil
+    end
+end

@@ -1,0 +1,191 @@
+--[[
+Timer Tool
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.1.0'
+BUTTON_W = 420
+BUTTON_H = 300
+BUTTON_SPACING = 0.9
+COL = {}
+for i = -2,2 do
+    COL[i+3] = i * BUTTON_SPACING
+end
+BUTTON_Z = 1
+FONT_SIZE = 200
+START_POS = {x = -20, y = 1.1, z = 12}
+
+------------------Variables
+time = 0
+currentTimerID = 0
+tint = {0,0,0}
+tintID = nil
+
+
+------------------Functions
+function onLoad(saveString)
+    moveBoard()
+    refreshButtons()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function getLabel()
+    local minutes, seconds, timeLabel
+    minutes = math.floor((time / 60))
+    seconds = string.format('%02d',time % 60)
+    timeLabel = minutes .. ':' .. seconds
+    return timeLabel
+end
+
+function timeRefresh()
+    local minutes, seconds, timeLabel
+    time = time - 1
+    if time <= 30 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Yellow')})
+    end
+    if time <= 10 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Orange')})
+    end
+
+    self.editButton({index = 0, label = getLabel()})
+    if time == 0 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Red')})
+        changeTint()
+        return
+    else
+        currentTimerID = Wait.time(timeRefresh, 1)
+    end
+end
+
+function moveBoard()
+    local global_name = Global.getVar('MOD_NAME')
+    if global_name == 'Secret Hitler: CE' then
+        self.setPositionSmooth(START_POS)
+        self.setLock(true)
+    end
+end
+
+function time30s()
+    suspendTint()
+    self.editButton({index = 0, label = '0:30', font_color = stringColorToRGB('Blue')})
+    time = 30
+    startTimer()
+end
+
+function time3m()
+    suspendTint()
+    self.editButton({index = 0, label = '3:00', font_color = stringColorToRGB('Blue')})
+    time = 180
+    startTimer()
+end
+
+function time6m()
+    suspendTint()
+    self.editButton({index = 0, label = '6:00', font_color = stringColorToRGB('Blue')})
+    time = 360
+    startTimer()
+end
+
+function timeCustom(obj, player_clicker_color, input_value, selected)
+    if not selected then
+        suspendTint()
+        if input_value == '' then
+            input_value = 1
+        end
+        time = tonumber(input_value) * 60
+        if time <= 0 then
+            time = 10
+        end
+        self.editButton({index = 0, label = getLabel(), font_color = stringColorToRGB('Blue')})
+        startTimer()
+    end
+end
+
+function startTimer()
+    self.setLock(true)
+    Wait.stop(currentTimerID)
+    self.editButton({index = 4, label = 'Pause'})
+    currentTimerID = Wait.time(timeRefresh, 1)
+end
+
+function pauseFunc()
+    local buttonTable = self.getButtons()
+    local newLabel
+    suspendTint()
+    if buttonTable[5].label == 'Start' then
+        newLabel = 'Pause'
+        currentTimerID = Wait.time(timeRefresh, 1)
+    else
+        newLabel = 'Start'
+        Wait.stop(currentTimerID)
+    end
+    self.editButton({index = 4, label = newLabel})
+end
+
+function changeTint()
+    tint = {0,0,0}
+    direction = true
+    tintID = Wait.time(colorTint, 0.01, -1)
+end
+
+function colorTint()
+        if direction then
+            tint[1] = tint[1] + 0.01
+            tint[2] = tint[2] + 0.01
+            tint[3] = tint[3] + 0.01
+            if tint[1] >= 1 then
+                direction = not direction
+            end
+        else
+            tint[1] = tint[1] - 0.01
+            tint[2] = tint[2] - 0.01
+            tint[3] = tint[3] - 0.01
+            if tint[1] <= 0 then
+                direction = not direction
+            end
+        end
+        self.setColorTint(tint)
+end
+
+function suspendTint()
+    if tintID then
+        Wait.stop(tintID)
+        self.setColorTint({0,0,0})
+        tintID = nil
+    end
+end
+
+
+------------------User Interface
+function refreshButtons()
+    self.clearButtons()
+    self.clearInputs()
+    local timeLabel
+
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = '0:00', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
+        position = {0,0.2,-0.2}, width = 0, height = 0, font_size = 800}
+    self.createButton(buttonParam)
+
+
+    local buttonParam = {click_function = 'time30s', function_owner = self, label = '30s', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {COL[1],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 30 seconds.'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'time3m', function_owner = self, label = '3m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {COL[2],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 3 minutes.'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'time6m', function_owner = self, label = '6m', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {COL[3],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Start the timer at 6 minutes.'}
+    self.createButton(buttonParam)
+
+    local inputParam = {input_function = 'timeCustom', function_owner = self, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+        position = {COL[4],0.2,BUTTON_Z}, rotation = {0,0,0}, width = BUTTON_W, height = FONT_SIZE + 23, font_size = FONT_SIZE, value = 0, alignment = 3, validation = 2, tab = 1, tooltip = 'Start the timer at a custom number of minutes.'}
+    self.createInput(inputParam)
+
+    local buttonParam = {click_function = 'pauseFunc', function_owner = self, label = 'Pause', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {COL[5],0.2,BUTTON_Z}, width = BUTTON_W, height = BUTTON_H, font_size = 150, tooltip = 'Pause or start the timer.'}
+    self.createButton(buttonParam)
+end

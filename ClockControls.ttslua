@@ -5,19 +5,22 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.1'
+VERSION = '1.5.0'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-BLACK_ZONES = {{guid = 'cf55c7', scale = {80.1, 30, 80.1}}, {guid = '3c9b1d', scale = {50, 10, 66}}}
+BLACK_ZONES = {{guid = 'cf55c7', scale = {80.1, 10, 80.1}},}
+SCRIPTING_ZONE_GUID = 'a17a77'
 CLOCK_GUID = '0d5f75'
 PURPLE_HAND_GUID = '88ad59'
 BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 TEAM_TOOL_GUID = '6fbc83'
+TABLE_GUIDS = {'7f1f5f'}
 HAND_ROTATION = {White = 217.5, Brown = 232.5, Red = 247.5, Orange = 262.5, Yellow = 277.5, Green = 292.5, Teal = 307.5, Blue = 322.5, Purple = 337.5, Pink = 352.5, Magenta = 7.5, Lavender = 22.5, Navy = 37.5, Cyan = 52.5, Mint = 67.5, Lime = 82.5, Peach = 97.5, Coral = 112.5, Maroon = 127.5, Silver = 142.5, None = 180}
 COLORS_EX_HEX = {Magenta = {255/255, 0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0,0,128/255}, Cyan = {73/255, 213/255,253/255}, Mint = {137/255, 195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255, 212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255, 190/255,190/255}}
+
 
 ------------------Variables
 pointedPlayer = 'None'
@@ -296,7 +299,8 @@ end
 for k,v in pairs(COLORS_ALL) do
     _G['pointTo' .. v] = function(obj, col)
         local players = Global.call('updatePlayers')
-        if players[v] == nil then
+        local voteButtonsOn = Global.getTable('voteButtonsOn')
+        if voteButtonsOn[v] == false then
             return
         end
         local clock = getObjectFromGUID(CLOCK_GUID)
@@ -522,11 +526,16 @@ function toggleHiddenZones(clickedObject, playerColor)
 end
 
 function showGrimoire()
-    local zoneObj
+    local zoneObj, scriptZone, objs
     grimShow = true
     for k,v in pairs(BLACK_ZONES) do
         zoneObj = getObjectFromGUID(v.guid)
         zoneObj.setScale({0,0,0})
+    end
+    scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    objs = scriptZone.getObjects()
+    for k,v in pairs(objs) do
+        v.setInvisibleTo({})
     end
     self.editButton({
         index          = 5,
@@ -536,17 +545,33 @@ function showGrimoire()
 end
 
 function hideGrimoire()
-    local zoneObj
+    local zoneObj, scriptZone, objs
     grimShow = false
     for k,v in pairs(BLACK_ZONES) do
         zoneObj = getObjectFromGUID(v.guid)
         zoneObj.setScale(v.scale)
+    end
+    scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    objs = scriptZone.getObjects()
+    for k,v in pairs(objs) do
+        if not inTable(v.getGUID(), TABLE_GUIDS) then
+            v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+        end
     end
     self.editButton({
         index          = 5,
         label          = 'Show\nGrimoire',
         tooltip        = 'Click this to show the grimoire.',
     })
+end
+
+function inTable(string, table)
+    for k,v in pairs(table) do
+        if string == v then
+            return true
+        end
+    end
+    return false
 end
 
 function toggleExSeatLock(clickedObject, playerColor)

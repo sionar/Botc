@@ -5,14 +5,16 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.3'
+VERSION = '1.1.0'
 Z_START = -8.5
 Z_INC = 0.45
 FONT_SIZE_LABEL = 200
 FONT_SIZE_TEXT = 150
-COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black', 'Table'}
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black'}
+COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_DEAL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Black', 'Table'}
+VISIBILITY = {}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveller = '[30B22A]'}
 ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
 TYPES = {'Townsfolk', 'Outsider', 'Minion', 'Demon', 'Traveller'}
@@ -27,6 +29,14 @@ for k,v in pairs(COLORS_ALL) do
     CLONE[v].rot = {0, ANGLE[v], 0}
     CLONE[v].scale = {0.6,0.6,0.6}
 end
+
+for k,v in pairs(COLORS) do
+    VISIBILITY[v] = v
+end
+for k,v in pairs(COLORS_EX) do
+    VISIBILITY[v] = 'Grey'
+end
+VISIBILITY['Table'] = 'All'
 
 CLONE['Black'] = {}
 CLONE['Table'] = {}
@@ -202,8 +212,25 @@ function destroyObjects()
         obj.setRotationSmooth(CLONE[v].rot)
         obj.setScale(CLONE[v].scale)
         obj.setLock(true)
+        obj.setInvisibleTo(visibleToOnly(VISIBILITY[v]))
     end
     self.destruct()
+end
+
+function visibleToOnly(color)
+    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black', 'Grey'}
+    local result = {}
+
+    if color == 'All' then
+        return {}
+    end
+
+    for k,v in pairs(colors) do
+        if v ~= color then
+            table.insert(result,v)
+        end
+    end
+    return result
 end
 
 function setSaveName(obj, color, input, stillEditing, index)

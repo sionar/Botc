@@ -5,32 +5,32 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.2'
-ROW_S = -1.4
-ROW_W = 0.13
-FONT_SIZE = 50
-FONT_SIZE_LABEL = 80
-BUTTON_SIZE = 60
-BUTTON_Y = 1.0
-COLUMN = {-0.8, -0.3, -0.1, 0.8, 1.4}
+VERSION = '1.6.0'
+ROW_S = -6.3
+ROW_W = 0.45
+FONT_SIZE = 225
+FONT_SIZE_LABEL = 360
+BUTTON_SIZE = 270
+BUTTON_Y = 1
+COLUMN = {-3.6, -1.35, -0.45, 3.6, 6.3}
 ROW = {}
-for i = 1,15 do
+for i = 1,20 do
     ROW[i] = ROW_S + i * ROW_W
 end
-PREVIEW_LAB_Z = 0.3
-PREVIEW_MSG_Z = 0.6
-ADDCHAR_LAB_X = -1.1
-ADDCHAR_LAB_Z = 0.8
-ADD_BUT_X = -0.4
-INPUTS_X = {-1.4, -0.7, 0.15, 0.95, 1.6}
-INPUTS_LAB_Z = 0.95
-INPUT_BUT_Z = 1.1
-BOTTOM_BUT_X = {-0.9, -0.3, 0.3, 0.9}
-BOTTOM_BUT_Z = 1.5
+PREVIEW_LAB_Z = 1.35
+PREVIEW_MSG_Z = 2.7
+ADDCHAR_LAB_X = -4.95
+ADDCHAR_LAB_Z = 3.6
+ADD_BUT_X = -1.6
+INPUTS_X = {-6.3, -3.15, 0.6, 3.9, 7.2}
+INPUTS_LAB_Z = 4.275
+INPUT_BUT_Z = 4.95
+BOTTOM_BUT_X = {-4.05, -1.35, 1.35, 4.05}
+BOTTOM_BUT_Z = 6.75
 
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[000080]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[329A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
-COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,168/255,149/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 
 START_POS = {x = 0, y = 1.11, z = 127}
 
@@ -102,6 +102,7 @@ end
 function import()
     local roles = Global.getTable('roles')
     local numRoles = 0
+
     for k,v in pairs(roles) do
         numRoles = numRoles + 1
     end
@@ -181,7 +182,7 @@ function setMsg()
     else
         currentMsg = CHARACTERS[currentRole].Prompt
     end
-    sendMsg = currentMsg
+    sendMsg = removeUnder(currentMsg)
     refreshUI()
 end
 
@@ -216,7 +217,7 @@ function used(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,15 do
+for k = 1,20 do
     _G['used' .. k] = function(obj, col)
         used(obj, col, k)
     end
@@ -261,7 +262,7 @@ function remove(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,15 do
+for k = 1,20 do
     _G['remove' .. k] = function(obj, col)
         remove(obj, col, k)
     end
@@ -321,7 +322,7 @@ function skip(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,15 do
+for k = 1,20 do
     _G['skip' .. k] = function(obj, col)
         skip(obj, col, k)
     end
@@ -395,7 +396,7 @@ function p1Input(obj, color, input, stillEditing)
                 elseif v.Type == 'Traveller' then
                     textColor = COLORS_BBC['Green']
                 end
-                p1 = textColor .. k .. '[-]'
+                p1 = removeUnder(textColor .. k .. '[-]')
                 found = true
                 break
             end
@@ -435,7 +436,7 @@ function p2Input(obj, color, input, stillEditing)
                 else
                     textColor = COLORS_BBC['Red']
                 end
-                p2 = textColor .. k .. '[-]'
+                p2 = removeUnder(textColor .. k .. '[-]')
                 found = true
                 break
             end
@@ -459,7 +460,7 @@ function p3Input(obj, color, input, stillEditing)
         local found = false
         for k,v in pairs(COLORS) do
             if string.match(string.lower(v), string.lower(input)) then
-                p3 = COLORS_BBC[v] .. v .. '[-]'
+                p3 = removeUnder(COLORS_BBC[v] .. v .. '[-]')
                 found = true
                 break
             end
@@ -494,7 +495,7 @@ function editMsg()
     msg = string.gsub(msg, 'P1', p1)
     msg = string.gsub(msg, 'P2', p2)
     msg = string.gsub(msg, 'P3', p3)
-    sendMsg = msg
+    sendMsg = removeUnder(msg)
     refreshUI()
 end
 
@@ -609,8 +610,8 @@ function refreshUI()
     local inputParam = {}
 
 
-    LIVING_LAB_Z = -1.5
-    NIGHT_LAB_Z = -1.5
+    LIVING_LAB_Z = -6.75
+    NIGHT_LAB_Z = -6.75
 
     buttonParam = {click_function = 'nullFunc', label = 'Living Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {COLUMN[1],BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
@@ -621,11 +622,11 @@ function refreshUI()
     self.createButton(buttonParam)
 
     for i = 1, #living do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = living[i].role, color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(living[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
         if CHARACTERS[living[i].role].Ability == true then
-            buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 150, height = BUTTON_SIZE, font_size = 30, tooltip = 'Remove from list'}
+            buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 600, height = 200, font_size = 120, tooltip = 'Remove from list'}
             if abilityUsed[living[i].color] == false then
                 buttonParam.label = 'Has\nAbility'
                 buttonParam.font_color = stringColorToRGB('Blue')
@@ -636,23 +637,23 @@ function refreshUI()
             self.createButton(buttonParam)
         end
 
-        buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[3],BUTTON_Y,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = FONT_SIZE, tooltip = 'Remove from list'}
+        buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[3],BUTTON_Y,ROW[i]}, width = 230, height = 230, font_size = FONT_SIZE, tooltip = 'Remove from list'}
         self.createButton(buttonParam)
     end
 
     if #order > 0 then
-        buttonParam = {click_function = 'send', function_owner = self, label = order[1].role, color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 300, height = 50, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 1350, height = 225, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 150, height = BUTTON_SIZE, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 675, height = 230, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 
     for i = 2, #order do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = order[i].role, color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 150, height = BUTTON_SIZE, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 675, height = BUTTON_SIZE, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 
@@ -690,41 +691,45 @@ function refreshUI()
         position = {INPUTS_X[5],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'addChar', label = '+', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 74, height = 74, font_size = FONT_SIZE, tooltip = 'Add character to game'}
+    buttonParam = {click_function = 'addChar', label = '+', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 400, height = 74, font_size = FONT_SIZE, value = roleAdd, alignment = 3, validation = 1, tab = 2}
+        position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = roleAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'colorInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[2],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 200, height = 74, font_size = FONT_SIZE, value = colorAdd, alignment = 3, validation = 1, tab = 2}
+        position = {INPUTS_X[2],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 900, height = 260, font_size = FONT_SIZE, value = colorAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'p1Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 350, height = 74, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
+        position = {INPUTS_X[3],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'p2Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 350, height = 74, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
+        position = {INPUTS_X[4],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
     self.createInput(inputParam)
 
     local inputParam = {input_function = 'p3Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 200, height = 74, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
+        position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
     self.createInput(inputParam)
 
-    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 250, height = 200, font_size = FONT_SIZE, tooltip = 'Import roles\nfrom game'}
+    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Import roles\nfrom game'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 250, height = 200, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
+    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 250, height = 200, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
+    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 250, height = 200, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
+    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
     if not blindAuto then
         buttonParam.label = 'Auto\nBlindfold\nOFF'
     end
     self.createButton(buttonParam)
+end
+
+function removeUnder(input)
+    return string.gsub(input, '_', ' ')
 end

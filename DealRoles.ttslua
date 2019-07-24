@@ -5,10 +5,10 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.4'
+VERSION = '1.2.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Coral', 'Lavender', 'Navy', 'Lime', 'Maroon'}
-COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,168/255,149/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
 
 function radius(rad, angle, height)
@@ -20,7 +20,7 @@ for k,v in pairs(COLORS_ALL) do
     POS[v][3] = POS[v][3] + 100
 end
 
-NIGHT_HELPER_GUID = '8133a2'
+NIGHT_HELPER_GUID = 'f79556'
 MODE_SELECTOR_GUID = '884de8'
 CUSTOM_IMPORTER_GUID = 'f79557'
 
@@ -44,7 +44,7 @@ function dealToPlayers(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
+    local debug = Global.getVar('DEBUG')
     local objectsInBag = self.getObjects()
     local params, obj, role
     local roles = {}
@@ -66,25 +66,28 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     for k,v in pairs(COLORS_ALL) do
-        if players[v] ~= nil then
+        if players[v] ~= nil or debug then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,
                 position = POS[v],
-                rotation = {0, 180, 0}
+                rotation = {0, 0, 0}
             }
 
             obj = self.takeObject(params)
             role = obj.getName()
             roles[v] = role
-            players[v].print('Your role is ' .. role..'!')
+
             tokenBagTable = tokenBag.getObjects()
             size = tokenBag.getQuantity()
             for j = size,1,-1 do
                 if tokenBagTable[j].name == role then
-                    params = {index = j-1, position = POS[v], rotation = {0, 180, 0}}
-                    --params.position.y = params.position.y + 1
+                    params = {index = j-1, position = POS[v], rotation = {0, 0, 0}}
+                    params.position[2] = params.position[2] + 1
                     tokenBag.takeObject(params)
                 end
+            end
+            if not debug then
+                players[v].print('Your role is ' .. role..'!')
             end
         end
     end

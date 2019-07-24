@@ -313,7 +313,7 @@
 	width = "150"
     rectAlignment = "LowerCenter"
     offsetXY = "230 7"
-    visibility = "Grey"
+    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     >
     Place Decal
@@ -327,7 +327,7 @@
 	offsetXY = "230 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
-	visibility = "Grey"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     cellBackgroundColor = "rgba(1,1,1,0)"
     >
@@ -376,7 +376,7 @@
 	offsetXY = "230 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
-	visibility = "Grey"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     cellBackgroundColor = "rgba(1,1,1,0)"
     >
@@ -428,7 +428,7 @@
 	offsetXY = "230 7"
 	childAlignment = "MiddleCenter"
 	spacing = "-5"
-	visibility = "Grey"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     cellBackgroundColor = "rgba(1,1,1,0)"
     >

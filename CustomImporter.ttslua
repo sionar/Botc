@@ -5,11 +5,12 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 Z_START = -8.5
 Z_INC = 0.45
 FONT_SIZE_LABEL = 200
 FONT_SIZE_TEXT = 150
+BUTTON_HEIGHT = 0.2
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -23,6 +24,7 @@ REF_BLACK_GUID = '49ac3a'
 REF_TABLE_GUID = 'b0105e'
 CLONE = {}
 CLONE_POS = Global.getTable('ROLE_SHEET_POS')
+
 for k,v in pairs(COLORS_ALL) do
     CLONE[v] = {}
     CLONE[v].pos = CLONE_POS[v]
@@ -64,6 +66,8 @@ function onLoad(saveString)
         saveNames = save['sn']
     end
     refreshUI()
+    moveBoard()
+    self.setDescription('v ' .. VERSION )
 end
 
 function onSave()
@@ -73,6 +77,16 @@ function onSave()
     save['sn'] = saveNames
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function moveBoard()
+    local modName = Global.getVar('MOD_NAME')
+    local customSet = Global.getVar('customSet')
+    if modName == 'Blood on the Clocktower Ex' and not customSet then
+        self.setPositionSmooth({20,1.15,105})
+        self.setRotationSmooth({0,0,0})
+        self.setLock(true)
+    end
 end
 
 function charInput(obj, color, input, stillEditing)
@@ -218,7 +232,7 @@ function destroyObjects()
 end
 
 function visibleToOnly(color)
-    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black', 'Grey'}
+    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}
     local result = {}
 
     if color == 'All' then
@@ -270,59 +284,59 @@ function saveLoadMenu()
     self.clearInputs()
 
     buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Lists", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,2,-6}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
+        position = {0,BUTTON_HEIGHT,-6}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
     self.createButton(buttonParam)
 
     inputParam = {input_function = 'setSaveName1', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,2,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
+        position = {-3.2,BUTTON_HEIGHT,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName2', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,2,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
+        position = {3.2,BUTTON_HEIGHT,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName3', color = stringColorToRGB('Green'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,2,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
+        position = {-3.2,BUTTON_HEIGHT,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName4', color = stringColorToRGB('Orange'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,2,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
+        position = {3.2,BUTTON_HEIGHT,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'save1', label = "Save", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,2,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-4.4,BUTTON_HEIGHT,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save2', label = "Save", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,2,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {2,BUTTON_HEIGHT,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save3', label = "Save", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,2,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-4.4,BUTTON_HEIGHT,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save4', label = "Save", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,2,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {2,BUTTON_HEIGHT,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load1', label = "Load", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,2,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-2,BUTTON_HEIGHT,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load2', label = "Load", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,2,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {4.4,BUTTON_HEIGHT,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load3', label = "Load", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,2,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-2,BUTTON_HEIGHT,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load4', label = "Load", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,2,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {4.4,BUTTON_HEIGHT,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'refreshUI', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,2,5.6}, rotation = {0,0,0}, width = 2000, height = 600, font_size = 320}
+        position = {0,BUTTON_HEIGHT,5.6}, rotation = {0,0,0}, width = 2000, height = 600, font_size = 320}
     self.createButton(buttonParam)
 end
 
@@ -337,22 +351,22 @@ function refreshUI()
     local numChars = 0
 
     if not customSet then
-        params = {input_function = 'charInput', position = {-4, 2, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}
+        params = {input_function = 'charInput', position = {-4, BUTTON_HEIGHT, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}
         self.createInput(params)
 
-        params = {click_function = 'removeChar', label = 'Remove', position = {-5, 2, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Remove character from game'}
+        params = {click_function = 'removeChar', label = 'Remove', position = {-5, BUTTON_HEIGHT, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Remove character from game'}
         self.createButton(params)
 
-        params = {click_function = 'addChar', label = 'Add', position = {-3, 2, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Add character to game'}
+        params = {click_function = 'addChar', label = 'Add', position = {-3, BUTTON_HEIGHT, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Add character to game'}
         self.createButton(params)
 
-        params = {click_function = 'clear', label = 'Clear\nList', position = {0, 2, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Clear custom list'}
+        params = {click_function = 'clear', label = 'Clear\nList', position = {0, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Clear custom list'}
         self.createButton(params)
 
-        params = {click_function = 'saveLoadMenu', label = 'Load/Save\nLists', position = {2, 2, 8}, width = 900, height = 500, font_size = 150, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Open the save/load menu'}
+        params = {click_function = 'saveLoadMenu', label = 'Load/Save\nLists', position = {2, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 150, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Open the save/load menu'}
         self.createButton(params)
 
-        params = {click_function = 'import', label = 'Import\nTo Game', position = {4, 2, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Import list to game'}
+        params = {click_function = 'import', label = 'Import\nTo Game', position = {4, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Import list to game'}
         self.createButton(params)
     else
         z = z + Z_INC * 2
@@ -369,7 +383,7 @@ function refreshUI()
     for k,v in pairs(TYPES) do
         if found[v] then
             params = {click_function = 'nullFunc', label = COLORS_BBC[v] .. v, color = {1,1,1,1}, function_owner = self,
-                position = {0,1,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
+                position = {0,BUTTON_HEIGHT,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
             self.createButton(params)
             z = z + Z_INC * 1.5
         end
@@ -379,7 +393,7 @@ function refreshUI()
                 numChars = numChars + 1
                 charLabel = string.gsub(v1, '_', ' ')
                 params = {click_function = 'nullFunc', color = {1,1,1,1}, function_owner = self,
-                    position = {0,1,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_TEXT,}
+                    position = {0,BUTTON_HEIGHT,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_TEXT,}
                 params.label = COLORS_BBC[CHARACTERS[v1].Type] .. charLabel .. '[FFFFFF] - ' .. CHARACTERS[v1].Description .. '[-]'
                 self.createButton(params)
                 z = z + Z_INC

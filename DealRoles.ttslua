@@ -20,7 +20,7 @@ for k,v in pairs(COLORS_ALL) do
     POS[v][3] = POS[v][3] + 100
 end
 
-NIGHT_HELPER_GUID = 'f79556'
+NIGHT_HELPER_GUID = 'bb89aa'
 MODE_SELECTOR_GUID = '884de8'
 CUSTOM_IMPORTER_GUID = 'f79557'
 

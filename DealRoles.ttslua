@@ -61,7 +61,7 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     if self.getQuantity() == 0 then
-        printToColor('ERROR: No roles in the bag.', color, {1,0,0})
+        Player['Black'].print('ERROR: No roles in the bag.', {1,0,0})
         return
     end
 

@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -34,14 +34,17 @@ shortcutsOn = true
 extension = false
 seatLock = false
 votingMode = ''
+allMuted = false
+allBlind = false
 
 
 ------------------Functions
 function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
-        extension = save['e']
         seatLock = save['s']
+        allMuted = save['am']
+        allBlind = save['ab']
     end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
@@ -54,12 +57,12 @@ function onLoad(saveString)
 
     local params = {click_function = 'toggleClockNom', function_owner = self,
     label = 'Show Clock', position = {0, 1, 0}, scale = UI_SCALE,
-    color = {0, 1, 0}, width = 2100, height = 500, font_size = 400}
+    color = {0, 1, 0}, width = 2700, height = 500, font_size = 400}
     self.createButton(params)
 
     params = {click_function = 'toggleClockMovement', function_owner = self,
     label = 'Start Clock', position = {0, 1, 1.2}, scale = {0, 0, 0},
-    color = {0, 1, 0}, width = 2100, height = 500, font_size = 400}
+    color = {0, 1, 0}, width = 2700, height = 500, font_size = 400}
     self.createButton(params)
 
     params = {input_function = 'setRotValue', function_owner = self, label = 'Rotation Value',
@@ -80,7 +83,7 @@ function onLoad(saveString)
 
     params = {click_function = 'toggleModes', function_owner = self,
     label = 'Clock Mode', position = {0, 1, -1.2}, scale = UI_SCALE,
-    color = {1, 1, 1}, width = 2100, height = 500, font_size = 400, tooltip = 'Left Click: Switch to Blindfold Mode\nRight Click: Switch to Mute Mode'}
+    color = {1, 1, 1}, width = 2700, height = 500, font_size = 400, tooltip = 'Left Click: Switch to Blindfold Mode\nRight Click: Switch to Mute Mode'}
     self.createButton(params)
 
     params = {click_function = 'toggleHiddenZones', function_owner = self,
@@ -117,14 +120,22 @@ function onLoad(saveString)
         color = COLORS_EX_HEX[c], tooltip = 'Point the clock to '..c}
         self.createButton(params)
     end
-    Wait.time(hideGrimoire, 5)
+    hideGrimoire()
 end
 
 function onSave()
     local save = {}
     save['s'] = seatLock
+    save['ab'] = allBlindd
+    save['am'] = allMuted
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function onPlayerConnect(player)
+    if allBlind then
+        player.blindfolded = true
+    end
 end
 
 function onFixedUpdate()
@@ -265,19 +276,6 @@ function toggleClockMovement()
     end
 end
 
-function muteAll(clickedObject, playerColor)
-    if playerColor ~= 'Black' then
-        return
-    end
-
-    local allPlayers = Player.getPlayers()
-    for k, v in pairs(allPlayers) do
-        if v.color ~= 'Black' then
-            v.mute()
-        end
-    end
-end
-
 function toggleClockMovementButton(currentlyRotating)
     if currentlyRotating == false then
         self.editButton({index = 1, label = 'Stop Clock', color = {1, 0, 0}})
@@ -355,7 +353,6 @@ function toggleModes(clickedObject, playerColor, altClick)
         self.editButton({
             index          = 4, -- the mode toggle button
             label          = 'Mute Mode',
-            width          = 2100,
             color          = {1, 0, 0},
             font_color     = {0, 0, 0},
             tooltip        = 'Left Click: Switch to Blindfold Mode\nRight Click: Switch to Clock Mode'
@@ -364,10 +361,12 @@ function toggleModes(clickedObject, playerColor, altClick)
             index          = 0,
             click_function = 'muteAll',
             label          = 'Mute All',
-            width          = 2100,
             color          = {0, 1, 0},
             font_color     = {0, 0, 0},
         })
+        if allMuted then
+            self.editButton({index = 0, label = 'Unmute All'})
+        end
 
         for i, c in ipairs(COLORS_ALL) do
             self.editButton({
@@ -382,7 +381,6 @@ function toggleModes(clickedObject, playerColor, altClick)
         self.editButton({
             index          = 4, -- the mode toggle button
             label          = 'Blindfold Mode',
-            width          = 2700,
             color          = {0, 0, 0},
             font_color     = {1, 1, 1},
             tooltip        = 'Left Click: Switch to Clock Mode\nRight Click: Switch to Mute Mode'
@@ -391,10 +389,12 @@ function toggleModes(clickedObject, playerColor, altClick)
             index          = 0,
             click_function = 'blindfoldAll',
             label          = 'Blindfold All',
-            width          = 2300,
             color          = {0, 1, 0},
             font_color     = {0, 0, 0},
         })
+        if allBlind then
+            self.editButton({index = 0, label = 'Unblindfold All'})
+        end
 
         for i, c in ipairs(COLORS_ALL) do
             self.editButton({
@@ -409,7 +409,6 @@ function toggleModes(clickedObject, playerColor, altClick)
         self.editButton({
             index          = 4, -- the mode toggle button
             label          = 'Clock Mode',
-            width          = 2100,
             color          = {1, 1, 1},
             font_color     = {0, 0, 0},
             tooltip        = 'Left Click: Switch to Mute Mode\nRight Click: Switch to Blindfold Mode'
@@ -420,7 +419,6 @@ function toggleModes(clickedObject, playerColor, altClick)
                 index          = 0,
                 click_function = 'toggleClockNom',
                 label          = 'Hide Clock',
-                width          = 2100,
                 color          = {0, 1, 0},
                 font_color     = {0, 0, 0},
             })
@@ -429,7 +427,6 @@ function toggleModes(clickedObject, playerColor, altClick)
                 index          = 0,
                 click_function = 'toggleClockNom',
                 label          = 'Show Clock',
-                width          = 2100,
                 color          = {0, 1, 0},
                 font_color     = {0, 0, 0},
             })
@@ -473,10 +470,22 @@ function blindfoldAll(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
+    allBlind = not allBlind
     local allPlayers = Player.getPlayers()
-    for k, v in pairs(allPlayers) do
-        if v.color ~= 'Black' then
-            v.blindfolded = not v.blindfolded
+
+    if allBlind then
+        self.editButton({index = 0, label = 'Unblindfold All'})
+        for k, v in pairs(allPlayers) do
+            if v.color ~= 'Black' then
+                v.blindfolded = true
+            end
+        end
+    else
+        self.editButton({index = 0, label = 'Blindfold All'})
+        for k, v in pairs(allPlayers) do
+            if v.color ~= 'Black' then
+                v.blindfolded = false
+            end
         end
     end
 end
@@ -489,6 +498,25 @@ for k,v in pairs(COLORS_ALL) do
             if player ~= nil then
                 player.mute()
             end
+        end
+    end
+end
+
+function muteAll(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    allMuted = not allMuted
+    local allPlayers = Player.getPlayers()
+    if allMuted then
+        self.editButton({index = 0, label = 'Unmute All'})
+    else
+        self.editButton({index = 0, label = 'Mute All'})
+    end
+
+    for k, v in pairs(allPlayers) do
+        if v.color ~= 'Black' then
+            v.mute()
         end
     end
 end

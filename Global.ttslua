@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower Ex'
-VERSION = '14.3.0'
+VERSION = '14.3.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [329A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [329A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -17,6 +17,8 @@ COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blu
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[000080]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[329A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_EX_HEX = {Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
+VOTEHAND_SHOW_SCALE = {3,1,3}
+VOTEHAND_HIDE_SCALE = {0,0,0}
 
 function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
@@ -24,8 +26,6 @@ end
 
 VOTEHAND_SHOW_POS = {}
 VOTEHAND_HIDE_POS = {}
-VOTEHAND_SHOW_SCALE = {3,1,3}
-VOTEHAND_HIDE_SCALE = {0,0,0}
 AVATAR_POS = {}
 AVATAR_ROT = {}
 DECAL_POS = {}
@@ -183,13 +183,15 @@ function onLoad(saveString)
     Wait.time(refreshObjects,10)
 
     -- check if players are alive, dead, and have a vote token regularly
-    Wait.time(function()
-        updatePlayers()
-        for k,v in pairs(COLORS_ALL) do
-            getAliveTokens(v)
+    Wait.time(
+        function()
+            updatePlayers()
+            for k,v in pairs(COLORS_ALL) do
+                getAliveTokens(v)
+            end
+            handleLifeUI()
         end
-        handleLifeUI()
-    end, 2, -1)
+    , 2, -1)
 end
 
 function onSave()
@@ -253,62 +255,62 @@ function onChat(message, player)
         player.print('Version ' .. VERSION)
         return false
     elseif command == '.magenta' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Magenta', msg)
         end
         return false
     elseif command == '.lavender' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Lavender', msg)
         end
         return false
     elseif command == '.navy' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Navy', msg)
         end
         return false
     elseif command == '.cyan' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Cyan', msg)
         end
         return false
     elseif command == '.mint' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Mint', msg)
         end
         return false
     elseif command == '.lime' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Lime', msg)
         end
         return false
     elseif command == '.peach' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Peach', msg)
         end
         return false
     elseif command == '.coral' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Coral', msg)
         end
         return false
     elseif command == '.maroon' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Maroon', msg)
         end
         return false
     elseif command == '.silver' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMessage('Silver', msg)
         end
         return false
     elseif command == '.move' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatMove(args[2], args[3])
             return false
         end
     elseif command == '.remove' then
-        if player.color == 'Black' then
+        if player.color == 'Black' or DEBUG then
             chatRemove(args[2])
             return false
         end
@@ -325,6 +327,9 @@ function onChat(message, player)
 end
 
 function chatMessage(color, message)
+    if message == nil then
+        return
+    end
     updatePlayers()
     local player = players[color]
     if player ~= nil then
@@ -337,6 +342,10 @@ function chatMessage(color, message)
 end
 
 function chatMove(playerName, seatColor)
+    if playerName == nil or seatColor == nil then
+        return
+    end
+
     local playerFound = false
     local colorFound = false
     local playerList = Player.getPlayers()
@@ -365,34 +374,33 @@ function chatMove(playerName, seatColor)
         return
     end
 
-    if colorFound == 'Grey' then
-        playerFound.changeColor(colorFound)
-        Player['Black'].print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
-        for k,v in pairs(playersExIds) do
-            if playerFound.steam_id == v then
-                sitUI(playerFound, _, k)
-            end
+    updatePlayers()
+    if colorFound ~= 'Grey' and players[colorFound] ~= nil then
+        Player['Black'].print('Error: Could not move player: seat is already taken.', {1,0,0})
+        return
+    end
+
+    for k,v in pairs(playersExIds) do
+        if playerFound.steam_id == v then
+            sitUI(playerFound, _, k)
         end
-    elseif inTable(colorFound, COLORS) and not Player[colorFound].seated then
+    end
+    if colorFound == 'Grey' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
         playerFound.changeColor(colorFound)
         Player['Black'].print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        for k,v in pairs(playersExIds) do
-            if playerFound.steam_id == v then
-                sitUI(playerFound, _, k)
-            end
-        end
         sitUI(playerFound, _, colorFound)
         Player['Black'].print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
-    else
-        Player['Black'].print('Error: Could not move player: seat is already taken.', {1,0,0})
     end
 end
 
 function chatRemove(seatColor)
-    local colorFound = false
+    if seatColor == nil then
+        return
+    end
 
+    local colorFound = false
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
             colorFound = v
@@ -405,6 +413,7 @@ function chatRemove(seatColor)
         return
     end
 
+    updatePlayers()
     if players[colorFound] ~= nil then
         Player['Black'].print(players[colorFound].steam_name .. ' has been moved to Grey.')
         if inTable(colorFound, COLORS) then
@@ -976,7 +985,7 @@ function sitUI(player, value, id)
         zoneObj.setColorTint(COLORS_EX_HEX[id])
     else
         if player.steam_id == playersEx[id].steam_id then
-            player.print('You are no longer sitting in ' .. id)
+            player.print('You are no longer sitting in ' .. id .. '.')
             playersEx[id] = nil
             playersExIds[id] = nil
             textObj = getObjectFromGUID(TEXT_GUIDS[id])
@@ -987,7 +996,7 @@ function sitUI(player, value, id)
                 zoneObj.setColorTint({0.35,0.35,0.35})
             end
         else
-            player.print('Someone is already sitting in ' .. id)
+            player.print('Someone is already sitting in ' .. id .. '.')
         end
     end
 end

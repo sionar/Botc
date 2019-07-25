@@ -508,6 +508,10 @@ function addChar(clickedObject, playerColor)
             return
         end
     end
+    if colorAdd == '' or roleAdd == '' then
+        broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
+        return
+    end
 
     if #living == 0 then
         pos = 1

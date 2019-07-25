@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.1'
+VERSION = '1.6.2'
 ROW_S = -6.3
 ROW_W = 0.45
 FONT_SIZE = 225
@@ -17,6 +17,8 @@ ROW = {}
 for i = 1,20 do
     ROW[i] = ROW_S + i * ROW_W
 end
+LIVING_LAB_Z = -6.75
+NIGHT_LAB_Z = -6.75
 PREVIEW_LAB_Z = 1.35
 PREVIEW_MSG_Z = 2.7
 ADDCHAR_LAB_X = -4.95
@@ -102,7 +104,6 @@ end
 function import()
     local roles = Global.getTable('roles')
     local numRoles = 0
-
     for k,v in pairs(roles) do
         numRoles = numRoles + 1
     end
@@ -140,7 +141,6 @@ function setNightOrder(night)
             lastBlind = ''
         end
     end
-
     if night == 'first' then
         table.insert(order, {role = 'Evil_Info', color = 'White'})
         table.insert(order, {role = 'Demon_Info', color = demonColor})
@@ -148,8 +148,6 @@ function setNightOrder(night)
     else
         orderRef = OTHER
     end
-
-
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do
             if v2.role == v1 and v2.role ~= 'Ravenkeeper' and v2.role ~= 'Sage' and v2.role ~= 'Barber' then
@@ -226,7 +224,6 @@ end
 function remove(clickedObject, playerColor, i)
     local entry = living[i]
     table.remove(living, i)
-
     if entry.role == 'Ravenkeeper' or entry.role == 'Sage' or entry.role == 'Barber' then
         if orderRef ~= nil then
             orderIndex = getKey(orderRef, entry.role)
@@ -246,7 +243,6 @@ function remove(clickedObject, playerColor, i)
             if entry.role == 'Barber' then
                 entry.color = demonColor
             end
-
             table.insert(order, orderPos, {color = entry.color, role = entry.role})
         end
     else
@@ -272,7 +268,6 @@ function send(clickedObject, playerColor)
     local steam_name = Player[playerColor].steam_name
     local sendColor, msg
     local players = Global.call('updatePlayers')
-
     if order[1].role == 'Evil_Info' then
         msg = COLORS_BBC[demonColor] .. '<' .. demonColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. evilMsg
         players[demonColor].print(msg)
@@ -312,7 +307,6 @@ function send(clickedObject, playerColor)
             end
         end
     end
-
     table.remove(order, 1)
     setMsg()
 end
@@ -404,7 +398,6 @@ function p1Input(obj, color, input, stillEditing)
         if not found then
             p1 = input
         end
-
         editMsg()
         return 1
     end
@@ -444,7 +437,6 @@ function p2Input(obj, color, input, stillEditing)
         if not found then
             p2 = input
         end
-
         editMsg()
         return 1
     end
@@ -460,7 +452,7 @@ function p3Input(obj, color, input, stillEditing)
         local found = false
         for k,v in pairs(COLORS) do
             if string.match(string.lower(v), string.lower(input)) then
-                p3 = removeUnder(COLORS_BBC[v] .. v .. '[-]')
+                p3 = COLORS_BBC[v] .. v .. '[-]'
                 found = true
                 break
             end
@@ -476,7 +468,7 @@ function p3Input(obj, color, input, stillEditing)
                 else
                     textColor = COLORS_BBC['Red']
                 end
-                p3 = textColor .. k .. '[-]'
+                p3 = removeUnder(textColor .. k .. '[-]')
                 found = true
                 break
             end
@@ -484,7 +476,6 @@ function p3Input(obj, color, input, stillEditing)
         if not found then
             p3 = input
         end
-
         editMsg()
         return 1
     end
@@ -500,6 +491,10 @@ function editMsg()
 end
 
 function addChar(clickedObject, playerColor)
+    if colorAdd == '' or roleAdd == '' then
+        broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
+        return
+    end
     local pos, colorIndex
     local orderPos, orderIndex
     for k,v in pairs(living) do
@@ -508,11 +503,6 @@ function addChar(clickedObject, playerColor)
             return
         end
     end
-    if colorAdd == '' or roleAdd == '' then
-        broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
-        return
-    end
-
     if #living == 0 then
         pos = 1
     else
@@ -527,27 +517,23 @@ function addChar(clickedObject, playerColor)
             pos = #living + 1
         end
     end
-
     table.insert(living, pos, {color = colorAdd, role = roleAdd})
     if roleAdd == 'Ravenkeeper' or roleAdd == 'Sage' or roleAdd == 'Barber' then
         refreshUI()
         return
     end
-
     if CHARACTERS[roleAdd].Type == 'Demon' or CHARACTERS[roleAdd].Type == 'Minion' then
         if CHARACTERS[roleAdd].Type == 'Demon' then
             demonColor = colorAdd
         elseif CHARACTERS[roleAdd].Type == 'Minion' then
             table.insert(minionColors, colorAdd)
         end
-
         local minionStr = 'Minions:'
         for i = 1, #minionColors do
             minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
         end
         evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
     end
-
     if orderRef ~= nil then
         orderIndex = getKey(orderRef, roleAdd)
         if orderIndex == nil then
@@ -588,7 +574,6 @@ function format(string)
     local result
     local lineLen = 0
     local output = ''
-
     for word in string.gmatch(string, '%g+') do
         if lineLen + string.len(word) + 1 > lineMax then
             output = output .. '\n' .. word
@@ -612,10 +597,6 @@ function refreshUI()
     self.clearButtons()
     local buttonParam = {}
     local inputParam = {}
-
-
-    LIVING_LAB_Z = -6.75
-    NIGHT_LAB_Z = -6.75
 
     buttonParam = {click_function = 'nullFunc', label = 'Living Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {COLUMN[1],BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
@@ -698,23 +679,23 @@ function refreshUI()
     buttonParam = {click_function = 'addChar', label = '+', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
     self.createButton(buttonParam)
 
-    local inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = roleAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
-    local inputParam = {input_function = 'colorInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'colorInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[2],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 900, height = 260, font_size = FONT_SIZE, value = colorAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
-    local inputParam = {input_function = 'p1Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'p1Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[3],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
     self.createInput(inputParam)
 
-    local inputParam = {input_function = 'p2Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'p2Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[4],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
     self.createInput(inputParam)
 
-    local inputParam = {input_function = 'p3Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'p3Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
     self.createInput(inputParam)
 

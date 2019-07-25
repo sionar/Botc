@@ -126,7 +126,7 @@ end
 function onSave()
     local save = {}
     save['s'] = seatLock
-    save['ab'] = allBlindd
+    save['ab'] = allBlind
     save['am'] = allMuted
     local saveString = JSON.encode(save)
     return saveString

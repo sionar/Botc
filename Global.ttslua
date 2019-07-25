@@ -544,8 +544,8 @@ function getAliveTokens(color)
     local objectsFound = Physics.cast({
         origin       = pos,
         direction    = {0, 1, 0},
-        type         = 2, -- int (1: Ray, 2: Sphere, 3: Box),
-        max_distance = 5,
+        type         = 1, -- int (1: Ray, 2: Sphere, 3: Box),
+        max_distance = 3,
         debug        = false-- bool (true = visualize cast),
     }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
 
@@ -974,7 +974,7 @@ function sitUI(player, value, id)
             player.print('Extension seats are locked.')
             return
         end
-        player.print('You are now sitting in ' .. id)
+        player.print('You are now sitting in ' .. id .. '.')
         playersExIds[id] = player.steam_id
         playersEx[id] = player
         textObj = getObjectFromGUID(TEXT_GUIDS[id])

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.0'
+VERSION = '1.6.1'
 ROW_S = -6.3
 ROW_W = 0.45
 FONT_SIZE = 225
@@ -645,7 +645,7 @@ function refreshUI()
         buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 1350, height = 225, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 675, height = 230, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 675, height = 200, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 
@@ -653,7 +653,7 @@ function refreshUI()
         buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 675, height = BUTTON_SIZE, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 675, height = 200, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 

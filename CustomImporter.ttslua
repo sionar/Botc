@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.1'
+VERSION = '1.2.0'
 Z_START = -8.5
 Z_INC = 0.45
 FONT_SIZE_LABEL = 200
@@ -42,8 +42,8 @@ VISIBILITY['Table'] = 'All'
 
 CLONE['Black'] = {}
 CLONE['Table'] = {}
-CLONE['Black'].pos = {20, 1.1, 90}
-CLONE['Table'].pos = {0, 1.1, 42}
+CLONE['Black'].pos = {20, 1.11, 90}
+CLONE['Table'].pos = {0, 1.11, 42}
 CLONE['Black'].rot = {0,0,0}
 CLONE['Table'].rot = {0,180,0}
 CLONE['Black'].scale = {0.63,0.63,0.63}
@@ -55,6 +55,7 @@ found = {}
 charAdd = ''
 saveLists = {Save1 = {}, Save2 = {}, Save3 = {}, Save4 = {}}
 saveNames = {'Save 1', 'Save 2', 'Save 3', 'Save 4'}
+batchList = {}
 
 
 ------------------Functions
@@ -65,6 +66,11 @@ function onLoad(saveString)
         saveLists = save['sl']
         saveNames = save['sn']
     end
+    local customSet = Global.getVar('customSet')
+    if customSet then
+        characters = Global.getTable('customList')
+    end
+
     refreshUI()
     moveBoard()
     self.setDescription('v ' .. VERSION )
@@ -143,6 +149,7 @@ function import()
 
     Global.setVar('mode', 'CU')
     Global.setVar('customSet', true)
+    Global.setTable('customList', characters)
     refreshUI()
 
     for k,v in pairs(objs) do
@@ -340,6 +347,86 @@ function saveLoadMenu()
     self.createButton(buttonParam)
 end
 
+function batchImportMenu()
+    self.clearButtons()
+    self.clearInputs()
+    self.createInput({
+        input_function = 'updateBatchList',
+        function_owner = self,
+        label = 'Import a bunch of characters at once.\nOne character per line, no commas.',
+        width = 4000,
+        height = 6000,
+        font_size = 200,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        alignment = 3,
+    })
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Batch Import',
+        position = {0,BUTTON_HEIGHT,-7.5},
+        width = 0,
+        height = 0,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
+    self.createButton({
+        click_function = 'batchImport',
+        function_owner = self,
+        label = 'Load',
+        position = {-2,BUTTON_HEIGHT,7.5},
+        width = 1300,
+        height = 500,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+
+    self.createButton({
+        click_function = 'refreshUI',
+        function_owner = self,
+        label = 'Cancel',
+        position = {2,BUTTON_HEIGHT,7.5},
+        width = 1300,
+        height = 500,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+end
+
+function updateBatchList(obj, color, input, stillEditing)
+    if not stillEditing then
+        batchList = {}
+        local entry
+        for s in input:gmatch("[^\r\n]+") do
+            entry = string.gsub(s,' ', '_')
+            table.insert(batchList, entry)
+        end
+    end
+end
+
+function batchImport()
+    characters = {}
+    for k,v in pairs(batchList) do
+        if matchesKey(v, CHARACTERS) then
+            table.insert(characters,v)
+        end
+    end
+    refreshUI()
+end
+
+function matchesKey(value, table)
+    for k,v in pairs(table) do
+        if value == k then
+            return true
+        end
+    end
+    return false
+end
 
 function refreshUI()
     self.clearButtons()
@@ -363,10 +450,13 @@ function refreshUI()
         params = {click_function = 'clear', label = 'Clear\nList', position = {0, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Clear custom list'}
         self.createButton(params)
 
-        params = {click_function = 'saveLoadMenu', label = 'Load/Save\nLists', position = {2, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 150, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Open the save/load menu'}
+        params = {click_function = 'batchImportMenu', label = 'Batch\nImport', position = {2, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Import a batch of characters at once'}
         self.createButton(params)
 
-        params = {click_function = 'import', label = 'Import\nTo Game', position = {4, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Import list to game'}
+        params = {click_function = 'saveLoadMenu', label = 'Load/Save\nLists', position = {4, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 150, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Open the save/load menu'}
+        self.createButton(params)
+
+        params = {click_function = 'import', label = 'Import\nTo Game', position = {6, BUTTON_HEIGHT, 8}, width = 900, height = 500, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Import list to game'}
         self.createButton(params)
     else
         z = z + Z_INC * 2

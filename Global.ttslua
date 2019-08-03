@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower Ex'
-VERSION = '14.4.0'
+VERSION = '14.4.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -114,6 +114,7 @@ for k,v in pairs(COLORS_EX) do
     avatarGuids[v] = nil
 end
 
+avatarUrl = ''
 uiColor = ''
 uiMsg = ''
 colorTable = false
@@ -133,7 +134,7 @@ function onLoad(saveString)
         playersExIds = save['p']
         avatarGuids = save['a']
         customSet = save['c']
-        --customList = save['cl']
+        customList = save['cl']
     end
 
     setNotes(START_MESSAGE)
@@ -187,6 +188,7 @@ function onLoad(saveString)
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
+            obj.setScale({0,0,0})
         end
     end
 
@@ -1037,21 +1039,24 @@ function generateAvatar(color)
         obj = getObjectFromGUID(avatarGuids[color])
         obj.destruct()
     end
-    local avatar = spawnObject(objParam)
-    avatar.setLock(true)
-    avatar.setDescription(color .. " Avatar")
-    avatar.interactable = false
-    local customParam = {
-        diffuse = generateAvatarImageUrl(playersEx[color].steam_id),
-        mesh = "http://cloud-3.steamusercontent.com/ugc/933813375177509684/900B7683E01C43C394C408BC38E034B305F1B3AA/",
-        collider = "http://cloud-3.steamusercontent.com/ugc/487893695356616224/E3E39A827C062914E4185D8757A81D4D14892B8B/",
-        type = 0,
-        material = 3,
-        cast_shadows = false
-    }
-    avatar.setCustomObject(customParam)
-    light = getObjectFromGUID(LIGHT_GUIDS[color])
-    light.call('power')
+    generateAvatarImageUrl(playersEx[color].steam_id)
+    Wait.time(function()
+        local avatar = spawnObject(objParam)
+        avatar.setLock(true)
+        avatar.setDescription(color .. " Avatar")
+        avatar.interactable = false
+        local customParam = {
+            diffuse = avatarUrl,
+            mesh = "http://cloud-3.steamusercontent.com/ugc/933813375177509684/900B7683E01C43C394C408BC38E034B305F1B3AA/",
+            collider = "http://cloud-3.steamusercontent.com/ugc/487893695356616224/E3E39A827C062914E4185D8757A81D4D14892B8B/",
+            type = 0,
+            material = 3,
+            cast_shadows = false
+        }
+        avatar.setCustomObject(customParam)
+        light = getObjectFromGUID(LIGHT_GUIDS[color])
+        light.call('power')
+    end, 0.5)
 end
 
 function avatarCallback(objIn, paramsIn)
@@ -1060,7 +1065,15 @@ function avatarCallback(objIn, paramsIn)
 end
 
 function generateAvatarImageUrl(steamId)
-   return string.format("http://steam-tts.bclass.info/avatar/?i=%s&s=l", steamId)
+    local url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=E05421C6A86CAABADE2F700F492FFA4A&steamids=' .. steamId
+    WebRequest.get(url, self, 'avatarUrlCB')
+end
+
+function avatarUrlCB(req)
+    if req.is_done and not req.is_error then
+        local response = JSON.decode(req.text)
+        avatarUrl = response.response.players[1].avatarfull
+    end
 end
 
 function deleteAvatar(color)

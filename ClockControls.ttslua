@@ -584,7 +584,8 @@ function hideGrimoire()
     objs = scriptZone.getObjects()
     for k,v in pairs(objs) do
         if v.getGUID() ~= TABLE_GUID and v.getGUID() ~= GUILLOTINE_GUID then
-            v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+            --v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+            v.setInvisibleTo({})
         end
     end
     self.editButton({

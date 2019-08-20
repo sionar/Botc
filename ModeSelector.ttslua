@@ -222,6 +222,9 @@ function adjustOutsiders(bag, count)
         if tab[#tab - i + 1].name == 'Fang Gu' or tab[#tab - i + 1].name == 'Godfather' then
             dist[2] = dist[2] + 1
             dist[1] = dist[1] - 1
+		elseif tab[#tab - i + 1].name == 'Vigormortis' then
+			dist[2] = dist[2] - 1
+			dist[1] = dist[1] + 1
         elseif tab[#tab - i + 1].name == 'Baron' then
             dist[2] = dist[2] + 2
             dist[1] = dist[1] - 2

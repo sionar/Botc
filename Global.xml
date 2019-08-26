@@ -401,7 +401,7 @@
         <Option>Pacifist</Option>
         <Option>Fool</Option>
         <Option>Tinker</Option>
-        <Option>Regent</Option>
+        <Option>Moonchild</Option>
         <Option>Goon</Option>
         <Option>Lunatic</Option>
         <Option>Godfather</Option>
@@ -539,6 +539,7 @@
         <Option>Mayor</Option>
         <Option>Minstrel</Option>
         <Option>Monk</Option>
+        <Option>Moonchild</Option>
         <Option>Mutant</Option>
         <Option>No_Dashii</Option>
         <Option>Oracle</Option>
@@ -551,7 +552,6 @@
         <Option>Pukka</Option>
         <Option>Ravenkeeper</Option>
         <Option>Recluse</Option>
-        <Option>Regent</Option>
         <Option>Sage</Option>
         <Option>Sailor</Option>
         <Option>Saint</Option>

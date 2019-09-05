@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower Ex'
-VERSION = '14.4.5'
+VERSION = '14.4.8'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -828,11 +828,6 @@ function showVoteButtons(params)
                     buttonParams.index = 2
                     getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
                     canNominate[v] = false
-                    if mode == 'TB' or mode == 'SV' then
-                        buttonParams.index = 0
-                        getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
-                        canBeNominated[v] = false
-                    end
                 end
                 if not hasVote[v] then
                     buttonParams.color = {0,0,0}

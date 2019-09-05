@@ -479,7 +479,7 @@
 	offsetXY = "230 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
-	visibility = "Grey"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     cellBackgroundColor = "rgba(1,1,1,0)"
     >

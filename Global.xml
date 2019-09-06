@@ -5,6 +5,7 @@
     <Image class="aliveImages" width="20" height="20"/>
     <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840" fontStyle="Bold"/>
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
+    <Option class="cuDecal" active="true"/>
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -489,6 +490,7 @@
         id = "decalCU"
         onValueChanged = "decalUI"
         >
+        <Option selected="true">None</Option>
         <Option selected="true">None</Option>
         <Option>Apprentice</Option>
         <Option>Artist</Option>

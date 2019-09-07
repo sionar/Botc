@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower Ex'
-VERSION = '14.4.10'
+VERSION = '14.4.11'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -321,13 +321,13 @@ function onChat(message, player)
         end
         return false
     elseif command == '.move' then
-        if player.color == 'Black' or DEBUG then
-            chatMove(args[2], args[3])
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatMove(args[2], args[3], player)
             return false
         end
     elseif command == '.remove' then
-        if player.color == 'Black' or DEBUG then
-            chatRemove(args[2])
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatRemove(args[2], player)
             return false
         end
     elseif command == 'debug' and DEBUG then
@@ -357,7 +357,7 @@ function chatMessage(color, message)
     end
 end
 
-function chatMove(playerName, seatColor)
+function chatMove(playerName, seatColor, player)
     if playerName == nil or seatColor == nil then
         return
     end
@@ -372,11 +372,15 @@ function chatMove(playerName, seatColor)
             break
         end
     end
+    if string.match('black', string.lower(seatColor)) then
+        colorFound = 'Black'
+    end
+
     if string.match('grey', string.lower(seatColor)) then
         colorFound = 'Grey'
     end
     if not colorFound then
-        Player['Black'].print('Error: Could not move player: invalid color.', {1,0,0})
+        player.print('Error: Could not move player: invalid color.', {1,0,0})
         return
     end
 
@@ -386,13 +390,13 @@ function chatMove(playerName, seatColor)
         end
     end
     if not playerFound then
-        Player['Black'].print('Error: Could not move player: player not found.', {1,0,0})
+        player.print('Error: Could not move player: player not found.', {1,0,0})
         return
     end
 
     updatePlayers()
     if colorFound ~= 'Grey' and players[colorFound] ~= nil then
-        Player['Black'].print('Error: Could not move player: seat is already taken.', {1,0,0})
+        player.print('Error: Could not move player: seat is already taken.', {1,0,0})
         return
     end
 
@@ -401,17 +405,17 @@ function chatMove(playerName, seatColor)
             sitUI(playerFound, _, k)
         end
     end
-    if colorFound == 'Grey' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
+    if colorFound == 'Grey' or colorFound == 'Black' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
         playerFound.changeColor(colorFound)
-        Player['Black'].print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
+        player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
         sitUI(playerFound, _, colorFound)
-        Player['Black'].print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
+        player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     end
 end
 
-function chatRemove(seatColor)
+function chatRemove(seatColor, player)
     if seatColor == nil then
         return
     end
@@ -423,22 +427,25 @@ function chatRemove(seatColor)
             break
         end
     end
+    if string.match('black', string.lower(seatColor)) then
+        colorFound = 'Black'
+    end
 
     if not colorFound then
-        Player['Black'].print('Error: Invalid color.', {1,0,0})
+        player.print('Error: Invalid color.', {1,0,0})
         return
     end
 
     updatePlayers()
     if players[colorFound] ~= nil then
-        Player['Black'].print(players[colorFound].steam_name .. ' has been moved to Grey.')
-        if inTable(colorFound, COLORS) then
+        player.print(players[colorFound].steam_name .. ' has been moved to Grey.')
+        if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
             sitUI(players[colorFound], _, colorFound)
         end
     else
-        Player['Black'].print('Error: Could not remove player: seat is empty.', {1,0,0})
+        player.print('Error: Could not remove player: seat is empty.', {1,0,0})
     end
 end
 
@@ -451,26 +458,19 @@ function inTable(input, table)
     return false
 end
 
-function onObjectPickUp(color, obj)
-    local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if inZone(obj, scriptingZone) then
-        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
-    end
-end
-
 function onObjectDrop(color, obj)
     local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     if inZone(obj, scriptingZone) then
-        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+        obj.setInvisibleTo({'Grey'})
     else
-        obj.setInvisibleTo({})
+        Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
     end
 end
 
 function onObjectEnterScriptingZone(zone, object)
     if zone.getGUID() == SCRIPTING_ZONE_GUID then
         if not grimShow then
-            Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 1)
+            Wait.time(function () object.setInvisibleTo({'Grey'}) end, 0.1)
         end
     end
 end
@@ -523,7 +523,7 @@ function checkSeatedPlayers()
             end
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
-                obj.setColorTint({0.35,0.35,0.35})
+                obj.setColorTint({0.69,0.69,0.69})
             end
         end
     end
@@ -947,6 +947,12 @@ function updatePlayers()
             players[v] = nil
         end
     end
+    if Player['Black'].seated then
+        players['Black'] = Player['Black']
+    else
+        players['Black'] = nil
+    end
+
     for k,v in pairs(COLORS_EX) do
         if playersExIds[v] == nil then    --no id for that color
             playersEx[v] = nil

@@ -126,7 +126,145 @@
 </HorizontalLayout>
 
 <TableLayout
-	id = "colorSelection"
+	id = "colorSelectionp15"
+	cellSpacing = "2.5"
+	height = "150"
+    width = "425"
+    rectAlignment = "UpperCenter"
+    visibility = "Grey"
+    offsetXY = "0 -150"
+    active = "false"
+	>
+	<Row>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectWhite"
+				text = "White"
+				colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectBrown"
+				text = "Brown"
+				colors = "#703A1680|#703A16FF|#703A1680|#703A1680"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectRed"
+				text = "Red"
+				colors = "#DA191780|#DA1917FF|#DA191780|#DA191780"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectOrange"
+				text = "Orange"
+				colors = "#F3631C80|#F3631CFF|#F3631C80|#F3631C80"
+			></Button>
+		</Cell>
+		<Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectYellow"
+				text = "Yellow"
+				colors = "#E6E42B80|#E6E42BFF|#E6E42B80|#E6E42B80"
+			></Button>
+		</Cell>
+	</Row>
+    <Row>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectGreen"
+                text = "Green"
+                colors = "#30B22A80|#30B22AFF|#30B22A80|#30B22A80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectTeal"
+                text = "Teal"
+                colors = "#20B09A80|#20B09AFF|#20B09A80|#20B09A80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectBlue"
+                text = "Blue"
+                colors = "#1E87FF80|#1E87FFFF|#1E87FF80|#1E87FF80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectPurple"
+                text = "Purple"
+                colors = "#9F1FEF80|#9F1FEFFF|#9F1FEF80|#9F1FEF80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectPink"
+                text = "Pink"
+                colors = "#F46FCD80|#F46FCDFF|#F46FCD80|#F46FCD80"
+            ></Button>
+        </Cell>
+    </Row>
+    <Row>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectLavender"
+                text = "Lavender"
+                colors = "#967BB680|#967BB6FF|#967BB680|#967BB680"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectNavy"
+                text = "Navy"
+                colors = "#00008080|#000080FF|#00008080|#00008080"
+            ></Button>
+        </Cell>
+        <Cell>
+			<Button
+				class = "colorSelect"
+                id = "colorSelectLime"
+				text = "Lime"
+				colors = "#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+			></Button>
+		</Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectCoral"
+                text = "Coral"
+                colors = "#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+            ></Button>
+        </Cell>
+        <Cell>
+            <Button
+                class = "colorSelect"
+                id = "colorSelectMaroon"
+                text = "Maroon"
+                colors = "#80000080|#800000FF|#80000080|#80000080"
+            ></Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "colorSelectionp20"
 	cellSpacing = "2.5"
 	height = "200"
     width = "425"
@@ -283,7 +421,7 @@
 				class = "colorSelect"
                 id = "colorSelectCoral"
 				text = "Coral"
-				colors = "#89C38180|#89C381FF|#89C38180|#89C38180"
+				colors = "#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
 			></Button>
 		</Cell>
 		<Cell>
@@ -582,9 +720,82 @@
     </Dropdown>
 </VerticalLayout>
 
+<TableLayout
+	id = "sit15"
+	cellSpacing = "5"
+	height = "60"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+	<Row>
+        <Cell>
+            <Button
+        		id = "Lavender"
+        		onClick = "sitUI"
+        		text = "Sit in Lavender"
+                class = "tp50"
+                fontSize = "15"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "Navy"
+        		onClick = "sitUI"
+        		text = "Sit in Navy"
+                class = "tp50"
+                fontSize = "15"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "Lime"
+                onClick = "sitUI"
+                text = "Sit in Lime"
+                class = "tp50"
+                fontSize = "15"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "Coral"
+                onClick = "sitUI"
+                text = "Sit in Coral"
+                class = "tp50"
+                fontSize = "15"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "Maroon"
+                onClick = "sitUI"
+                text = "Sit in Maroon"
+                class = "tp50"
+                fontSize = "15"
+                colors="#80000080|#800000FF|#80000080|#80000080"
+                textColor = "#FFFFFF"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
 
 <TableLayout
-	id = "sit"
+	id = "sit20"
 	cellSpacing = "5"
 	height = "120"
     width = "500"
@@ -776,7 +987,56 @@
 ></Button>
 
 <TableLayout
-    id = "blackMessage"
+    id = "blackMessage15"
+    height = "100"
+    width = "300"
+    rectAlignment = "LowerCenter"
+    visibility = "Black"
+    offsetXY = "0 10"
+    active = "false"
+    >
+    <!-- Row 1 -->
+    <Row>
+        <Cell>
+            <Dropdown
+                id="colorSitDropdown"
+                onValueChanged="colorSitUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+			<Option>Lime</Option>
+            <Option>Coral</Option>
+            <Option>Maroon</Option>
+            </Dropdown>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sendMessageButton"
+                onClick = "sendMessageUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+				text = "Send"
+				fontSize = "15"
+                >
+            </Button>
+        </Cell>
+    </Row>
+    <Row>
+        <Cell columnSpan = "2">
+            <InputField
+                id = "messageInput"
+                onEndEdit = "messageInputUI"
+                placeholder = "Send a message to one of the players sitting in one of the extended colors."
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                >
+            </InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id = "blackMessage20"
     height = "100"
     width = "300"
     rectAlignment = "LowerCenter"

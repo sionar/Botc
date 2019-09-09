@@ -6,17 +6,19 @@ UI code borrowed from Lost Savage and SilentxDream
 
 
 ------------------Constants
-MOD_NAME = 'Blood on the Clocktower Ex'
-VERSION = '14.4.11'
+MOD_NAME = 'Blood on the Clocktower'
+VERSION = '15.0.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_SET1 = {'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
+COLORS_SET2 = {'Magenta', 'Cyan', 'Mint', 'Peach', 'Silver'}
+COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[000080]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_EX_HEX = {Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0,0,0}
 
@@ -24,50 +26,113 @@ function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
 end
 
-VOTEHAND_SHOW_POS = {}
-VOTEHAND_HIDE_POS = {}
-AVATAR_POS = {}
-AVATAR_ROT = {}
-LIGHT_POS = {}
-DECAL_POS = {}
-DECAL_ROT = {}
-ALIVE_BASE_POS = {}
-ALIVE_TOKEN_POS = {}
-VOTE_PANEL_POS = {}
-ROT = {}
-ROLE_SHEET_POS = {}
+ANGLE10 = {White = 45, Brown = 75, Red = 105, Orange = 135, Yellow = 165, Green = 195, Teal = 225, Blue = 255, Purple = 285, Pink = 315,}
+ANGLE15 = {White = 40, Brown = 60, Red = 80, Orange = 100, Yellow = 120, Green = 140, Teal = 160, Blue = 180, Purple = 200, Pink = 220, Lavender = 240, Navy = 260, Lime = 280, Coral = 300, Maroon = 320}
+ANGLE20 = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
 
-for k,v in pairs(COLORS_ALL) do
-    VOTEHAND_SHOW_POS[v] = radius(60, ANGLE[v], 5)
-    VOTEHAND_HIDE_POS[v] = radius(90, ANGLE[v], -5)
-    AVATAR_POS[v] = radius(102, ANGLE[v], 8.5)
-    AVATAR_ROT[v] = {180, ANGLE[v], 180}
-    LIGHT_POS[v] = radius(99, ANGLE[v], 8.5)
-    DECAL_POS[v] = radius(60, ANGLE[v], 1.1)
-    DECAL_ROT[v] = {90, ANGLE[v] - 180, 0}
-    ALIVE_BASE_POS[v] = radius(70, ANGLE[v], 1)
-    ALIVE_TOKEN_POS[v] = radius(70, ANGLE[v], 1.16)
-    VOTE_PANEL_POS[v] = radius(76, ANGLE[v], 0.8)
-    ROT[v] = {0, ANGLE[v], 0}
-    ROLE_SHEET_POS[v] = radius(86,ANGLE[v], 1)
+PLAYER_MODES = {'p10', 'p15', 'p20'}
+PARAMS = {}
+for k,v in pairs(PLAYER_MODES) do
+    PARAMS[v] = {
+        VOTEHAND_SHOW_POS = {},
+        VOTEHAND_HIDE_POS = {},
+        AVATAR_POS = {},
+        AVATAR_ROT = {},
+        LIGHT_POS = {},
+        DECAL_POS = {},
+        DECAL_ROT = {},
+        ALIVE_BASE_POS = {},
+        ALIVE_TOKEN_POS = {},
+        VOTE_PANEL_POS = {},
+        ROT = {},
+        ROLE_SHEET_POS = {},
+        ZONE_POS = {},
+        HAND_POS = {},
+        HAND_ROT = {},
+        TEXT_POS = {},
+        TEXT_ROT = {},
+    }
 end
 
+for k,v in pairs(COLORS) do
+    PARAMS.p10.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE10[v], 5)
+    PARAMS.p10.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE10[v], -5)
+    PARAMS.p10.AVATAR_POS[v] = radius(87, ANGLE10[v], 8.5)
+    PARAMS.p10.AVATAR_ROT[v] = {180, ANGLE10[v], 180}
+    PARAMS.p10.LIGHT_POS[v] = radius(84, ANGLE10[v], 8.5)
+    PARAMS.p10.DECAL_POS[v] = radius(45, ANGLE10[v], 1.1)
+    PARAMS.p10.DECAL_ROT[v] = {90, ANGLE10[v] - 180, 0}
+    PARAMS.p10.ALIVE_BASE_POS[v] = radius(55, ANGLE10[v], 1)
+    PARAMS.p10.ALIVE_TOKEN_POS[v] = radius(55, ANGLE10[v], 1.16)
+    PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
+    PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
+    PARAMS.p10.ROLE_SHEET_POS[v] = radius(71,ANGLE10[v], 1)
+    PARAMS.p10.ZONE_POS[v] = radius(71,ANGLE10[v], 1)
+    PARAMS.p10.HAND_POS[v] = radius(85,ANGLE10[v], 3.5)
+    PARAMS.p10.HAND_ROT[v] = {0, ANGLE10[v] + 180, 0}
+end
+
+for k,v in pairs(COLORS_15) do
+    PARAMS.p15.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE15[v], 5)
+    PARAMS.p15.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE15[v], -5)
+    PARAMS.p15.AVATAR_POS[v] = radius(87, ANGLE15[v], 8.5)
+    PARAMS.p15.AVATAR_ROT[v] = {180, ANGLE15[v], 180}
+    PARAMS.p15.LIGHT_POS[v] = radius(84, ANGLE15[v], 8.5)
+    PARAMS.p15.DECAL_POS[v] = radius(45, ANGLE15[v], 1.1)
+    PARAMS.p15.DECAL_ROT[v] = {90, ANGLE15[v] - 180, 0}
+    PARAMS.p15.ALIVE_BASE_POS[v] = radius(55, ANGLE15[v], 1)
+    PARAMS.p15.ALIVE_TOKEN_POS[v] = radius(55, ANGLE15[v], 1.16)
+    PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
+    PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
+    PARAMS.p15.ROLE_SHEET_POS[v] = radius(71,ANGLE15[v], 1)
+    PARAMS.p15.ZONE_POS[v] = radius(71,ANGLE15[v], 1)
+    PARAMS.p15.HAND_POS[v] = radius(85,ANGLE15[v], 3.5)
+    PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
+    PARAMS.p15.TEXT_POS[v] = radius(86.6,ANGLE15[v], 1)
+    PARAMS.p15.TEXT_ROT[v] = {90, ANGLE15[v], 0}
+end
+
+for k,v in pairs(COLORS_ALL) do
+    PARAMS.p20.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE20[v], 5)
+    PARAMS.p20.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE20[v], -5)
+    PARAMS.p20.AVATAR_POS[v] = radius(87, ANGLE20[v], 8.5)
+    PARAMS.p20.AVATAR_ROT[v] = {180, ANGLE20[v], 180}
+    PARAMS.p20.LIGHT_POS[v] = radius(84, ANGLE20[v], 8.5)
+    PARAMS.p20.DECAL_POS[v] = radius(45, ANGLE20[v], 1.1)
+    PARAMS.p20.DECAL_ROT[v] = {90, ANGLE20[v] - 180, 0}
+    PARAMS.p20.ALIVE_BASE_POS[v] = radius(55, ANGLE20[v], 1)
+    PARAMS.p20.ALIVE_TOKEN_POS[v] = radius(55, ANGLE20[v], 1.16)
+    PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
+    PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
+    PARAMS.p20.ROLE_SHEET_POS[v] = radius(71,ANGLE20[v], 1)
+    PARAMS.p20.ZONE_POS[v] = radius(71,ANGLE20[v], 1)
+    PARAMS.p20.HAND_POS[v] = radius(85,ANGLE20[v], 3.5)
+    PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
+    PARAMS.p20.TEXT_POS[v] = radius(86.6,ANGLE20[v], 1)
+    PARAMS.p20.TEXT_ROT[v] = {90, ANGLE20[v], 0}
+end
+
+TABLE10_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255119639/7FF0A75B6102E57729B9ECBD0A37DBC4C3C944A4/'
+TABLE15_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255081165/C8DBFEB7492079CB9F9C331BD10B392F43EC55FF/'
+TABLE20_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007254908157/42DD98CD69FFD19403E269A2602119EE2F628BC8/'
+
+
+ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = 'c250ec', Lavender = '8daef9', Navy = '1a0b6b', Cyan = 'b73bc0', Mint = '742d4e', Lime = '155c40', Peach = '004a7d', Coral = 'abb4e7', Maroon = 'd314d5', Silver = '34f0f3'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
-TABLE_GUIDS = {'7f1f5f'}
+TABLE_GUID = '7f1f5f'
 ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
 ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
 VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
 VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
-ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = 'c250ec', Lavender = '8daef9', Navy = '1a0b6b', Cyan = 'b73bc0', Mint = '742d4e', Lime = '155c40', Peach = '004a7d', Coral = 'abb4e7', Maroon = 'd314d5', Silver = '34f0f3'}
-
+ROLE_SHEET_GUIDS = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'ec429a', Lavender = 'ed5d8c', Navy = '696f16', Cyan = '30897d', Mint = '030e1d', Lime = 'd7bd47', Peach = '5f7b4b', Coral = 'd01ecc', Maroon = 'cc7b32', Silver = '64e20d'}
 CLOCK_CONTROLS_GUID = '184d11'
 TEAM_TOOL_GUID = '6fbc83'
 PURPLE_HAND_GUID = '88ad59'
 BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
-PLAYER_DIST_GUIDS = {'7527ae'}
+PLAYER_DIST_GUID = '7527ae'
 SCRIPTING_ZONE_GUID = 'a17a77'
 
 
@@ -92,6 +157,7 @@ hasVote = {}
 voted = {}
 voteLock = {}
 voteButtonsOn = {}
+playerMode = 'p20'
 
 for k,v in pairs(COLORS_ALL) do
     aliveTokens[v] = {object = 0, vote = 0}
@@ -135,16 +201,25 @@ function onLoad(saveString)
         avatarGuids = save['a']
         customSet = save['c']
         customList = save['cl']
+        playerMode = save['pm']
     end
 
     setNotes(START_MESSAGE)
+    if not started then
+        local allPlayers = Player.getPlayers()
+        if #allPlayers < 11 then
+            table10()
+        elseif #allPlayers < 16 then
+            table15()
+        else
+            table20()
+        end
+    end
 
     local obj, colors
-    for k,v in pairs(TABLE_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-        end
+    obj = getObjectFromGUID(TABLE_GUID)
+    if obj then
+        obj.interactable = false
     end
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -219,8 +294,347 @@ function onSave()
     save['a'] = avatarGuids
     save['c'] = customSet
     save['cl'] = customList
+    save['pm'] = playerMode
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function table10()
+    local obj, tab, pos,rot
+
+    UI.setAttribute('colorSelection' .. playerMode,'active',false)
+    playerMode = 'p10'
+    obj = getObjectFromGUID(TABLE_GUID)
+    tab = obj.getCustomObject()
+    tab.mesh = TABLE10_MODEL
+    tab.collider = TABLE10_MODEL
+    obj.setCustomObject(tab)
+    obj.reload()
+    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    for k,v in pairs(COLORS) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p10.ZONE_POS[v])
+        obj.setScale({25,10,13})
+        obj.setRotationSmooth(PARAMS.p10.ROT[v])
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p10.ROLE_SHEET_POS[v])
+            obj.setRotationSmooth(PARAMS.p10.ROT[v])
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p10.VOTE_PANEL_POS[v])
+        obj.setRotationSmooth(PARAMS.p10.ROT[v])
+
+        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p10.VOTEHAND_HIDE_POS[v])
+        obj.setRotationSmooth(PARAMS.p10.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p10.ALIVE_BASE_POS[v])
+        obj.setRotationSmooth(PARAMS.p10.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p10.ALIVE_TOKEN_POS[v])
+            obj.setRotationSmooth(PARAMS.p10.ROT[v])
+        end
+
+        Player[v].setHandTransform({position = PARAMS.p10.HAND_POS[v], rotation = PARAMS.p10.HAND_ROT[v]})
+    end
+
+    for k,v in pairs(COLORS_EX) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setPosition({0,-5, 0})
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+        obj.setScale({0,0,0})
+            pos = obj.getPosition()
+            obj.setPosition({pos.x, -10, pos.z})
+        end
+    end
+    updatePlayers()
+    for k,v in pairs(COLORS_EX) do
+        if players[v] ~= nil then
+            sitUI(players[v], _, v)
+        end
+    end
+    showExtensionUI()
+    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    obj.call('updateSettings')
+    createSnapPoints()
+end
+
+function table15()
+    local obj, tab, pos
+
+    UI.setAttribute('colorSelection' .. playerMode,'active',false)
+    playerMode = 'p15'
+    obj = getObjectFromGUID(TABLE_GUID)
+    tab = obj.getCustomObject()
+    tab.mesh = TABLE15_MODEL
+    tab.collider = TABLE15_MODEL
+    obj.setCustomObject(tab)
+    obj.reload()
+    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    for k,v in pairs(COLORS) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({18,10,13})
+        obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
+            obj.setRotationSmooth(PARAMS.p15.ROT[v])
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p15.VOTE_PANEL_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p15.VOTEHAND_HIDE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p15.ALIVE_BASE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p15.ALIVE_TOKEN_POS[v])
+            obj.setRotationSmooth(PARAMS.p15.ROT[v])
+        end
+
+        Player[v].setHandTransform({position = PARAMS.p15.HAND_POS[v], rotation = PARAMS.p15.HAND_ROT[v]})
+    end
+
+    for k,v in pairs(COLORS_SET1) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({9,5,6.5})
+        obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setScale({1.64,1,1.64})
+            obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
+            obj.setRotationSmooth(PARAMS.p15.ROT[v])
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setScale({1.5,0.34,1.5})
+        obj.setPositionSmooth(PARAMS.p15.VOTE_PANEL_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p15.VOTEHAND_HIDE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setScale({2.24,1,2.24})
+        obj.setPositionSmooth(PARAMS.p15.ALIVE_BASE_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.ROT[v])
+
+        if obj then
+            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            if obj then
+                obj.setScale({1.82,1,1.82})
+                obj.setPositionSmooth(PARAMS.p15.ALIVE_TOKEN_POS[v])
+                obj.setRotationSmooth(PARAMS.p15.ROT[v])
+            end
+        end
+
+        obj = getObjectFromGUID(TEXT_GUIDS[v])
+        obj.setPosition(PARAMS.p15.TEXT_POS[v])
+        obj.setRotationSmooth(PARAMS.p15.TEXT_ROT[v])
+        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p15.LIGHT_POS[v])
+    end
+
+    for k,v in pairs(COLORS_SET2) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setPosition({0,-5, 0})
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setScale({0,0,0})
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+
+        if obj then
+            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            if obj then
+                obj.setScale({0,0,0})
+                pos = obj.getPosition()
+                obj.setPosition({pos.x, -10, pos.z})
+            end
+        end
+
+        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        pos = obj.getPosition()
+        obj.setPosition({pos.x, -10, pos.z})
+    end
+
+    updatePlayers()
+    for k,v in pairs(COLORS_SET2) do
+        if players[v] ~= nil then
+            sitUI(players[v], _, v)
+        end
+    end
+    showExtensionUI()
+    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    obj.call('updateSettings')
+    createSnapPoints()
+end
+
+function table20()
+    local obj, tab, pos
+
+    UI.setAttribute('colorSelection' .. playerMode,'active',false)
+    playerMode = 'p20'
+    obj = getObjectFromGUID(TABLE_GUID)
+    tab = obj.getCustomObject()
+    tab.mesh = TABLE20_MODEL
+    tab.collider = TABLE20_MODEL
+    obj.setCustomObject(tab)
+    obj.reload()
+    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    for k,v in pairs(COLORS) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({16,10,13})
+        obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
+            obj.setRotationSmooth(PARAMS.p20.ROT[v])
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p20.VOTE_PANEL_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p20.VOTEHAND_HIDE_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p20.ALIVE_BASE_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+            obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
+            obj.setRotationSmooth(PARAMS.p20.ROT[v])
+        end
+
+        Player[v].setHandTransform({position = PARAMS.p20.HAND_POS[v], rotation = PARAMS.p20.HAND_ROT[v]})
+    end
+
+    for k,v in pairs(COLORS_EX) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        obj.setScale({8,5,6.5})
+        obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        if obj then
+            obj.setScale({1.64,1,1.64})
+            obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
+            obj.setRotationSmooth(PARAMS.p20.ROT[v])
+        end
+
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj.setScale({1.5,0.34,1.5})
+        obj.setPositionSmooth(PARAMS.p20.VOTE_PANEL_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj.setScale({2.24,1,2.24})
+        obj.setPositionSmooth(PARAMS.p20.ALIVE_BASE_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.ROT[v])
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+            obj.setScale({1.82,1,1.82})
+            obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
+            obj.setRotationSmooth(PARAMS.p20.ROT[v])
+        end
+
+        obj = getObjectFromGUID(TEXT_GUIDS[v])
+        obj.setPosition(PARAMS.p20.TEXT_POS[v])
+        obj.setRotationSmooth(PARAMS.p20.TEXT_ROT[v])
+
+        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        obj.setPositionSmooth(PARAMS.p20.LIGHT_POS[v])
+    end
+    showExtensionUI()
+    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    obj.call('updateSettings')
+    createSnapPoints()
+end
+
+function createSnapPoints()
+    local snapTable = {}
+    local pos
+    table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {18,0,58}, rotation = {0,0,0}, rotation_snap = true})
+    if playerMode == 'p10' then
+        for k,v in pairs(COLORS) do
+            table.insert(snapTable, {position = PARAMS.p10.ALIVE_TOKEN_POS[v], rotation = PARAMS.p10.ROT[v], rotation_snap = true})
+            pos = radius(14, ANGLE10[v], 1.0)
+            pos[3] = pos[3] + 83
+            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
+        end
+    elseif playerMode == 'p15' then
+        for k,v in pairs(COLORS_15) do
+            table.insert(snapTable, {position = PARAMS.p15.ALIVE_TOKEN_POS[v], rotation = PARAMS.p15.ROT[v], rotation_snap = true})
+            pos = radius(14, ANGLE15[v], 1.0)
+            pos[3] = pos[3] + 83
+            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
+        end
+    elseif playerMode == 'p20' then
+        for k,v in pairs(COLORS_ALL) do
+            table.insert(snapTable, {position = PARAMS.p20.ALIVE_TOKEN_POS[v], rotation = PARAMS.p20.ROT[v], rotation_snap = true})
+            pos = radius(14, ANGLE20[v], 1.0)
+            pos[3] = pos[3] + 83
+            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
+        end
+    end
+    self.setSnapPoints(snapTable)
 end
 
 function onPlayerChangeColor(color)
@@ -384,6 +798,14 @@ function chatMove(playerName, seatColor, player)
         return
     end
 
+    if playerMode == 'p10' and inTable(colorFound, COLORS_EX) then
+        return
+    end
+
+    if playerMode == 'p15' and inTable(colorFound, COLORS_SET2) then
+        return
+    end
+
     for k,v in pairs(playerList) do
         if string.match(string.lower(v.steam_name), string.lower(playerName)) then
             playerFound = v
@@ -461,16 +883,16 @@ end
 function onObjectDrop(color, obj)
     local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     if inZone(obj, scriptingZone) then
-        obj.setInvisibleTo({'Grey'})
+        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
     else
         Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
     end
 end
 
 function onObjectEnterScriptingZone(zone, object)
-    if zone.getGUID() == SCRIPTING_ZONE_GUID then
+    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= TABLE_GUID then
         if not grimShow then
-            Wait.time(function () object.setInvisibleTo({'Grey'}) end, 0.1)
+            Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
         end
     end
 end
@@ -619,12 +1041,10 @@ function handleLifeUI()
     end
     votesNeeded = math.ceil(numAlive/2)
     if currPlayers ~= numAlive or currVotes ~= numberOfVotes then
-        for k,v in pairs(PLAYER_DIST_GUIDS) do
-            playerDist = getObjectFromGUID(v)
-            if playerDist then
-                playerDist.call('updatePlayerDist', {num = numAlive})
-                playerDist.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
-            end
+        playerDist = getObjectFromGUID(PLAYER_DIST_GUID)
+        if playerDist then
+            playerDist.call('updatePlayerDist', {num = numAlive})
+            playerDist.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
         end
     end
     currPlayers = numAlive
@@ -654,7 +1074,7 @@ function vote(params)
             params.font_color = {0,0,0}
             getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
             handObj.setScale({0,1,0})
-            handObj.setPosition(VOTEHAND_HIDE_POS[voter])
+            handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[voter])
         else
             voted[voter] = true
             params.index = 1
@@ -662,7 +1082,7 @@ function vote(params)
             params.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
             handObj.setScale(VOTEHAND_SHOW_SCALE)
-            handObj.setPositionSmooth(VOTEHAND_SHOW_POS[voter])
+            handObj.setPositionSmooth(PARAMS[playerMode].VOTEHAND_SHOW_POS[voter])
         end
     end
 end
@@ -686,7 +1106,7 @@ function nominate(params)
         params.font_color = {1,1,1}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
         clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = nominator})
-        UI.setAttribute('colorSelection','active',false)
+        UI.setAttribute('colorSelection' .. playerMode,'active',false)
         colorTable = false
     elseif currentNominator == nominator then
         currentNominator = ''
@@ -704,7 +1124,7 @@ function nominate(params)
             clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
             clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
         end
-        UI.setAttribute('colorSelection','active',false)
+        UI.setAttribute('colorSelection' .. playerMode,'active',false)
         colorTable = false
     else
         updatePlayers()
@@ -903,7 +1323,15 @@ end
 function resetVotes(params)
     local buttonParams = {}
     local handObj
-    for k,v in pairs(COLORS_ALL) do
+    local colors
+    if playerMode == 'p10' then
+        colors = COLORS
+    elseif playerMode == 'p15' then
+        colors = COLORS_15
+    elseif playerMode == 'p20' then
+        colors = COLORS_ALL
+    end
+    for k,v in pairs(colors) do
         if players[v] ~= nil and voteButtonsOn[v] then
             if hasVote[v] or params.voteMode == 'exile' then
                 buttonParams.color = {1,1,1}
@@ -928,10 +1356,19 @@ end
 
 function hideVotehands()
     local handObj
-    for k,v in pairs(COLORS_ALL) do
+    local colors
+    if playerMode == 'p10' then
+        colors = COLORS
+    elseif playerMode == 'p15' then
+        colors = COLORS_15
+    elseif playerMode == 'p20' then
+        colors = COLORS_ALL
+    end
+
+    for k,v in pairs(colors) do
         handObj = getObjectFromGUID(VOTEHAND_GUIDS[v])
         handObj.setScale({0,1,0})
-        handObj.setPosition(VOTEHAND_HIDE_POS[v])
+        handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[v])
     end
 end
 
@@ -986,7 +1423,6 @@ function sitUI(player, value, id)
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
     local zoneObj
-
     updatePlayers()
     if playersEx[id] == nil then
         for k,v in pairs(playersEx) do
@@ -1029,8 +1465,8 @@ end
 function generateAvatar(color)
     local objParam = {
         type = "Custom_Model",
-        position = AVATAR_POS[color],
-        rotation = AVATAR_ROT[color],
+        position = PARAMS[playerMode].AVATAR_POS[color],
+        rotation = PARAMS[playerMode].AVATAR_ROT[color],
         scale = {2.5, 2.5, 2.5},
         callback = "avatarCallback",
         sound = false
@@ -1125,10 +1561,10 @@ function nominatedDropdown(player, value, id)
     end
 
 	if (colorTable) then --colorSelection is visible
-		UI.setAttribute('colorSelection','active',false)
+		UI.setAttribute('colorSelection' .. playerMode,'active',false)
 		colorTable = false
 	else --colorSelection is NOT visible
-		UI.setAttribute('colorSelection','active',true)
+		UI.setAttribute('colorSelection' .. playerMode,'active',true)
 		colorTable = true
 	end
 end
@@ -1180,7 +1616,7 @@ function nominatedUI(player, value, id)
     callParams.player = found
     callParams.target = target
     nominated(callParams)
-    UI.setAttribute('colorSelection','active',false)
+    UI.setAttribute('colorSelection' .. playerMode,'active',false)
     colorTable = false
 end
 
@@ -1218,16 +1654,34 @@ function leaveTeamUI(player, value, id)
 end
 
 function showExtensionUI()
-    UI.setAttribute('sit', 'active', 'true')
-    UI.setAttribute('teamMenu', 'active', 'true')
-    UI.setAttribute('leaveTeam', 'active', 'true')
-    UI.setAttribute('blackMessage', 'active', 'true')
     UI.setAttribute('placeDecalTB', 'active', 'false')
     UI.setAttribute('placeDecalBM', 'active', 'false')
     UI.setAttribute('placeDecalSV', 'active', 'false')
     UI.setAttribute('placeDecalCU', 'active', 'false')
-    UI.setAttribute('decalText', 'active', 'true')
     UI.setAttribute('placeDecal'.. mode, 'active', 'true')
+    UI.setAttribute('decalText', 'active', 'true')
+    if playerMode == 'p10' then
+        UI.setAttribute('sit15', 'active', 'false')
+        UI.setAttribute('sit20', 'active', 'false')
+        UI.setAttribute('teamMenu', 'active', 'false')
+        UI.setAttribute('leaveTeam', 'active', 'false')
+        UI.setAttribute('blackMessage15', 'active', 'false')
+        UI.setAttribute('blackMessage20', 'active', 'false')
+    elseif playerMode == 'p15' then
+        UI.setAttribute('sit15', 'active', 'true')
+        UI.setAttribute('sit20', 'active', 'false')
+        UI.setAttribute('teamMenu', 'active', 'true')
+        UI.setAttribute('leaveTeam', 'active', 'true')
+        UI.setAttribute('blackMessage15', 'active', 'true')
+        UI.setAttribute('blackMessage20', 'active', 'false')
+    elseif playerMode == 'p20' then
+        UI.setAttribute('sit15', 'active', 'false')
+        UI.setAttribute('sit20', 'active', 'true')
+        UI.setAttribute('teamMenu', 'active', 'true')
+        UI.setAttribute('leaveTeam', 'active', 'true')
+        UI.setAttribute('blackMessage15', 'active', 'false')
+        UI.setAttribute('blackMessage20', 'active', 'true')
+    end
 end
 
 function messageInputUI(player, value, id)
@@ -1262,7 +1716,7 @@ function decalUI(player, value, id)
     local globalDecals = Global.getDecals()
     if globalDecals ~= nil then
         for i = #globalDecals,1,-1 do
-            if math.abs(globalDecals[i].position[1] - DECAL_POS[found][1]) < 0.01 then
+            if math.abs(globalDecals[i].position[1] - PARAMS[playerMode].DECAL_POS[found][1]) < 0.01 and math.abs(globalDecals[i].position[3] - PARAMS[playerMode].DECAL_POS[found][3]) < 0.01 then
                 table.remove(globalDecals,i)
             end
         end
@@ -1272,8 +1726,8 @@ function decalUI(player, value, id)
     if value ~= "None" then
         params.name = value
         params.url = DECAL_URLS[value]
-        params.position = DECAL_POS[found]
-        params.rotation = DECAL_ROT[found]
+        params.position = PARAMS[playerMode].DECAL_POS[found]
+        params.rotation = PARAMS[playerMode].DECAL_ROT[found]
         params.scale = {8,8,8}
         Global.addDecal(params)
     end

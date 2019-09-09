@@ -169,7 +169,7 @@ CHARACTERS =
     Witch = {Type = 'Minion', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player: if they nominate tomorrow, they die. If just 3 players live, you lose this ability.'},
     Cerenovus = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night, choose a player & a good character: they are "mad" they are this character tomorrow, or might be executed.'},
     Pit_Hag = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night*, choose a player & a character they become (if not-in-play). If a Demon is made, deaths tonight are arbitrary.'},
-    Fang_Gu = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Chosen Outsiders kill you, turn evil, then swap characters with you. [+1 Outsider]'},
+    Fang_Gu = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. The 1st Outsider chosen becomes an evil Fang Gu & you die instead. [+1 Outsider]'},
     Vigormortis = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Minions you kill keep their ability & poison 1 Townsfolk neighbor. [-1 Outsider].'},
     No_Dashii = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Your 2 Townsfolk neighbors are poisoned.'},
     Vortox = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Good abilities yield false information. Each day, if no-one is executed, evil wins.'},

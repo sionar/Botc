@@ -5,24 +5,39 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-ANGLE = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
+ANGLE10 = {White = 45, Brown = 75, Red = 105, Orange = 135, Yellow = 165, Green = 195, Teal = 225, Blue = 255, Purple = 285, Pink = 315,}
+ANGLE15 = {White = 40, Brown = 60, Red = 80, Orange = 100, Yellow = 120, Green = 140, Teal = 160, Blue = 180, Purple = 200, Pink = 220, Lavender = 240, Navy = 260, Lime = 280, Coral = 300, Maroon = 320}
+ANGLE20 = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
 
 function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
 end
-POS = {}
-for k,v in pairs(COLORS_ALL) do
-    POS[v] = radius(15, ANGLE[v], 1.1)
-    POS[v][3] = POS[v][3] + 100
+POS10 = {}
+POS15 = {}
+POS20 = {}
+for k,v in pairs(COLORS) do
+    POS10[v] = radius(14, ANGLE10[v], 1.1)
+    POS10[v][3] = POS10[v][3] + 83
 end
+for k,v in pairs(COLORS_15) do
+    POS15[v] = radius(14, ANGLE15[v], 1.1)
+    POS15[v][3] = POS15[v][3] + 83
+end
+for k,v in pairs(COLORS_ALL) do
+    POS20[v] = radius(14, ANGLE20[v], 1.1)
+    POS20[v][3] = POS20[v][3] + 83
+end
+
 
 NIGHT_HELPER_GUID = 'bb89aa'
 MODE_SELECTOR_GUID = '884de8'
 CUSTOM_IMPORTER_GUID = 'f79557'
+TABLE_SIZER_GUID = '00c013'
 
 ------------------Variables
 seatedPlayers = {} --ordered in order of COLORS
@@ -45,6 +60,7 @@ function dealToPlayers(clickedObject, playerColor)
         return
     end
     local debug = Global.getVar('DEBUG')
+    local playerMode = Global.getVar('playerMode')
     local objectsInBag = self.getObjects()
     local params, obj, role
     local roles = {}
@@ -52,6 +68,15 @@ function dealToPlayers(clickedObject, playerColor)
     local tokenBag, tokenBagTable
     local size, takeIndex
     local players = Global.call('updatePlayers')
+    local posTable, colors
+
+    if playerMode == 'p10' then
+        posTable = POS10
+    elseif playerMode == 'p15' then
+        posTable = POS15
+    elseif playerMode == 'p20' then
+        posTable = POS20
+    end
 
     for k,v in pairs(allObjs) do
         if string.match(v.getName(), ': Status Tokens') then
@@ -69,7 +94,7 @@ function dealToPlayers(clickedObject, playerColor)
         if players[v] ~= nil or debug then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,
-                position = POS[v],
+                position = posTable[v],
                 rotation = {0, 0, 0}
             }
 
@@ -81,7 +106,7 @@ function dealToPlayers(clickedObject, playerColor)
             size = tokenBag.getQuantity()
             for j = size,1,-1 do
                 if tokenBagTable[j].name == role then
-                    params = {index = j-1, position = POS[v], rotation = {0, 0, 0}}
+                    params = {index = j-1, position = posTable[v], rotation = {0, 0, 0}}
                     params.position[2] = params.position[2] + 1
                     tokenBag.takeObject(params)
                 end
@@ -105,6 +130,11 @@ function dealToPlayers(clickedObject, playerColor)
     local modeSelector = getObjectFromGUID(MODE_SELECTOR_GUID)
     if modeSelector then
         modeSelector.destruct()
+    end
+
+    local tableSizer = getObjectFromGUID(TABLE_SIZER_GUID)
+    if tableSizer then
+        tableSizer.destruct()
     end
 
     local customImporter = getObjectFromGUID(CUSTOM_IMPORTER_GUID)

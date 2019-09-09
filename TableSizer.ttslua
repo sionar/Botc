@@ -1,0 +1,53 @@
+--[[
+Table Sizer
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.0'
+BUTTON_W = 600
+BUTTON_H = 600
+FONT_SIZE = 200
+
+
+------------------Functions
+function onLoad(saveString)
+    refreshButtons()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function callTable10(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        Global.call('table10')
+    end
+end
+
+function callTable15(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        Global.call('table15')
+    end
+end
+
+function callTable20(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        Global.call('table20')
+    end
+end
+
+------------------User Interface
+function refreshButtons()
+    self.clearButtons()
+
+    local buttonParam = {click_function = 'callTable10', function_owner = self, label = '10\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {-1.5,0.2,0}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 10 players.'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'callTable15', function_owner = self, label = '15\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {0,0.2,0}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 15 players.'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'callTable20', function_owner = self, label = '20\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {1.5,0.2,0}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 20 players.'}
+    self.createButton(buttonParam)
+end

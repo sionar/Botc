@@ -1,8 +1,8 @@
 # Botc
 
-Twenty player version forked from www.github.com/sionar/Botc
+
 Blood on the Clocktower script for Tabletop Simulator. Created by Unreal_Ed, modified by Sionar.
-Link to the workshop mod: https://steamcommunity.com/sharedfiles/filedetails/?id=1812334156
+Link to the workshop mod: https://steamcommunity.com/sharedfiles/filedetails/?id=1749093601
 
 
 Requires Atom Editor and the Tabletop Simulator package. See http://berserk-games.com/knowledgebase/atom-editor-plugin/ for full details.

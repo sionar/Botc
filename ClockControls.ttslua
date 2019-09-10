@@ -524,6 +524,32 @@ function toggleHiddenZones(clickedObject, playerColor)
     end
 end
 
+function onObjectDrop(color, obj)
+    local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    if inZone(obj, scriptingZone) and not grimShow then
+        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+    else
+        Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
+    end
+end
+
+function onObjectEnterScriptingZone(zone, object)
+    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= TABLE_GUID then
+        if not grimShow then
+            Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
+        end
+    end
+end
+
+function onObjectLeaveScriptingZone(zone, object)
+    if zone.getGUID() == SCRIPTING_ZONE_GUID then
+        local pos = object.getPosition()
+        if pos[2] < 0 then
+            object.setPosition({pos[1], 2.5, pos[3]})
+        end
+    end
+end
+
 function showGrimoire()
     local zoneObj, scriptZone, objs
     grimShow = true
@@ -562,6 +588,16 @@ function hideGrimoire()
         label          = 'Show\nGrimoire',
         tooltip        = 'Click this to show the grimoire.',
     })
+end
+
+function inZone(obj, zone)
+    local zoneObjs = zone.getObjects()
+    for k,v in pairs(zoneObjs) do
+        if obj.getGUID() == v.getGUID() then
+            return true
+        end
+    end
+    return false
 end
 
 function inTable(string, table)

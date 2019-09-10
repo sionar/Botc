@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.0.0'
+VERSION = '15.0.4'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -133,7 +133,6 @@ BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
 PLAYER_DIST_GUID = '7527ae'
-SCRIPTING_ZONE_GUID = 'a17a77'
 
 
 ------------------Variables
@@ -203,13 +202,13 @@ function onLoad(saveString)
         customList = save['cl']
         playerMode = save['pm']
     end
-
+    Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     setNotes(START_MESSAGE)
     if not started then
         local allPlayers = Player.getPlayers()
-        if #allPlayers < 11 then
+        if #allPlayers <= 11 then
             table10()
-        elseif #allPlayers < 16 then
+        elseif #allPlayers <= 16 then
             table15()
         else
             table20()
@@ -352,7 +351,8 @@ function table10()
 
         obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
         if obj then
-            obj.setPosition({0,-5, 0})
+            obj.setPosition({0,0,0})
+            obj.interactable = false
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
@@ -398,7 +398,7 @@ function table15()
     Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({18,10,13})
+        obj.setScale({22,10,13})
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
@@ -431,7 +431,7 @@ function table15()
 
     for k,v in pairs(COLORS_SET1) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({9,5,6.5})
+        obj.setScale({11,5,6.5})
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
@@ -440,6 +440,7 @@ function table15()
             obj.setScale({1.64,1,1.64})
             obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p15.ROT[v])
+            obj.interactable = true
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
@@ -470,6 +471,12 @@ function table15()
         obj.setRotationSmooth(PARAMS.p15.TEXT_ROT[v])
         obj = getObjectFromGUID(LIGHT_GUIDS[v])
         obj.setPositionSmooth(PARAMS.p15.LIGHT_POS[v])
+
+        if avatarGuids[v] then
+            obj = getObjectFromGUID(avatarGuids[v])
+            obj.setPositionSmooth(PARAMS.p15.AVATAR_POS[v])
+            obj.setRotationSmooth(PARAMS.p15.AVATAR_ROT[v])
+        end
     end
 
     for k,v in pairs(COLORS_SET2) do
@@ -480,7 +487,8 @@ function table15()
 
         obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
         if obj then
-            obj.setPosition({0,-5, 0})
+            obj.setPosition({0,0,0})
+            obj.interactable = false
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
@@ -575,6 +583,7 @@ function table20()
             obj.setScale({1.64,1,1.64})
             obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
+            obj.interactable = true
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
@@ -600,6 +609,12 @@ function table20()
 
         obj = getObjectFromGUID(LIGHT_GUIDS[v])
         obj.setPositionSmooth(PARAMS.p20.LIGHT_POS[v])
+
+        if avatarGuids[v] then
+            obj = getObjectFromGUID(avatarGuids[v])
+            obj.setPositionSmooth(PARAMS.p20.AVATAR_POS[v])
+            obj.setRotationSmooth(PARAMS.p20.AVATAR_ROT[v])
+        end
     end
     showExtensionUI()
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
@@ -874,33 +889,6 @@ end
 function inTable(input, table)
     for k,v in pairs(table) do
         if input == v then
-            return true
-        end
-    end
-    return false
-end
-
-function onObjectDrop(color, obj)
-    local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if inZone(obj, scriptingZone) then
-        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
-    else
-        Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
-    end
-end
-
-function onObjectEnterScriptingZone(zone, object)
-    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= TABLE_GUID then
-        if not grimShow then
-            Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
-        end
-    end
-end
-
-function inZone(obj, zone)
-    local zoneObjs = zone.getObjects()
-    for k,v in pairs(zoneObjs) do
-        if obj.getGUID() == v.getGUID() then
             return true
         end
     end

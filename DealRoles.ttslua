@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.3.0'
+VERSION = '1.3.1'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -21,11 +21,11 @@ POS10 = {}
 POS15 = {}
 POS20 = {}
 for k,v in pairs(COLORS) do
-    POS10[v] = radius(14, ANGLE10[v], 1.1)
+    POS10[v] = radius(10, ANGLE10[v], 1.1)
     POS10[v][3] = POS10[v][3] + 83
 end
 for k,v in pairs(COLORS_15) do
-    POS15[v] = radius(14, ANGLE15[v], 1.1)
+    POS15[v] = radius(12, ANGLE15[v], 1.1)
     POS15[v][3] = POS15[v][3] + 83
 end
 for k,v in pairs(COLORS_ALL) do
@@ -33,17 +33,13 @@ for k,v in pairs(COLORS_ALL) do
     POS20[v][3] = POS20[v][3] + 83
 end
 
-
 NIGHT_HELPER_GUID = 'bb89aa'
 MODE_SELECTOR_GUID = '884de8'
 CUSTOM_IMPORTER_GUID = 'f79557'
 TABLE_SIZER_GUID = '00c013'
 
+
 ------------------Variables
-seatedPlayers = {} --ordered in order of COLORS
-for k,v in pairs(COLORS_ALL) do
-    seatedPlayers[v] = false
-end
 
 
 ------------------Functions
@@ -130,11 +126,6 @@ function dealToPlayers(clickedObject, playerColor)
     local modeSelector = getObjectFromGUID(MODE_SELECTOR_GUID)
     if modeSelector then
         modeSelector.destruct()
-    end
-
-    local tableSizer = getObjectFromGUID(TABLE_SIZER_GUID)
-    if tableSizer then
-        tableSizer.destruct()
     end
 
     local customImporter = getObjectFromGUID(CUSTOM_IMPORTER_GUID)

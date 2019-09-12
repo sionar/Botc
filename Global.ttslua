@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.0.6'
+VERSION = '15.0.7'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -17,7 +17,7 @@ COLORS_SET1 = {'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_SET2 = {'Magenta', 'Cyan', 'Mint', 'Peach', 'Silver'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[000080]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
+COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_EX_HEX = {Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0,0,0}
@@ -125,7 +125,11 @@ ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange =
 ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
 VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
 VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
-ROLE_SHEET_GUIDS = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'ec429a', Lavender = 'ed5d8c', Navy = '696f16', Cyan = '30897d', Mint = '030e1d', Lime = 'd7bd47', Peach = '5f7b4b', Coral = 'd01ecc', Maroon = 'cc7b32', Silver = '64e20d'}
+ROLE_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'ec429a', Lavender = 'ed5d8c', Navy = '696f16', Cyan = '30897d', Mint = '030e1d', Lime = 'd7bd47', Peach = '5f7b4b', Coral = 'd01ecc', Maroon = 'cc7b32', Silver = '64e20d'}
+ROLE_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = 'b693a5', Magenta = '513deb', Lavender = '312ffe', Navy = 'ec482b', Cyan = '8fcb6b', Mint = '2a9008', Lime = 'dea506', Peach = 'cbdbb9', Coral = 'd7fc0e', Maroon = 'aeb276', Silver = '0213e5',}
+ROLE_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '7fa413', Magenta = '161300', Lavender = 'a491e1', Navy = '19f5eb', Cyan = 'e020c2', Mint = '6a2a30', Lime = 'ca7b1f', Peach = '8a1638', Coral = '9516ca', Maroon = 'da98cb', Silver = '86070c',}
+ROLE_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '7c5b4f', Magenta = '3991eb', Lavender = '79df60', Navy = '2f0a81', Cyan = '43a691', Mint = '08ff7b', Lime = '06f32b', Peach = 'de8dc3', Coral = '6be9c8', Maroon = '05197a', Silver = '547727',}
+
 CLOCK_CONTROLS_GUID = '184d11'
 TEAM_TOOL_GUID = '6fbc83'
 PURPLE_HAND_GUID = '88ad59'
@@ -300,6 +304,7 @@ end
 
 function table10()
     local obj, tab, pos,rot
+    local roleSheetGuids
 
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p10'
@@ -310,13 +315,23 @@ function table10()
     obj.setCustomObject(tab)
     obj.reload()
     Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    if mode == 'TB' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+    elseif mode == 'BM' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+    elseif mode == 'SV' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+    elseif mode == 'CU' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+    end
+
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
         obj.setPositionSmooth(PARAMS.p10.ZONE_POS[v])
         obj.setScale({28,10,13})
         obj.setRotationSmooth(PARAMS.p10.ROT[v])
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setPositionSmooth(PARAMS.p10.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p10.ROT[v])
@@ -349,7 +364,7 @@ function table10()
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setPosition({0,0,0})
             obj.interactable = false
@@ -396,13 +411,23 @@ function table15()
     obj.setCustomObject(tab)
     obj.reload()
     Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    if mode == 'TB' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+    elseif mode == 'BM' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+    elseif mode == 'SV' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+    elseif mode == 'CU' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+    end
+
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
         obj.setScale({22,10,13})
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p15.ROT[v])
@@ -435,7 +460,7 @@ function table15()
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setScale({1.64,1,1.64})
             obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
@@ -485,7 +510,7 @@ function table15()
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setPosition({0,0,0})
             obj.interactable = false
@@ -539,13 +564,23 @@ function table20()
     obj.setCustomObject(tab)
     obj.reload()
     Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
+    if mode == 'TB' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+    elseif mode == 'BM' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+    elseif mode == 'SV' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+    elseif mode == 'CU' then
+        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+    end
+
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
         obj.setScale({16,10,13})
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
@@ -578,7 +613,7 @@ function table20()
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
-        obj = getObjectFromGUID(ROLE_SHEET_GUIDS[v])
+        obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setScale({1.64,1,1.64})
             obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
@@ -1429,7 +1464,7 @@ function sitUI(player, value, id)
         textObj = getObjectFromGUID(TEXT_GUIDS[id])
         textObj.setValue(player.steam_name)
         generateAvatar(id)
-        printToAll(player.steam_name .. ' is color ' .. id .. '.', COLORS_EX_HEX[id])
+        printToAll(COLORS_BBC[id] .. player.steam_name .. ' is color ' .. id .. '.[-]')
         zoneObj = getObjectFromGUID(ZONE_GUIDS[id])
         zoneObj.setColorTint(COLORS_EX_HEX[id])
     else

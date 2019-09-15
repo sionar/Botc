@@ -7,10 +7,10 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.0.7'
+VERSION = '15.1.0'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower (Extended)\n Version [00FF00]' .. VERSION .. '[-]\n\nMade by Sionar, based on the script by Unreal_Ed and SilentxDream\n\nPlayer chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
-HELP_MESSAGE = 'Player chat commands:\n[967BB6]help[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\nStoryteller commands:\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [000080].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\nMade by [49D5FD]Sionar[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_SET1 = {'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
@@ -18,7 +18,7 @@ COLORS_SET2 = {'Magenta', 'Cyan', 'Mint', 'Peach', 'Silver'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
-COLORS_EX_HEX = {Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0,0,0}
 
@@ -130,6 +130,7 @@ ROLE_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orang
 ROLE_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '7fa413', Magenta = '161300', Lavender = 'a491e1', Navy = '19f5eb', Cyan = 'e020c2', Mint = '6a2a30', Lime = 'ca7b1f', Peach = '8a1638', Coral = '9516ca', Maroon = 'da98cb', Silver = '86070c',}
 ROLE_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '7c5b4f', Magenta = '3991eb', Lavender = '79df60', Navy = '2f0a81', Cyan = '43a691', Mint = '08ff7b', Lime = '06f32b', Peach = 'de8dc3', Coral = '6be9c8', Maroon = '05197a', Silver = '547727',}
 
+NIGHT_HELPER_GUID = 'bb89aa'
 CLOCK_CONTROLS_GUID = '184d11'
 TEAM_TOOL_GUID = '6fbc83'
 PURPLE_HAND_GUID = '88ad59'
@@ -386,6 +387,9 @@ function table10()
             pos = obj.getPosition()
             obj.setPosition({pos.x, -10, pos.z})
         end
+
+        obj = getObjectFromGUID(TEXT_GUIDS[v])
+        obj.setPosition({0,0,0})
     end
     updatePlayers()
     for k,v in pairs(COLORS_EX) do
@@ -535,6 +539,8 @@ function table15()
             end
         end
 
+        obj = getObjectFromGUID(TEXT_GUIDS[v])
+        obj.setPosition({0,0,0})
         obj = getObjectFromGUID(LIGHT_GUIDS[v])
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
@@ -706,7 +712,7 @@ function onChat(message, player)
         msg = string.sub(message, len + 2)
     end
 
-    if command == 'help' then
+    if command == 'c' then
         player.print(HELP_MESSAGE)
         return false
     elseif command == 'h' then
@@ -792,6 +798,11 @@ function onChat(message, player)
     elseif command == '.remove' then
         if player.color == 'Black' or player.admin or DEBUG then
             chatRemove(args[2], player)
+            return false
+        end
+    elseif command == '.swap' then
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatSwap(args[2], args[3], player)
             return false
         end
     elseif command == 'debug' and DEBUG then
@@ -918,6 +929,109 @@ function chatRemove(seatColor, player)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
+    end
+end
+
+function chatSwap(seatColor1, seatColor2, player)
+    local color1, color2, tempRole
+    local player1id, player2id
+    local pos1, pos2, token1, token2
+    local obj
+
+    color1 = false
+    for k,v in pairs(COLORS_ALL) do
+        if string.match(string.lower(v), string.lower(seatColor1)) then
+            color1 = v
+            break
+        end
+    end
+
+    color2 = false
+    for k,v in pairs(COLORS_ALL) do
+        if string.match(string.lower(v), string.lower(seatColor2)) then
+            color2 = v
+            break
+        end
+    end
+
+    if not color1 then
+        player.print('Error: The first color you entered is not a color.', {1,0,0})
+        return
+    end
+
+    if not color2 then
+        player.print('Error: The second color you entered is not a color.', {1,0,0})
+        return
+    end
+
+    updatePlayers()
+    if players[color1] == nil or players[color2] == nil then
+        player.print('Error: At least one of the seats is empty. Use the .move command instead.', {1,0,0})
+        return
+    end
+
+    player1id = players[color1].steam_id
+    player2id = players[color2].steam_id
+
+    if inTable(color1, COLORS) then
+        players[color1].changeColor('Grey')
+    else
+        sitUI(players[color1], _, color1)
+    end
+
+
+    if inTable(color2, COLORS) then
+        players[color2].changeColor('Grey')
+    else
+        sitUI(players[color2], _, color2)
+    end
+
+    if started then
+        for k,v in pairs(getAllObjects()) do
+            if v.getDescription() == roles[color1] then
+                token1 = v
+                pos1 = v.getPosition()
+                v.setColorTint(COLORS_RGB[color2])
+            elseif v.getDescription() == roles[color2] then
+                token2 = v
+                pos2 = v.getPosition()
+                v.setColorTint(COLORS_RGB[color1])
+            end
+        end
+        token1.setPositionSmooth(pos2)
+        token2.setPositionSmooth(pos1)
+        tempRole = roles[color1]
+        roles[color1] = roles[color2]
+        roles[color2] = tempRole
+
+        obj = getObjectFromGUID(NIGHT_HELPER_GUID)
+        if obj then
+            obj.call('swapColors', {color1 = color1, color2 = color2})
+        end
+    end
+
+    for k,v in pairs(Player.getPlayers()) do
+        if v.steam_id == player2id then
+            player.print(v.steam_name .. ' has been moved to ' .. color1 .. '.')
+            if inTable(color1, COLORS) then
+                v.changeColor(color1)
+            elseif inTable(color1, COLORS_EX) then
+                sitUI(v, _, color1)
+            end
+            break
+        end
+    end
+
+    for k,v in pairs(Player.getPlayers()) do
+        if v.steam_id == player1id then
+            player.print(v.steam_name .. ' has been moved to ' .. color2 .. '.')
+            if inTable(color2, COLORS) then
+                v.changeColor(color2)
+            elseif inTable(color2, COLORS_EX) then
+                sitUI(v, _, color2)
+            end
+            break
+        end
     end
 end
 
@@ -1428,7 +1542,7 @@ function updatePlayers()
                 playersExIds[v] = nil
                 playersEx[v] = nil
                 textObj = getObjectFromGUID(TEXT_GUIDS[v])
-                textObj.setValue(' ')
+                textObj.setValue('')
                 deleteAvatar(v)
             else
                 playersEx[v] = found
@@ -1439,6 +1553,60 @@ function updatePlayers()
     return players
 end
 
+function shufflePlayers()
+    if started then
+        return
+    end
+    local colorTab = {}
+    local playerTab = {}
+    local allPlayers
+    for k,v in pairs(COLORS) do
+        if players[v] ~= nil then
+            table.insert(colorTab, v)
+            table.insert(playerTab, players[v].steam_id)
+            players[v].changeColor('Grey')
+        end
+    end
+    for k,v in pairs(COLORS_EX) do
+        if players[v] ~= nil then
+            table.insert(colorTab, v)
+            table.insert(playerTab, players[v].steam_id)
+            sitUI(players[v], _, v)
+        end
+    end
+    if playerTab == nil then
+        return
+    end
+    playerTab = shuffleTable(playerTab)
+    allPlayers = Player.getPlayers()
+
+    for k,v in pairs(colorTab) do
+        for k1,v1 in pairs(allPlayers) do
+            if v1.steam_id == playerTab[k] then
+                if inTable(v, COLORS) then
+                    v1.changeColor(v)
+                else
+                    sitUI(v1, _, v)
+                end
+                break
+                print('found')
+            end
+        end
+    end
+end
+
+function shuffleTable(tab)
+    local rand
+    if tab == nil then
+        return nil
+    end
+
+    for i = #tab, 1, -1 do
+        rand = math.random(1,i)
+        tab[i], tab[rand] = tab[rand], tab[i]
+    end
+    return tab
+end
 
 ------------------Grey UI
 function sitUI(player, value, id)
@@ -1466,7 +1634,7 @@ function sitUI(player, value, id)
         generateAvatar(id)
         printToAll(COLORS_BBC[id] .. player.steam_name .. ' is color ' .. id .. '.[-]')
         zoneObj = getObjectFromGUID(ZONE_GUIDS[id])
-        zoneObj.setColorTint(COLORS_EX_HEX[id])
+        zoneObj.setColorTint(COLORS_RGB[id])
     else
         if player.steam_id == playersEx[id].steam_id then
             player.print('You are no longer sitting in ' .. id .. '.')

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.2'
+VERSION = '1.7.0'
 ROW_S = -6.3
 ROW_W = 0.45
 FONT_SIZE = 225
@@ -204,8 +204,9 @@ end
 
 function used(clickedObject, playerColor, i)
     local entry = living[i]
+    local role = string.gsub(living[i].role, ' ', '_')
     abilityUsed[living[i].color] = not abilityUsed[living[i].color]
-    if CHARACTERS[living[i].role].Ability == true and abilityUsed[living[i].color] == true then
+    if CHARACTERS[role].Ability == true and abilityUsed[living[i].color] == true then
         for k,v in pairs(order) do
             if living[i].role == v.role then
                 table.remove(order, k)
@@ -591,12 +592,74 @@ function format(string)
     return output
 end
 
+function swapColors(params)
+    local color1 = params.color1
+    local color2 = params.color2
+    local color1Living = false
+    local color2Living = false
+    local roles = Global.getTable('roles')
+    local index, tempUsed
+
+    for i = 1, #living do
+        if living[i].color == color1 then
+            color1Living = i
+        elseif living[i].color == color2 then
+            color2Living = i
+        end
+    end
+
+    if not color1Living and not color2Living then
+        return
+    end
+    if color1Living and color2Living then
+        living[color1Living].role = roles[color1]
+        living[color2Living].role = roles[color2]
+    elseif color1Living and not color2Living then
+        table.remove(living, color1Living)
+        index = findLivingIndex(color2)
+        table.insert(living, index, {color = color2, role = roles[color2]})
+    elseif not color1Living and color2Living then
+        table.remove(living, color2Living)
+        index = findLivingIndex(color1)
+        table.insert(living, index, {color = color1, role = roles[color1]})
+    end
+
+    tempUsed = abilityUsed[color1]
+    abilityUsed[color1] = abilityUsed[color2]
+    abilityUsed[color2] = tempUsed
+    setNightOrder('other')
+end
+
+function findLivingIndex(color)
+    local colorIdx = colorIndex(color)
+    local index
+    for i = 1, #living do
+        index = colorIndex(living[i].color)
+        if colorIdx < index then
+            return i
+        end
+    end
+    return #living + 1
+end
+
+function colorIndex(color)
+    local index = 1
+    for k,v in pairs(COLORS) do
+        if v == color then
+            return index
+        end
+        index = index + 1
+    end
+    return nil
+end
+
 ------------------UI
 function refreshUI()
     self.clearInputs()
     self.clearButtons()
     local buttonParam = {}
     local inputParam = {}
+    local role
 
     buttonParam = {click_function = 'nullFunc', label = 'Living Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {COLUMN[1],BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
@@ -610,7 +673,8 @@ function refreshUI()
         buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(living[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        if CHARACTERS[living[i].role].Ability == true then
+        role = string.gsub(living[i].role, ' ', '_')
+        if CHARACTERS[role].Ability == true then
             buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 600, height = 200, font_size = 120, tooltip = 'Remove from list'}
             if abilityUsed[living[i].color] == false then
                 buttonParam.label = 'Has\nAbility'

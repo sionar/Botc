@@ -58,6 +58,7 @@ function onLoad(saveString)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
     local redHand = getObjectFromGUID(RED_HAND_GUID)
     local blueHand = getObjectFromGUID(BLUE_HAND_GUID)
+    self.interactable = false
     clock.interactable = false
     purpleHand.interactable = false
     redHand.interactable = false

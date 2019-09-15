@@ -52,7 +52,7 @@ function onLoad(save_state)
 end
 
 function dealToPlayers(clickedObject, playerColor)
-    if playerColor ~= 'Black' then
+    if playerColor ~= 'Black' and not debug then
         return
     end
     local debug = Global.getVar('DEBUG')

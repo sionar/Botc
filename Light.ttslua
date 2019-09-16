@@ -1,0 +1,268 @@
+function openUI()
+    self.UI.hide("open")
+    self.UI.show("panel")
+end
+
+function closeUI()
+    self.UI.hide("panel")
+    self.UI.show("open")
+end
+
+local state = {}
+
+local toRgb = function(value)
+return {
+    (tonumber(value:sub(2,3),16) or 0)/255,
+    (tonumber(value:sub(4,5),16) or 0)/255,
+    (tonumber(value:sub(6,7),16) or 0)/255
+}
+end
+
+function powerOn()
+    local light = self.getComponentInChildren("Light")
+    light.set("enabled", true)
+    state.power = true
+end
+
+function powerOff()
+    local light = self.getComponentInChildren("Light")
+    light.set("enabled", false)
+    state.power = false
+end
+
+function collision()
+    local collider = self.getChildren()[1].getComponent("BoxCollider")
+    collider.set("enabled", not(collider.get("enabled")))
+    state.collider = not(collider.get("enabled"))
+end
+
+function setProperties(data)
+    if (data.intensity ~= nil) then
+        local value = tonumber(data.intensity);
+        if (value ~= nil) then
+            self.getComponentInChildren("Light").set("intensity", value)
+            state.intensity = value
+        end
+        self.UI.setAttribute("intensity", "text", data.intensity)
+    end
+    if (data.color ~= nil) then
+        local value = data.color;
+        if (type(value) == "string") then
+            if (value:len() == 7 and value:sub(1,1) == "#") then
+                local clr = toRgb(value)
+                self.getComponentInChildren("Light").set("color", clr)
+                self.UI.setAttribute("color", "colors", ""..value.."|"..value.."|"..value.."")
+                state.color = value
+            end
+        end
+        self.UI.setAttribute("color", "text", data.color)
+    end
+    if (data.range ~= nil) then
+        local value = tonumber(data.range)
+        if (value ~= nil) then
+            self.getComponentInChildren("Light").set("range", value)
+            state.range = value
+        end
+        self.UI.setAttribute("range", "text", data.range)
+    end
+    if (state.power) then
+        local c = toRgb(state.color)
+        local i = math.log(state.intensity + 1)
+        self.setColorTint({c[1] * i, c[2] * i, c[3] * i})
+    else
+        self.setColorTint({0,0,0})
+    end
+end
+
+
+
+function ui_intensity(player, value) setProperties({intensity=value}) end
+function ui_color(player, value) setProperties({color=value}) end
+function ui_range(player, value) setProperties({range=value}) end
+
+function onSave()
+    return JSON.encode(state)
+end
+
+function onLoad(save)
+    state = JSON.decode(save) or {
+        power = false,
+        visibility = true,
+        color = "#ffffff",
+        intensity = 1,
+        range = 10,
+        collider = true
+    }
+    local r = tonumber(state.color:sub(2,3),16)/255 or ""
+    local g = tonumber(state.color:sub(4,5),16)/255 or ""
+    local b = tonumber(state.color:sub(6,7),16)/255 or ""
+    self.getComponentInChildren("Light").set("enabled", state.power)
+    self.getComponentInChildren("Light").set("intensity", state.intensity)
+    self.getComponentInChildren("Light").set("color", {r,g,b})
+    self.getComponentInChildren("Light").set("range", state.range)
+    self.getChildren()[1].getComponent("BoxCollider").set("enabled", state.collider or true)
+    local btnColors = "#ccccccff|#ffffffff|#404040ff|#808080ff"
+    local txtColors = "#ffffffff|#ffffffff|#ffffffff|#808080ff"
+    local assets = {
+        {name="ui_close", url = "https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/close.png"},
+        {name="ui_settings", url = "https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/gear.png"},
+        {name="ui_power", url = "https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/power.png"},
+        {name="ui_cube", url = "https://raw.githubusercontent.com/RobMayer/TTSLibrary/master/ui/cube.png"},
+    }
+    local ui = {
+        {
+            tag="Button",
+            attributes={
+                id="open",
+                width=50,
+                height=50,
+                position="0 0 -60",
+                onClick="openUI",
+                image="ui_settings",
+                colors="#ccccccff|#ffffffff|#404040ff|#808080ff",
+            }
+        },
+        {
+            tag="Panel",
+            attributes={
+                id="panel",
+                width=200,
+                height=100,
+                position="0 0 -60",
+                color="#000000cc",
+                active=false,
+                alignment="UpperLeft",
+            },
+            children={
+                {
+                    tag="Text",
+                    attributes={
+                        color="#ffffffff",
+                        width=175,
+                        height=20,
+                        rectAlignment="UpperLeft",
+                        alignment="MiddleLeft",
+                        offsetXY="5 -5",
+                        text="Point",
+                    }
+                },
+                {
+                    tag="Button",
+                    attributes={
+                        onClick="collision",
+                        width=20,
+                        height=20,
+                        image="ui_cube",
+                        colors=btnColors,
+                        rectAlignment="UpperRight",
+                        offsetXY="-45 -5",
+                        tooltip="Toggle Collisions",
+                        tooltipPosition="Above",
+                    }
+                },
+                {
+                    tag="Button",
+                    attributes={
+                        onClick="power",
+                        width=20,
+                        height=20,
+                        image="ui_power",
+                        colors=btnColors,
+                        rectAlignment="UpperRight",
+                        offsetXY="-25 -5",
+                        tooltip="Power",
+                        tooltipPosition="Above",
+                    }
+                },
+                {
+                    tag="Button",
+                    attributes={
+                        onClick="closeUI",
+                        width=20,
+                        height=20,
+                        image="ui_close",
+                        colors=btnColors,
+                        rectAlignment="UpperRight",
+                        offsetXY="-5 -5",
+                        tooltip="Close",
+                        tooltipPosition="Above",
+                    }
+                },
+                {
+                    tag="InputField",
+                    attributes={
+                        id="intensity",
+                        onValueChanged="ui_intensity",
+                        tooltip="Intensity",
+                        tooltipPosition="Left",
+                        text=state.intensity,
+                        width=92.5,
+                        height=30,
+                        characterValidation="Decimal",
+                        colors=txtColors,
+                        characterLimit=5,
+                        textAlignment="MiddleCenter",
+                        rectAlignment="UpperLeft",
+                        offsetXY="5 -30",
+                    }
+                },
+                {
+                    tag="InputField",
+                    attributes={
+                        id="color",
+                        onValueChanged="ui_color",
+                        tooltip="Color",
+                        tooltipPosition="Right",
+                        text=state.color,
+                        width=92.5,
+                        height=30,
+                        colors=txtColors,
+                        characterLimit=7,
+                        textAlignment="MiddleCenter",
+                        rectAlignment="UpperRight",
+                        offsetXY="-5 -30",
+                        colors=""..state.color.."|"..state.color.."|"..state.color..""
+                    }
+                },
+                {
+                    tag="InputField",
+                    attributes={
+                        id="range",
+                        onValueChanged="ui_range",
+                        tooltip="Range",
+                        tooltipPosition="Left",
+                        text=state.range,
+                        width=92.5,
+                        height=30,
+                        characterValidation="Decimal",
+                        colors=txtColors,
+                        characterLimit=9,
+                        textAlignment="MiddleCenter",
+                        rectAlignment="UpperLeft",
+                        offsetXY="5 -65",
+                    }
+                },
+                {
+                    tag="InputField",
+                    attributes={
+                        interactable=false,
+                        id="angle",
+                        tooltip="Angle",
+                        tooltipPosition="Right",
+                        text="N/A",
+                        width=92.5,
+                        height=30,
+                        colors=txtColors,
+                        characterLimit=3,
+                        textAlignment="MiddleCenter",
+                        rectAlignment="UpperRight",
+                        offsetXY="-5 -65",
+                    }
+                },
+            }
+        }
+    }
+    self.UI.setCustomAssets(assets)
+    self.UI.setXmlTable(ui)
+    collision()
+end

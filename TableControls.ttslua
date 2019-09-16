@@ -5,10 +5,10 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
-BUTTON_W = 600
-BUTTON_H = 500
-FONT_SIZE = 200
+VERSION = '1.2.0'
+BUTTON_W = 500
+BUTTON_H = 400
+FONT_SIZE = 150
 
 
 ------------------Functions
@@ -41,23 +41,33 @@ function callShufflePlayers(clickedObject, playerColor)
     end
 end
 
+function callToggleLights(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        Global.call('toggleLights', {switching = true})
+    end
+end
+
 ------------------User Interface
 function refreshButtons()
     self.clearButtons()
 
     local buttonParam = {click_function = 'callTable10', function_owner = self, label = '10\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {-1.5,0.2,-0.6}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 10 players.'}
+            position = {-1.05,0.2,-1}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 10 players.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'callTable15', function_owner = self, label = '15\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {0,0.2,-0.6}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 15 players.'}
+            position = {0,0.2,-1}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 15 players.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'callTable20', function_owner = self, label = '20\nPlayer', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {1.5,0.2,-0.6}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 20 players.'}
+            position = {1.05,0.2,-1}, width = BUTTON_W, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 20 players.'}
     self.createButton(buttonParam)
 
     local buttonParam = {click_function = 'callShufflePlayers', function_owner = self, label = 'Shuffle Seats', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {0,0.2,0.6}, width = 1500, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the table size to 20 players.'}
+            position = {0,0.2,0}, width = 1500, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Shuffle seats (Before the game starts).'}
+    self.createButton(buttonParam)
+
+    local buttonParam = {click_function = 'callToggleLights', function_owner = self, label = 'Toggle Lights', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {0,0.2,1}, width = 1500, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
     self.createButton(buttonParam)
 end

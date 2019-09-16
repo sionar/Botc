@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.1.1'
+VERSION = '15.2.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\nMade by [49D5FD]Sionar[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -46,6 +46,7 @@ for k,v in pairs(PLAYER_MODES) do
         VOTE_PANEL_POS = {},
         ROT = {},
         ROLE_SHEET_POS = {},
+        NIGHT_LIGHT_POS = {},
         ZONE_POS = {},
         HAND_POS = {},
         HAND_ROT = {},
@@ -67,6 +68,7 @@ for k,v in pairs(COLORS) do
     PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
     PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
     PARAMS.p10.ROLE_SHEET_POS[v] = radius(71,ANGLE10[v], 1)
+    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(71,ANGLE10[v], 5)
     PARAMS.p10.ZONE_POS[v] = radius(71,ANGLE10[v], 1)
     PARAMS.p10.HAND_POS[v] = radius(85,ANGLE10[v], 3.5)
     PARAMS.p10.HAND_ROT[v] = {0, ANGLE10[v] + 180, 0}
@@ -85,6 +87,7 @@ for k,v in pairs(COLORS_15) do
     PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
     PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
     PARAMS.p15.ROLE_SHEET_POS[v] = radius(71,ANGLE15[v], 1)
+    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(71,ANGLE15[v], 5)
     PARAMS.p15.ZONE_POS[v] = radius(71,ANGLE15[v], 1)
     PARAMS.p15.HAND_POS[v] = radius(85,ANGLE15[v], 3.5)
     PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
@@ -105,6 +108,7 @@ for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
     PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
     PARAMS.p20.ROLE_SHEET_POS[v] = radius(71,ANGLE20[v], 1)
+    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(71,ANGLE20[v], 5)
     PARAMS.p20.ZONE_POS[v] = radius(71,ANGLE20[v], 1)
     PARAMS.p20.HAND_POS[v] = radius(85,ANGLE20[v], 3.5)
     PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
@@ -116,10 +120,10 @@ TABLE10_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255119639/7FF0
 TABLE15_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255081165/C8DBFEB7492079CB9F9C331BD10B392F43EC55FF/'
 TABLE20_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007254908157/42DD98CD69FFD19403E269A2602119EE2F628BC8/'
 
-
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = 'c250ec', Lavender = '8daef9', Navy = '1a0b6b', Cyan = 'b73bc0', Mint = '742d4e', Lime = '155c40', Peach = '004a7d', Coral = 'abb4e7', Maroon = 'd314d5', Silver = '34f0f3'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
-LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
+AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
+NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
 TABLE_GUID = '7f1f5f'
 ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
 ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
@@ -150,6 +154,8 @@ mode = 'TB'
 currentNominator = ''
 currentNominated = ''
 history = '[FFFFFF]Vote History:[-]'
+lights = false
+playerMode = 'p20'
 roles = {}
 aliveTokens = {}
 allAliveTokens = {}
@@ -160,7 +166,6 @@ hasVote = {}
 voted = {}
 voteLock = {}
 voteButtonsOn = {}
-playerMode = 'p20'
 
 for k,v in pairs(COLORS_ALL) do
     aliveTokens[v] = {object = 0, vote = 0}
@@ -205,6 +210,7 @@ function onLoad(saveString)
         customSet = save['c']
         customList = save['cl']
         playerMode = save['pm']
+        lights = save ['l']
     end
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     setNotes(START_MESSAGE)
@@ -217,6 +223,8 @@ function onLoad(saveString)
         else
             table20()
         end
+    else
+        toggleLights({switching = false})
     end
 
     local obj, colors
@@ -262,7 +270,7 @@ function onLoad(saveString)
     obj = getObjectFromGUID(TEXT_GUIDS['Version'])
     obj.setValue('v ' .. VERSION)
 
-    for k,v in pairs(LIGHT_GUIDS) do
+    for k,v in pairs(AVATAR_LIGHT_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
@@ -298,6 +306,7 @@ function onSave()
     save['c'] = customSet
     save['cl'] = customList
     save['pm'] = playerMode
+    save['l'] = lights
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -400,6 +409,7 @@ function table10()
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
     createSnapPoints()
+    toggleLights({switching = false})
 end
 
 function table15()
@@ -497,7 +507,7 @@ function table15()
         obj = getObjectFromGUID(TEXT_GUIDS[v])
         obj.setPosition(PARAMS.p15.TEXT_POS[v])
         obj.setRotationSmooth(PARAMS.p15.TEXT_ROT[v])
-        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
         obj.setPositionSmooth(PARAMS.p15.LIGHT_POS[v])
 
         if avatarGuids[v] then
@@ -540,7 +550,7 @@ function table15()
 
         obj = getObjectFromGUID(TEXT_GUIDS[v])
         obj.setPosition({0,0,0})
-        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
     end
@@ -555,6 +565,7 @@ function table15()
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
     createSnapPoints()
+    toggleLights({switching = false})
 end
 
 function table20()
@@ -647,7 +658,7 @@ function table20()
         obj.setPosition(PARAMS.p20.TEXT_POS[v])
         obj.setRotationSmooth(PARAMS.p20.TEXT_ROT[v])
 
-        obj = getObjectFromGUID(LIGHT_GUIDS[v])
+        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
         obj.setPositionSmooth(PARAMS.p20.LIGHT_POS[v])
 
         if avatarGuids[v] then
@@ -660,6 +671,7 @@ function table20()
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
     createSnapPoints()
+    toggleLights({switching = false})
 end
 
 function createSnapPoints()
@@ -831,7 +843,7 @@ function chatMessage(color, message)
         player.print(msg)
         Player['Black'].print(msg)
     else
-        Player['Black'].print('Nobody is sitting in ' .. color .. '.', {1,0,0})
+        Player['Black'].print('No one is playing as ' .. color .. '.', {1,0,0})
     end
 end
 
@@ -1613,6 +1625,78 @@ function shuffleTable(tab)
     return tab
 end
 
+function toggleLights(params)
+    local switching = params.switching
+    local obj
+
+    if switching then
+        lights = not lights
+    end
+    if not lights then
+        Lighting.ambient_type = 1
+        Lighting.ambient_intensity = 1.3
+        Lighting.light_intensity = 0.54
+        Lighting.apply()
+        for k,v in pairs(NIGHT_LIGHT_GUIDS) do
+            obj = getObjectFromGUID(v)
+            obj.setPosition({0,0,0})
+            obj.call('powerOff')
+        end
+    else
+        Lighting.ambient_type = 2
+        Lighting.ambient_intensity = 0
+        Lighting.light_intensity = 0.2
+        Lighting.apply()
+        obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
+        obj.setPosition({0,40,0})
+        obj.call('powerOn')
+        obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
+        obj.setPosition({0,5,80})
+        obj.call('powerOn')
+        if playerMode == 'p10' then
+            for k,v in pairs(COLORS) do
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
+                if obj then
+                    obj.setPosition(PARAMS.p10.NIGHT_LIGHT_POS[v])
+                    obj.call('powerOn')
+                end
+
+            end
+            for k,v in pairs(COLORS_EX) do
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
+                if obj then
+                    obj.setPosition({0,0,0})
+                    obj.call('powerOff')
+                end
+            end
+        elseif playerMode == 'p15' then
+            for k,v in pairs(COLORS_15) do
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
+                if obj then
+                    obj.setPosition(PARAMS.p15.NIGHT_LIGHT_POS[v])
+                    obj.call('powerOn')
+                end
+            end
+            for k,v in pairs(COLORS_SET2) do
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
+                if obj then
+                    obj.setPosition({0,0,0})
+                    obj.call('powerOff')
+                end
+            end
+        elseif playerMode == 'p20' then
+            for k,v in pairs(COLORS_ALL) do
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
+                if obj then
+                    obj.setPosition(PARAMS.p20.NIGHT_LIGHT_POS[v])
+                    obj.call('powerOn')
+                end
+            end
+        end
+    end
+end
+
+
 ------------------Grey UI
 function sitUI(player, value, id)
     local textObj
@@ -1692,8 +1776,8 @@ function generateAvatar(color)
             cast_shadows = false
         }
         avatar.setCustomObject(customParam)
-        light = getObjectFromGUID(LIGHT_GUIDS[color])
-        light.call('power')
+        light = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
+        light.call('powerOn')
     end, 0.5)
 end
 
@@ -1719,8 +1803,8 @@ function deleteAvatar(color)
         obj = getObjectFromGUID(avatarGuids[color])
         obj.destruct()
         avatarGuids[color] = nil
-        light = getObjectFromGUID(LIGHT_GUIDS[color])
-        light.call('power')
+        light = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
+        light.call('powerOff')
     end
 end
 
@@ -1897,7 +1981,7 @@ function sendMessageUI(blackPlayer, value, id)
         player.print(msg)
         blackPlayer.print(msg)
     else
-        blackPlayer.print('Nobody is sitting in ' .. uiColor .. '.', {1,0,0})
+        blackPlayer.print('No one is playing as ' .. uiColor .. '.', {1,0,0})
     end
 end
 

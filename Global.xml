@@ -733,7 +733,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "Lavender"
+        		id = "p15Lavender"
         		onClick = "sitUI"
         		text = "Sit in Lavender"
                 class = "tp50"
@@ -745,7 +745,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Navy"
+        		id = "p15Navy"
         		onClick = "sitUI"
         		text = "Sit in Navy"
                 class = "tp50"
@@ -757,7 +757,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "Lime"
+                id = "p15Lime"
                 onClick = "sitUI"
                 text = "Sit in Lime"
                 class = "tp50"
@@ -769,7 +769,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "Coral"
+                id = "p15Coral"
                 onClick = "sitUI"
                 text = "Sit in Coral"
                 class = "tp50"
@@ -781,7 +781,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "Maroon"
+                id = "p15Maroon"
                 onClick = "sitUI"
                 text = "Sit in Maroon"
                 class = "tp50"
@@ -807,7 +807,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "Magenta"
+        		id = "p20Magenta"
         		onClick = "sitUI"
         		text = "Sit in Magenta"
                 class = "tp50"
@@ -819,7 +819,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Lavender"
+        		id = "p20Lavender"
         		onClick = "sitUI"
         		text = "Sit in Lavender"
                 class = "tp50"
@@ -831,7 +831,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Navy"
+        		id = "p20Navy"
         		onClick = "sitUI"
         		text = "Sit in Navy"
                 class = "tp50"
@@ -843,7 +843,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Cyan"
+        		id = "p20Cyan"
         		onClick = "sitUI"
         		text = "Sit in Cyan"
                 class = "tp50"
@@ -855,7 +855,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Mint"
+        		id = "p20Mint"
         		onClick = "sitUI"
         		text = "Sit in Mint"
                 class = "tp50"
@@ -869,7 +869,7 @@
     <Row>
         <Cell>
             <Button
-        		id = "Lime"
+        		id = "p20Lime"
         		onClick = "sitUI"
         		text = "Sit in Lime"
                 class = "tp50"
@@ -881,7 +881,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Peach"
+        		id = "p20Peach"
         		onClick = "sitUI"
         		text = "Sit in Peach"
                 class = "tp50"
@@ -893,7 +893,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Coral"
+        		id = "p20Coral"
         		onClick = "sitUI"
         		text = "Sit in Coral"
                 class = "tp50"
@@ -905,7 +905,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Maroon"
+        		id = "p20Maroon"
         		onClick = "sitUI"
         		text = "Sit in Maroon"
                 class = "tp50"
@@ -917,7 +917,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "Silver"
+        		id = "p20Silver"
         		onClick = "sitUI"
         		text = "Sit in Silver"
                 class = "tp50"

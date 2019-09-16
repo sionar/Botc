@@ -59,10 +59,6 @@ function onLoad(save_state)
     self.createButton(data)
 end
 
-function onPlayerChangeColor(playerColor)
-    refreshUI()
-end
-
 function defaultTeamToggle(clickedObject, playerColor)
     if Player[playerColor].admin then
         local allPlayers = Player.getPlayers()

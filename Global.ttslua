@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.1.0'
+VERSION = '15.1.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\nMade by [49D5FD]Sionar[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -137,7 +137,6 @@ PURPLE_HAND_GUID = '88ad59'
 BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
-PLAYER_DIST_GUID = '7527ae'
 
 
 ------------------Variables
@@ -696,6 +695,10 @@ end
 function onPlayerChangeColor(color)
     refreshUI()
     updatePlayers()
+    local obj = getObjectFromGUID(TEAM_TOOL_GUID)
+    if obj then
+        obj.call('refreshUI')
+    end
 end
 
 function onChat(message, player)
@@ -1155,6 +1158,7 @@ function handleLifeUI()
     local numberOfVotes = 0
     local votesNeeded = 0
     local playerDist
+    local allObjects = getAllObjects()
 
     for i=1, 20 do
         if aliveTokens[COLORS_ALL[i]].object ~= 0 and players[COLORS_ALL[i]] ~= nil then
@@ -1178,10 +1182,11 @@ function handleLifeUI()
     end
     votesNeeded = math.ceil(numAlive/2)
     if currPlayers ~= numAlive or currVotes ~= numberOfVotes then
-        playerDist = getObjectFromGUID(PLAYER_DIST_GUID)
-        if playerDist then
-            playerDist.call('updatePlayerDist', {num = numAlive})
-            playerDist.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
+        for k,v in pairs(allObjects) do
+            if v.getName() == 'Player Distribution Chart' then
+                v.call('updatePlayerDist', {num = numAlive})
+                v.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
+            end
         end
     end
     currPlayers = numAlive
@@ -1614,8 +1619,9 @@ function sitUI(player, value, id)
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
     local zoneObj
+    local color = string.sub(id, 4, #id)
     updatePlayers()
-    if playersEx[id] == nil then
+    if playersEx[color] == nil then
         for k,v in pairs(playersEx) do
             if v ~= nil and v.steam_id == player.steam_id then
                 player.print('You are already sitting in a seat.')
@@ -1626,29 +1632,33 @@ function sitUI(player, value, id)
             player.print('Extension seats are locked.')
             return
         end
-        player.print('You are now sitting in ' .. id .. '.')
-        playersExIds[id] = player.steam_id
-        playersEx[id] = player
-        textObj = getObjectFromGUID(TEXT_GUIDS[id])
+        player.print('You are now sitting in ' .. color .. '.')
+        playersExIds[color] = player.steam_id
+        playersEx[color] = player
+        textObj = getObjectFromGUID(TEXT_GUIDS[color])
         textObj.setValue(player.steam_name)
-        generateAvatar(id)
-        printToAll(COLORS_BBC[id] .. player.steam_name .. ' is color ' .. id .. '.[-]')
-        zoneObj = getObjectFromGUID(ZONE_GUIDS[id])
-        zoneObj.setColorTint(COLORS_RGB[id])
+        generateAvatar(color)
+        printToAll(COLORS_BBC[color] .. player.steam_name .. ' is color ' .. color .. '.[-]')
+        UI.setAttribute(id, 'text', 'Leave ' .. color)
+        UI.setAttribute(id, 'textColor', '#FFFFFF')
+        zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
+        zoneObj.setColorTint(COLORS_RGB[color])
     else
-        if player.steam_id == playersEx[id].steam_id then
-            player.print('You are no longer sitting in ' .. id .. '.')
-            playersEx[id] = nil
-            playersExIds[id] = nil
-            textObj = getObjectFromGUID(TEXT_GUIDS[id])
+        if player.steam_id == playersEx[color].steam_id then
+            player.print('You are no longer sitting in ' .. color .. '.')
+            UI.setAttribute(id, 'text', 'Sit in ' .. color)
+            UI.setAttribute(id, 'textColor', '#FFFFFF')
+            playersEx[color] = nil
+            playersExIds[color] = nil
+            textObj = getObjectFromGUID(TEXT_GUIDS[color])
             textObj.setValue(' ')
-            deleteAvatar(id)
+            deleteAvatar(color)
             if started then
-                zoneObj = getObjectFromGUID(ZONE_GUIDS[id])
+                zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
                 zoneObj.setColorTint({0.69,0.69,0.69})
             end
         else
-            player.print('Someone is already sitting in ' .. id .. '.')
+            player.print('Someone is already sitting in ' .. color .. '.')
         end
     end
 end

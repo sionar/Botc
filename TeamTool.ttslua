@@ -57,6 +57,8 @@ function onLoad(save_state)
     position = {0, 3.5, 5}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
     width = 5700, height = 1300, font_size = 800, alignment = 3}
     self.createButton(data)
+    self.setLock(true)
+    refreshUI()
 end
 
 function defaultTeamToggle(clickedObject, playerColor)

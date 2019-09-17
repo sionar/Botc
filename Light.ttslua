@@ -101,6 +101,7 @@ function onLoad(save)
     self.getComponentInChildren("Light").set("color", {r,g,b})
     self.getComponentInChildren("Light").set("range", state.range)
     self.getChildren()[1].getComponent("BoxCollider").set("enabled", state.collider or true)
+    self.setLock(true)
     local btnColors = "#ccccccff|#ffffffff|#404040ff|#808080ff"
     local txtColors = "#ffffffff|#ffffffff|#ffffffff|#808080ff"
     local assets = {
@@ -163,7 +164,7 @@ function onLoad(save)
                 {
                     tag="Button",
                     attributes={
-                        onClick="power",
+                        onClick="powerOn",
                         width=20,
                         height=20,
                         image="ui_power",

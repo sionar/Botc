@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.2.0'
+VERSION = '15.2.2'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\nMade by [49D5FD]Sionar[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -67,10 +67,10 @@ for k,v in pairs(COLORS) do
     PARAMS.p10.ALIVE_TOKEN_POS[v] = radius(55, ANGLE10[v], 1.16)
     PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
     PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
-    PARAMS.p10.ROLE_SHEET_POS[v] = radius(71,ANGLE10[v], 1)
-    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(71,ANGLE10[v], 5)
-    PARAMS.p10.ZONE_POS[v] = radius(71,ANGLE10[v], 1)
-    PARAMS.p10.HAND_POS[v] = radius(85,ANGLE10[v], 3.5)
+    PARAMS.p10.ROLE_SHEET_POS[v] = radius(71.5,ANGLE10[v], 1)
+    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE10[v], 5)
+    PARAMS.p10.ZONE_POS[v] = radius(71.5,ANGLE10[v], 1)
+    PARAMS.p10.HAND_POS[v] = radius(82,ANGLE10[v], 1)
     PARAMS.p10.HAND_ROT[v] = {0, ANGLE10[v] + 180, 0}
 end
 
@@ -86,10 +86,10 @@ for k,v in pairs(COLORS_15) do
     PARAMS.p15.ALIVE_TOKEN_POS[v] = radius(55, ANGLE15[v], 1.16)
     PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
     PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
-    PARAMS.p15.ROLE_SHEET_POS[v] = radius(71,ANGLE15[v], 1)
-    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(71,ANGLE15[v], 5)
-    PARAMS.p15.ZONE_POS[v] = radius(71,ANGLE15[v], 1)
-    PARAMS.p15.HAND_POS[v] = radius(85,ANGLE15[v], 3.5)
+    PARAMS.p15.ROLE_SHEET_POS[v] = radius(71.5,ANGLE15[v], 1)
+    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE15[v], 5)
+    PARAMS.p15.ZONE_POS[v] = radius(71.5,ANGLE15[v], 1)
+    PARAMS.p15.HAND_POS[v] = radius(82,ANGLE15[v], 1)
     PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
     PARAMS.p15.TEXT_POS[v] = radius(86.6,ANGLE15[v], 1)
     PARAMS.p15.TEXT_ROT[v] = {90, ANGLE15[v], 0}
@@ -107,10 +107,10 @@ for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.ALIVE_TOKEN_POS[v] = radius(55, ANGLE20[v], 1.16)
     PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
     PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
-    PARAMS.p20.ROLE_SHEET_POS[v] = radius(71,ANGLE20[v], 1)
-    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(71,ANGLE20[v], 5)
-    PARAMS.p20.ZONE_POS[v] = radius(71,ANGLE20[v], 1)
-    PARAMS.p20.HAND_POS[v] = radius(85,ANGLE20[v], 3.5)
+    PARAMS.p20.ROLE_SHEET_POS[v] = radius(71.5,ANGLE20[v], 1)
+    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE20[v], 5)
+    PARAMS.p20.ZONE_POS[v] = radius(71.5,ANGLE20[v], 1)
+    PARAMS.p20.HAND_POS[v] = radius(82,ANGLE20[v], 1)
     PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
     PARAMS.p20.TEXT_POS[v] = radius(86.6,ANGLE20[v], 1)
     PARAMS.p20.TEXT_ROT[v] = {90, ANGLE20[v], 0}
@@ -129,10 +129,10 @@ ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange =
 ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
 VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
 VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
-ROLE_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'ec429a', Lavender = 'ed5d8c', Navy = '696f16', Cyan = '30897d', Mint = '030e1d', Lime = 'd7bd47', Peach = '5f7b4b', Coral = 'd01ecc', Maroon = 'cc7b32', Silver = '64e20d'}
-ROLE_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = 'b693a5', Magenta = '513deb', Lavender = '312ffe', Navy = 'ec482b', Cyan = '8fcb6b', Mint = '2a9008', Lime = 'dea506', Peach = 'cbdbb9', Coral = 'd7fc0e', Maroon = 'aeb276', Silver = '0213e5',}
-ROLE_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '7fa413', Magenta = '161300', Lavender = 'a491e1', Navy = '19f5eb', Cyan = 'e020c2', Mint = '6a2a30', Lime = 'ca7b1f', Peach = '8a1638', Coral = '9516ca', Maroon = 'da98cb', Silver = '86070c',}
-ROLE_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '7c5b4f', Magenta = '3991eb', Lavender = '79df60', Navy = '2f0a81', Cyan = '43a691', Mint = '08ff7b', Lime = '06f32b', Peach = 'de8dc3', Coral = '6be9c8', Maroon = '05197a', Silver = '547727',}
+ROLE_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'f332be', Lavender = 'e3323e', Navy = '73de24', Cyan = 'b913d3', Mint = 'f2eecc', Lime = '6730eb', Peach = '98a909', Coral = '748526', Maroon = 'ef6ac7', Silver = '3258d7'}
+ROLE_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = '8721d3', Magenta = '793761', Lavender = '81ade5', Navy = '53e3d9', Cyan = 'c89b19', Mint = 'c94ca5', Lime = '27a7d6', Peach = '1e6331', Coral = 'a472a7', Maroon = 'c15727', Silver = 'b693a5',}
+ROLE_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '44a632', Magenta = '7fa413', Lavender = '85dfac', Navy = 'c79858', Cyan = '330c9d', Mint = 'b4fa88', Lime = 'e9e503', Peach = '745bdd', Coral = 'b3b035', Maroon = 'ab2437', Silver = 'dbe7f7',}
+ROLE_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a',}
 
 NIGHT_HELPER_GUID = 'bb89aa'
 CLOCK_CONTROLS_GUID = '184d11'
@@ -317,13 +317,6 @@ function table10()
 
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p10'
-    obj = getObjectFromGUID(TABLE_GUID)
-    tab = obj.getCustomObject()
-    tab.mesh = TABLE10_MODEL
-    tab.collider = TABLE10_MODEL
-    obj.setCustomObject(tab)
-    obj.reload()
-    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
     if mode == 'TB' then
         roleSheetGuids = ROLE_SHEET_GUIDS_TB
     elseif mode == 'BM' then
@@ -364,7 +357,7 @@ function table10()
             obj.setRotationSmooth(PARAMS.p10.ROT[v])
         end
 
-        Player[v].setHandTransform({position = PARAMS.p10.HAND_POS[v], rotation = PARAMS.p10.HAND_ROT[v]})
+        Player[v].setHandTransform({position = PARAMS.p10.HAND_POS[v], rotation = PARAMS.p10.HAND_ROT[v], scale = {14,5,6.5}})
     end
 
     for k,v in pairs(COLORS_EX) do
@@ -375,7 +368,8 @@ function table10()
 
         obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
-            obj.setPosition({0,0,0})
+            obj.setScale({0.01,0.01,0.01})
+            obj.setPosition({0,-0.5,0})
             obj.interactable = false
         end
 
@@ -397,7 +391,7 @@ function table10()
         end
 
         obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,0,0})
+        obj.setPosition({0,-0.5,0})
     end
     updatePlayers()
     for k,v in pairs(COLORS_EX) do
@@ -417,13 +411,6 @@ function table15()
 
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p15'
-    obj = getObjectFromGUID(TABLE_GUID)
-    tab = obj.getCustomObject()
-    tab.mesh = TABLE15_MODEL
-    tab.collider = TABLE15_MODEL
-    obj.setCustomObject(tab)
-    obj.reload()
-    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
     if mode == 'TB' then
         roleSheetGuids = ROLE_SHEET_GUIDS_TB
     elseif mode == 'BM' then
@@ -464,7 +451,7 @@ function table15()
             obj.setRotationSmooth(PARAMS.p15.ROT[v])
         end
 
-        Player[v].setHandTransform({position = PARAMS.p15.HAND_POS[v], rotation = PARAMS.p15.HAND_ROT[v]})
+        Player[v].setHandTransform({position = PARAMS.p15.HAND_POS[v], rotation = PARAMS.p15.HAND_ROT[v], scale = {14,5,6.5}})
     end
 
     for k,v in pairs(COLORS_SET1) do
@@ -525,7 +512,8 @@ function table15()
 
         obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
-            obj.setPosition({0,0,0})
+            obj.setScale({0.01,0.01,0.01})
+            obj.setPosition({0,-0.5,0})
             obj.interactable = false
         end
 
@@ -549,7 +537,7 @@ function table15()
         end
 
         obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,0,0})
+        obj.setPosition({0,-0.5,0})
         obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
@@ -573,13 +561,6 @@ function table20()
 
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p20'
-    obj = getObjectFromGUID(TABLE_GUID)
-    tab = obj.getCustomObject()
-    tab.mesh = TABLE20_MODEL
-    tab.collider = TABLE20_MODEL
-    obj.setCustomObject(tab)
-    obj.reload()
-    Wait.time(function () getObjectFromGUID(TABLE_GUID).interactable = false end, 0.1)
     if mode == 'TB' then
         roleSheetGuids = ROLE_SHEET_GUIDS_TB
     elseif mode == 'BM' then
@@ -592,12 +573,13 @@ function table20()
 
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({16,10,13})
+        obj.setScale({15,10,13})
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
         obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
+            obj.setScale({1.64,1,1.64})
             obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
         end
@@ -620,12 +602,12 @@ function table20()
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
         end
 
-        Player[v].setHandTransform({position = PARAMS.p20.HAND_POS[v], rotation = PARAMS.p20.HAND_ROT[v]})
+        Player[v].setHandTransform({position = PARAMS.p20.HAND_POS[v], rotation = PARAMS.p20.HAND_ROT[v], scale = {14,5,6.5}})
     end
 
     for k,v in pairs(COLORS_EX) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({8,5,6.5})
+        obj.setScale({7.5,5,6.5})
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
@@ -711,6 +693,11 @@ function onPlayerChangeColor(color)
     if obj then
         obj.call('refreshUI')
     end
+end
+
+function onPlayerConnect(player_id)
+    Wait.time(reloadLights, 60)
+    Wait.time(function() getObjectFromGUID(TEAM_TOOL_GUID).reload() end, 60)
 end
 
 function onChat(message, player)
@@ -1625,6 +1612,14 @@ function shuffleTable(tab)
     return tab
 end
 
+function reloadLights()
+    local obj
+    for k,v in pairs(NIGHT_LIGHT_GUIDS) do
+        obj = getObjectFromGUID(v)
+        obj.reload()
+    end
+end
+
 function toggleLights(params)
     local switching = params.switching
     local obj
@@ -1639,8 +1634,9 @@ function toggleLights(params)
         Lighting.apply()
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
-            obj.setPosition({0,0,0})
+            obj.setPosition({0,-0.5,0})
             obj.call('powerOff')
+
         end
     else
         Lighting.ambient_type = 2
@@ -1651,7 +1647,7 @@ function toggleLights(params)
         obj.setPosition({0,40,0})
         obj.call('powerOn')
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
-        obj.setPosition({0,5,80})
+        obj.setPosition({0,5,83})
         obj.call('powerOn')
         if playerMode == 'p10' then
             for k,v in pairs(COLORS) do
@@ -1665,7 +1661,7 @@ function toggleLights(params)
             for k,v in pairs(COLORS_EX) do
                 obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
                 if obj then
-                    obj.setPosition({0,0,0})
+                    obj.setPosition({0,-0.5,0})
                     obj.call('powerOff')
                 end
             end
@@ -1680,7 +1676,7 @@ function toggleLights(params)
             for k,v in pairs(COLORS_SET2) do
                 obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
                 if obj then
-                    obj.setPosition({0,0,0})
+                    obj.setPosition({0,-0.5,0})
                     obj.call('powerOff')
                 end
             end

@@ -7,9 +7,9 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.2.2'
+VERSION = '15.2.5'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\nMade by [49D5FD]Sionar[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -67,8 +67,8 @@ for k,v in pairs(COLORS) do
     PARAMS.p10.ALIVE_TOKEN_POS[v] = radius(55, ANGLE10[v], 1.16)
     PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
     PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
-    PARAMS.p10.ROLE_SHEET_POS[v] = radius(71.5,ANGLE10[v], 1)
-    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE10[v], 5)
+    PARAMS.p10.ROLE_SHEET_POS[v] = radius(72.5,ANGLE10[v], 1)
+    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE10[v], 5)
     PARAMS.p10.ZONE_POS[v] = radius(71.5,ANGLE10[v], 1)
     PARAMS.p10.HAND_POS[v] = radius(82,ANGLE10[v], 1)
     PARAMS.p10.HAND_ROT[v] = {0, ANGLE10[v] + 180, 0}
@@ -86,8 +86,8 @@ for k,v in pairs(COLORS_15) do
     PARAMS.p15.ALIVE_TOKEN_POS[v] = radius(55, ANGLE15[v], 1.16)
     PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
     PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
-    PARAMS.p15.ROLE_SHEET_POS[v] = radius(71.5,ANGLE15[v], 1)
-    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE15[v], 5)
+    PARAMS.p15.ROLE_SHEET_POS[v] = radius(72.5,ANGLE15[v], 1)
+    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE15[v], 5)
     PARAMS.p15.ZONE_POS[v] = radius(71.5,ANGLE15[v], 1)
     PARAMS.p15.HAND_POS[v] = radius(82,ANGLE15[v], 1)
     PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
@@ -107,8 +107,8 @@ for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.ALIVE_TOKEN_POS[v] = radius(55, ANGLE20[v], 1.16)
     PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
     PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
-    PARAMS.p20.ROLE_SHEET_POS[v] = radius(71.5,ANGLE20[v], 1)
-    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(71.5,ANGLE20[v], 5)
+    PARAMS.p20.ROLE_SHEET_POS[v] = radius(72.5,ANGLE20[v], 1)
+    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE20[v], 5)
     PARAMS.p20.ZONE_POS[v] = radius(71.5,ANGLE20[v], 1)
     PARAMS.p20.HAND_POS[v] = radius(82,ANGLE20[v], 1)
     PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
@@ -225,6 +225,16 @@ function onLoad(saveString)
         end
     else
         toggleLights({switching = false})
+    end
+
+
+    for k,v in pairs(NIGHT_LIGHT_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if DEBUG then
+            obj.setScale({1,1,1})
+        else
+            obj.setScale({0,0,0})
+        end
     end
 
     local obj, colors
@@ -696,8 +706,8 @@ function onPlayerChangeColor(color)
 end
 
 function onPlayerConnect(player_id)
-    Wait.time(reloadLights, 60)
-    Wait.time(function() getObjectFromGUID(TEAM_TOOL_GUID).reload() end, 60)
+    Wait.time(reloadLights, 20)
+    Wait.time(function() getObjectFromGUID(TEAM_TOOL_GUID).reload() end, 20)
 end
 
 function onChat(message, player)
@@ -1067,6 +1077,9 @@ end
 
 function checkSeatedPlayers()
     local obj
+    if DEBUG then
+        return
+    end
     updatePlayers()
     for k,v in pairs(COLORS) do
         if not Player[v].seated then
@@ -1647,7 +1660,7 @@ function toggleLights(params)
         obj.setPosition({0,40,0})
         obj.call('powerOn')
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
-        obj.setPosition({0,5,83})
+        obj.setPosition({0,10,83})
         obj.call('powerOn')
         if playerMode == 'p10' then
             for k,v in pairs(COLORS) do
@@ -1948,6 +1961,8 @@ function showExtensionUI()
         UI.setAttribute('leaveTeam', 'active', 'false')
         UI.setAttribute('blackMessage15', 'active', 'false')
         UI.setAttribute('blackMessage20', 'active', 'false')
+        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
+        UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
     elseif playerMode == 'p15' then
         UI.setAttribute('sit15', 'active', 'true')
         UI.setAttribute('sit20', 'active', 'false')
@@ -1955,6 +1970,8 @@ function showExtensionUI()
         UI.setAttribute('leaveTeam', 'active', 'true')
         UI.setAttribute('blackMessage15', 'active', 'true')
         UI.setAttribute('blackMessage20', 'active', 'false')
+        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
     elseif playerMode == 'p20' then
         UI.setAttribute('sit15', 'active', 'false')
         UI.setAttribute('sit20', 'active', 'true')
@@ -1962,6 +1979,8 @@ function showExtensionUI()
         UI.setAttribute('leaveTeam', 'active', 'true')
         UI.setAttribute('blackMessage15', 'active', 'false')
         UI.setAttribute('blackMessage20', 'active', 'true')
+        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
     end
 end
 

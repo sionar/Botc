@@ -11,7 +11,7 @@ COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
-BLACK_ZONES = {{guid = 'cf55c7', scale = {67, 10, 60}},}
+BLACK_ZONES = {{guid = 'cf55c7', scale = {67, 11, 60}},}
 SCRIPTING_ZONE_GUID = 'a17a77'
 CLOCK_GUID = '0d5f75'
 PURPLE_HAND_GUID = '88ad59'

@@ -35,7 +35,7 @@ end
 
 NIGHT_HELPER_GUID = 'bb89aa'
 MODE_SELECTOR_GUID = '884de8'
-CUSTOM_IMPORTER_GUID = 'f79557'
+CUSTOM_IMPORTER_GUID = '94f3ee'
 TABLE_SIZER_GUID = '00c013'
 
 
@@ -68,10 +68,13 @@ function dealToPlayers(clickedObject, playerColor)
 
     if playerMode == 'p10' then
         posTable = POS10
+        colors = COLORS
     elseif playerMode == 'p15' then
         posTable = POS15
+        colors = COLORS_15
     elseif playerMode == 'p20' then
         posTable = POS20
+        colors = COLORS_ALL
     end
 
     for k,v in pairs(allObjs) do
@@ -82,11 +85,11 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     if self.getQuantity() == 0 then
-        Player['Black'].print('ERROR: No roles in the bag.', {1,0,0})
+        Player['Black'].print('Error: No roles in the bag.', {1,0,0})
         return
     end
 
-    for k,v in pairs(COLORS_ALL) do
+    for k,v in pairs(colors) do
         if players[v] ~= nil or debug then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,

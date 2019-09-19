@@ -113,7 +113,7 @@ function setBagStates()
 		or string.match(v.getName(), ': Minions')
 		or string.match(v.getName(), ': Demons')
 		or string.match(v.getName(), ': Status Tokens')
-		or string.match(v.getName(), ': Travellers')
+		or string.match(v.getName(), ': Travelers')
 		or string.match(v.getName(), ': Roles')
 		or string.match(v.getName(), ': Reference') then
             if v.getStateId() ~= stateValue then
@@ -178,7 +178,7 @@ function setup(clickedObject, playerColor)
             outsiderBag = v
         elseif string.match(v.getName(), ': Townsfolk') then
             townBag = v
-		elseif string.match(v.getName(), ': Travellers') then
+		elseif string.match(v.getName(), ': Travelers') then
 			travBag = v
         end
     end

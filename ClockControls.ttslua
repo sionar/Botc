@@ -172,7 +172,7 @@ function toggleClock(vm)
             self.editButton({index = 0, label = 'Show Clock', color = {0, 1, 0}})
         end
         self.editButton({index = 1, scale = {0, 0, 0}})
-        self.editButton({index = 7, label = 'Exile Mode', tooltip = 'Show the clock for exiling a traveller.'})
+        self.editButton({index = 7, label = 'Exile Mode', tooltip = 'Show the clock for exiling a traveler.'})
 
         Global.call('toggleLockAliveAndVoteTokens', false)
         Global.call('hideVoteButtons')
@@ -707,7 +707,7 @@ function refreshButtons()
 
     params = {click_function = 'toggleClockExile', function_owner = self,
     label = 'Exile\nMode', position = {2.35, 1, 0}, scale = UI_SCALE,
-    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Show the clock for exiling a traveller.'}
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Show the clock for exiling a traveler.'}
     self.createButton(params)
 
     params = {click_function = 'toggleExSeatLock', function_owner = self,

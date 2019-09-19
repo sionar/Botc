@@ -388,7 +388,7 @@ function p1Input(obj, color, input, stillEditing)
                     textColor = COLORS_BBC['Orange']
                 elseif v.Type == 'Demon' then
                     textColor = COLORS_BBC['Red']
-                elseif v.Type == 'Traveller' then
+                elseif v.Type == 'Traveler' then
                     textColor = COLORS_BBC['Green']
                 end
                 p1 = removeUnder(textColor .. k .. '[-]')

@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.1'
+VERSION = '1.5.2'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -177,7 +177,7 @@ function toggleClock(vm)
         Global.call('toggleLockAliveAndVoteTokens', false)
         Global.call('hideVoteButtons')
         Global.call('hideVotehands')
-        setNotes('')
+        Global.setVar('notes', '')
         votingMode = ''
 
         if rotating == true then --if clock's rotating
@@ -681,12 +681,12 @@ function refreshButtons()
     self.createInput(params)
 
     params = {click_function = 'minusRot', function_owner = self, label = '-',
-    position = {-0.85, 1, 0.6}, scale = UI_SCALE,
+    position = {-0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Decrease clock speed by 5',
     width = 500, height = 500, font_size = 400, alignment = 3}
     self.createButton(params)
 
     params = {click_function = 'plusRot', function_owner = self, label = '+',
-    position = {0.85, 1, 0.6}, scale = UI_SCALE,
+    position = {0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Increase clock speed by 5',
     width = 500, height = 500, font_size = 400, alignment = 3}
     self.createButton(params)
 

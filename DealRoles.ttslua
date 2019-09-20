@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.3.1'
+VERSION = '1.4.1'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -45,7 +45,7 @@ TABLE_SIZER_GUID = '00c013'
 ------------------Functions
 function onLoad(save_state)
     local data = {click_function = 'dealToPlayers', function_owner = self,
-    label = 'Deal', tooltip = 'This button will deal the roles in the order inside the bag.\n[aaaaaa](the first role will go to white, then brown, etc if those players are seated)[-]\nMake sure to randomize the bag if you want deals to be dealt out randomly',
+    label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first role will go to White, then Brown, ... if those players are seated.)[-]\nMake sure to shuffle the bag if you want the characters to be dealt out randomly.',
     position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5},
     width = 2000, height = 1000, font_size = 800}
     self.createButton(data)
@@ -65,14 +65,15 @@ function dealToPlayers(clickedObject, playerColor)
     local size, takeIndex
     local players = Global.call('updatePlayers')
     local posTable, colors
+    local allPlayers = Player.getPlayers()
 
-    if playerMode == 'p10' then
+    if (playerMode == 'p10' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() <= 10) then
         posTable = POS10
         colors = COLORS
-    elseif playerMode == 'p15' then
+    elseif (playerMode == 'p15' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() <= 15) then
         posTable = POS15
         colors = COLORS_15
-    elseif playerMode == 'p20' then
+    elseif (playerMode == 'p20' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() > 15) then
         posTable = POS20
         colors = COLORS_ALL
     end
@@ -90,13 +91,12 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     for k,v in pairs(colors) do
-        if players[v] ~= nil or debug then
+        if players[v] ~= nil or debug or (#allPlayers == 1 and self.getQuantity() ~= 0) then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,
                 position = posTable[v],
                 rotation = {0, 0, 0}
             }
-
             obj = self.takeObject(params)
             role = obj.getName()
             roles[v] = role
@@ -110,7 +110,7 @@ function dealToPlayers(clickedObject, playerColor)
                     tokenBag.takeObject(params)
                 end
             end
-            if not debug then
+            if not debug and #allPlayers ~= 1 then
                 players[v].print('Your role is ' .. role..'!')
             end
         end

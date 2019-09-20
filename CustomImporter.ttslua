@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.0'
+VERSION = '1.4.1'
 Z_START = -8.5
 Z_INC = 0.45
 Z_INC_SMALL = 0.35
@@ -44,8 +44,8 @@ end
 
 CLONE10['Black'] = {}
 CLONE10['Table'] = {}
-CLONE10['Black'].pos = {20, 1.11, 75}
-CLONE10['Table'].pos = {0, 1.11, 32}
+CLONE10['Black'].pos = {20, 1.2, 75}
+CLONE10['Table'].pos = {0, 1.2, 34}
 CLONE10['Black'].rot = {0,0,0}
 CLONE10['Table'].rot = {0,180,0}
 CLONE10['Black'].scale = {0.63,0.63,0.63}
@@ -60,8 +60,8 @@ end
 
 CLONE15['Black'] = {}
 CLONE15['Table'] = {}
-CLONE15['Black'].pos = {20, 1.11, 75}
-CLONE15['Table'].pos = {0, 1.11, 32}
+CLONE15['Black'].pos = {20, 1.2, 75}
+CLONE15['Table'].pos = {0, 1.2, 34}
 CLONE15['Black'].rot = {0,0,0}
 CLONE15['Table'].rot = {0,180,0}
 CLONE15['Black'].scale = {0.63,0.63,0.63}
@@ -76,8 +76,8 @@ end
 
 CLONE20['Black'] = {}
 CLONE20['Table'] = {}
-CLONE20['Black'].pos = {20, 1.11, 75}
-CLONE20['Table'].pos = {0, 1.11, 32}
+CLONE20['Black'].pos = {20, 1.2, 75}
+CLONE20['Table'].pos = {0, 1.2, 34}
 CLONE20['Black'].rot = {0,0,0}
 CLONE20['Table'].rot = {0,180,0}
 CLONE20['Black'].scale = {0.63,0.63,0.63}
@@ -124,7 +124,7 @@ function moveBoard()
     local modName = Global.getVar('MOD_NAME')
     local customSet = Global.getVar('customSet')
     if modName == 'Blood on the Clocktower' and not customSet then
-        self.setPositionSmooth({20,1.15,106})
+        self.setPositionSmooth({20,1.2,106})
         self.setRotationSmooth({0,0,0})
         self.setLock(true)
     end

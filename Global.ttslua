@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.2.6'
+VERSION = '15.2.9'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -156,6 +156,7 @@ currentNominated = ''
 history = '[FFFFFF]Vote History:[-]'
 lights = false
 playerMode = 'p20'
+notes = ''
 roles = {}
 aliveTokens = {}
 allAliveTokens = {}
@@ -213,6 +214,7 @@ function onLoad(saveString)
         lights = save ['l']
     end
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+    notes = START_MESSAGE
     setNotes(START_MESSAGE)
     if not started then
         local allPlayers = Player.getPlayers()
@@ -233,7 +235,7 @@ function onLoad(saveString)
         if DEBUG then
             obj.setScale({1,1,1})
         else
-            obj.setScale({0,0,0})
+            obj.setScale({0.01,0.01,0.01})
         end
     end
 
@@ -284,7 +286,7 @@ function onLoad(saveString)
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
-            obj.setScale({0,0,0})
+            obj.setScale({0.01,0.01,0.01})
         end
     end
 
@@ -292,6 +294,7 @@ function onLoad(saveString)
     updatePlayers()
     showExtensionUI()
     Wait.time(refreshObjects,10)
+    Wait.time(refreshNotes,1,-1)
 
     -- check if players are alive, dead, and have a vote token regularly
     Wait.time(
@@ -379,29 +382,29 @@ function table10()
         obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setScale({0.01,0.01,0.01})
-            obj.setPosition({0,-0.5,0})
+            obj.setPosition({0,-0.1,0})
             obj.interactable = false
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setScale({0,0,0})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPosition({0,-0.1,0})
 
         obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setScale({0,0,0})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPosition({0,-0.1,0})
 
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
         if obj then
-        obj.setScale({0,0,0})
-            pos = obj.getPosition()
-            obj.setPosition({pos.x, -10, pos.z})
+            if not started then
+                obj.setLock(true)
+            end
+            obj.setScale({0.01,0.01,0.01})
+            obj.setPosition({0,-0.1,0})
         end
 
         obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,-0.5,0})
+        obj.setPosition({0,-0.1,0})
     end
     updatePlayers()
     for k,v in pairs(COLORS_EX) do
@@ -495,6 +498,9 @@ function table15()
         if obj then
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
+                if started then
+                    obj.setLock(false)
+                end
                 obj.setScale({1.82,1,1.82})
                 obj.setPositionSmooth(PARAMS.p15.ALIVE_TOKEN_POS[v])
                 obj.setRotationSmooth(PARAMS.p15.ROT[v])
@@ -523,34 +529,33 @@ function table15()
         obj = getObjectFromGUID(roleSheetGuids[v])
         if obj then
             obj.setScale({0.01,0.01,0.01})
-            obj.setPosition({0,-0.5,0})
+            obj.setPosition({0,-0.1,0})
             obj.interactable = false
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setScale({0,0,0})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPosition({0, -0.1, 0})
 
         obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setScale({0,0,0})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPosition({0,-0.1, 0})
 
         if obj then
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
-                obj.setScale({0,0,0})
-                pos = obj.getPosition()
-                obj.setPosition({pos.x, -10, pos.z})
+                if not started then
+                    obj.setLock(true)
+                end
+                obj.setScale({0.01,0.01,0.01})
+                obj.setPosition({0,-0.1,0})
             end
         end
 
         obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,-0.5,0})
+        obj.setPosition({0,-0.1,0})
         obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+        obj.setPosition({0,-0.1,0})
     end
 
     updatePlayers()
@@ -608,6 +613,9 @@ function table20()
 
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
         if obj then
+            if started then
+                obj.setLock(false)
+            end
             obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
         end
@@ -818,6 +826,9 @@ function onChat(message, player)
             return false
         end
     elseif command == 'debug' and DEBUG then
+        return false
+    elseif command == 'look' and DEBUG then
+        chatLook(args[2], player)
         return false
     end
 
@@ -1047,6 +1058,14 @@ function chatSwap(seatColor1, seatColor2, player)
     end
 end
 
+function chatLook(objectGUID, player)
+    local obj = getObjectFromGUID(objectGUID)
+    if obj then
+        local pos = obj.getPosition()
+        player.lookAt({position = pos, pitch = 90, yaw = 180, distance = 5})
+    end
+end
+
 function inTable(input, table)
     for k,v in pairs(table) do
         if input == v then
@@ -1077,7 +1096,8 @@ end
 
 function checkSeatedPlayers()
     local obj
-    if DEBUG then
+    local allPlayers = Player.getPlayers()
+    if DEBUG or #allPlayers == 1 then
         return
     end
     updatePlayers()
@@ -1133,6 +1153,10 @@ function lockObjects()
             obj.interactable = false
         end
     end
+end
+
+function refreshNotes()
+    setNotes(notes)
 end
 
 function getAliveTokens(color)
@@ -1227,7 +1251,7 @@ function vote(params)
             params.color = {1,1,1}
             params.font_color = {0,0,0}
             getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
-            handObj.setScale({0,1,0})
+            handObj.setScale({0.01,0.01,0.01})
             handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[voter])
         else
             voted[voter] = true
@@ -1445,7 +1469,8 @@ function updateVoteResults(params)
     end
     broadcastToAll(voterString, {1,1,1})
     history = history .. '\n' .. nominationString .. voterString .. '\n'
-    setNotes(nominationString .. voterString)
+    notes = nominationString .. voterString
+    setNotes(notes)
 
     updateNominations()
     resetVotes({voteMode = vM})
@@ -1521,7 +1546,7 @@ function hideVotehands()
 
     for k,v in pairs(colors) do
         handObj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        handObj.setScale({0,1,0})
+        handObj.setScale({0.01,0.01,0.01})
         handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[v])
     end
 end
@@ -1631,6 +1656,10 @@ function reloadLights()
         obj = getObjectFromGUID(v)
         obj.reload()
     end
+    for k,v in pairs(AVATAR_LIGHT_GUIDS) do
+        obj = getObjectFromGUID(v)
+        obj.reload()
+    end
 end
 
 function toggleLights(params)
@@ -1647,14 +1676,13 @@ function toggleLights(params)
         Lighting.apply()
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
-            obj.setPosition({0,-0.5,0})
+            obj.setPosition({0,-0.1,0})
             obj.call('powerOff')
-
         end
     else
         Lighting.ambient_type = 2
         Lighting.ambient_intensity = 0
-        Lighting.light_intensity = 0.2
+        Lighting.light_intensity = 0.25
         Lighting.apply()
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
         obj.setPosition({0,40,0})
@@ -1674,7 +1702,7 @@ function toggleLights(params)
             for k,v in pairs(COLORS_EX) do
                 obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
                 if obj then
-                    obj.setPosition({0,-0.5,0})
+                    obj.setPosition({0,-0.1,0})
                     obj.call('powerOff')
                 end
             end
@@ -1689,7 +1717,7 @@ function toggleLights(params)
             for k,v in pairs(COLORS_SET2) do
                 obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
                 if obj then
-                    obj.setPosition({0,-0.5,0})
+                    obj.setPosition({0,-0.1,0})
                     obj.call('powerOff')
                 end
             end

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.2.9'
+VERSION = '15.2.13'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -396,9 +396,7 @@ function table10()
 
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
         if obj then
-            if not started then
-                obj.setLock(true)
-            end
+            obj.setLock(true)
             obj.setScale({0.01,0.01,0.01})
             obj.setPosition({0,-0.1,0})
         end
@@ -544,9 +542,7 @@ function table15()
         if obj then
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
-                if not started then
-                    obj.setLock(true)
-                end
+                obj.setLock(true)
                 obj.setScale({0.01,0.01,0.01})
                 obj.setPosition({0,-0.1,0})
             end
@@ -649,6 +645,9 @@ function table20()
 
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
         if obj then
+            if started then
+                obj.setLock(false)
+            end
             obj.setScale({1.82,1,1.82})
             obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
@@ -713,9 +712,25 @@ function onPlayerChangeColor(color)
     end
 end
 
-function onPlayerConnect(player_id)
-    Wait.time(reloadLights, 20)
-    Wait.time(function() getObjectFromGUID(TEAM_TOOL_GUID).reload() end, 20)
+function onPlayerConnect(player)
+    local delay = 10
+    local inc = 0.4
+    local obj
+    Wait.time(function ()
+        obj = getObjectFromGUID(TEAM_TOOL_GUID)
+        if obj then
+            obj.reload()
+        end
+    end, 10)
+    for k,v in pairs(NIGHT_LIGHT_GUIDS) do
+        Wait.time(function ()
+            obj = getObjectFromGUID(v)
+            if obj then
+                obj.reload()
+            end
+        end, delay)
+        delay = delay + inc
+    end
 end
 
 function onChat(message, player)
@@ -759,6 +774,56 @@ function onChat(message, player)
         return false
     elseif command == 'v' then
         player.print('Version ' .. VERSION)
+        return false
+    elseif command == '.white' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('White', msg)
+        end
+        return false
+    elseif command == '.brown' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Brown', msg)
+        end
+        return false
+    elseif command == '.red' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Red', msg)
+        end
+        return false
+    elseif command == '.orange' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Orange', msg)
+        end
+        return false
+    elseif command == '.yellow' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Yellow', msg)
+        end
+        return false
+    elseif command == '.green' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Green', msg)
+        end
+        return false
+    elseif command == '.teal' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Teal', msg)
+        end
+        return false
+    elseif command == '.blue' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Blue', msg)
+        end
+        return false
+    elseif command == '.purple' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Purple', msg)
+        end
+        return false
+    elseif command == '.pink' then
+        if player.color == 'Black' or DEBUG then
+            chatMessage('Pink', msg)
+        end
         return false
     elseif command == '.magenta' then
         if player.color == 'Black' or DEBUG then
@@ -1085,11 +1150,25 @@ function refreshUI()
 end
 
 function unlockAliveTokens()
+    local colors
+
+    if playerMode == 'p10' then
+        colors = COLORS
+    elseif playerMode == 'p15' then
+        colors = COLORS_15
+    elseif playerMode == 'p20' then
+        colors = COLORS_ALL
+    end
     for k,v in pairs(ALIVE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
-            obj.setLock(false)
             obj.interactable = true
+        end
+    end
+    for k,v in pairs(colors) do
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        if obj then
+            obj.setLock(false)
         end
     end
 end
@@ -1104,7 +1183,7 @@ function checkSeatedPlayers()
     for k,v in pairs(COLORS) do
         if not Player[v].seated then
             obj = getObjectFromGUID(ZONE_GUIDS[v])
-            obj.setValue('Black')
+            obj.setValue('Grey')
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             obj.destruct()
         end
@@ -1195,9 +1274,13 @@ function handleLifeUI()
     local votesNeeded = 0
     local playerDist
     local allObjects = getAllObjects()
+    local allPlayers = Player.getPlayers()
 
     for i=1, 20 do
         if aliveTokens[COLORS_ALL[i]].object ~= 0 and players[COLORS_ALL[i]] ~= nil then
+            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Grey' and #allPlayers > 1 then
+                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue(COLORS[i])
+            end
             numPlayers = numPlayers + 1
             if aliveTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
                 if aliveTokens[COLORS_ALL[i]].vote ~= 0 then -- ..then if a vote token is present
@@ -1212,6 +1295,9 @@ function handleLifeUI()
                 numberOfVotes = numberOfVotes + 1
             end
         else
+            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
+                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue('Grey')
+            end
             numberOfSkipped = numberOfSkipped +1
             UI.setAttribute('aliveImage'..21 - numberOfSkipped, 'image', 'empty') -- starting from 11 to work backwards through list of aliveImage
         end

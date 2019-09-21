@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.1'
+VERSION = '1.5.0'
 Z_START = -8.5
 Z_INC = 0.45
 Z_INC_SMALL = 0.35
@@ -385,7 +385,7 @@ function batchImportMenu()
     self.createInput({
         input_function = 'updateBatchList',
         function_owner = self,
-        label = 'Import a bunch of characters at once.\nOne character per line, no commas.',
+        label = 'Import a bunch of characters at once.\nOne character per line, no commas.\nYou do not need to type in the full name.\nFor example, you can enter math for Mathematician.',
         width = 4000,
         height = 6000,
         font_size = 200,
@@ -443,18 +443,24 @@ end
 
 function batchImport()
     characters = {}
+    local match
+
     for k,v in pairs(batchList) do
-        if matchesKey(v, CHARACTERS) then
-            table.insert(characters,v)
+        match = getKey(CHARACTERS, v)
+        if match then
+            table.insert(characters,match)
         end
     end
     refreshUI()
 end
 
-function matchesKey(value, table)
+function getKey(table, value)
     for k,v in pairs(table) do
-        if value == k then
-            return true
+        if string.lower(k) == string.lower(value) and value ~= '' then
+            return k
+        end
+        if string.match(string.lower(k), string.lower(value)) and value ~= '' then
+            return k
         end
     end
     return false

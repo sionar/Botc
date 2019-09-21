@@ -159,7 +159,7 @@ CHARACTERS =
     Seamstress = {Type = 'Townsfolk', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night, choose 2 players (not yourself): you learn if they are the same alignment.'},
     Philosopher = {Type = 'Townsfolk', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night, choose a good character: become them. If you duplicate an in-play character, they are drunk.'},
     Artist = {Type = 'Townsfolk', Ability = true, Prompt = '', Description = 'Once per game, during the day, privately ask the Storyteller any yes/no question.'},
-    Juggler = {Type = 'Townsfolk', Ability = false, Prompt = 'You learn that P1 of your guesses were correct.', Description = 'On your 1st day, publicly guess up to 5 player\'s characters. That night, you learn how many you got correct.'},
+    Juggler = {Type = 'Townsfolk', Ability = true, Prompt = 'You learn that P1 of your guesses were correct.', Description = 'On your 1st day, publicly guess up to 5 player\'s characters. That night, you learn how many you got correct.'},
     Sage = {Type = 'Townsfolk', Ability = false, Prompt = 'You died tonight. The demon is either P1 or P2.', Description = 'If the Demon kills you, you learn that it is 1 of 2 players.'},
     Mutant = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'If you are "mad" about being an Outsider, you might be executed.'},
     Sweetheart = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'If you die, 1 player is drunk from now on.'},

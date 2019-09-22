@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.2.14'
+VERSION = '15.3.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -18,7 +18,8 @@ COLORS_SET2 = {'Magenta', 'Cyan', 'Mint', 'Peach', 'Silver'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
-COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255,0.5}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0,0,0}
 
@@ -120,7 +121,7 @@ TABLE10_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255119639/7FF0
 TABLE15_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255081165/C8DBFEB7492079CB9F9C331BD10B392F43EC55FF/'
 TABLE20_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007254908157/42DD98CD69FFD19403E269A2602119EE2F628BC8/'
 
-ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = 'c250ec', Lavender = '8daef9', Navy = '1a0b6b', Cyan = 'b73bc0', Mint = '742d4e', Lime = '155c40', Peach = '004a7d', Coral = 'abb4e7', Maroon = 'd314d5', Silver = '34f0f3'}
+ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
 NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
@@ -228,7 +229,6 @@ function onLoad(saveString)
     else
         toggleLights({switching = false})
     end
-
 
     for k,v in pairs(NIGHT_LIGHT_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -375,7 +375,7 @@ function table10()
 
     for k,v in pairs(COLORS_EX) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({0,0,0})
+        obj.setScale({0.01,0.01,0.01})
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
@@ -467,7 +467,7 @@ function table15()
 
     for k,v in pairs(COLORS_SET1) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({11,5,6.5})
+        obj.setScale({22,10,13})
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
@@ -520,7 +520,7 @@ function table15()
 
     for k,v in pairs(COLORS_SET2) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({0,0,0})
+        obj.setScale({0.01,0.01,0.01})
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
@@ -621,7 +621,7 @@ function table20()
 
     for k,v in pairs(COLORS_EX) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({7.5,5,6.5})
+        obj.setScale({15,10,13})
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
@@ -1205,7 +1205,7 @@ function checkSeatedPlayers()
             end
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
-                obj.setColorTint({0.69,0.69,0.69})
+                obj.setColorTint({0.69,0.69,0.69,0.25})
             end
         end
     end
@@ -1775,9 +1775,9 @@ function toggleLights(params)
             obj.call('powerOff')
         end
     else
-        Lighting.ambient_type = 2
-        Lighting.ambient_intensity = 0
-        Lighting.light_intensity = 0.25
+        Lighting.ambient_type = 1
+        Lighting.ambient_intensity = 1.8
+        Lighting.light_intensity = 0
         Lighting.apply()
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
         obj.setPosition({0,40,0})
@@ -1858,7 +1858,7 @@ function sitUI(player, value, id)
         UI.setAttribute(id, 'text', 'Leave ' .. color)
         UI.setAttribute(id, 'textColor', '#FFFFFF')
         zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
-        zoneObj.setColorTint(COLORS_RGB[color])
+        zoneObj.setColorTint(FAKE_ZONE_RGB[color])
     else
         if player.steam_id == playersEx[color].steam_id then
             player.print('You are no longer sitting in ' .. color .. '.')
@@ -1871,7 +1871,7 @@ function sitUI(player, value, id)
             deleteAvatar(color)
             if started then
                 zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
-                zoneObj.setColorTint({0.69,0.69,0.69})
+                zoneObj.setColorTint({0.69,0.69,0.69,0.25})
             end
         else
             player.print('Someone is already sitting in ' .. color .. '.')

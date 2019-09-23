@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.3.0'
+VERSION = '15.4.2'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -59,7 +59,7 @@ end
 for k,v in pairs(COLORS) do
     PARAMS.p10.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE10[v], 5)
     PARAMS.p10.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE10[v], -5)
-    PARAMS.p10.AVATAR_POS[v] = radius(87, ANGLE10[v], 8.5)
+    PARAMS.p10.AVATAR_POS[v] = radius(84, ANGLE10[v], 6)
     PARAMS.p10.AVATAR_ROT[v] = {180, ANGLE10[v], 180}
     PARAMS.p10.LIGHT_POS[v] = radius(84, ANGLE10[v], 8.5)
     PARAMS.p10.DECAL_POS[v] = radius(45, ANGLE10[v], 1.1)
@@ -78,9 +78,9 @@ end
 for k,v in pairs(COLORS_15) do
     PARAMS.p15.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE15[v], 5)
     PARAMS.p15.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE15[v], -5)
-    PARAMS.p15.AVATAR_POS[v] = radius(87, ANGLE15[v], 8.5)
+    PARAMS.p15.AVATAR_POS[v] = radius(84, ANGLE15[v], 6)
     PARAMS.p15.AVATAR_ROT[v] = {180, ANGLE15[v], 180}
-    PARAMS.p15.LIGHT_POS[v] = radius(84, ANGLE15[v], 8.5)
+    PARAMS.p15.LIGHT_POS[v] = radius(81, ANGLE15[v], 6)
     PARAMS.p15.DECAL_POS[v] = radius(45, ANGLE15[v], 1.1)
     PARAMS.p15.DECAL_ROT[v] = {90, ANGLE15[v] - 180, 0}
     PARAMS.p15.ALIVE_BASE_POS[v] = radius(55, ANGLE15[v], 1)
@@ -92,16 +92,16 @@ for k,v in pairs(COLORS_15) do
     PARAMS.p15.ZONE_POS[v] = radius(71.5,ANGLE15[v], 1)
     PARAMS.p15.HAND_POS[v] = radius(82,ANGLE15[v], 1)
     PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
-    PARAMS.p15.TEXT_POS[v] = radius(86.6,ANGLE15[v], 1)
+    PARAMS.p15.TEXT_POS[v] = radius(83.6,ANGLE15[v], 1)
     PARAMS.p15.TEXT_ROT[v] = {90, ANGLE15[v], 0}
 end
 
 for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE20[v], 5)
     PARAMS.p20.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE20[v], -5)
-    PARAMS.p20.AVATAR_POS[v] = radius(87, ANGLE20[v], 8.5)
+    PARAMS.p20.AVATAR_POS[v] = radius(84, ANGLE20[v], 6)
     PARAMS.p20.AVATAR_ROT[v] = {180, ANGLE20[v], 180}
-    PARAMS.p20.LIGHT_POS[v] = radius(84, ANGLE20[v], 8.5)
+    PARAMS.p20.LIGHT_POS[v] = radius(81, ANGLE20[v], 6)
     PARAMS.p20.DECAL_POS[v] = radius(45, ANGLE20[v], 1.1)
     PARAMS.p20.DECAL_ROT[v] = {90, ANGLE20[v] - 180, 0}
     PARAMS.p20.ALIVE_BASE_POS[v] = radius(55, ANGLE20[v], 1)
@@ -113,7 +113,7 @@ for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.ZONE_POS[v] = radius(71.5,ANGLE20[v], 1)
     PARAMS.p20.HAND_POS[v] = radius(82,ANGLE20[v], 1)
     PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
-    PARAMS.p20.TEXT_POS[v] = radius(86.6,ANGLE20[v], 1)
+    PARAMS.p20.TEXT_POS[v] = radius(83.6,ANGLE20[v], 1)
     PARAMS.p20.TEXT_ROT[v] = {90, ANGLE20[v], 0}
 end
 
@@ -407,7 +407,7 @@ function table10()
     updatePlayers()
     for k,v in pairs(COLORS_EX) do
         if players[v] ~= nil then
-            sitUI(players[v], _, v)
+            sitUI(players[v], _, playerMode..v)
         end
     end
     showExtensionUI()
@@ -557,7 +557,7 @@ function table15()
     updatePlayers()
     for k,v in pairs(COLORS_SET2) do
         if players[v] ~= nil then
-            sitUI(players[v], _, v)
+            sitUI(players[v], _, playerMode..v)
         end
     end
     showExtensionUI()
@@ -713,33 +713,12 @@ function onPlayerChangeColor(color)
 end
 
 function onPlayerConnect(player)
-    local delay = 10
-    local inc = 0.4
-    local obj
     Wait.time(function ()
         obj = getObjectFromGUID(TEAM_TOOL_GUID)
         if obj then
             obj.reload()
         end
     end, 10)
-    for k,v in pairs(NIGHT_LIGHT_GUIDS) do
-        Wait.time(function ()
-            obj = getObjectFromGUID(v)
-            if obj then
-                obj.reload()
-            end
-        end, delay)
-        delay = delay + inc
-    end
-    for k,v in pairs(AVATAR_LIGHT_GUIDS) do
-        Wait.time(function ()
-            obj = getObjectFromGUID(v)
-            if obj then
-                obj.reload()
-            end
-        end, delay)
-        delay = delay + inc
-    end
 end
 
 function onChat(message, player)
@@ -982,7 +961,7 @@ function chatMove(playerName, seatColor, player)
 
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            sitUI(playerFound, _, k)
+            sitUI(playerFound, _, playerMode..k)
         end
     end
     if colorFound == 'Grey' or colorFound == 'Black' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
@@ -990,7 +969,7 @@ function chatMove(playerName, seatColor, player)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        sitUI(playerFound, _, colorFound)
+        sitUI(playerFound, _, playerMode..colorFound)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     end
 end
@@ -1022,7 +1001,7 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            sitUI(players[colorFound], _, colorFound)
+            sitUI(players[colorFound], _, playerMode..colorFound)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1073,14 +1052,14 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        sitUI(players[color1], _, color1)
+        sitUI(players[color1], _, playerMode..color1)
     end
 
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        sitUI(players[color2], _, color2)
+        sitUI(players[color2], _, playerMode..color2)
     end
 
     if started then
@@ -1113,7 +1092,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 v.changeColor(color1)
             elseif inTable(color1, COLORS_EX) then
-                sitUI(v, _, color1)
+                sitUI(v, _, playerMode..color1)
             end
             break
         end
@@ -1125,7 +1104,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 v.changeColor(color2)
             elseif inTable(color2, COLORS_EX) then
-                sitUI(v, _, color2)
+                sitUI(v, _, playerMode..color2)
             end
             break
         end
@@ -1679,7 +1658,8 @@ function updatePlayers()
                 playersExIds[v] = nil
                 playersEx[v] = nil
                 textObj = getObjectFromGUID(TEXT_GUIDS[v])
-                textObj.setValue('')
+                textObj.setValue(' ')
+                UI.setAttribute(playerMode .. v, 'text', 'Sit in ' .. v)
                 deleteAvatar(v)
             else
                 playersEx[v] = found
@@ -1708,7 +1688,7 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            sitUI(players[v], _, v)
+            sitUI(players[v], _, playerMode..v)
         end
     end
     if playerTab == nil then
@@ -1723,7 +1703,7 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    sitUI(v1, _, v)
+                    sitUI(v1, _, playerMode..v)
                 end
                 break
                 print('found')
@@ -1776,7 +1756,7 @@ function toggleLights(params)
         end
     else
         Lighting.ambient_type = 1
-        Lighting.ambient_intensity = 1.8
+        Lighting.ambient_intensity = 1.5
         Lighting.light_intensity = 0
         Lighting.apply()
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
@@ -2137,6 +2117,8 @@ function decalUI(player, value, id)
         return
     end
     local globalDecals = Global.getDecals()
+    local decalTab
+
     if globalDecals ~= nil then
         for i = #globalDecals,1,-1 do
             if math.abs(globalDecals[i].position[1] - PARAMS[playerMode].DECAL_POS[found][1]) < 0.01 and math.abs(globalDecals[i].position[3] - PARAMS[playerMode].DECAL_POS[found][3]) < 0.01 then
@@ -2144,6 +2126,11 @@ function decalUI(player, value, id)
             end
         end
         Global.setDecals({})
+        decalTab = Global.getDecals()
+        while decalTab ~= nil do
+            Global.setDecals({})
+            decalTab = Global.getDecals()
+        end
         Global.setDecals(globalDecals)
     end
     if value ~= "None" then

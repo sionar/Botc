@@ -194,7 +194,7 @@ function import()
 		or string.match(v.getName(), ': Demons')
 		or string.match(v.getName(), ': Status Tokens')
 		or string.match(v.getName(), ': Travelers')
-		or string.match(v.getName(), ': Roles')
+		or string.match(v.getName(), ': Characters')
 		or string.match(v.getName(), ': Reference') then
             if v.getStateId() ~= 4 then
                 v.setState(4)
@@ -232,7 +232,7 @@ function destroyObjects()
             table.insert(bags, v)
         elseif string.match(v.getName(), ': Demons') then
             table.insert(bags, v)
-        elseif string.match(v.getName(), ': Roles') then
+        elseif string.match(v.getName(), ': Characters') then
             v.destruct()
         end
     end
@@ -277,7 +277,7 @@ function destroyObjects()
 
     for k,v in pairs(dealColors) do
         obj = self.clone()
-        obj.setName('Custom Role List')
+        obj.setName('Custom Characters List')
         obj.setPositionSmooth(cloneTable[v].pos)
         obj.setRotationSmooth(cloneTable[v].rot)
         obj.setScale(cloneTable[v].scale)

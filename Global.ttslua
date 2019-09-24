@@ -7,10 +7,10 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.4.2'
+VERSION = '15.5.0'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
-HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your role.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + roles.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_SET1 = {'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
@@ -46,7 +46,7 @@ for k,v in pairs(PLAYER_MODES) do
         ALIVE_TOKEN_POS = {},
         VOTE_PANEL_POS = {},
         ROT = {},
-        ROLE_SHEET_POS = {},
+        CHAR_SHEET_POS = {},
         NIGHT_LIGHT_POS = {},
         ZONE_POS = {},
         HAND_POS = {},
@@ -68,7 +68,7 @@ for k,v in pairs(COLORS) do
     PARAMS.p10.ALIVE_TOKEN_POS[v] = radius(55, ANGLE10[v], 1.16)
     PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
     PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
-    PARAMS.p10.ROLE_SHEET_POS[v] = radius(72.5,ANGLE10[v], 1)
+    PARAMS.p10.CHAR_SHEET_POS[v] = radius(72.5,ANGLE10[v], 1)
     PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE10[v], 5)
     PARAMS.p10.ZONE_POS[v] = radius(71.5,ANGLE10[v], 1)
     PARAMS.p10.HAND_POS[v] = radius(82,ANGLE10[v], 1)
@@ -87,7 +87,7 @@ for k,v in pairs(COLORS_15) do
     PARAMS.p15.ALIVE_TOKEN_POS[v] = radius(55, ANGLE15[v], 1.16)
     PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
     PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
-    PARAMS.p15.ROLE_SHEET_POS[v] = radius(72.5,ANGLE15[v], 1)
+    PARAMS.p15.CHAR_SHEET_POS[v] = radius(72.5,ANGLE15[v], 1)
     PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE15[v], 5)
     PARAMS.p15.ZONE_POS[v] = radius(71.5,ANGLE15[v], 1)
     PARAMS.p15.HAND_POS[v] = radius(82,ANGLE15[v], 1)
@@ -108,7 +108,7 @@ for k,v in pairs(COLORS_ALL) do
     PARAMS.p20.ALIVE_TOKEN_POS[v] = radius(55, ANGLE20[v], 1.16)
     PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
     PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
-    PARAMS.p20.ROLE_SHEET_POS[v] = radius(72.5,ANGLE20[v], 1)
+    PARAMS.p20.CHAR_SHEET_POS[v] = radius(72.5,ANGLE20[v], 1)
     PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE20[v], 5)
     PARAMS.p20.ZONE_POS[v] = radius(71.5,ANGLE20[v], 1)
     PARAMS.p20.HAND_POS[v] = radius(82,ANGLE20[v], 1)
@@ -130,10 +130,10 @@ ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange =
 ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
 VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
 VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
-ROLE_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'f332be', Lavender = 'e3323e', Navy = '73de24', Cyan = 'b913d3', Mint = 'f2eecc', Lime = '6730eb', Peach = '98a909', Coral = '748526', Maroon = 'ef6ac7', Silver = '3258d7'}
-ROLE_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = '8721d3', Magenta = '793761', Lavender = '81ade5', Navy = '53e3d9', Cyan = 'c89b19', Mint = 'c94ca5', Lime = '27a7d6', Peach = '1e6331', Coral = 'a472a7', Maroon = 'c15727', Silver = 'b693a5',}
-ROLE_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '44a632', Magenta = '7fa413', Lavender = '85dfac', Navy = 'c79858', Cyan = '330c9d', Mint = 'b4fa88', Lime = 'e9e503', Peach = '745bdd', Coral = 'b3b035', Maroon = 'ab2437', Silver = 'dbe7f7',}
-ROLE_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a',}
+CHAR_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'f332be', Lavender = 'e3323e', Navy = '73de24', Cyan = 'b913d3', Mint = 'f2eecc', Lime = '6730eb', Peach = '98a909', Coral = '748526', Maroon = 'ef6ac7', Silver = '3258d7'}
+CHAR_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = '8721d3', Magenta = '793761', Lavender = '81ade5', Navy = '53e3d9', Cyan = 'c89b19', Mint = 'c94ca5', Lime = '27a7d6', Peach = '1e6331', Coral = 'a472a7', Maroon = 'c15727', Silver = 'b693a5',}
+CHAR_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '44a632', Magenta = '7fa413', Lavender = '85dfac', Navy = 'c79858', Cyan = '330c9d', Mint = 'b4fa88', Lime = 'e9e503', Peach = '745bdd', Coral = 'b3b035', Maroon = 'ab2437', Silver = 'dbe7f7',}
+CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a',}
 
 NIGHT_HELPER_GUID = 'bb89aa'
 CLOCK_CONTROLS_GUID = '184d11'
@@ -158,7 +158,7 @@ history = '[FFFFFF]Vote History:[-]'
 lights = false
 playerMode = 'p20'
 notes = ''
-roles = {}
+chars = {}
 aliveTokens = {}
 allAliveTokens = {}
 canNominate = {}
@@ -205,7 +205,7 @@ function onLoad(saveString)
         local save = JSON.decode(saveString)
         started = save['s']
         mode = save['m']
-        roles = save['r']
+        chars = save['r']
         history = save['h']
         playersExIds = save['p']
         avatarGuids = save['a']
@@ -312,7 +312,7 @@ function onSave()
     local save = {}
     save['s'] = started
     save['m'] = mode
-    save['r'] = roles
+    save['r'] = chars
     save['h'] = history
     save['p'] = playersExIds
     save['a'] = avatarGuids
@@ -326,18 +326,18 @@ end
 
 function table10()
     local obj, tab, pos,rot
-    local roleSheetGuids
+    local charSheetGuids
 
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p10'
     if mode == 'TB' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+        charSheetGuids = CHAR_SHEET_GUIDS_TB
     elseif mode == 'BM' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+        charSheetGuids = CHAR_SHEET_GUIDS_BM
     elseif mode == 'SV' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+        charSheetGuids = CHAR_SHEET_GUIDS_SV
     elseif mode == 'CU' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+        charSheetGuids = CHAR_SHEET_GUIDS_CU
     end
 
     for k,v in pairs(COLORS) do
@@ -346,9 +346,9 @@ function table10()
         obj.setScale({28,10,13})
         obj.setRotationSmooth(PARAMS.p10.ROT[v])
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
-            obj.setPositionSmooth(PARAMS.p10.ROLE_SHEET_POS[v])
+            obj.setPositionSmooth(PARAMS.p10.CHAR_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p10.ROT[v])
         end
 
@@ -379,7 +379,7 @@ function table10()
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
             obj.setScale({0.01,0.01,0.01})
             obj.setPosition({0,-0.1,0})
@@ -423,13 +423,13 @@ function table15()
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p15'
     if mode == 'TB' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+        charSheetGuids = CHAR_SHEET_GUIDS_TB
     elseif mode == 'BM' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+        charSheetGuids = CHAR_SHEET_GUIDS_BM
     elseif mode == 'SV' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+        charSheetGuids = CHAR_SHEET_GUIDS_SV
     elseif mode == 'CU' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+        charSheetGuids = CHAR_SHEET_GUIDS_CU
     end
 
     for k,v in pairs(COLORS) do
@@ -438,9 +438,9 @@ function table15()
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
-            obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
+            obj.setPositionSmooth(PARAMS.p15.CHAR_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p15.ROT[v])
         end
 
@@ -471,10 +471,10 @@ function table15()
         obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p15.ROT[v])
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
             obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p15.ROLE_SHEET_POS[v])
+            obj.setPositionSmooth(PARAMS.p15.CHAR_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p15.ROT[v])
             obj.interactable = true
         end
@@ -524,7 +524,7 @@ function table15()
         pos = obj.getPosition()
         obj.setPosition({pos.x, -10, pos.z})
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
             obj.setScale({0.01,0.01,0.01})
             obj.setPosition({0,-0.1,0})
@@ -573,13 +573,13 @@ function table20()
     UI.setAttribute('colorSelection' .. playerMode,'active',false)
     playerMode = 'p20'
     if mode == 'TB' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_TB
+        charSheetGuids = CHAR_SHEET_GUIDS_TB
     elseif mode == 'BM' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_BM
+        charSheetGuids = CHAR_SHEET_GUIDS_BM
     elseif mode == 'SV' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_SV
+        charSheetGuids = CHAR_SHEET_GUIDS_SV
     elseif mode == 'CU' then
-        roleSheetGuids = ROLE_SHEET_GUIDS_CU
+        charSheetGuids = CHAR_SHEET_GUIDS_CU
     end
 
     for k,v in pairs(COLORS) do
@@ -588,10 +588,10 @@ function table20()
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
             obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
+            obj.setPositionSmooth(PARAMS.p20.CHAR_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
         end
 
@@ -625,10 +625,10 @@ function table20()
         obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
         obj.setRotationSmooth(PARAMS.p20.ROT[v])
 
-        obj = getObjectFromGUID(roleSheetGuids[v])
+        obj = getObjectFromGUID(charSheetGuids[v])
         if obj then
             obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p20.ROLE_SHEET_POS[v])
+            obj.setPositionSmooth(PARAMS.p20.CHAR_SHEET_POS[v])
             obj.setRotationSmooth(PARAMS.p20.ROT[v])
             obj.interactable = true
         end
@@ -677,7 +677,7 @@ function createSnapPoints()
     local snapTable = {}
     local pos
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {16,0,58}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-28,0,58}, rotation = {0,0,0}, rotation_snap = true})
     if playerMode == 'p10' then
         for k,v in pairs(COLORS) do
             table.insert(snapTable, {position = PARAMS.p10.ALIVE_TOKEN_POS[v], rotation = PARAMS.p10.ROT[v], rotation_snap = true})
@@ -743,22 +743,22 @@ function onChat(message, player)
         return false
     elseif command == 'r' then
         updatePlayers()
-        local role, char
+        local char, charOut
         for k,v in pairs(players) do
             if v.steam_id == player.steam_id then
-                role = roles[k]
-                if role == nil then
-                    player.print('You do not have a role.')
+                char = chars[k]
+                if char == nil then
+                    player.print('You do not have a character.')
                     return false
                 else
-                    char = string.gsub(role, ' ', '_')
-                    player.print('Your role is ' .. role .. '!')
-                    player.print(role .. ' - ' .. CHARACTERS[char].Description)
+                    charOut = string.gsub(char, ' ', '_')
+                    player.print('Your character is ' .. char .. '!')
+                    player.print(char .. ' - ' .. CHARACTERS[charOut].Description)
                     return false
                 end
             end
         end
-        player.print('You do not have a role.')
+        player.print('You do not have a char.')
         return false
     elseif command == 'v' then
         player.print('Version ' .. VERSION)
@@ -1009,7 +1009,7 @@ function chatRemove(seatColor, player)
 end
 
 function chatSwap(seatColor1, seatColor2, player)
-    local color1, color2, tempRole
+    local color1, color2, tempChar
     local player1id, player2id
     local pos1, pos2, token1, token2
     local obj
@@ -1064,11 +1064,11 @@ function chatSwap(seatColor1, seatColor2, player)
 
     if started then
         for k,v in pairs(getAllObjects()) do
-            if v.getDescription() == roles[color1] then
+            if v.getDescription() == chars[color1] then
                 token1 = v
                 pos1 = v.getPosition()
                 v.setColorTint(COLORS_RGB[color2])
-            elseif v.getDescription() == roles[color2] then
+            elseif v.getDescription() == chars[color2] then
                 token2 = v
                 pos2 = v.getPosition()
                 v.setColorTint(COLORS_RGB[color1])
@@ -1076,9 +1076,9 @@ function chatSwap(seatColor1, seatColor2, player)
         end
         token1.setPositionSmooth(pos2)
         token2.setPositionSmooth(pos1)
-        tempRole = roles[color1]
-        roles[color1] = roles[color2]
-        roles[color2] = tempRole
+        tempChar = chars[color1]
+        chars[color1] = chars[color2]
+        chars[color2] = tempChar
 
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
         if obj then
@@ -1131,8 +1131,8 @@ end
 function refreshUI()
     for _, playerColor in pairs(COLORS) do
         UI.setAttribute('player' .. playerColor, 'visibility', playerColor)
-        if roles[playerColor] then
-            UI.setValue('player' .. playerColor, 'Your role is ' .. roles[playerColor] .. '!')
+        if chars[playerColor] then
+            UI.setValue('player' .. playerColor, 'Your character is ' .. chars[playerColor] .. '!')
         end
     end
 end
@@ -1723,18 +1723,6 @@ function shuffleTable(tab)
         tab[i], tab[rand] = tab[rand], tab[i]
     end
     return tab
-end
-
-function reloadLights()
-    local obj
-    for k,v in pairs(NIGHT_LIGHT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        obj.reload()
-    end
-    for k,v in pairs(AVATAR_LIGHT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        obj.reload()
-    end
 end
 
 function toggleLights(params)

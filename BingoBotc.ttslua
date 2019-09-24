@@ -7,7 +7,8 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.4.4'
 NAME = 'BotC Bingo'
-START_POS = {x = -100, y = 1.1, z = 30}
+START_POS = {x = 100, y = 1.1, z = 0}
+START_ROT = {0,180,0}
 X_POS = {}
 Z_POS = {}
 POS_START = -1.1
@@ -18,7 +19,7 @@ for i = 1,5 do
     Z_POS[i] = POS_START + (i-1) * POS_INC
 end
 SCALE = {1.93,1,1.93}
-COLOR = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COORD =
 {
     White = {pos = {-35.61, -0.15, -44.95}, rot = {0, 225, 0}},
@@ -36,14 +37,14 @@ COORD =
 BOOK =
 {
     'Player leaves right after game starts',
-    'Two players claim the same role',
+    'Two players claim the same character',
     'Good misvotes on last day and loses',
     'Demon executed day one',
     'Game ends with no dead evil',
-    'Town lynches every dead evil',
+    'Town executes every dead evil',
     '"Is this an all town game?"',
-    'Two evils in conflict',
-    'Player revised role claim twice during same day',
+    'Two evil players fight against each other',
+    'Player revised character claim twice during same day',
 
     'Poisoner targets Imp during night',
     'Town dies to unclaimed Virgin',
@@ -52,48 +53,49 @@ BOOK =
     'Soldier gets targetted by demon',
     'Ravenkeeper ability activates',
     'Imp wins after killing himself',
-    'Town wins via Mayor',
+    'Mayor victory',
     'Virgin nominates self and dies',
     'Town executes Saint',
     'Slayer kills Demon',
-    'Scarlet Woman becomes Imp after execution',
+    'Scarlet Woman becomes Imp from execution',
     'Fortune Teller is their own red herring',
     'Slayer kills Recluse',
-    'Mayor malfunctions last day and town loses',
+    'Mayor ability malfunctions last day and town loses',
     'Monk saves a player',
 
     'Nobody dies three days in a row',
-    'Game ends in stalemate',
-    'Player gets executed three times',
+    'Player executed three times',
     'Devils Advocate saves Demon',
     'Devils Advocate saves a good player',
     'Mastermind win',
-    'Lunatic ends the game without realizing his role',
+    'Lunatic ends the game without realizing they\'re not the Demon',
     'Professor resurrects town',
     'Courtier poisons demon',
     'Minstrel blocks a triple Po kill',
-    'Shabbaloth resurrects two+ players',
+    'Shabaloth resurrects two+ players',
     'Zombuul kills himself at night',
     'Goon switches alignment two+ times',
     'Tea lady saves a town',
-    'Exorcist continuously blocks demon',
+    'Exorcist blocks demon kill',
     'Sailor executed and saved by his own ability',
     'Grandmother dies from Demon killing grandchild',
-    'Regent kills a good player',
-    'Player killed by Gossip',
+    'Moonchild kills a good player',
+    'Gossip killed by their own statement',
 
     'Town executes good twin',
     'Vortox wins via zero executions',
-    'Player dies to madness',
+    'Player commits suicide with madness',
     'Mutant is never executed by the storyteller',
     'Snake Charmer swaps to demon and wins',
-    'Philosopher becomes an outsider and wins',
+    'Snake Charmer snipes Demon night one',
+    'Philosopher becomes an Outsider and wins',
     'Philosopher makes a player drunk',
     'Pit-Hag transforms own demon',
+    'Pit-Hag makes multiple demons',
     'Player dies to Witch day one',
     'Klutz guesses wrong and loses',
     'Cerenovus targets the demon',
-    'Fang Gu converts multiple outsiders',
+    'Fang-Gu converts an Outsider',
     'Sage ability triggers',
     'Juggler successfully juggles five players',
     'Dead player executed from madness',
@@ -166,7 +168,7 @@ end
 
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
-    if global_name == 'Blood on the Clocktower Scripted' then
+    if global_name == 'Blood on the Clocktower' then
         if player_id == nil then
             local tab = getAllObjects()
             local foundTab = {}
@@ -176,6 +178,7 @@ function moveBoard()
                 end
             end
             self.setPositionSmooth({START_POS['x'], START_POS['y'], START_POS['z'] + (#foundTab-1) * 30})
+            self.setRotationSmooth(START_ROT)
             self.setLock(true)
         end
     end
@@ -183,7 +186,7 @@ end
 
 function giveBoard(clickedButton, playerColor, index)
     if Player[playerColor].admin then
-        local color = COLOR[index]
+        local color = COLORS[index]
         if not Player[color].seated then
             broadcastToColor('ERROR: Player not seated.', playerColor, {1,0,0})
         else
@@ -408,8 +411,8 @@ function refreshButtons()
     if player_id == nil then
         local inc = -0.2
         for i = 1,10 do
-            local buttonParam = {click_function = 'giveBoard'..i, color = stringColorToRGB(COLOR[i]), function_owner = self,
-                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 100, height = 100, font_size = 60, tooltip = 'Give board to ' .. COLOR[i]}
+            local buttonParam = {click_function = 'giveBoard'..i, color = stringColorToRGB(COLORS[i]), function_owner = self,
+                position = {-1.7,0.2,1.6+(i-1)*inc}, rotation = {0,0,0}, width = 100, height = 100, font_size = 60, tooltip = 'Give board to ' .. COLORS[i]}
             self.createButton(buttonParam)
         end
     end

@@ -51,7 +51,7 @@ for k,v in pairs(COLORS) do
 end
 
 message = ''
-roleAdd = ''
+charAdd = ''
 colorAdd = ''
 currentMsg = ''
 sendMsg = ''
@@ -102,24 +102,24 @@ function moveBoard()
 end
 
 function import()
-    local roles = Global.getTable('roles')
-    local numRoles = 0
-    for k,v in pairs(roles) do
-        numRoles = numRoles + 1
+    local chars = Global.getTable('chars')
+    local numChars = 0
+    for k,v in pairs(chars) do
+        numChars = numChars + 1
     end
-    if numRoles == 0 then
+    if numChars == 0 then
         return
     end
     local entry = {}
     living = {}
     minionColors = {}
-    for k,v in pairs(roles) do
-        playerRole = string.gsub(v, ' ', '_')
-        entry = {color = k, role = playerRole}
+    for k,v in pairs(chars) do
+        playerChar = string.gsub(v, ' ', '_')
+        entry = {color = k, char = playerChar}
         table.insert(living, entry)
-        if CHARACTERS[playerRole].Type == 'Minion' then
+        if CHARACTERS[playerChar].Type == 'Minion' then
             table.insert(minionColors, entry.color)
-        elseif CHARACTERS[playerRole].Type == 'Demon' then
+        elseif CHARACTERS[playerChar].Type == 'Demon' then
             demonColor = entry.color
         end
     end
@@ -142,26 +142,26 @@ function setNightOrder(night)
         end
     end
     if night == 'first' then
-        table.insert(order, {role = 'Evil_Info', color = 'White'})
-        table.insert(order, {role = 'Demon_Info', color = demonColor})
+        table.insert(order, {char = 'Evil_Info', color = 'White'})
+        table.insert(order, {char = 'Demon_Info', color = demonColor})
         orderRef = FIRST
     else
         orderRef = OTHER
     end
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do
-            if v2.role == v1 and v2.role ~= 'Ravenkeeper' and v2.role ~= 'Sage' and v2.role ~= 'Barber' then
-                if CHARACTERS[v2.role].Ability == false or CHARACTERS[v2.role].Ability == true and abilityUsed[v2.color] == false then
+            if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' then
+                if CHARACTERS[v2.char].Ability == false or CHARACTERS[v2.char].Ability == true and abilityUsed[v2.color] == false then
                     table.insert(order, v2)
-                    if v2.role == 'Lunatic' and night == 'first' then
-                        table.insert(order, 1, {role = 'Lunatic_InfoA', color = v2.color})
-                        table.insert(order, 2, {role = 'Lunatic_InfoB', color = v2.color})
+                    if v2.char == 'Lunatic' and night == 'first' then
+                        table.insert(order, 1, {char = 'Lunatic_InfoA', color = v2.color})
+                        table.insert(order, 2, {char = 'Lunatic_InfoB', color = v2.color})
                     end
                 end
             end
         end
     end
-    table.insert(order, {role = 'Next_Night', color = 'White'})
+    table.insert(order, {char = 'Next_Night', color = 'White'})
     setMsg()
 end
 
@@ -172,13 +172,13 @@ function setMsg()
         refreshUI()
         return
     end
-    local currentRole = order[1].role
-    if currentRole == 'Evil_Info' then
+    local currentChar = order[1].char
+    if currentChar == 'Evil_Info' then
         currentMsg = evilMsg
-    elseif currentRole == 'Next_Night' then
+    elseif currentChar == 'Next_Night' then
         currentMsg = ''
     else
-        currentMsg = CHARACTERS[currentRole].Prompt
+        currentMsg = CHARACTERS[currentChar].Prompt
     end
     sendMsg = removeUnder(currentMsg)
     refreshUI()
@@ -204,11 +204,11 @@ end
 
 function used(clickedObject, playerColor, i)
     local entry = living[i]
-    local role = string.gsub(living[i].role, ' ', '_')
+    local char = string.gsub(living[i].char, ' ', '_')
     abilityUsed[living[i].color] = not abilityUsed[living[i].color]
-    if CHARACTERS[role].Ability == true and abilityUsed[living[i].color] == true then
+    if CHARACTERS[char].Ability == true and abilityUsed[living[i].color] == true then
         for k,v in pairs(order) do
-            if living[i].role == v.role then
+            if living[i].char == v.char then
                 table.remove(order, k)
             end
         end
@@ -225,15 +225,15 @@ end
 function remove(clickedObject, playerColor, i)
     local entry = living[i]
     table.remove(living, i)
-    if entry.role == 'Ravenkeeper' or entry.role == 'Sage' or entry.role == 'Barber' then
+    if entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' then
         if orderRef ~= nil then
-            orderIndex = getKey(orderRef, entry.role)
+            orderIndex = getKey(orderRef, entry.char)
             if orderIndex == nil then
                 refreshUI()
                 return
             end
             for i = 1, #order do
-                if orderIndex < getKey(orderRef, order[i].role) then
+                if orderIndex < getKey(orderRef, order[i].char) then
                     orderPos = i
                     break
                 end
@@ -241,15 +241,15 @@ function remove(clickedObject, playerColor, i)
             if orderPos == nil then
                 orderPos = #order + 1
             end
-            if entry.role == 'Barber' then
+            if entry.char == 'Barber' then
                 entry.color = demonColor
             end
-            table.insert(order, orderPos, {color = entry.color, role = entry.role})
+            table.insert(order, orderPos, {color = entry.color, char = entry.char})
         end
     else
         if order ~= nil then
             for k,v in pairs(order) do
-                if v.role == entry.role then
+                if v.char == entry.char then
                     table.remove(order, k)
                     break
                 end
@@ -269,7 +269,7 @@ function send(clickedObject, playerColor)
     local steam_name = Player[playerColor].steam_name
     local sendColor, msg
     local players = Global.call('updatePlayers')
-    if order[1].role == 'Evil_Info' then
+    if order[1].char == 'Evil_Info' then
         msg = COLORS_BBC[demonColor] .. '<' .. demonColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. evilMsg
         players[demonColor].print(msg)
         printToColor(msg, 'Black', {1,1,1})
@@ -278,7 +278,7 @@ function send(clickedObject, playerColor)
             players[minionColors[i]].print(msg)
             printToColor(msg, 'Black', {1,1,1})
         end
-    elseif order[1].role == 'Next_Night' then
+    elseif order[1].char == 'Next_Night' then
         setNightOrder('other')
         setMsg()
         if blindAuto then
@@ -297,7 +297,7 @@ function send(clickedObject, playerColor)
         msg = COLORS_BBC[sendColor] .. '<' .. sendColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. sendMsg
         players[sendColor].print(msg)
         printToColor(msg, 'Black', {1,1,1})
-        if blindAuto and order[1].role ~= 'Lunatic_InfoA' then
+        if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
             if lastBlind == '' then
                 lastBlind = order[1].color
                 players[lastBlind].blindfolded = false
@@ -337,11 +337,11 @@ function charInput(obj, color, input, stillEditing)
     if not stillEditing then
         for k,v in pairs(CHARACTERS) do
             if string.lower(k) == string.lower(input) and input ~= '' then
-                roleAdd = k
+                charAdd = k
                 break
             end
             if string.match(string.lower(k), string.lower(input)) and input ~= '' then
-                roleAdd = k
+                charAdd = k
                 break
             end
         end
@@ -492,7 +492,7 @@ function editMsg()
 end
 
 function addChar(clickedObject, playerColor)
-    if colorAdd == '' or roleAdd == '' then
+    if colorAdd == '' or charAdd == '' then
         broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
         return
     end
@@ -500,7 +500,7 @@ function addChar(clickedObject, playerColor)
     local orderPos, orderIndex
     for k,v in pairs(living) do
         if v.color == colorAdd then
-            broadcastToColor('ERROR: That player already has a role.', playerColor, {1,0,0})
+            broadcastToColor('ERROR: That player already has a char.', playerColor, {1,0,0})
             return
         end
     end
@@ -518,15 +518,15 @@ function addChar(clickedObject, playerColor)
             pos = #living + 1
         end
     end
-    table.insert(living, pos, {color = colorAdd, role = roleAdd})
-    if roleAdd == 'Ravenkeeper' or roleAdd == 'Sage' or roleAdd == 'Barber' then
+    table.insert(living, pos, {color = colorAdd, char = charAdd})
+    if charAdd == 'Ravenkeeper' or charAdd == 'Sage' or charAdd == 'Barber' then
         refreshUI()
         return
     end
-    if CHARACTERS[roleAdd].Type == 'Demon' or CHARACTERS[roleAdd].Type == 'Minion' then
-        if CHARACTERS[roleAdd].Type == 'Demon' then
+    if CHARACTERS[charAdd].Type == 'Demon' or CHARACTERS[charAdd].Type == 'Minion' then
+        if CHARACTERS[charAdd].Type == 'Demon' then
             demonColor = colorAdd
-        elseif CHARACTERS[roleAdd].Type == 'Minion' then
+        elseif CHARACTERS[charAdd].Type == 'Minion' then
             table.insert(minionColors, colorAdd)
         end
         local minionStr = 'Minions:'
@@ -536,13 +536,13 @@ function addChar(clickedObject, playerColor)
         evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
     end
     if orderRef ~= nil then
-        orderIndex = getKey(orderRef, roleAdd)
+        orderIndex = getKey(orderRef, charAdd)
         if orderIndex == nil then
             refreshUI()
             return
         end
         for i = 1, #order do
-            if orderIndex < getKey(orderRef, order[i].role) then
+            if orderIndex < getKey(orderRef, order[i].char) then
                 orderPos = i
                 break
             end
@@ -550,10 +550,10 @@ function addChar(clickedObject, playerColor)
         if orderPos == nil then
             orderPos = #order + 1
         end
-        table.insert(order, orderPos, {color = colorAdd, role = roleAdd})
-        if roleAdd == 'Lunatic' then
-            table.insert(order, 1, {role = 'Lunatic_InfoA', color = colorAdd})
-            table.insert(order, 2, {role = 'Lunatic_InfoB', color = colorAdd})
+        table.insert(order, orderPos, {color = colorAdd, char = charAdd})
+        if charAdd == 'Lunatic' then
+            table.insert(order, 1, {char = 'Lunatic_InfoA', color = colorAdd})
+            table.insert(order, 2, {char = 'Lunatic_InfoB', color = colorAdd})
             setMsg()
         end
     end
@@ -597,7 +597,7 @@ function swapColors(params)
     local color2 = params.color2
     local color1Living = false
     local color2Living = false
-    local roles = Global.getTable('roles')
+    local chars = Global.getTable('chars')
     local index, tempUsed
 
     for i = 1, #living do
@@ -612,16 +612,16 @@ function swapColors(params)
         return
     end
     if color1Living and color2Living then
-        living[color1Living].role = roles[color1]
-        living[color2Living].role = roles[color2]
+        living[color1Living].char = chars[color1]
+        living[color2Living].char = chars[color2]
     elseif color1Living and not color2Living then
         table.remove(living, color1Living)
         index = findLivingIndex(color2)
-        table.insert(living, index, {color = color2, role = roles[color2]})
+        table.insert(living, index, {color = color2, char = chars[color2]})
     elseif not color1Living and color2Living then
         table.remove(living, color2Living)
         index = findLivingIndex(color1)
-        table.insert(living, index, {color = color1, role = roles[color1]})
+        table.insert(living, index, {color = color1, char = chars[color1]})
     end
 
     tempUsed = abilityUsed[color1]
@@ -659,7 +659,7 @@ function refreshUI()
     self.clearButtons()
     local buttonParam = {}
     local inputParam = {}
-    local role
+    local char
 
     buttonParam = {click_function = 'nullFunc', label = 'Living Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {COLUMN[1],BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
@@ -670,11 +670,11 @@ function refreshUI()
     self.createButton(buttonParam)
 
     for i = 1, #living do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(living[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(living[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        role = string.gsub(living[i].role, ' ', '_')
-        if CHARACTERS[role].Ability == true then
+        char = string.gsub(living[i].char, ' ', '_')
+        if CHARACTERS[char].Ability == true then
             buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 600, height = 200, font_size = 120, tooltip = 'Remove from list'}
             if abilityUsed[living[i].color] == false then
                 buttonParam.label = 'Has\nAbility'
@@ -691,7 +691,7 @@ function refreshUI()
     end
 
     if #order > 0 then
-        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 1350, height = 225, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 1350, height = 225, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
         buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 675, height = 200, font_size = FONT_SIZE,}
@@ -699,7 +699,7 @@ function refreshUI()
     end
 
     for i = 2, #order do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].role), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
         buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 675, height = 200, font_size = FONT_SIZE,}
@@ -744,7 +744,7 @@ function refreshUI()
     self.createButton(buttonParam)
 
     inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = roleAdd, alignment = 3, validation = 1, tab = 2}
+        position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = charAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'colorInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
@@ -763,7 +763,7 @@ function refreshUI()
         position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
     self.createInput(inputParam)
 
-    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Import roles\nfrom game'}
+    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}

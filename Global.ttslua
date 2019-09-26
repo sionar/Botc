@@ -1,125 +1,24 @@
 --[[
 Blood in the Clocktower Scripted
-Made by Unreal_ed, modified by Sionar
+Made by Sionar
 UI code borrowed from Lost Savage and SilentxDream
 --]]
 
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '15.6.0'
+VERSION = '16.0.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-COLORS_SET1 = {'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
-COLORS_SET2 = {'Magenta', 'Cyan', 'Mint', 'Peach', 'Silver'}
-COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255,0.5}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
-VOTEHAND_HIDE_SCALE = {0,0,0}
-
-function radius(rad, angle, height)
-    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
-end
-
-ANGLE10 = {White = 45, Brown = 75, Red = 105, Orange = 135, Yellow = 165, Green = 195, Teal = 225, Blue = 255, Purple = 285, Pink = 315,}
-ANGLE15 = {White = 40, Brown = 60, Red = 80, Orange = 100, Yellow = 120, Green = 140, Teal = 160, Blue = 180, Purple = 200, Pink = 220, Lavender = 240, Navy = 260, Lime = 280, Coral = 300, Maroon = 320}
-ANGLE20 = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
-
-PLAYER_MODES = {'p10', 'p15', 'p20'}
-PARAMS = {}
-for k,v in pairs(PLAYER_MODES) do
-    PARAMS[v] = {
-        VOTEHAND_SHOW_POS = {},
-        VOTEHAND_HIDE_POS = {},
-        AVATAR_POS = {},
-        AVATAR_ROT = {},
-        LIGHT_POS = {},
-        DECAL_POS = {},
-        DECAL_ROT = {},
-        ALIVE_BASE_POS = {},
-        ALIVE_TOKEN_POS = {},
-        VOTE_PANEL_POS = {},
-        ROT = {},
-        CHAR_SHEET_POS = {},
-        NIGHT_LIGHT_POS = {},
-        ZONE_POS = {},
-        HAND_POS = {},
-        HAND_ROT = {},
-        TEXT_POS = {},
-        TEXT_ROT = {},
-    }
-end
-
-for k,v in pairs(COLORS) do
-    PARAMS.p10.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE10[v], 5)
-    PARAMS.p10.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE10[v], -5)
-    PARAMS.p10.AVATAR_POS[v] = radius(84, ANGLE10[v], 6)
-    PARAMS.p10.AVATAR_ROT[v] = {180, ANGLE10[v], 180}
-    PARAMS.p10.LIGHT_POS[v] = radius(84, ANGLE10[v], 8.5)
-    PARAMS.p10.DECAL_POS[v] = radius(45, ANGLE10[v], 1.1)
-    PARAMS.p10.DECAL_ROT[v] = {90, ANGLE10[v] - 180, 0}
-    PARAMS.p10.ALIVE_BASE_POS[v] = radius(55, ANGLE10[v], 1)
-    PARAMS.p10.ALIVE_TOKEN_POS[v] = radius(55, ANGLE10[v], 1.16)
-    PARAMS.p10.VOTE_PANEL_POS[v] = radius(61, ANGLE10[v], 0.8)
-    PARAMS.p10.ROT[v] = {0, ANGLE10[v], 0}
-    PARAMS.p10.CHAR_SHEET_POS[v] = radius(72.5,ANGLE10[v], 1)
-    PARAMS.p10.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE10[v], 5)
-    PARAMS.p10.ZONE_POS[v] = radius(71.5,ANGLE10[v], 1)
-    PARAMS.p10.HAND_POS[v] = radius(82,ANGLE10[v], 1)
-    PARAMS.p10.HAND_ROT[v] = {0, ANGLE10[v] + 180, 0}
-end
-
-for k,v in pairs(COLORS_15) do
-    PARAMS.p15.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE15[v], 5)
-    PARAMS.p15.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE15[v], -5)
-    PARAMS.p15.AVATAR_POS[v] = radius(84, ANGLE15[v], 6)
-    PARAMS.p15.AVATAR_ROT[v] = {180, ANGLE15[v], 180}
-    PARAMS.p15.LIGHT_POS[v] = radius(81, ANGLE15[v], 6)
-    PARAMS.p15.DECAL_POS[v] = radius(45, ANGLE15[v], 1.1)
-    PARAMS.p15.DECAL_ROT[v] = {90, ANGLE15[v] - 180, 0}
-    PARAMS.p15.ALIVE_BASE_POS[v] = radius(55, ANGLE15[v], 1)
-    PARAMS.p15.ALIVE_TOKEN_POS[v] = radius(55, ANGLE15[v], 1.16)
-    PARAMS.p15.VOTE_PANEL_POS[v] = radius(61, ANGLE15[v], 0.8)
-    PARAMS.p15.ROT[v] = {0, ANGLE15[v], 0}
-    PARAMS.p15.CHAR_SHEET_POS[v] = radius(72.5,ANGLE15[v], 1)
-    PARAMS.p15.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE15[v], 5)
-    PARAMS.p15.ZONE_POS[v] = radius(71.5,ANGLE15[v], 1)
-    PARAMS.p15.HAND_POS[v] = radius(82,ANGLE15[v], 1)
-    PARAMS.p15.HAND_ROT[v] = {0, ANGLE15[v] + 180, 0}
-    PARAMS.p15.TEXT_POS[v] = radius(83.6,ANGLE15[v], 1)
-    PARAMS.p15.TEXT_ROT[v] = {90, ANGLE15[v], 0}
-end
-
-for k,v in pairs(COLORS_ALL) do
-    PARAMS.p20.VOTEHAND_SHOW_POS[v] = radius(45, ANGLE20[v], 5)
-    PARAMS.p20.VOTEHAND_HIDE_POS[v] = radius(75, ANGLE20[v], -5)
-    PARAMS.p20.AVATAR_POS[v] = radius(84, ANGLE20[v], 6)
-    PARAMS.p20.AVATAR_ROT[v] = {180, ANGLE20[v], 180}
-    PARAMS.p20.LIGHT_POS[v] = radius(81, ANGLE20[v], 6)
-    PARAMS.p20.DECAL_POS[v] = radius(45, ANGLE20[v], 1.1)
-    PARAMS.p20.DECAL_ROT[v] = {90, ANGLE20[v] - 180, 0}
-    PARAMS.p20.ALIVE_BASE_POS[v] = radius(55, ANGLE20[v], 1)
-    PARAMS.p20.ALIVE_TOKEN_POS[v] = radius(55, ANGLE20[v], 1.16)
-    PARAMS.p20.VOTE_PANEL_POS[v] = radius(61, ANGLE20[v], 0.8)
-    PARAMS.p20.ROT[v] = {0, ANGLE20[v], 0}
-    PARAMS.p20.CHAR_SHEET_POS[v] = radius(72.5,ANGLE20[v], 1)
-    PARAMS.p20.NIGHT_LIGHT_POS[v] = radius(73.5,ANGLE20[v], 5)
-    PARAMS.p20.ZONE_POS[v] = radius(71.5,ANGLE20[v], 1)
-    PARAMS.p20.HAND_POS[v] = radius(82,ANGLE20[v], 1)
-    PARAMS.p20.HAND_ROT[v] = {0, ANGLE20[v] + 180, 0}
-    PARAMS.p20.TEXT_POS[v] = radius(83.6,ANGLE20[v], 1)
-    PARAMS.p20.TEXT_ROT[v] = {90, ANGLE20[v], 0}
-end
-
-TABLE10_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255119639/7FF0A75B6102E57729B9ECBD0A37DBC4C3C944A4/'
-TABLE15_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007255081165/C8DBFEB7492079CB9F9C331BD10B392F43EC55FF/'
-TABLE20_MODEL = 'http://cloud-3.steamusercontent.com/ugc/793119007254908157/42DD98CD69FFD19403E269A2602119EE2F628BC8/'
+VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
@@ -142,6 +41,7 @@ PURPLE_HAND_GUID = '88ad59'
 BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
+SCRIPTING_ZONE_GUID = 'a17a77'
 
 
 ------------------Variables
@@ -156,7 +56,8 @@ currentNominator = ''
 currentNominated = ''
 history = '[FFFFFF]Vote History:[-]'
 lights = false
-playerMode = 'p20'
+tableSize = 10
+colors = {}
 notes = ''
 chars = {}
 aliveTokens = {}
@@ -168,6 +69,8 @@ hasVote = {}
 voted = {}
 voteLock = {}
 voteButtonsOn = {}
+tokenTable = {}
+
 
 for k,v in pairs(COLORS_ALL) do
     aliveTokens[v] = {object = 0, vote = 0}
@@ -211,24 +114,14 @@ function onLoad(saveString)
         avatarGuids = save['a']
         customSet = save['c']
         customList = save['cl']
-        playerMode = save['pm']
+        tableSize = save['t']
+        colors = save['co']
+        angle = save['an']
         lights = save ['l']
     end
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     notes = START_MESSAGE
     setNotes(START_MESSAGE)
-    if not started then
-        local allPlayers = Player.getPlayers()
-        if #allPlayers <= 11 then
-            table10()
-        elseif #allPlayers <= 16 then
-            table15()
-        else
-            table20()
-        end
-    else
-        toggleLights({switching = false})
-    end
 
     for k,v in pairs(NIGHT_LIGHT_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -282,14 +175,6 @@ function onLoad(saveString)
     obj = getObjectFromGUID(TEXT_GUIDS['Version'])
     obj.setValue('v ' .. VERSION)
 
-    for k,v in pairs(AVATAR_LIGHT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-            obj.setScale({0.01,0.01,0.01})
-        end
-    end
-
     refreshUI()
     updatePlayers()
     showExtensionUI()
@@ -318,18 +203,24 @@ function onSave()
     save['a'] = avatarGuids
     save['c'] = customSet
     save['cl'] = customList
-    save['pm'] = playerMode
+    save['t'] = tableSize
+    save['co'] = colors
+    save['an'] = angle
     save['l'] = lights
     local saveString = JSON.encode(save)
     return saveString
 end
 
-function table10()
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+function resizeTable()
     local obj, tab, pos,rot
     local charSheetGuids
+    local angleFirst, angleInc
+    local zoneSize
 
-    UI.setAttribute('colorSelection' .. playerMode,'active',false)
-    playerMode = 'p10'
     if mode == 'TB' then
         charSheetGuids = CHAR_SHEET_GUIDS_TB
     elseif mode == 'BM' then
@@ -340,375 +231,218 @@ function table10()
         charSheetGuids = CHAR_SHEET_GUIDS_CU
     end
 
-    for k,v in pairs(COLORS) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p10.ZONE_POS[v])
-        obj.setScale({29,10,13})
-        obj.setRotationSmooth(PARAMS.p10.ROT[v])
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setPositionSmooth(PARAMS.p10.CHAR_SHEET_POS[v])
-            obj.setRotationSmooth(PARAMS.p10.ROT[v])
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p10.VOTE_PANEL_POS[v])
-        obj.setRotationSmooth(PARAMS.p10.ROT[v])
-
-        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p10.VOTEHAND_HIDE_POS[v])
-        obj.setRotationSmooth(PARAMS.p10.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p10.ALIVE_BASE_POS[v])
-        obj.setRotationSmooth(PARAMS.p10.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-        if obj then
-            obj.setPositionSmooth(PARAMS.p10.ALIVE_TOKEN_POS[v])
-            obj.setRotationSmooth(PARAMS.p10.ROT[v])
-        end
-
-        Player[v].setHandTransform({position = PARAMS.p10.HAND_POS[v], rotation = PARAMS.p10.HAND_ROT[v], scale = {14,5,6.5}})
+    updatePlayers()
+    colors = {}
+    angle = {}
+    for i = 1, tableSize do
+        table.insert(colors, COLORS_ALL[i])
+        angle[COLORS_ALL[i]] = 30 + 150/tableSize + (i-1)*300/tableSize
+    end
+    zoneSize = 2 * 71.5 * math.sin(math.pi / tableSize) * 0.67
+    if zoneSize > 40 then
+        zoneSize = 40
     end
 
-    for k,v in pairs(COLORS_EX) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({0.01,0.01,0.01})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
+    if tableSize > 10 and tableSize < 15 then
+        UI.setAttribute('sitTable', 'width', 100*(tableSize-10))
+        UI.setAttribute('colorSelection', 'height', 150)
+    else
+        UI.setAttribute('sitTable', 'width', 500)
+        UI.setAttribute('colorSelection', 'height', 200)
+    end
 
-        obj = getObjectFromGUID(charSheetGuids[v])
+    for i = 1, 20 do
+    	if i <= tableSize then
+            obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
+            obj.setScale({zoneSize,10,13})
+            obj.setPositionSmooth(radius(71.5,angle[COLORS_ALL[i]], 1))
+            obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+
+            obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
+            if obj then
+                obj.setScale({1.64,1,1.64})
+                obj.setPositionSmooth(radius(72.5,angle[COLORS_ALL[i]], 1))
+                obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+            end
+
+            obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
+            obj.setScale({1.5,0.34,1.5})
+            obj.setPositionSmooth(radius(61, angle[COLORS_ALL[i]], 0.8))
+            obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+
+            obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
+            obj.setPositionSmooth(radius(75, angle[COLORS_ALL[i]], -5))
+            obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+
+            obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
+            obj.setScale({2.24,1,2.24})
+            obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1))
+            obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+
+            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
+            if obj then
+                obj.setScale({1.82,1,1.82})
+                obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.16))
+                obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+            end
+
+            if i <= 10 then
+                Player[COLORS_ALL[i]].setHandTransform({position = radius(82,angle[COLORS_ALL[i]], 1), rotation = {0, angle[COLORS_ALL[i]] + 180, 0}, scale = {14,5,6.5}})
+            end
+
+            if i > 10 then
+                obj = getObjectFromGUID(TEXT_GUIDS[COLORS_ALL[i]])
+                obj.setPosition(radius(83.6,angle[COLORS_ALL[i]], 1))
+                obj.setRotation({90, angle[COLORS_ALL[i]], 0})
+
+                obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
+                obj.setPositionSmooth(radius(81, angle[COLORS_ALL[i]], 6))
+
+                if avatarGuids[COLORS_ALL[i]] then
+                    obj = getObjectFromGUID(avatarGuids[COLORS_ALL[i]])
+                    obj.setPositionSmooth(radius(84, angle[COLORS_ALL[i]], 6))
+                    obj.setRotationSmooth({180, angle[COLORS_ALL[i]], 180})
+                end
+                UI.setAttribute('cell'..COLORS_ALL[i],'active','true')
+                UI.setAttribute('select'..COLORS_ALL[i],'active','true')
+            end
+        else
+            break
+    	end
+    end
+
+    for i = tableSize+1, 20 do
+        obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPositionSmooth({0,-0.1,0})
+
+        obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
         if obj then
             obj.setScale({0.01,0.01,0.01})
-            obj.setPosition({0,-0.1,0})
+            obj.setPositionSmooth({0,-0.1,0})
             obj.interactable = false
         end
 
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
+        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
         obj.setScale({0.01,0.01,0.01})
-        obj.setPosition({0,-0.1,0})
+        obj.setPositionSmooth({0,-0.1,0})
 
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
         obj.setScale({0.01,0.01,0.01})
-        obj.setPosition({0,-0.1,0})
+        obj.setPositionSmooth({0,-0.1,0})
 
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
+        obj.setScale({0.01,0.01,0.01})
+        obj.setPositionSmooth({0,-0.1,0})
+
+        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
         if obj then
             obj.setLock(true)
+            obj.setPositionSmooth({0,-0.1,0})
             obj.setScale({0.01,0.01,0.01})
+        end
+
+        if i <= 10 then
+            Player[COLORS_ALL[i]].setHandTransform({position = {0,1000,0}, scale = {0,0,0}})
+            if Player[COLORS_ALL[i]].seated then
+                Player[COLORS_ALL[i]].changeColor('Grey')
+            end
+        end
+        if i > 10 then
+            UI.setAttribute('cell'..COLORS_ALL[i],'active','false')
+            UI.setAttribute('select'..COLORS_ALL[i],'active','false')
+            if players[COLORS_ALL[i]] ~= nil then
+                sitUI(players[COLORS_ALL[i]], _, 'sit'..COLORS_ALL[i])
+            end
+            obj = getObjectFromGUID(TEXT_GUIDS[COLORS_ALL[i]])
             obj.setPosition({0,-0.1,0})
-        end
 
-        obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,-0.1,0})
-    end
-    updatePlayers()
-    for k,v in pairs(COLORS_EX) do
-        if players[v] ~= nil then
-            sitUI(players[v], _, playerMode..v)
+            obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
+            obj.setPositionSmooth({0,-0.1,0})
         end
     end
+
     showExtensionUI()
-    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    obj.call('updateSettings')
     createSnapPoints()
     toggleLights({switching = false})
-end
-
-function table15()
-    local obj, tab, pos
-
-    UI.setAttribute('colorSelection' .. playerMode,'active',false)
-    playerMode = 'p15'
-    if mode == 'TB' then
-        charSheetGuids = CHAR_SHEET_GUIDS_TB
-    elseif mode == 'BM' then
-        charSheetGuids = CHAR_SHEET_GUIDS_BM
-    elseif mode == 'SV' then
-        charSheetGuids = CHAR_SHEET_GUIDS_SV
-    elseif mode == 'CU' then
-        charSheetGuids = CHAR_SHEET_GUIDS_CU
-    end
-
-    for k,v in pairs(COLORS) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({20,10,13})
-        obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setPositionSmooth(PARAMS.p15.CHAR_SHEET_POS[v])
-            obj.setRotationSmooth(PARAMS.p15.ROT[v])
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p15.VOTE_PANEL_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p15.VOTEHAND_HIDE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p15.ALIVE_BASE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-        if obj then
-            obj.setPositionSmooth(PARAMS.p15.ALIVE_TOKEN_POS[v])
-            obj.setRotationSmooth(PARAMS.p15.ROT[v])
-        end
-
-        Player[v].setHandTransform({position = PARAMS.p15.HAND_POS[v], rotation = PARAMS.p15.HAND_ROT[v], scale = {14,5,6.5}})
-    end
-
-    for k,v in pairs(COLORS_SET1) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({22,10,13})
-        obj.setPositionSmooth(PARAMS.p15.ZONE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p15.CHAR_SHEET_POS[v])
-            obj.setRotationSmooth(PARAMS.p15.ROT[v])
-            obj.interactable = true
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setScale({1.5,0.34,1.5})
-        obj.setPositionSmooth(PARAMS.p15.VOTE_PANEL_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p15.VOTEHAND_HIDE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setScale({2.24,1,2.24})
-        obj.setPositionSmooth(PARAMS.p15.ALIVE_BASE_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.ROT[v])
-
-        if obj then
-            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-            if obj then
-                if started then
-                    obj.setLock(false)
-                end
-                obj.setScale({1.82,1,1.82})
-                obj.setPositionSmooth(PARAMS.p15.ALIVE_TOKEN_POS[v])
-                obj.setRotationSmooth(PARAMS.p15.ROT[v])
-            end
-        end
-
-        obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition(PARAMS.p15.TEXT_POS[v])
-        obj.setRotationSmooth(PARAMS.p15.TEXT_ROT[v])
-        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p15.LIGHT_POS[v])
-
-        if avatarGuids[v] then
-            obj = getObjectFromGUID(avatarGuids[v])
-            obj.setPositionSmooth(PARAMS.p15.AVATAR_POS[v])
-            obj.setRotationSmooth(PARAMS.p15.AVATAR_ROT[v])
-        end
-    end
-
-    for k,v in pairs(COLORS_SET2) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({0.01,0.01,0.01})
-        pos = obj.getPosition()
-        obj.setPosition({pos.x, -10, pos.z})
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPosition({0,-0.1,0})
-            obj.interactable = false
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setScale({0.01,0.01,0.01})
-        obj.setPosition({0, -0.1, 0})
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setScale({0.01,0.01,0.01})
-        obj.setPosition({0,-0.1, 0})
-
-        if obj then
-            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-            if obj then
-                obj.setLock(true)
-                obj.setScale({0.01,0.01,0.01})
-                obj.setPosition({0,-0.1,0})
-            end
-        end
-
-        obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition({0,-0.1,0})
-        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
-        obj.setPosition({0,-0.1,0})
-    end
-
-    updatePlayers()
-    for k,v in pairs(COLORS_SET2) do
-        if players[v] ~= nil then
-            sitUI(players[v], _, playerMode..v)
-        end
-    end
-    showExtensionUI()
+    UI.setAttribute('colorSelection','active',false)
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
-    createSnapPoints()
-    toggleLights({switching = false})
-end
-
-function table20()
-    local obj, tab, pos
-
-    UI.setAttribute('colorSelection' .. playerMode,'active',false)
-    playerMode = 'p20'
-    if mode == 'TB' then
-        charSheetGuids = CHAR_SHEET_GUIDS_TB
-    elseif mode == 'BM' then
-        charSheetGuids = CHAR_SHEET_GUIDS_BM
-    elseif mode == 'SV' then
-        charSheetGuids = CHAR_SHEET_GUIDS_SV
-    elseif mode == 'CU' then
-        charSheetGuids = CHAR_SHEET_GUIDS_CU
-    end
-
-    for k,v in pairs(COLORS) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({15,10,13})
-        obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p20.CHAR_SHEET_POS[v])
-            obj.setRotationSmooth(PARAMS.p20.ROT[v])
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p20.VOTE_PANEL_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p20.VOTEHAND_HIDE_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p20.ALIVE_BASE_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-        if obj then
-            if started then
-                obj.setLock(false)
-            end
-            obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
-            obj.setRotationSmooth(PARAMS.p20.ROT[v])
-        end
-
-        Player[v].setHandTransform({position = PARAMS.p20.HAND_POS[v], rotation = PARAMS.p20.HAND_ROT[v], scale = {14,5,6.5}})
-    end
-
-    for k,v in pairs(COLORS_EX) do
-        obj = getObjectFromGUID(ZONE_GUIDS[v])
-        obj.setScale({15,10,13})
-        obj.setPositionSmooth(PARAMS.p20.ZONE_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(charSheetGuids[v])
-        if obj then
-            obj.setScale({1.64,1,1.64})
-            obj.setPositionSmooth(PARAMS.p20.CHAR_SHEET_POS[v])
-            obj.setRotationSmooth(PARAMS.p20.ROT[v])
-            obj.interactable = true
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        obj.setScale({1.5,0.34,1.5})
-        obj.setPositionSmooth(PARAMS.p20.VOTE_PANEL_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
-        obj.setScale({2.24,1,2.24})
-        obj.setPositionSmooth(PARAMS.p20.ALIVE_BASE_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.ROT[v])
-
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-        if obj then
-            if started then
-                obj.setLock(false)
-            end
-            obj.setScale({1.82,1,1.82})
-            obj.setPositionSmooth(PARAMS.p20.ALIVE_TOKEN_POS[v])
-            obj.setRotationSmooth(PARAMS.p20.ROT[v])
-        end
-
-        obj = getObjectFromGUID(TEXT_GUIDS[v])
-        obj.setPosition(PARAMS.p20.TEXT_POS[v])
-        obj.setRotationSmooth(PARAMS.p20.TEXT_ROT[v])
-
-        obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[v])
-        obj.setPositionSmooth(PARAMS.p20.LIGHT_POS[v])
-
-        if avatarGuids[v] then
-            obj = getObjectFromGUID(avatarGuids[v])
-            obj.setPositionSmooth(PARAMS.p20.AVATAR_POS[v])
-            obj.setRotationSmooth(PARAMS.p20.AVATAR_ROT[v])
-        end
-    end
-    showExtensionUI()
-    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    obj.call('updateSettings')
-    createSnapPoints()
-    toggleLights({switching = false})
 end
 
 function createSnapPoints()
     local snapTable = {}
-    local pos
+    local pos, rad
+    rad = tableSize * 0.4 + 6
+
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
     table.insert(snapTable, {position = {-28,0,58}, rotation = {0,0,0}, rotation_snap = true})
-    if playerMode == 'p10' then
-        for k,v in pairs(COLORS) do
-            table.insert(snapTable, {position = PARAMS.p10.ALIVE_TOKEN_POS[v], rotation = PARAMS.p10.ROT[v], rotation_snap = true})
-            pos = radius(10, ANGLE10[v], 1.0)
-            pos[3] = pos[3] + 83
-            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
-        end
-    elseif playerMode == 'p15' then
-        for k,v in pairs(COLORS_15) do
-            table.insert(snapTable, {position = PARAMS.p15.ALIVE_TOKEN_POS[v], rotation = PARAMS.p15.ROT[v], rotation_snap = true})
-            pos = radius(12, ANGLE15[v], 1.0)
-            pos[3] = pos[3] + 83
-            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
-        end
-    elseif playerMode == 'p20' then
-        for k,v in pairs(COLORS_ALL) do
-            table.insert(snapTable, {position = PARAMS.p20.ALIVE_TOKEN_POS[v], rotation = PARAMS.p20.ROT[v], rotation_snap = true})
-            pos = radius(14, ANGLE20[v], 1.0)
-            pos[3] = pos[3] + 83
-            table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
-        end
+    for i = 1,tableSize do
+        table.insert(snapTable, {position = radius(55, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
+        pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
+        pos[3] = pos[3] + 83
+        table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
     end
+
     self.setSnapPoints(snapTable)
 end
 
+function setTokenTable()
+    local objs, scriptZone
+    local posTable = {}
+    local rad = tableSize * 0.4 + 6
+    local margin = 1.5
+
+    if started then
+        for k,v in pairs(colors) do
+            posTable[v] = radius(rad, angle[v], 1.0)
+            posTable[v][3] = posTable[v][3] + 83
+        end
+        tokenTable = {}
+        scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+        if scriptZone then
+            objs = scriptZone.getObjects()
+            for k,v in pairs(colors) do
+                tokenTable[v] = {}
+                for k1, v1 in pairs(objs) do
+                    if math.abs(posTable[v][1] - v1.getPosition()[1]) < margin and math.abs(posTable[v][3] - v1.getPosition()[3]) < margin then
+                        table.insert(tokenTable[v], v1)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function moveTokens()
+    local objs, pos
+    local posTable = {}
+    local rad = tableSize * 0.4 + 6
+
+    if started then
+        for k,v in pairs(colors) do
+            posTable[v] = radius(rad, angle[v], 1.0)
+            posTable[v][3] = posTable[v][3] + 83
+            if tokenTable[v] ~= nil then
+                for k1,v1 in pairs(tokenTable[v]) do
+                    pos = v1.getPosition()
+                    v1.setPositionSmooth({posTable[v][1], pos[2], posTable[v][3]})
+                end
+            end
+        end
+    end
+end
+
 function onPlayerChangeColor(color)
-    refreshUI()
-    updatePlayers()
-    local obj = getObjectFromGUID(TEAM_TOOL_GUID)
-    if obj then
-        obj.call('refreshUI')
+    if inTable(color, COLORS) and not inTable(color, colors) then
+        Player[color].changeColor('Grey')
+    else
+        refreshUI()
+        updatePlayers()
+        local obj = getObjectFromGUID(TEAM_TOOL_GUID)
+        if obj then
+            obj.call('refreshUI')
+        end
     end
 end
 
@@ -935,11 +669,7 @@ function chatMove(playerName, seatColor, player)
         return
     end
 
-    if playerMode == 'p10' and inTable(colorFound, COLORS_EX) then
-        return
-    end
-
-    if playerMode == 'p15' and inTable(colorFound, COLORS_SET2) then
+    if not inTable(colorFound, colors) then
         return
     end
 
@@ -961,7 +691,7 @@ function chatMove(playerName, seatColor, player)
 
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            sitUI(playerFound, _, playerMode..k)
+            sitUI(playerFound, _, 'sit'..k)
         end
     end
     if colorFound == 'Grey' or colorFound == 'Black' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
@@ -969,7 +699,7 @@ function chatMove(playerName, seatColor, player)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        sitUI(playerFound, _, playerMode..colorFound)
+        sitUI(playerFound, _, 'sit'..colorFound)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     end
 end
@@ -1001,7 +731,7 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            sitUI(players[colorFound], _, playerMode..colorFound)
+            sitUI(players[colorFound], _, 'sit'..colorFound)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1052,14 +782,14 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        sitUI(players[color1], _, playerMode..color1)
+        sitUI(players[color1], _, 'sit'..color1)
     end
 
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        sitUI(players[color2], _, playerMode..color2)
+        sitUI(players[color2], _, 'sit'..color2)
     end
 
     if started then
@@ -1092,7 +822,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 v.changeColor(color1)
             elseif inTable(color1, COLORS_EX) then
-                sitUI(v, _, playerMode..color1)
+                sitUI(v, _, 'sit'..color1)
             end
             break
         end
@@ -1104,7 +834,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 v.changeColor(color2)
             elseif inTable(color2, COLORS_EX) then
-                sitUI(v, _, playerMode..color2)
+                sitUI(v, _, 'sit'..color2)
             end
             break
         end
@@ -1138,15 +868,6 @@ function refreshUI()
 end
 
 function unlockAliveTokens()
-    local colors
-
-    if playerMode == 'p10' then
-        colors = COLORS
-    elseif playerMode == 'p15' then
-        colors = COLORS_15
-    elseif playerMode == 'p20' then
-        colors = COLORS_ALL
-    end
     for k,v in pairs(ALIVE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
@@ -1204,6 +925,27 @@ function refreshObjects()
         end
     end
 
+    for k,v in pairs(VOTE_PANEL_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.reload()
+        end
+    end
+
+    for k,v in pairs(ALIVE_BASE_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.reload()
+        end
+    end
+
+    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.reload()
+        end
+    end
+
     Wait.time(lockObjects, 5)
 end
 
@@ -1218,6 +960,22 @@ function lockObjects()
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
+        end
+    end
+
+    for k,v in pairs(ALIVE_BASE_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+        end
+    end
+
+    if not started then
+        for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+            obj = getObjectFromGUID(v)
+            if obj then
+                obj.interactable = false
+            end
         end
     end
 end
@@ -1283,7 +1041,7 @@ function handleLifeUI()
                 numberOfVotes = numberOfVotes + 1
             end
         else
-            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
+            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
                 getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue('Grey')
             end
             numberOfSkipped = numberOfSkipped +1
@@ -1325,8 +1083,8 @@ function vote(params)
             params.color = {1,1,1}
             params.font_color = {0,0,0}
             getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
-            handObj.setScale({0.01,0.01,0.01})
-            handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[voter])
+            handObj.setScale(VOTEHAND_HIDE_SCALE)
+            handObj.setPosition(radius(75, angle[voter], -5))
         else
             voted[voter] = true
             params.index = 1
@@ -1334,7 +1092,7 @@ function vote(params)
             params.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
             handObj.setScale(VOTEHAND_SHOW_SCALE)
-            handObj.setPositionSmooth(PARAMS[playerMode].VOTEHAND_SHOW_POS[voter])
+            handObj.setPositionSmooth(radius(45, angle[voter], 5))
         end
     end
 end
@@ -1358,7 +1116,7 @@ function nominate(params)
         params.font_color = {1,1,1}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
         clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = nominator})
-        UI.setAttribute('colorSelection' .. playerMode,'active',false)
+        UI.setAttribute('colorSelection','active','false')
         colorTable = false
     elseif currentNominator == nominator then
         currentNominator = ''
@@ -1376,7 +1134,7 @@ function nominate(params)
             clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
             clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
         end
-        UI.setAttribute('colorSelection' .. playerMode,'active',false)
+        UI.setAttribute('colorSelection','active','false')
         colorTable = false
     else
         updatePlayers()
@@ -1576,14 +1334,6 @@ end
 function resetVotes(params)
     local buttonParams = {}
     local handObj
-    local colors
-    if playerMode == 'p10' then
-        colors = COLORS
-    elseif playerMode == 'p15' then
-        colors = COLORS_15
-    elseif playerMode == 'p20' then
-        colors = COLORS_ALL
-    end
     for k,v in pairs(colors) do
         if players[v] ~= nil and voteButtonsOn[v] then
             if hasVote[v] or params.voteMode == 'exile' then
@@ -1609,19 +1359,10 @@ end
 
 function hideVotehands()
     local handObj
-    local colors
-    if playerMode == 'p10' then
-        colors = COLORS
-    elseif playerMode == 'p15' then
-        colors = COLORS_15
-    elseif playerMode == 'p20' then
-        colors = COLORS_ALL
-    end
-
     for k,v in pairs(colors) do
         handObj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        handObj.setScale({0.01,0.01,0.01})
-        handObj.setPosition(PARAMS[playerMode].VOTEHAND_HIDE_POS[v])
+        handObj.setScale(VOTEHAND_HIDE_SCALE)
+        handObj.setPosition(radius(75, angle[v], -5))
     end
 end
 
@@ -1659,7 +1400,7 @@ function updatePlayers()
                 playersEx[v] = nil
                 textObj = getObjectFromGUID(TEXT_GUIDS[v])
                 textObj.setValue(' ')
-                UI.setAttribute(playerMode .. v, 'text', 'Sit in ' .. v)
+                UI.setAttribute('sit' .. v, 'text', 'Sit in ' .. v)
                 deleteAvatar(v)
             else
                 playersEx[v] = found
@@ -1698,7 +1439,7 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            sitUI(players[v], _, playerMode..v)
+            sitUI(players[v], _, 'sit'..v)
         end
     end
     if playerTab == nil then
@@ -1713,7 +1454,7 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    sitUI(v1, _, playerMode..v)
+                    sitUI(v1, _, 'sit'..v)
                 end
                 break
                 print('found')
@@ -1763,44 +1504,20 @@ function toggleLights(params)
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
         obj.setPosition({0,10,83})
         obj.call('powerOn')
-        if playerMode == 'p10' then
-            for k,v in pairs(COLORS) do
-                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
-                if obj then
-                    obj.setPosition(PARAMS.p10.NIGHT_LIGHT_POS[v])
-                    obj.call('powerOn')
-                end
 
+        for i = 1, tableSize do
+            obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
+            if obj then
+                obj.setPosition(radius(73.5,angle[COLORS_ALL[i]], 5))
+                obj.call('powerOn')
             end
-            for k,v in pairs(COLORS_EX) do
-                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
-                if obj then
-                    obj.setPosition({0,-0.1,0})
-                    obj.call('powerOff')
-                end
-            end
-        elseif playerMode == 'p15' then
-            for k,v in pairs(COLORS_15) do
-                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
-                if obj then
-                    obj.setPosition(PARAMS.p15.NIGHT_LIGHT_POS[v])
-                    obj.call('powerOn')
-                end
-            end
-            for k,v in pairs(COLORS_SET2) do
-                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
-                if obj then
-                    obj.setPosition({0,-0.1,0})
-                    obj.call('powerOff')
-                end
-            end
-        elseif playerMode == 'p20' then
-            for k,v in pairs(COLORS_ALL) do
-                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[v])
-                if obj then
-                    obj.setPosition(PARAMS.p20.NIGHT_LIGHT_POS[v])
-                    obj.call('powerOn')
-                end
+        end
+
+        for i = tableSize+1, 20 do
+            obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
+            if obj then
+                obj.setPosition({0,-0.1,0})
+                obj.call('powerOff')
             end
         end
     end
@@ -1860,8 +1577,8 @@ end
 function generateAvatar(color)
     local objParam = {
         type = "Custom_Model",
-        position = PARAMS[playerMode].AVATAR_POS[color],
-        rotation = PARAMS[playerMode].AVATAR_ROT[color],
+        position = radius(84, angle[color], 6),
+        rotation = {180, angle[color], 180},
         scale = {2.5, 2.5, 2.5},
         callback = "avatarCallback",
         sound = false
@@ -1956,10 +1673,10 @@ function nominatedDropdown(player, value, id)
     end
 
 	if (colorTable) then --colorSelection is visible
-		UI.setAttribute('colorSelection' .. playerMode,'active',false)
+		UI.setAttribute('colorSelection','active','false')
 		colorTable = false
 	else --colorSelection is NOT visible
-		UI.setAttribute('colorSelection' .. playerMode,'active',true)
+		UI.setAttribute('colorSelection','active','true')
 		colorTable = true
 	end
 end
@@ -2011,7 +1728,7 @@ function nominatedUI(player, value, id)
     callParams.player = found
     callParams.target = target
     nominated(callParams)
-    UI.setAttribute('colorSelection' .. playerMode,'active',false)
+    UI.setAttribute('colorSelection','active','false')
     colorTable = false
 end
 
@@ -2055,30 +1772,16 @@ function showExtensionUI()
     UI.setAttribute('placeDecalCU', 'active', 'false')
     UI.setAttribute('placeDecal'.. mode, 'active', 'true')
     UI.setAttribute('decalText', 'active', 'true')
-    if playerMode == 'p10' then
-        UI.setAttribute('sit15', 'active', 'false')
-        UI.setAttribute('sit20', 'active', 'false')
+    if tableSize <= 10 then
         UI.setAttribute('teamMenu', 'active', 'false')
         UI.setAttribute('leaveTeam', 'active', 'false')
         UI.setAttribute('blackMessage15', 'active', 'false')
         UI.setAttribute('blackMessage20', 'active', 'false')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
-    elseif playerMode == 'p15' then
-        UI.setAttribute('sit15', 'active', 'true')
-        UI.setAttribute('sit20', 'active', 'false')
+    else
         UI.setAttribute('teamMenu', 'active', 'true')
         UI.setAttribute('leaveTeam', 'active', 'true')
-        UI.setAttribute('blackMessage15', 'active', 'true')
-        UI.setAttribute('blackMessage20', 'active', 'false')
-        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-    elseif playerMode == 'p20' then
-        UI.setAttribute('sit15', 'active', 'false')
-        UI.setAttribute('sit20', 'active', 'true')
-        UI.setAttribute('teamMenu', 'active', 'true')
-        UI.setAttribute('leaveTeam', 'active', 'true')
-        UI.setAttribute('blackMessage15', 'active', 'false')
         UI.setAttribute('blackMessage20', 'active', 'true')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
@@ -2119,7 +1822,7 @@ function decalUI(player, value, id)
 
     if globalDecals ~= nil then
         for i = #globalDecals,1,-1 do
-            if math.abs(globalDecals[i].position[1] - PARAMS[playerMode].DECAL_POS[found][1]) < 0.01 and math.abs(globalDecals[i].position[3] - PARAMS[playerMode].DECAL_POS[found][3]) < 0.01 then
+            if math.abs(globalDecals[i].position[1] - radius(45, angle[found], 1.1)[1]) < 0.01 and math.abs(globalDecals[i].position[3] - radius(45, angle[found], 1.1)[3]) < 0.01 then
                 table.remove(globalDecals,i)
             end
         end
@@ -2134,8 +1837,8 @@ function decalUI(player, value, id)
     if value ~= "None" then
         params.name = value
         params.url = DECAL_URLS[value]
-        params.position = PARAMS[playerMode].DECAL_POS[found]
-        params.rotation = PARAMS[playerMode].DECAL_ROT[found]
+        params.position = radius(45, angle[found], 1.1)
+        params.rotation = {90, angle[found] - 180, 0}
         params.scale = {8,8,8}
         Global.addDecal(params)
     end

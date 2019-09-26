@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.1'
+VERSION = '1.5.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -56,26 +56,23 @@ function dealToPlayers(clickedObject, playerColor)
         return
     end
     local debug = Global.getVar('DEBUG')
-    local playerMode = Global.getVar('playerMode')
+    local tableSize = Global.getVar('tableSize')
+    local colors = Global.getTable('colors')
+    local angle = Global.getTable('angle')
     local objectsInBag = self.getObjects()
+    local players = Global.call('updatePlayers')
+    local allPlayers = Player.getPlayers()
     local params, obj, char
     local chars = {}
     local allObjs = getAllObjects()
     local tokenBag, tokenBagTable
+    local posTable = {}
     local size, takeIndex
-    local players = Global.call('updatePlayers')
-    local posTable, colors
-    local allPlayers = Player.getPlayers()
+    local rad = tableSize * 0.4 + 6
 
-    if (playerMode == 'p10' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() <= 10) then
-        posTable = POS10
-        colors = COLORS
-    elseif (playerMode == 'p15' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() <= 15) then
-        posTable = POS15
-        colors = COLORS_15
-    elseif (playerMode == 'p20' and #allPlayers > 1) or (#allPlayers == 1 and self.getQuantity() > 15) then
-        posTable = POS20
-        colors = COLORS_ALL
+    for k,v in pairs(colors) do
+        posTable[v] = radius(rad, angle[v], 1.0)
+        posTable[v][3] = posTable[v][3] + 83
     end
 
     for k,v in pairs(allObjs) do

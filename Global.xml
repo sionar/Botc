@@ -5,6 +5,7 @@
     <Image class="aliveImages" width="20" height="20"/>
     <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840" fontStyle="Bold"/>
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
+    <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold"/>
     <Option class="cuDecal" active="true"/>
 </Defaults>
 
@@ -126,145 +127,7 @@
 </HorizontalLayout>
 
 <TableLayout
-	id = "colorSelectionp15"
-	cellSpacing = "2.5"
-	height = "150"
-    width = "425"
-    rectAlignment = "UpperCenter"
-    visibility = "Grey"
-    offsetXY = "0 -150"
-    active = "false"
-	>
-	<Row>
-		<Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectWhite"
-				text = "White"
-				colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
-			></Button>
-		</Cell>
-		<Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectBrown"
-				text = "Brown"
-				colors = "#703A1680|#703A16FF|#703A1680|#703A1680"
-			></Button>
-		</Cell>
-		<Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectRed"
-				text = "Red"
-				colors = "#DA191780|#DA1917FF|#DA191780|#DA191780"
-			></Button>
-		</Cell>
-		<Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectOrange"
-				text = "Orange"
-				colors = "#F3631C80|#F3631CFF|#F3631C80|#F3631C80"
-			></Button>
-		</Cell>
-		<Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectYellow"
-				text = "Yellow"
-				colors = "#E6E42B80|#E6E42BFF|#E6E42B80|#E6E42B80"
-			></Button>
-		</Cell>
-	</Row>
-    <Row>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectGreen"
-                text = "Green"
-                colors = "#30B22A80|#30B22AFF|#30B22A80|#30B22A80"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectTeal"
-                text = "Teal"
-                colors = "#20B09A80|#20B09AFF|#20B09A80|#20B09A80"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectBlue"
-                text = "Blue"
-                colors = "#1E87FF80|#1E87FFFF|#1E87FF80|#1E87FF80"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectPurple"
-                text = "Purple"
-                colors = "#9F1FEF80|#9F1FEFFF|#9F1FEF80|#9F1FEF80"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectPink"
-                text = "Pink"
-                colors = "#F46FCD80|#F46FCDFF|#F46FCD80|#F46FCD80"
-            ></Button>
-        </Cell>
-    </Row>
-    <Row>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectLavender"
-                text = "Lavender"
-                colors = "#967BB680|#967BB6FF|#967BB680|#967BB680"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectNavy"
-                text = "Navy"
-                colors = "#00008080|#000080FF|#00008080|#00008080"
-            ></Button>
-        </Cell>
-        <Cell>
-			<Button
-				class = "colorSelect"
-                id = "colorSelectLime"
-				text = "Lime"
-				colors = "#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-			></Button>
-		</Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectCoral"
-                text = "Coral"
-                colors = "#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-            ></Button>
-        </Cell>
-        <Cell>
-            <Button
-                class = "colorSelect"
-                id = "colorSelectMaroon"
-                text = "Maroon"
-                colors = "#80000080|#800000FF|#80000080|#80000080"
-            ></Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "colorSelectionp20"
+	id = "colorSelection"
 	cellSpacing = "2.5"
 	height = "200"
     width = "425"
@@ -358,7 +221,7 @@
         </Cell>
     </Row>
     <Row>
-        <Cell>
+        <Cell id = "selectMagenta">
             <Button
                 class = "colorSelect"
                 id = "colorSelectMagenta"
@@ -366,7 +229,7 @@
                 colors = "#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell id = "selectLavender">
             <Button
                 class = "colorSelect"
                 id = "colorSelectLavender"
@@ -374,7 +237,7 @@
                 colors = "#967BB680|#967BB6FF|#967BB680|#967BB680"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell id = "selectNavy">
             <Button
                 class = "colorSelect"
                 id = "colorSelectNavy"
@@ -382,7 +245,7 @@
                 colors = "#00008080|#000080FF|#00008080|#00008080"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell id = "selectCyan">
             <Button
                 class = "colorSelect"
                 id = "colorSelectCyan"
@@ -390,7 +253,7 @@
                 colors = "#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell id = "selectMint">
             <Button
                 class = "colorSelect"
                 id = "colorSelectMint"
@@ -400,7 +263,7 @@
         </Cell>
     </Row>
 	<Row>
-		<Cell>
+		<Cell id = "selectLime">
 			<Button
 				class = "colorSelect"
                 id = "colorSelectLime"
@@ -408,15 +271,15 @@
 				colors = "#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell id = "selectPeach">
 			<Button
 				class = "colorSelect"
-                id = "colorSelectPeace"
+                id = "colorSelectPeach"
 				text = "Peach"
 				colors = "#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell id = "selectCoral">
 			<Button
 				class = "colorSelect"
                 id = "colorSelectCoral"
@@ -424,7 +287,7 @@
 				colors = "#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell id = "selectMaroon">
 			<Button
 				class = "colorSelect"
                 id = "colorSelectMaroon"
@@ -432,7 +295,7 @@
 				colors = "#80000080|#800000FF|#80000080|#80000080"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell id = "selectSilver">
 			<Button
 				class = "colorSelect"
                 id = "colorSelectSilver"
@@ -721,209 +584,104 @@
 </VerticalLayout>
 
 <TableLayout
-	id = "sit15"
-	cellSpacing = "5"
-	height = "60"
-    width = "500"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-	<Row>
-        <Cell>
-            <Button
-        		id = "p15Lavender"
-        		onClick = "sitUI"
-        		text = "Sit in Lavender"
-                class = "tp50"
-                fontSize = "15"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                textColor = "#FFFFFF"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "p15Navy"
-        		onClick = "sitUI"
-        		text = "Sit in Navy"
-                class = "tp50"
-                fontSize = "15"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                textColor = "#FFFFFF"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "p15Lime"
-                onClick = "sitUI"
-                text = "Sit in Lime"
-                class = "tp50"
-                fontSize = "15"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                textColor = "#FFFFFF"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "p15Coral"
-                onClick = "sitUI"
-                text = "Sit in Coral"
-                class = "tp50"
-                fontSize = "15"
-                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-                textColor = "#FFFFFF"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "p15Maroon"
-                onClick = "sitUI"
-                text = "Sit in Maroon"
-                class = "tp50"
-                fontSize = "15"
-                colors="#80000080|#800000FF|#80000080|#80000080"
-                textColor = "#FFFFFF"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sit20"
+	id = "sitTable"
 	cellSpacing = "5"
 	height = "120"
     width = "500"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
-    active = "false"
 	>
-	<Row>
-        <Cell>
+    <Row>
+        <Cell id = "cellLime">
             <Button
-        		id = "p20Magenta"
-        		onClick = "sitUI"
-        		text = "Sit in Magenta"
-                class = "tp50"
-                fontSize = "15"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                textColor = "#FFFFFF"
+                id = "sitLime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellPeach">
             <Button
-        		id = "p20Lavender"
-        		onClick = "sitUI"
-        		text = "Sit in Lavender"
-                class = "tp50"
-                fontSize = "15"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                textColor = "#FFFFFF"
+                id = "sitPeach"
+                class = "sitButton"
+                text = "Sit in Peach"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellCoral">
             <Button
-        		id = "p20Navy"
-        		onClick = "sitUI"
-        		text = "Sit in Navy"
-                class = "tp50"
-                fontSize = "15"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                textColor = "#FFFFFF"
+                id = "sitCoral"
+                class = "sitButton"
+                text = "Sit in Coral"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellMaroon">
             <Button
-        		id = "p20Cyan"
-        		onClick = "sitUI"
-        		text = "Sit in Cyan"
-                class = "tp50"
-                fontSize = "15"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                textColor = "#FFFFFF"
+                id = "sitMaroon"
+                class = "sitButton"
+                text = "Sit in Maroon"
+                colors="#80000080|#800000FF|#80000080|#80000080"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellSilver">
             <Button
-        		id = "p20Mint"
-        		onClick = "sitUI"
-        		text = "Sit in Mint"
-                class = "tp50"
-                fontSize = "15"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                textColor = "#FFFFFF"
+                id = "sitSilver"
+                class = "sitButton"
+                text = "Sit in Silver"
+                colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
                 >
             </Button>
         </Cell>
     </Row>
-    <Row>
-        <Cell>
+	<Row>
+        <Cell id = "cellMagenta">
             <Button
-        		id = "p20Lime"
-        		onClick = "sitUI"
-        		text = "Sit in Lime"
-                class = "tp50"
-                fontSize = "15"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                textColor = "#FFFFFF"
+        		id = "sitMagenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellLavender">
             <Button
-        		id = "p20Peach"
-        		onClick = "sitUI"
-        		text = "Sit in Peach"
-                class = "tp50"
-                fontSize = "15"
-                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
-                textColor = "#FFFFFF"
+        		id = "sitLavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellNavy">
             <Button
-        		id = "p20Coral"
-        		onClick = "sitUI"
-        		text = "Sit in Coral"
-                class = "tp50"
-                fontSize = "15"
-                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-                textColor = "#FFFFFF"
+        		id = "sitNavy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellCyan">
             <Button
-        		id = "p20Maroon"
-        		onClick = "sitUI"
-        		text = "Sit in Maroon"
-                class = "tp50"
-                fontSize = "15"
-                colors="#80000080|#800000FF|#80000080|#80000080"
-                textColor = "#FFFFFF"
+        		id = "sitCyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell>
+        <Cell id = "cellMint">
             <Button
-        		id = "p20Silver"
-        		onClick = "sitUI"
-        		text = "Sit in Silver"
-                class = "tp50"
-                fontSize = "15"
-                colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
-                textColor = "#FFFFFF"
+        		id = "sitMint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
         </Cell>

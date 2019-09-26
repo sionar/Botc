@@ -5,12 +5,11 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.2'
+VERSION = '1.6.0'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 BLACK_ZONES = {{guid = 'cf55c7', scale = {67, 11, 60}},}
 SCRIPTING_ZONE_GUID = 'a17a77'
 CLOCK_GUID = '0d5f75'
@@ -20,9 +19,6 @@ RED_HAND_GUID = 'eaee43'
 TEAM_TOOL_GUID = '6fbc83'
 TABLE_GUID = '7f1f5f'
 GUILLOTINE_GUID = '597735'
-HAND_ROTATION10 = {White = 225, Brown = 255, Red = 285, Orange = 315, Yellow = 345, Green = 15, Teal = 45, Blue = 75, Purple = 105, Pink = 135, None = 180}
-HAND_ROTATION15 = {White = 220, Brown = 240, Red = 260, Orange = 280, Yellow = 300, Green = 320, Teal = 340, Blue = 0, Purple = 20, Pink = 40, Lavender = 60, Navy = 80, Lime = 100, Coral = 120, Maroon = 140, None = 180}
-HAND_ROTATION20 = {White = 217.5, Brown = 232.5, Red = 247.5, Orange = 262.5, Yellow = 277.5, Green = 292.5, Teal = 307.5, Blue = 322.5, Purple = 337.5, Pink = 352.5, Magenta = 7.5, Lavender = 22.5, Navy = 37.5, Cyan = 52.5, Mint = 67.5, Lime = 82.5, Peach = 97.5, Coral = 112.5, Maroon = 127.5, Silver = 142.5, None = 180}
 COLORS_EX_HEX = {Magenta = {255/255, 0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0,0,128/255}, Cyan = {73/255, 213/255,253/255}, Mint = {137/255, 195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255, 212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255, 190/255,190/255}}
 
 
@@ -52,7 +48,6 @@ function onLoad(saveString)
         allMuted = save['am']
         allBlind = save['ab']
         handRotation = save['h']
-        colors = save['c']
     end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
@@ -63,16 +58,10 @@ function onLoad(saveString)
     purpleHand.interactable = false
     redHand.interactable = false
     blueHand.interactable = false
-    local playerMode = Global.getVar('playerMode')
-    if playerMode == 'p10' then
-        handRotation = HAND_ROTATION10
-        colors = COLORS
-    elseif playerMode == 'p15' then
-        handRotation = HAND_ROTATION15
-        colors = COLORS_15
-    elseif playerMode == 'p20' then
-        handRotation = HAND_ROTATION20
-        colors = COLORS_ALL
+    colors = Global.getTable('colors')
+    handRotation = Global.getTable('angle')
+    for k,v in pairs(colors) do
+        handRotation[v] = (handRotation[v] + 180)%360
     end
 
     refreshButtons()
@@ -85,7 +74,6 @@ function onSave()
     save['ab'] = allBlind
     save['am'] = allMuted
     save['h'] = handRotation
-    save['c'] = colors
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -121,16 +109,10 @@ function onFixedUpdate()
 end
 
 function updateSettings()
-    local playerMode = Global.getVar('playerMode')
-    if playerMode == 'p10' then
-        handRotation = HAND_ROTATION10
-        colors = COLORS
-    elseif playerMode == 'p15' then
-        handRotation = HAND_ROTATION15
-        colors = COLORS_15
-    elseif playerMode == 'p20' then
-        handRotation = HAND_ROTATION20
-        colors = COLORS_ALL
+    colors = Global.getTable('colors')
+    handRotation = Global.getTable('angle')
+    for k,v in pairs(colors) do
+        handRotation[v] = (handRotation[v]+180)%360
     end
     refreshButtons()
 end
@@ -261,6 +243,9 @@ function pointHand(params)
     local color = params.color
     local hand = getObjectFromGUID(handGUID)
     local rotValue = handRotation[color]
+    if color == 'None' then
+        rotValue = 180
+    end
     hand.setRotationSmooth({0, rotValue, 180})
     degreesRotated = 0
     pointedPlayer = color
@@ -715,21 +700,13 @@ function refreshButtons()
     color = {1, 1, 1}, width = 1200, height = 500, font_size = 150, tooltip = 'Prevent people from joining the extension seats.'}
     self.createButton(params)
 
-    local startingVal
-    if #colors == 10 then
-        startingVal = -2.7
-    elseif #colors == 15 then
-        startingVal = -4.2
-    elseif #colors == 20 then
-        startingVal = -5.7
-    end
-
+    local startingVal = 0.3 - #colors * 0.3
     for i, c in ipairs(colors) do
         params = {click_function = 'pointTo'..c, function_owner = self, label = ' ',
         position = {startingVal + 0.6*(i-1), 1, -0.6}, scale = UI_SCALE,
         width = 500, height = 500, font_size = 400,
         color = c, tooltip = 'Point the clock to '..c}
-        if not inTable(c, COLORS) then
+        if inTable(c, COLORS_EX) then
             params.color = COLORS_EX_HEX[c]
         end
         self.createButton(params)

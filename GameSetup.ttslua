@@ -1,0 +1,928 @@
+--[[
+Game Setup
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.0'
+PLAYER_DIST = {{0,0,0,0},{1,0,0,0},{2,0,0,0},{3,0,0,0},{3,0,1,0},{3,1,1,0},{5,0,1,0},{5,1,1,0},{5,2,1,0},{7,0,2,0},{7,1,2,0},{7,2,2,0},{9,0,3,0},{9,1,3,0},{9,2,3,0},{9,2,3,1},{9,2,3,2},{9,2,3,3},{9,2,3,4},{9,2,3,5}} --layout: player count = {townsfolk, outsiders, minions}
+DEAL_BAG_GUID = '43ecc9'
+COLUMN = {-1, 0, 1}
+BUTTON_Y = 0.1
+TB_LIST = {'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune_Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet_Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief'}
+BM_LIST = {'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea_Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils_Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop'}
+SV_LIST = {'Clockmaker', 'Dreamer', 'Snake_Charmer', 'Mathematician', 'Flowergirl', 'Town_Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil_Twin', 'Witch', 'Cerenovus', 'Pit_Hag', 'Fang_Gu', 'Vigormortis', 'No_Dashii', 'Vortox', 'Butcher', 'Bone_Collector', 'Harlot', 'Barista', 'Deviant'}
+COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
+Z_START = -7
+Z_INC = 0.44
+
+REF_BLACK_GUID = '49ac3a'
+REF_TABLE_GUID = 'b0105e'
+TYPES = {'Townsfolk', 'Outsider', 'Minion', 'Demon', 'Traveler'}
+COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_DEAL10 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black', 'Table'}
+COLORS_DEAL15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon', 'Black', 'Table'}
+COLORS_DEAL20 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Black', 'Table'}
+ANGLE10 = {White = 45, Brown = 75, Red = 105, Orange = 135, Yellow = 165, Green = 195, Teal = 225, Blue = 255, Purple = 285, Pink = 315,}
+ANGLE15 = {White = 40, Brown = 60, Red = 80, Orange = 100, Yellow = 120, Green = 140, Teal = 160, Blue = 180, Purple = 200, Pink = 220, Lavender = 240, Navy = 260, Lime = 280, Coral = 300, Maroon = 320}
+ANGLE20 = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
+CLONE10 = {}
+CLONE15 = {}
+CLONE20 = {}
+
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+for k,v in pairs(COLORS) do
+    CLONE10[v] = {}
+    CLONE10[v].pos = radius(71,ANGLE10[v], 1)
+    CLONE10[v].rot = {0, ANGLE10[v], 0}
+    CLONE10[v].scale = {0.6,0.6,0.6}
+end
+
+CLONE10['Black'] = {}
+CLONE10['Table'] = {}
+CLONE10['Black'].pos = {20, 1.2, 75}
+CLONE10['Table'].pos = {0, 1.2, 34}
+CLONE10['Black'].rot = {0,0,0}
+CLONE10['Table'].rot = {0,180,0}
+CLONE10['Black'].scale = {0.63,0.63,0.63}
+CLONE10['Table'].scale = {1,1,1}
+
+for k,v in pairs(COLORS_15) do
+    CLONE15[v] = {}
+    CLONE15[v].pos = radius(71,ANGLE15[v], 1)
+    CLONE15[v].rot = {0, ANGLE15[v], 0}
+    CLONE15[v].scale = {0.6,0.6,0.6}
+end
+
+CLONE15['Black'] = {}
+CLONE15['Table'] = {}
+CLONE15['Black'].pos = {20, 1.2, 75}
+CLONE15['Table'].pos = {0, 1.2, 34}
+CLONE15['Black'].rot = {0,0,0}
+CLONE15['Table'].rot = {0,180,0}
+CLONE15['Black'].scale = {0.63,0.63,0.63}
+CLONE15['Table'].scale = {1,1,1}
+
+for k,v in pairs(COLORS_ALL) do
+    CLONE20[v] = {}
+    CLONE20[v].pos = radius(71,ANGLE20[v], 1)
+    CLONE20[v].rot = {0, ANGLE20[v], 0}
+    CLONE20[v].scale = {0.6,0.6,0.6}
+end
+
+CLONE20['Black'] = {}
+CLONE20['Table'] = {}
+CLONE20['Black'].pos = {20, 1.2, 75}
+CLONE20['Table'].pos = {0, 1.2, 34}
+CLONE20['Black'].rot = {0,0,0}
+CLONE20['Table'].rot = {0,180,0}
+CLONE20['Black'].scale = {0.63,0.63,0.63}
+CLONE20['Table'].scale = {1,1,1}
+
+
+------------------Variables
+mode = 'TB'
+numPlayers = ''
+numTrav = 0
+dist = {}
+characters = {}
+unused = {}
+selected = {}
+found = {}
+saveLists = {Save1 = {}, Save2 = {}, Save3 = {}, Save4 = {}}
+saveNames = {'Save 1', 'Save 2', 'Save 3', 'Save 4'}
+batchList = {}
+
+
+------------------Functions
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        characters = save['c']
+        saveLists = save['sl']
+        saveNames = save['sn']
+    end
+    local customSet = Global.getVar('customSet')
+    if customSet then
+        characters = Global.getTable('customList')
+        refreshUI()
+    else
+        moveBoard()
+        startMenu()
+        self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    end
+end
+
+function onSave()
+    local save = {}
+    save['c'] = characters
+    save['sl'] = saveLists
+    save['sn'] = saveNames
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function moveBoard()
+    local modName = Global.getVar('MOD_NAME')
+    if modName == 'Blood on the Clocktower' then
+        self.setPositionSmooth({0,1.2,86})
+        self.setRotationSmooth({0,0,0})
+        self.setLock(true)
+    end
+end
+
+function nullFunc() end
+
+function unusedRemove(clickedObject, playerColor, index)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local char = unused[index]
+    table.remove(unused, index)
+    table.insert(selected, char)
+    refreshUI()
+end
+
+for k = 1,35 do
+    _G['unusedRemove' .. k] = function(obj, col)
+        unusedRemove(obj, col, k)
+    end
+end
+
+function selectedRemove(clickedObject, playerColor, index)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local char = selected[index]
+    table.remove(selected, index)
+    table.insert(unused, char)
+    refreshUI()
+end
+
+for k = 1,40 do
+    _G['selectedRemove' .. k] = function(obj, col)
+        selectedRemove(obj, col, k)
+    end
+end
+
+function label(input)
+    return COLORS_BBC[CHARACTERS[input].Type] .. string.gsub(input, '_', ' ')
+end
+
+function modeTB(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    setMode(1)
+end
+
+function modeBM(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    setMode(2)
+end
+
+function modeSV(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    setMode(3)
+end
+
+function modeCU(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    setMode(4)
+end
+
+function setMode(state)
+    local objs = getAllObjects()
+
+    if state == 1 then
+        mode = 'TB'
+        characters = TB_LIST
+    elseif state == 2 then
+        mode = 'BM'
+        characters = BM_LIST
+    elseif state == 3 then
+        mode = 'SV'
+        characters = SV_LIST
+    elseif state == 4 then
+        mode = 'CU'
+        characters = {}
+    end
+    unused = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    selected = {}
+
+
+    Global.setVar('mode', mode)
+    for k,v in pairs(objs) do
+        if string.match(v.getName(), ': Townsfolk')
+        or string.match(v.getName(), ': Outsiders')
+        or string.match(v.getName(), ': Minions')
+        or string.match(v.getName(), ': Demons')
+        or string.match(v.getName(), ': Reminder Tokens')
+        or string.match(v.getName(), ': Travelers')
+        or string.match(v.getName(), ': Characters')
+        or string.match(v.getName(), ': Reference') then
+            if v.getStateId() ~= state then
+                v.setState(state)
+            end
+        end
+    end
+    Global.call('showExtensionUI')
+    refreshUI()
+end
+
+
+function random(clickedObject, playerColor)
+    local players
+    local chars = {Townsfolk = {}, Outsider = {}, Minion = {}, Demon = {}, Traveler = {}}
+    local rand
+    local currentChar
+
+    if playerColor ~= 'Black' and not debug then
+        return
+    end
+
+    if numPlayers == '' then
+        numPlayers = Global.call('getNumPlayers')
+        if numPlayers == 0 then
+            return
+        end
+    end
+
+    unused = {}
+    selected = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+        table.insert(chars[CHARACTERS[v].Type], v)
+    end
+
+    for k,v in pairs(chars) do
+        shuffleTable(v)
+    end
+
+    dist = {}
+    for k,v in pairs(PLAYER_DIST[numPlayers]) do
+        table.insert(dist,v)
+    end
+    currentChar = chars.Demon[1]
+    table.insert(selected, currentChar)
+    for k,v in pairs(unused) do
+        if v == currentChar then
+            table.remove(unused,k)
+        end
+    end
+    adjustOutsiders(currentChar)
+    for i = 1, dist[3] do
+        currentChar = chars.Minion[i]
+        table.insert(selected, currentChar)
+        for k,v in pairs(unused) do
+            if v == currentChar then
+                table.remove(unused,k)
+            end
+        end
+        adjustOutsiders(currentChar)
+    end
+    for i = 1, dist[2] do
+        currentChar = chars.Outsider[i]
+        table.insert(selected, currentChar)
+        for k,v in pairs(unused) do
+            if v == currentChar then
+                table.remove(unused,k)
+            end
+        end
+    end
+    for i = 1, dist[1] do
+        currentChar = chars.Townsfolk[i]
+        table.insert(selected, currentChar)
+        for k,v in pairs(unused) do
+            if v == currentChar then
+                table.remove(unused,k)
+            end
+        end
+    end
+
+    for i = 1, numTrav do
+        currentChar = chars.Traveler[i]
+        table.insert(selected, currentChar)
+        for k,v in pairs(unused) do
+            if v == currentChar then
+                table.remove(unused,k)
+            end
+        end
+    end
+
+    refreshUI()
+end
+
+function start(clickedObject, playerColor)
+    local bags = {}
+    local dealBagPos
+	local takeObj
+    local bagObjs
+    local name, foundIndex
+    local objs = getAllObjects()
+
+	if playerColor ~= 'Black' and not debug then
+		return
+	end
+
+    if #selected == 0 then
+        Player[playerColor].print('Error: No characters have been selected.')
+        return
+    end
+
+    bags.deal = getObjectFromGUID(DEAL_BAG_GUID)
+    if bags.deal == nil then
+        printToColor('ERROR: Deal bag not found.', 'Black', {1,0,0})
+        return
+    end
+    dealBagPos = bags.deal.getPosition()
+    dealBagPos['y'] = dealBagPos['y'] + 6
+
+    for k,v in pairs(objs) do
+        if string.match(v.getName(), ': Demons') then
+            bags.Demon = v
+        elseif string.match(v.getName(), ': Minions') then
+            bags.Minion = v
+        elseif string.match(v.getName(), ': Outsiders') then
+            bags.Outsider = v
+        elseif string.match(v.getName(), ': Townsfolk') then
+            bags.Townsfolk = v
+		elseif string.match(v.getName(), ': Travelers') then
+			bags.Traveler = v
+        end
+    end
+
+    for k,v in pairs(selected) do
+        name = string.gsub(v, '_', ' ')
+        foundIndex = nil
+        bagObjs = bags[CHARACTERS[v].Type].getObjects()
+        for k1, v1 in pairs(bagObjs) do
+            if v1.name == name then
+                foundIndex = v1.index
+                break
+            end
+        end
+        if foundIndex ~= nil then
+            takeObj = bags[CHARACTERS[v].Type].takeObject({position = dealBagPos, index = foundIndex})
+            bags.deal.putObject(takeObj)
+        end
+    end
+
+	Wait.time(function() bags.deal.shuffle() end, 0.5)
+    if mode == 'CU' then
+        import()
+    end
+	self.destruct()
+end
+
+
+function adjustOutsiders(char)
+    if char == 'Fang Gu' or char == 'Godfather' then
+        dist[2] = dist[2] + 1
+        dist[1] = dist[1] - 1
+	elseif char == 'Vigormortis' then
+        if dist[2] ~= 0 then
+    		dist[2] = dist[2] - 1
+    		dist[1] = dist[1] + 1
+        end
+    elseif char == 'Baron' then
+        dist[2] = dist[2] + 2
+        dist[1] = dist[1] - 2
+    end
+end
+
+function shuffleTable(tab)
+    local rand
+    if tab == nil then
+        return nil
+    end
+
+    for i = #tab, 1, -1 do
+        rand = math.random(1,i)
+        tab[i], tab[rand] = tab[rand], tab[i]
+    end
+    return tab
+end
+
+function charInput(obj, color, input, stillEditing)
+    if not stillEditing then
+        for k,v in pairs(CHARACTERS) do
+            if string.lower(k) == string.lower(input) and input ~= '' then
+                charAdd = k
+                break
+            end
+            if string.match(string.lower(k), string.lower(input)) and input ~= '' then
+                charAdd = k
+                break
+            end
+        end
+        refreshUI()
+        return 1
+    end
+end
+
+function removeChar()
+    if charAdd == '' then
+        return
+    end
+    for k,v in pairs(characters) do
+        if v == charAdd then
+            table.remove(characters, k)
+        end
+    end
+    unused = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    selected = {}
+    refreshUI()
+end
+
+function addChar()
+    if charAdd == '' then
+        return
+    end
+    for k,v in pairs(characters) do
+        if v == charAdd then
+            return
+        end
+    end
+    table.insert(characters, charAdd)
+    unused = {}
+    selected = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    refreshUI()
+end
+
+function clear()
+    characters = {}
+    unused = {}
+    selected = {}
+    refreshUI()
+end
+
+function numPlayersInput(obj, color, input, stillEditing)
+    if not stillEditing then
+        numPlayers = tonumber(input)
+        refreshUI()
+        return 1
+    end
+end
+
+function numTravInput(obj, color, input, stillEditing)
+    if not stillEditing then
+        numTrav = tonumber(input)
+        refreshUI()
+        return 1
+    end
+end
+
+function batchImportMenu()
+    self.clearButtons()
+    self.clearInputs()
+    self.createInput({
+        input_function = 'updateBatchList',
+        function_owner = self,
+        label = 'Import a bunch of characters at once.\nOne character per line, no commas.\nYou do not need to type in the full name.\nFor example, you can enter math for Mathematician.',
+        width = 4000,
+        height = 6000,
+        font_size = 200,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        alignment = 3,
+    })
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Batch Import',
+        position = {0,BUTTON_Y,-7.5},
+        width = 0,
+        height = 0,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
+    self.createButton({
+        click_function = 'batchImport',
+        function_owner = self,
+        label = 'Load',
+        position = {-2,BUTTON_Y,7.5},
+        width = 1300,
+        height = 500,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+
+    self.createButton({
+        click_function = 'refreshUI',
+        function_owner = self,
+        label = 'Cancel',
+        position = {2,BUTTON_Y,7.5},
+        width = 1300,
+        height = 500,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+end
+
+function updateBatchList(obj, color, input, stillEditing)
+    if not stillEditing then
+        batchList = {}
+        local entry
+        for s in input:gmatch("[^\r\n]+") do
+            entry = string.gsub(s,' ', '_')
+            table.insert(batchList, entry)
+        end
+    end
+end
+
+function batchImport()
+    characters = {}
+    local match
+
+    for k,v in pairs(batchList) do
+        match = getKey(CHARACTERS, v)
+        if match then
+            table.insert(characters,match)
+        end
+    end
+    unused = {}
+    selected = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    refreshUI()
+end
+
+function getKey(table, value)
+    for k,v in pairs(table) do
+        if string.lower(k) == string.lower(value) and value ~= '' then
+            return k
+        end
+        if string.match(string.lower(k), string.lower(value)) and value ~= '' then
+            return k
+        end
+    end
+    return false
+end
+
+function import()
+    local allObjects = getAllObjects()
+    local objTable, numObjects
+    local bags = {}
+    local takeObj, obj
+    local found = false
+    local name, idx
+    local dealColors, cloneTable
+    local playerMode = Global.getVar('playerMode')
+
+    Global.setVar('customSet', true)
+    Global.setTable('customList', characters)
+
+    for k,v in pairs(allObjects) do
+        if string.match(v.getName(), ': Townsfolk') then
+            table.insert(bags, v)
+        elseif string.match(v.getName(), ': Outsiders') then
+            table.insert(bags, v)
+        elseif string.match(v.getName(), ': Minions') then
+            table.insert(bags, v)
+        elseif string.match(v.getName(), ': Demons') then
+            table.insert(bags, v)
+        elseif string.match(v.getName(), ': Characters') then
+            v.destruct()
+        end
+    end
+    for k1,v1 in pairs(bags) do
+        numObjects = v1.getQuantity()
+        objTable = v1.getObjects()
+
+        for i = numObjects,1,-1 do
+            found = false
+            name = string.gsub(objTable[i].name, ' ', '_')
+            for k,v in pairs(characters) do
+                if name == v then
+                    found = true
+                end
+            end
+            if not found then
+                idx = objTable[i].index
+                takeObj = v1.takeObject({index = idx})
+                takeObj.destruct()
+            end
+        end
+    end
+
+    obj = getObjectFromGUID(REF_BLACK_GUID)
+    if obj then
+        obj.destruct()
+    end
+    obj = getObjectFromGUID(REF_TABLE_GUID)
+    if obj then
+        obj.destruct()
+    end
+    if playerMode == 'p10' then
+        dealColors = COLORS_DEAL10
+        cloneTable = CLONE10
+    elseif playerMode == 'p15' then
+        dealColors = COLORS_DEAL15
+        cloneTable = CLONE15
+    elseif playerMode == 'p20' then
+        dealColors = COLORS_DEAL20
+        cloneTable = CLONE20
+    end
+
+    for k,v in pairs(dealColors) do
+        obj = self.clone()
+        obj.setName('Custom Characters List')
+        obj.setPositionSmooth(cloneTable[v].pos)
+        obj.setRotationSmooth(cloneTable[v].rot)
+        obj.setScale(cloneTable[v].scale)
+        obj.setLock(true)
+    end
+end
+
+function setSaveName(obj, color, input, stillEditing, index)
+    if not stillEditing then
+        saveNames[index] = input
+        saveLoadMenu()
+        return 1
+    end
+end
+
+function save(clickedObject, playerColor, index)
+    saveLists['Save'..index] = characters
+    Player[playerColor].print('Current character list saved to slot ' .. index .. '.')
+    saveLoadMenu()
+end
+
+function load(clickedObject, playerColor, index)
+    characters = saveLists['Save'..index]
+    Player[playerColor].print('Character list ' .. saveNames[index] .. ' loaded.')
+    unused = {}
+    selected = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    refreshUI()
+end
+
+for k = 1,4 do
+    _G['setSaveName' .. k] = function(obj, col, input, editing)
+        setSaveName(obj, col, input, editing, k)
+    end
+    _G['save' .. k] = function(obj, col)
+        save(obj, col, k)
+    end
+    _G['load' .. k] = function(obj, col)
+        load(obj, col, k)
+    end
+end
+
+function saveLoadMenu()
+    self.clearButtons()
+    self.clearInputs()
+    local buttonParam, inputParam
+
+    buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Lists", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,BUTTON_Y,-6}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
+    self.createButton(buttonParam)
+
+    inputParam = {input_function = 'setSaveName1', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-3.2,BUTTON_Y,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
+    self.createInput(inputParam)
+
+    inputParam = {input_function = 'setSaveName2', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {3.2,BUTTON_Y,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
+    self.createInput(inputParam)
+
+    inputParam = {input_function = 'setSaveName3', color = stringColorToRGB('Green'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-3.2,BUTTON_Y,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
+    self.createInput(inputParam)
+
+    inputParam = {input_function = 'setSaveName4', color = stringColorToRGB('Orange'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {3.2,BUTTON_Y,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
+    self.createInput(inputParam)
+
+    buttonParam = {click_function = 'save1', label = "Save", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'save2', label = "Save", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'save3', label = "Save", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'save4', label = "Save", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'load1', label = "Load", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'load2', label = "Load", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'load3', label = "Load", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'load4', label = "Load", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
+        position = {4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'refreshUI', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
+        position = {0,BUTTON_Y,5.6}, rotation = {0,0,0}, width = 2000, height = 600, font_size = 320}
+    self.createButton(buttonParam)
+end
+
+function startMenu()
+    buttonParam = {click_function = 'nullFunc', label = 'Choose an Edition', color = {0,0,0,1}, font_color = {1,1,1}, function_owner = self,
+        position = {0,BUTTON_Y,-7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 500}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeTB', label = 'Trouble Brewing', color = {0.85,0.1,0.1,1}, font_color = {1,1,1}, function_owner = self,
+        position = {0,BUTTON_Y,-4}, rotation = {0,0,0}, width = 4500, height = 1200, font_size = 500, tooltip = 'Start a Trouble Brewing game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeBM', label = 'Bad Moon Rising', color = {0.85,0.73,0.09,1}, font_color = {0,0,0}, function_owner = self,
+        position = {0,BUTTON_Y,-1}, rotation = {0,0,0}, width = 4500, height = 1200, font_size = 500, tooltip = 'Start a Bad Moon Rising game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeSV', label = 'Sects & Violets', color = {0.62,0.13,0.94,1}, font_color = {1,1,1}, function_owner = self,
+        position = {0,BUTTON_Y,2}, rotation = {0,0,0}, width = 4500, height = 1200, font_size = 500, tooltip = 'Start a Sects & Violets game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeCU', label = 'Custom Game', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+        position = {0,BUTTON_Y,5}, rotation = {0,0,0}, width = 4500, height = 1200, font_size = 500, tooltip = 'Start a Custom game.'}
+    self.createButton(buttonParam)
+end
+
+function refreshUI()
+    local buttonParam
+    local z
+
+    self.clearButtons()
+    self.clearInputs()
+    customSet = Global.getVar('customSet')
+
+    if not customSet then
+        buttonParam = {click_function = 'nullFunc', label = 'Characters', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {-3,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'nullFunc', label = 'Unused', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {1.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'nullFunc', label = 'Selected', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {5.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'modeTB', label = 'Trouble Brewing', color = {0.85,0.1,0.1,1}, font_color = {1,1,1}, function_owner = self,
+            position = {-7.4,BUTTON_Y,-1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Trouble Brewing game.'}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'modeBM', label = 'Bad Moon Rising', color = {0.85,0.73,0.09,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,-0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Bad Moon Rising game.'}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'modeSV', label = 'Sects & Violets', color = {0.62,0.13,0.94,1}, font_color = {1,1,1}, function_owner = self,
+            position = {-7.4,BUTTON_Y,0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Sects & Violets game.'}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'modeCU', label = 'Custom Game', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Custom game.'}
+        self.createButton(buttonParam)
+
+        if mode == 'CU' then
+            buttonParam = {click_function = 'clear', label = 'Clear List', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,2.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Clear the Character list.'}
+            self.createButton(buttonParam)
+
+            buttonParam = {click_function = 'batchImportMenu', label = 'Batch Import', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,3.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Import a bunch of characters at once.'}
+            self.createButton(buttonParam)
+
+            buttonParam = {click_function = 'saveLoadMenu', label = 'Load/Save Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,4.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Load or save your custom character list.'}
+            self.createButton(buttonParam)
+
+            buttonParam = {input_function = 'charInput', position = {-3, BUTTON_Y, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}
+            self.createInput(buttonParam)
+
+            buttonParam = {click_function = 'removeChar', label = 'Remove', position = {-4, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Remove character from game'}
+            self.createButton(buttonParam)
+
+            buttonParam = {click_function = 'addChar', label = 'Add', position = {-2, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Add character to game'}
+            self.createButton(buttonParam)
+        end
+
+        buttonParam = {click_function = 'nullFunc', label = '# Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {0.6,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'nullFunc', label = '# Travelers', color = {1,1,1,1}, font_color = stringColorToRGB('Green'), function_owner = self,
+            position = {2.9,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+        self.createButton(buttonParam)
+
+        buttonParam = {input_function = 'numPlayersInput', position = {0.6, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numPlayers, label = '5', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of non-travelers in the game'}
+        self.createInput(buttonParam)
+
+        buttonParam = {input_function = 'numTravInput', position = {2.9, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numTrav, label = '0', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of travelers in the game'}
+        self.createInput(buttonParam)
+
+        buttonParam = {click_function = 'random', label = 'Random', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
+            position = {5.2,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Select random character tokens based on the player count.'}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'start', label = 'Start', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
+            position = {7.5,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Put the selected character tokens into the Deal bag.'}
+        self.createButton(buttonParam)
+
+        z = Z_START
+        for k,v in pairs(characters) do
+            buttonParam = {click_function = 'nullFunc', label = label(v), color = {0,0,0,1}, font_color = {1,1,1}, function_owner = self,
+                position = {-3,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 200, tooltip = CHARACTERS[v].Description}
+            self.createButton(buttonParam)
+            z = z + Z_INC
+        end
+
+        z = Z_START
+        for k,v in pairs(unused) do
+            buttonParam = {click_function = 'unusedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
+                position = {1.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
+            self.createButton(buttonParam)
+            z = z + Z_INC
+        end
+
+        z = Z_START
+        for k,v in pairs(selected) do
+            buttonParam = {click_function = 'selectedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
+                position = {5.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
+            self.createButton(buttonParam)
+            z = z + Z_INC
+        end
+    else
+        z = -8.5
+        if #characters < 26 then
+            z_inc = Z_INC
+        else
+            z_inc = 0.40
+        end
+
+        for k,v in pairs(TYPES) do
+            found[v] = false
+        end
+
+        for k,v in pairs(characters) do
+            found[CHARACTERS[v].Type] = true
+        end
+
+        for k,v in pairs(TYPES) do
+            if found[v] then
+                params = {click_function = 'nullFunc', label = COLORS_BBC[v] .. v, color = {1,1,1,1}, function_owner = self,
+                    position = {0,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 200,}
+                self.createButton(params)
+                z = z + z_inc * 1.5
+            end
+
+            for k1,v1 in pairs(characters) do
+                if CHARACTERS[v1].Type == v then
+                    charLabel = string.gsub(v1, '_', ' ')
+                    params = {click_function = 'nullFunc', color = {1,1,1,1}, function_owner = self,
+                        position = {0,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 280, scale = {0.5,0.5,0.5}}
+                    params.label = COLORS_BBC[CHARACTERS[v1].Type] .. charLabel .. '[FFFFFF] - ' .. CHARACTERS[v1].Description .. '[-]'
+                    self.createButton(params)
+                    z = z + z_inc
+                end
+            end
+            z = z + z_inc
+        end
+    end
+end

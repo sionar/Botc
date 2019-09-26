@@ -79,7 +79,7 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     for k,v in pairs(allObjs) do
-        if string.match(v.getName(), ': Status Tokens') then
+        if string.match(v.getName(), ': Reminder Tokens') then
             tokenBag = v
             break
         end

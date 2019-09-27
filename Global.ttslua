@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.0.0'
+VERSION = '16.0.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -263,6 +263,7 @@ function resizeTable()
                 obj.setScale({1.64,1,1.64})
                 obj.setPositionSmooth(radius(72.5,angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
+                obj.interactable = true
             end
 
             obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
@@ -303,7 +304,6 @@ function resizeTable()
                     obj.setPositionSmooth(radius(84, angle[COLORS_ALL[i]], 6))
                     obj.setRotationSmooth({180, angle[COLORS_ALL[i]], 180})
                 end
-                UI.setAttribute('cell'..COLORS_ALL[i],'active','true')
                 UI.setAttribute('select'..COLORS_ALL[i],'active','true')
             end
         else
@@ -362,12 +362,12 @@ function resizeTable()
         end
     end
 
-    showExtensionUI()
     createSnapPoints()
     toggleLights({switching = false})
     UI.setAttribute('colorSelection','active',false)
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
+    showExtensionUI()
 end
 
 function createSnapPoints()
@@ -426,7 +426,7 @@ function moveTokens()
             if tokenTable[v] ~= nil then
                 for k1,v1 in pairs(tokenTable[v]) do
                     pos = v1.getPosition()
-                    v1.setPositionSmooth({posTable[v][1], pos[2], posTable[v][3]})
+                    v1.setPosition({posTable[v][1], pos[2], posTable[v][3]})
                 end
             end
         end
@@ -1772,10 +1772,12 @@ function showExtensionUI()
     UI.setAttribute('placeDecalCU', 'active', 'false')
     UI.setAttribute('placeDecal'.. mode, 'active', 'true')
     UI.setAttribute('decalText', 'active', 'true')
+    for i = 11,20 do
+        UI.setAttribute('sitTable'..i, 'active', 'false')
+    end
     if tableSize <= 10 then
         UI.setAttribute('teamMenu', 'active', 'false')
         UI.setAttribute('leaveTeam', 'active', 'false')
-        UI.setAttribute('blackMessage15', 'active', 'false')
         UI.setAttribute('blackMessage20', 'active', 'false')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
@@ -1785,6 +1787,7 @@ function showExtensionUI()
         UI.setAttribute('blackMessage20', 'active', 'true')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('sitTable'..tableSize, 'active', 'true')
     end
 end
 

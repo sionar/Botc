@@ -393,7 +393,7 @@ end
 
 
 function adjustOutsiders(char)
-    if char == 'Fang Gu' or char == 'Godfather' then
+    if char == 'Fang_Gu' or char == 'Godfather' then
         dist[2] = dist[2] + 1
         dist[1] = dist[1] - 1
 	elseif char == 'Vigormortis' then

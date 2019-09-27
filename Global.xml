@@ -599,7 +599,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta11"
+        		id = "sit11Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -628,7 +628,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta12"
+        		id = "sit12Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -637,7 +637,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender12"
+        		id = "sit12Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -665,7 +665,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta13"
+        		id = "sit13Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -674,7 +674,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender13"
+        		id = "sit13Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -683,7 +683,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy13"
+        		id = "sit13Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -710,7 +710,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta14"
+        		id = "sit14Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -719,7 +719,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender14"
+        		id = "sit14Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -728,7 +728,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy14"
+        		id = "sit14Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -737,7 +737,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan14"
+        		id = "sit14Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -767,7 +767,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta15"
+        		id = "sit15Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -776,7 +776,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender15"
+        		id = "sit15Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -785,7 +785,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy15"
+        		id = "sit15Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -794,7 +794,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan15"
+        		id = "sit15Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -803,7 +803,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint15"
+        		id = "sit15Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -826,7 +826,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime16"
+                id = "sit16Lime"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -841,7 +841,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta16"
+        		id = "sit16Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -850,7 +850,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender16"
+        		id = "sit16Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -859,7 +859,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy16"
+        		id = "sit16Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -868,7 +868,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan16"
+        		id = "sit16Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -877,7 +877,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint16"
+        		id = "sit16Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -900,7 +900,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime17"
+                id = "sit17Lime"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -909,7 +909,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach17"
+                id = "sit17Peach"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -923,7 +923,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta17"
+        		id = "sit17Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -932,7 +932,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender17"
+        		id = "sit17Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -941,7 +941,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy17"
+        		id = "sit17Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -950,7 +950,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan17"
+        		id = "sit17Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -959,7 +959,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint17"
+        		id = "sit17Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -982,7 +982,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime18"
+                id = "sit18Lime"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -991,7 +991,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach18"
+                id = "sit18Peach"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -1000,7 +1000,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral18"
+                id = "sit18Coral"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1013,7 +1013,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta18"
+        		id = "sit18Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -1022,7 +1022,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender18"
+        		id = "sit18Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1031,7 +1031,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy18"
+        		id = "sit18Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1040,7 +1040,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan18"
+        		id = "sit18Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1049,7 +1049,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint18"
+        		id = "sit18Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -1072,7 +1072,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime19"
+                id = "sit19Lime"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -1081,7 +1081,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach19"
+                id = "sit19Peach"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -1090,7 +1090,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral19"
+                id = "sit19Coral"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1099,7 +1099,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitMaroon19"
+                id = "sit19Maroon"
                 class = "sitButton"
                 text = "Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
@@ -1111,7 +1111,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta19"
+        		id = "sit19Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -1120,7 +1120,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender19"
+        		id = "sit19Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1129,7 +1129,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy19"
+        		id = "sit19Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1138,7 +1138,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan19"
+        		id = "sit19Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1147,7 +1147,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint19"
+        		id = "sit19Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -1170,7 +1170,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime20"
+                id = "sit20Lime"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -1179,7 +1179,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach20"
+                id = "sit20Peach"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -1188,7 +1188,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral20"
+                id = "sit20Coral"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1197,7 +1197,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitMaroon20"
+                id = "sit20Maroon"
                 class = "sitButton"
                 text = "Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
@@ -1206,7 +1206,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitSilver20"
+                id = "sit20Silver"
                 class = "sitButton"
                 text = "Sit in Silver"
                 colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
@@ -1217,7 +1217,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta20"
+        		id = "sit20Magenta"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -1226,7 +1226,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender20"
+        		id = "sit20Lavender"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1235,7 +1235,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy20"
+        		id = "sit20Navy"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1244,7 +1244,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan20"
+        		id = "sit20Cyan"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1253,7 +1253,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint20"
+        		id = "sit20Mint"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"

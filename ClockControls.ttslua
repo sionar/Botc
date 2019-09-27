@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.2'
+VERSION = '1.6.3'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -38,6 +38,7 @@ allMuted = false
 allBlind = false
 handRotation = {}
 colors = {}
+tableSize = 10
 
 
 ------------------Functions
@@ -48,6 +49,7 @@ function onLoad(saveString)
         allMuted = save['am']
         allBlind = save['ab']
         handRotation = save['h']
+        --colors = save['c']
     end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
@@ -74,6 +76,7 @@ function onSave()
     save['ab'] = allBlind
     save['am'] = allMuted
     save['h'] = handRotation
+    save['c'] = colors
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -138,6 +141,7 @@ function toggleClock(vm)
     local clock = getObjectFromGUID(CLOCK_GUID)
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
     local started = Global.getVar('started')
+    local tableSize = Global.getVar('tableSize')
 
     if clock.getScale().x ~= 0 then --if clock is CURRENTLY up
         purpleHand.setScale({0, 1, 0})
@@ -183,7 +187,10 @@ function toggleClock(vm)
         blueHand.setPosition({0, 1.4, 0})
         clock.setScale({28, 1, 28})
         clock.setPosition({0, 1, 0})
-        UI.setAttribute('nomMenu', 'active', 'true')
+
+        if tableSize > 10 then
+            UI.setAttribute('nomMenu', 'active', 'true')
+        end
         UI.setAttribute('colorSelection', 'active', 'false')
 
         if votingMode == 'execution' or votingMode == 'Clock' then

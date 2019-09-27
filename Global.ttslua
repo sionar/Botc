@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.0.2'
+VERSION = '16.0.3'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -314,7 +314,7 @@ function updatePlayers()
                 textObj = getObjectFromGUID(TEXT_GUIDS[v])
                 textObj.setValue(' ')
                 for i = 11, 20 do
-                    UI.setAttribute('sit' .. v, 'text', 'Sit in ' .. v)
+                    UI.setAttribute('sit' .. tableSize .. v, 'text', 'Sit in ' .. v)
                 end
                 deleteAvatar(v)
             else
@@ -557,7 +557,7 @@ function resizeTable()
             UI.setAttribute('cell'..COLORS_ALL[i],'active','false')
             UI.setAttribute('select'..COLORS_ALL[i],'active','false')
             if players[COLORS_ALL[i]] ~= nil then
-                sitUI(players[COLORS_ALL[i]], _, 'sit'..COLORS_ALL[i])
+                sitUI(players[COLORS_ALL[i]], _, 'sit'..tableSize..COLORS_ALL[i])
             end
             obj = getObjectFromGUID(TEXT_GUIDS[COLORS_ALL[i]])
             obj.setPosition({0,-0.1,0})
@@ -668,7 +668,7 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            sitUI(players[v], _, 'sit'..v)
+            sitUI(players[v], _, 'sit'..tableSize..v)
         end
     end
     if playerTab == nil then
@@ -683,7 +683,7 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    sitUI(v1, _, 'sit'..v)
+                    sitUI(v1, _, 'sit'..tableSize..v)
                 end
                 break
                 print('found')
@@ -1024,7 +1024,7 @@ function chatMove(playerName, seatColor, player)
 
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            sitUI(playerFound, _, 'sit'..k)
+            sitUI(playerFound, _, 'sit'..tableSize..k)
         end
     end
     if colorFound == 'Grey' or colorFound == 'Black' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
@@ -1032,7 +1032,7 @@ function chatMove(playerName, seatColor, player)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        sitUI(playerFound, _, 'sit'..colorFound)
+        sitUI(playerFound, _, 'sit'..tableSize..colorFound)
         player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     end
 end
@@ -1064,7 +1064,7 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            sitUI(players[colorFound], _, 'sit'..colorFound)
+            sitUI(players[colorFound], _, 'sit'..tableSize..colorFound)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1115,13 +1115,13 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        sitUI(players[color1], _, 'sit'..color1)
+        sitUI(players[color1], _, 'sit'..tableSize..color1)
     end
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        sitUI(players[color2], _, 'sit'..color2)
+        sitUI(players[color2], _, 'sit'..tableSize..color2)
     end
 
     if started then
@@ -1154,7 +1154,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 v.changeColor(color1)
             elseif inTable(color1, COLORS_EX) then
-                sitUI(v, _, 'sit'..color1)
+                sitUI(v, _, 'sit'..tableSize..color1)
             end
             break
         end
@@ -1166,7 +1166,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 v.changeColor(color2)
             elseif inTable(color2, COLORS_EX) then
-                sitUI(v, _, 'sit'..color2)
+                sitUI(v, _, 'sit'..tableSize..color2)
             end
             break
         end
@@ -1567,7 +1567,7 @@ function sitUI(player, value, id)
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
     local zoneObj
-    local color = string.sub(id, 4, #id)
+    local color = string.sub(id, 6, #id)
     updatePlayers()
     if playersEx[color] == nil then
         for k,v in pairs(playersEx) do
@@ -1596,6 +1596,7 @@ function sitUI(player, value, id)
             player.print('You are no longer sitting in ' .. color .. '.')
             UI.setAttribute(id, 'text', 'Sit in ' .. color)
             UI.setAttribute(id, 'textColor', '#FFFFFF')
+
             playersEx[color] = nil
             playersExIds[color] = nil
             textObj = getObjectFromGUID(TEXT_GUIDS[color])

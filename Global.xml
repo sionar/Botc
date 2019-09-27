@@ -7,6 +7,7 @@
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
     <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold"/>
     <Option class="cuDecal" active="true"/>
+    <Dropdown class = "blackMsgDropdown" onValueChanged="colorSelectUI" colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880" active = "false"/>
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -440,6 +441,7 @@
         id = "decalSV"
         onValueChanged = "decalUI"
         >
+        <Option selected="true">None</Option>
         <Option>Clockmaker</Option>
         <Option>Dreamer</Option>
         <Option>Snake_Charmer</Option>
@@ -491,7 +493,6 @@
         id = "decalCU"
         onValueChanged = "decalUI"
         >
-        <Option selected="true">None</Option>
         <Option selected="true">None</Option>
         <Option>Apprentice</Option>
         <Option>Artist</Option>
@@ -598,7 +599,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta11"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -627,16 +628,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta12"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender12"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -664,16 +665,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta13"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender13"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -682,7 +683,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy13"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -709,16 +710,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta14"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender14"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -727,7 +728,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy14"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -736,7 +737,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan14"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -766,16 +767,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta15"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender15"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -784,7 +785,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy15"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -793,7 +794,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan15"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -802,7 +803,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint15"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -825,7 +826,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime"
+                id = "sitLime16"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -840,16 +841,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta16"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender16"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -858,7 +859,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy16"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -867,7 +868,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan16"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -876,7 +877,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint16"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -899,7 +900,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime"
+                id = "sitLime17"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -908,7 +909,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach"
+                id = "sitPeach17"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -922,16 +923,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta17"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender17"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -940,7 +941,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy17"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -949,7 +950,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan17"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -958,7 +959,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint17"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -981,7 +982,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime"
+                id = "sitLime18"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -990,7 +991,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach"
+                id = "sitPeach18"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -999,7 +1000,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral"
+                id = "sitCoral18"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1012,16 +1013,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta18"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender18"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1030,7 +1031,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy18"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1039,7 +1040,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan18"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1048,7 +1049,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint18"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -1071,7 +1072,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime"
+                id = "sitLime19"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -1080,7 +1081,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach"
+                id = "sitPeach19"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -1089,7 +1090,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral"
+                id = "sitCoral19"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1098,7 +1099,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitMaroon"
+                id = "sitMaroon19"
                 class = "sitButton"
                 text = "Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
@@ -1110,16 +1111,16 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta19"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell id = "cellLavender">
+        <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender19"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1128,7 +1129,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy19"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1137,7 +1138,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan19"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1146,7 +1147,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint19"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -1169,7 +1170,7 @@
     <Row>
         <Cell>
             <Button
-                id = "sitLime"
+                id = "sitLime20"
                 class = "sitButton"
                 text = "Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
@@ -1178,7 +1179,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitPeach"
+                id = "sitPeach20"
                 class = "sitButton"
                 text = "Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
@@ -1187,7 +1188,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitCoral"
+                id = "sitCoral20"
                 class = "sitButton"
                 text = "Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
@@ -1196,7 +1197,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitMaroon"
+                id = "sitMaroon20"
                 class = "sitButton"
                 text = "Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
@@ -1205,7 +1206,7 @@
         </Cell>
         <Cell>
             <Button
-                id = "sitSilver"
+                id = "sitSilver20"
                 class = "sitButton"
                 text = "Sit in Silver"
                 colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
@@ -1216,7 +1217,7 @@
 	<Row>
         <Cell>
             <Button
-        		id = "sitMagenta"
+        		id = "sitMagenta20"
                 class = "sitButton"
         		text = "Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
@@ -1225,7 +1226,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitLavender"
+        		id = "sitLavender20"
         		class = "sitButton"
         		text = "Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
@@ -1234,7 +1235,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitNavy"
+        		id = "sitNavy20"
         		class = "sitButton"
         		text = "Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
@@ -1243,7 +1244,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitCyan"
+        		id = "sitCyan20"
         		class = "sitButton"
         		text = "Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
@@ -1252,7 +1253,7 @@
         </Cell>
         <Cell>
             <Button
-        		id = "sitMint"
+        		id = "sitMint20"
         		class = "sitButton"
         		text = "Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
@@ -1318,9 +1319,21 @@
     active = "false"
 ></Button>
 
+<Button
+    id = "blackShowMsg"
+    height = "20"
+    width = "40"
+    onClick = "showMessageUI"
+    tooltip = "Show the message box UI."
+    offsetXY = "0 10"
+    rectAlignment = "LowerCenter"
+    text = "+"
+    active = "false"
+></Button>
+
 <TableLayout
-    id = "blackMessage15"
-    height = "100"
+    id = "blackMessage"
+    height = "120"
     width = "300"
     rectAlignment = "LowerCenter"
     visibility = "Black"
@@ -1328,61 +1341,122 @@
     active = "false"
     >
     <!-- Row 1 -->
-    <Row>
-        <Cell>
+    <Row preferredHeight = "20">
+        <Cell columnSpan = "9" dontUseTableCellBackground = "true"></Cell><Cell cellBackgroundColor = "clear" fontSize = "200"><Button onClick="hideMessageUI" tooltip = "Hide this message box UI." text = "-"></Button></Cell>
+    </Row>
+    <Row preferredHeight = "50">
+        <Cell columnSpan = "5">
             <Dropdown
-                id="colorSitDropdown"
-                onValueChanged="colorSitUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                id = "colorMsgDropdown11"
+                class = "blackMsgDropdown"
                 >
             <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            </Dropdown>
+
+            <Dropdown
+                id = "colorMsgDropdown12"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            </Dropdown>
+
+            <Dropdown
+                id = "colorMsgDropdown13"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
             <Option>Lavender</Option>
             <Option>Navy</Option>
+            </Dropdown>
+
+            <Dropdown
+                id = "colorMsgDropdown14"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            </Dropdown>
+
+            <Dropdown
+                id = "colorMsgDropdown15"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            </Dropdown>
+
+            <Dropdown
+                id="colorMsgDropdown16"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
 			<Option>Lime</Option>
+            </Dropdown>
+
+            <Dropdown
+                id="colorMsgDropdown17"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+			<Option>Lime</Option>
+            <Option>Peach</Option>
+            </Dropdown>
+
+            <Dropdown
+                id="colorMsgDropdown18"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+			<Option>Lime</Option>
+            <Option>Peach</Option>
+            <Option>Coral</Option>
+            </Dropdown>
+
+            <Dropdown
+                id="colorMsgDropdown19"
+                class = "blackMsgDropdown"
+                >
+            <Option selected="true">Select a color</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+			<Option>Lime</Option>
+            <Option>Peach</Option>
             <Option>Coral</Option>
             <Option>Maroon</Option>
             </Dropdown>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sendMessageButton"
-                onClick = "sendMessageUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
-				text = "Send"
-				fontSize = "15"
-                >
-            </Button>
-        </Cell>
-    </Row>
-    <Row>
-        <Cell columnSpan = "2">
-            <InputField
-                id = "messageInput"
-                onEndEdit = "messageInputUI"
-                placeholder = "Send a message to one of the players sitting in one of the extended colors."
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
-                >
-            </InputField>
-        </Cell>
-    </Row>
-</TableLayout>
 
-<TableLayout
-    id = "blackMessage20"
-    height = "100"
-    width = "300"
-    rectAlignment = "LowerCenter"
-    visibility = "Black"
-    offsetXY = "0 10"
-    active = "false"
-    >
-    <!-- Row 1 -->
-    <Row>
-        <Cell>
             <Dropdown
-                id="colorSitDropdown"
-                onValueChanged="colorSitUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                id="colorMsgDropdown20"
+                class = "blackMsgDropdown"
                 >
             <Option selected="true">Select a color</Option>
             <Option>Magenta</Option>
@@ -1397,7 +1471,7 @@
             <Option>Silver</Option>
             </Dropdown>
         </Cell>
-        <Cell>
+        <Cell columnSpan = "5">
             <Button
                 id = "sendMessageButton"
                 onClick = "sendMessageUI"
@@ -1408,8 +1482,8 @@
             </Button>
         </Cell>
     </Row>
-    <Row>
-        <Cell columnSpan = "2">
+    <Row preferredHeight = "50">
+        <Cell columnSpan = "10">
             <InputField
                 id = "messageInput"
                 onEndEdit = "messageInputUI"

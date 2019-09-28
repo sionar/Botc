@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.0'
+VERSION = '1.7.1'
 ROW_S = -6.3
 ROW_W = 0.45
 FONT_SIZE = 225
@@ -104,6 +104,11 @@ end
 function import()
     local chars = Global.getTable('chars')
     local numChars = 0
+    local lunaticColor = false
+    local tempDemonColor
+    local demonName
+
+
     for k,v in pairs(chars) do
         numChars = numChars + 1
     end
@@ -121,8 +126,25 @@ function import()
             table.insert(minionColors, entry.color)
         elseif CHARACTERS[playerChar].Type == 'Demon' then
             demonColor = entry.color
+            demonName = entry.char
         end
     end
+    for k,v in pairs(living) do
+        if v.char == 'Lunatic' then
+            lunaticColor = v.color
+            tempDemonColor = demonColor
+            demonColor = lunaticColor
+            v.char = demonName
+            for k1,v1 in pairs(living) do
+                if v1.color == tempDemonColor then
+                    v1.char = 'Lunatic'
+                    break
+                end
+            end
+            break
+        end
+    end
+
     local minionStr = 'Minions:'
     for i = 1, #minionColors do
         minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'

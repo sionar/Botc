@@ -572,7 +572,9 @@ end
 function numPlayersInput(obj, color, input, stillEditing)
     if not stillEditing then
         numPlayers = tonumber(input)
-        if numPlayers > 15 then
+        if numPlayers == nil then
+            numPlayers = 5
+        elseif numPlayers > 15 then
             numPlayers = 15
         elseif numPlayers < 5 then
             numPlayers = 5
@@ -586,7 +588,9 @@ end
 function numTravInput(obj, color, input, stillEditing)
     if not stillEditing then
         numTrav = tonumber(input)
-        if numTrav > 5 then
+        if numTrav == nil then
+            numTrav = 0
+        elseif numTrav > 5 then
             numTrav = 5
         elseif numTrav < 0 then
             numTrav = 0

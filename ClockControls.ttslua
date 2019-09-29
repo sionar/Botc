@@ -285,7 +285,11 @@ end
 
 function setRotValue(obj, color, value, stillEditing)
     if not stillEditing then
-        rotationRate = value
+        rotationRate = tonumber(value)
+        if rotationRate == nil then
+            rotationRate = 10
+            refreshButtons()
+        end
     end
 end
 
@@ -701,7 +705,7 @@ function refreshButtons()
     params = {input_function = 'setRotValue', function_owner = self, label = 'Rotation Value',
     position = {0, 1, 0.6}, scale = UI_SCALE,
     width = 800, height = 500, font_size = 400,
-    tooltip = 'How fast the hour hand rotates\n(in degrees per second)', alignment = 3, value = rotationRate}
+    tooltip = 'How fast the hour hand rotates\n(in degrees per second)', validation = 3, alignment = 3, value = rotationRate}
     self.createInput(params)
 
     params = {click_function = 'minusRot', function_owner = self, label = '-',

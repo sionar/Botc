@@ -48,6 +48,9 @@ end
 function setTableSize(obj, color, value, stillEditing)
     if not stillEditing then
         tableSize = tonumber(value)
+        if tableSize == nil then
+            tableSize = 10
+        end
         if tableSize < 5 then
             tableSize = 5
         elseif tableSize > 20 then
@@ -93,7 +96,7 @@ function refreshUI()
             position = {-1.05,0.2,-0.9}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Remove a seat.'}
     self.createButton(buttonParam)
 
-    inputParam = {input_function = 'setTableSize', function_owner = self, position = {0, 0.2, -0.9}, width = 600, height = 300, font_size = 260, tooltip = 'Table Size', alignment = 3, value = tableSize}
+    inputParam = {input_function = 'setTableSize', function_owner = self, position = {0, 0.2, -0.9}, width = 600, height = 300, font_size = 260, tooltip = 'Table Size', validation = 2, alignment = 3, value = tableSize}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'incTableSize', function_owner = self, label = '+', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),

@@ -6,6 +6,9 @@ Data
 ------------------Constants
 FIRST =
 {
+    'Lunatic_InfoA',
+    'Lunatic_InfoB',
+    'Lunatic_InfoC',
     'Evil_Info',
     'Demon_Info',
     'Poisoner',
@@ -141,6 +144,7 @@ CHARACTERS =
     Lunatic = {Type = 'Outsider', Ability = false, Prompt = 'Choose who to kill.', Description = 'You think you are a Demon, but your abilities malfunction. The Demon knows who you are & who you attack.'},
     Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3', Description = ''},
     Lunatic_InfoB = {Type = 'Outsider', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
+    Lunatic_InfoC = {Type = 'Outsider', Ability = false, Prompt = 'P1 is a Lunatic. You are a P2.', Description = ''},
     Godfather = {Type = 'Minion', Ability = false, Prompt = 'Choose a player to kill.', Description = 'You start knowing which Outsiders are in-play. If 1 died today, choose a player tonight: they die. [-1 or +1 Outsider]'},
     Devils_Advocate = {Type = 'Minion', Ability = false, Prompt = 'Choose a living player to save during the day.', Description = 'Each night, choose a living player (not the same as last night): if executed tomorrow, they do not die.'},
     Assassin = {Type = 'Minion', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night*, choose a player: they die, even if for some reason they could not.'},

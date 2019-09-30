@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 DEAL_BAG_GUID = '43ecc9'
 COLUMN = {-1, 0, 1}
@@ -272,10 +272,8 @@ end
 function random(clickedObject, playerColor)
     local players
     local unusedChars = {Townsfolk = {}, Outsider = {}, Minion = {}, Demon = {}, Traveler = {}}
-    local selChars = {Townsfolk = {}, Outsider = {}, Minion = {}, Demon = {}, Traveler = {}}
-    local rand
-    local currentChar
-    local travDist
+    local lockedChars = {Townsfolk = {}, Outsider = {}, Minion = {}, Demon = {}, Traveler = {}}
+    local rand, currentChar, travDist, count
 
     if playerColor ~= 'Black' and not debug then
         return
@@ -317,7 +315,7 @@ function random(clickedObject, playerColor)
     end
 
     for k,v in pairs(selected) do
-        table.insert(selChars[CHARACTERS[v].Type], v)
+        table.insert(lockedChars[CHARACTERS[v].Type], v)
     end
 
     dist = {}
@@ -326,10 +324,10 @@ function random(clickedObject, playerColor)
     end
 
     for i = 1,4 do
-        dist[i] = dist[i] - #selChars[TYPES[i]]
+        dist[i] = dist[i] - #lockedChars[TYPES[i]]
     end
 
-    travDist = numTrav - #selChars['Traveler']
+    travDist = numTrav - #lockedChars['Traveler']
 
     if dist[4] < 0 then
         Player['Black'].print('Error: Too many Demons are locked.', {1,0,0})
@@ -339,10 +337,11 @@ function random(clickedObject, playerColor)
         Player['Black'].print('Error: Too many Minions are locked.', {1,0,0})
         refreshUI()
         return
-    elseif #selChars['Outsider'] > PLAYER_DIST[numPlayers][2] then
+    elseif #lockedChars['Outsider'] > PLAYER_DIST[numPlayers][2] then
         Player['Black'].print('Error: Too many Outsiders are locked.', {1,0,0})
         refreshUI()
-    elseif #selChars['Outsider'] == PLAYER_DIST[numPlayers][2] and #selChars['Outsider'] ~= 0 and selChars['Demon'][1] == 'Vigormortis' then
+        return
+    elseif #lockedChars['Outsider'] == PLAYER_DIST[numPlayers][2] and #lockedChars['Outsider'] ~= 0 and lockedChars['Demon'][1] == 'Vigormortis' then
         Player['Black'].print('Error: Too many Outsiders are locked.', {1,0,0})
         refreshUI()
         return
@@ -356,16 +355,25 @@ function random(clickedObject, playerColor)
         return
     end
 
-    for k,v in pairs(selChars['Demon']) do
+    for k,v in pairs(lockedChars['Demon']) do
         adjustOutsiders(v)
     end
 
-    for k,v in pairs(selChars['Minion']) do
+    for k,v in pairs(lockedChars['Minion']) do
         adjustOutsiders(v)
     end
 
+    count = 1
     for i = 1, dist[4] do
-        currentChar = unusedChars.Demon[1]
+        while not checkValid(unusedChars.Demon[count]) do
+            count = count + 1
+            if count > #unusedChars.Demon then
+                Player['Black'].print('Error: Invalid setup.', {1,0,0})
+                refreshUI()
+                return
+            end
+        end
+        currentChar = unusedChars.Demon[count]
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then
@@ -374,8 +382,18 @@ function random(clickedObject, playerColor)
         end
         adjustOutsiders(currentChar)
     end
+
+    count = 1
     for i = 1, dist[3] do
-        currentChar = unusedChars.Minion[i]
+        while not checkValid(unusedChars.Minion[count]) do
+            count = count + 1
+            if count > #unusedChars.Minion then
+                Player['Black'].print('Error: Invalid setup.', {1,0,0})
+                refreshUI()
+                return
+            end
+        end
+        currentChar = unusedChars.Minion[count]
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then
@@ -478,6 +496,22 @@ function start(clickedObject, playerColor)
 	self.destruct()
 end
 
+function checkValid(char)
+    if char == 'Fang_Gu' or char == 'Godfather' then
+        if dist[1] == 0 then
+            return false
+        end
+    elseif char == 'Vigormortis' then
+        if dist[2] == 0 then
+            return false
+        end
+    elseif char == 'Baron' then
+        if dist[1] <= 1 then
+            return false
+        end
+    end
+    return true
+end
 
 function adjustOutsiders(char)
     if char == 'Fang_Gu' or char == 'Godfather' then

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.1.3'
+VERSION = '16.1.4'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -96,6 +96,7 @@ uiMsg = ''
 colorTable = false
 customSet = false
 customList = {}
+customBoardGuids = {}
 
 
 ------------------Functions
@@ -110,6 +111,7 @@ function onLoad(saveString)
         avatarGuids = save['a']
         customSet = save['c']
         customList = save['cl']
+        customBoardGuids = save['cb']
         tableSize = save['t']
         colors = save['co']
         angle = save['an']
@@ -162,6 +164,9 @@ function onLoad(saveString)
             obj.interactable = false
         end
     end
+
+    hideCharSheets()
+
     for k,v in pairs(TEXT_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
@@ -170,6 +175,8 @@ function onLoad(saveString)
     end
     obj = getObjectFromGUID(TEXT_GUIDS['Version'])
     obj.setValue('v ' .. VERSION)
+
+
 
     updatePlayers()
     refreshUI()
@@ -190,12 +197,31 @@ function onSave()
     save['a'] = avatarGuids
     save['c'] = customSet
     save['cl'] = customList
+    save['cb'] = customBoardGuids
     save['t'] = tableSize
     save['co'] = colors
     save['an'] = angle
     save['l'] = lights
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function hideCharSheets()
+    local obj
+    for k,v in pairs(COLORS_EX) do
+        if mode == 'TB' then
+            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_TB[v])
+        elseif mode == 'BM' then
+            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_BM[v])
+        elseif mode == 'SV' then
+            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_SV[v])
+        elseif mode == 'CU' then
+            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_CU[v])
+        end
+        if obj then
+            obj.setInvisibleTo({'White','Brown','Red','Orange','Yellow','Green','Teal','Blue','Purple','Pink'})
+        end
+    end
 end
 
 function refreshObjects()
@@ -421,7 +447,7 @@ function radius(rad, angle, height)
 end
 
 function resizeTable()
-    local obj, tab, pos,rot
+    local obj, tab, pos, rot, colorPos
     local charSheetGuids
     local angleFirst, angleInc
     local zoneSize
@@ -469,6 +495,15 @@ function resizeTable()
                 obj.setPositionSmooth(radius(72.5,angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
                 obj.interactable = true
+            end
+
+            if customSet then
+                obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
+                if not obj then
+                    obj = getObjectFromGUID(customBoardGuids['White']).clone()
+                end
+                obj.setPosition(radius(72.5,angle[COLORS_ALL[i]], 1))
+                obj.setRotation({0, angle[COLORS_ALL[i]], 0})
             end
 
             obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
@@ -528,6 +563,13 @@ function resizeTable()
             obj.interactable = false
         end
 
+        if customSet then
+            obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
+            if obj then
+                obj.destruct()
+            end
+        end
+
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
         obj.setScale({0.01,0.01,0.01})
         obj.setPositionSmooth({0,-0.1,0})
@@ -573,6 +615,7 @@ function resizeTable()
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     obj.call('updateSettings')
     showExtensionUI()
+    Wait.time(updateCustomBoardGuids, 1)
 end
 
 function createSnapPoints()
@@ -589,6 +632,41 @@ function createSnapPoints()
         table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
     end
     self.setSnapPoints(snapTable)
+end
+
+function updateCustomBoardGuids()
+    local allObjects = getAllObjects()
+    local foundObj
+
+    for k,v in pairs(COLORS_ALL) do
+        if inTable(v, colors) then
+            colorPos = radius(72.5,angle[v], 1)
+            foundObj = false
+            for k1,v1 in pairs(allObjects) do
+                pos = v1.getPosition()
+                if v1.getName() == 'Custom Characters List' and math.abs(pos[1] - colorPos[1]) < 0.1 and math.abs(pos[3] - colorPos[3]) < 0.1 then
+                    foundObj = true
+                    customBoardGuids[v] = v1.getGUID()
+                    if inTable(v, COLORS_EX) then
+                        v1.setInvisibleTo({'White','Brown','Red','Orange','Yellow','Green','Teal','Blue','Purple','Pink'})
+                    end
+                    break
+                end
+            end
+            if not foundObj then
+                customBoardGuids[v] = nil
+            end
+        else
+            if customBoardGuids[v] ~= nil then
+                obj = getObjectFromGUID(customBoardGuids[v])
+                if obj then
+                    obj.destruct()
+                    customBoardGuids[v] = nil
+                end
+            end
+        end
+    end
+    toggleLights({switching = false})
 end
 
 function setTokenTable()
@@ -725,7 +803,11 @@ function toggleLights(params)
             obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then
                 obj.setPosition(radius(73.5,angle[COLORS_ALL[i]], 5))
-                obj.call('powerOn')
+                if customSet then
+                    obj.call('powerOff')
+                else
+                    obj.call('powerOn')
+                end
             end
         end
 

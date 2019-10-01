@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.3'
+VERSION = '1.1.4'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 DEAL_BAG_GUID = '43ecc9'
 COLUMN = {-1, 0, 1}
@@ -305,15 +305,15 @@ function random(clickedObject, playerColor)
 
     count = 1
     for i = 1, dist[4] do
-        while not checkValid(unusedChars.Demon[count]) do
-            count = count + 1
-            if count > #unusedChars.Demon then
+        while not checkValid(unusedChars.Demon[i]) do
+            i = i + 1
+            if i > #unusedChars.Demon then
                 Player['Black'].print('Error: Invalid setup.', {1,0,0})
                 refreshUI()
                 return
             end
         end
-        currentChar = unusedChars.Demon[count]
+        currentChar = unusedChars.Demon[i]
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then
@@ -323,17 +323,16 @@ function random(clickedObject, playerColor)
         adjustOutsiders(currentChar)
     end
 
-    count = 1
     for i = 1, dist[3] do
         while not checkValid(unusedChars.Minion[count]) do
-            count = count + 1
-            if count > #unusedChars.Minion then
+            i = i + 1
+            if i > #unusedChars.Minion then
                 Player['Black'].print('Error: Invalid setup.', {1,0,0})
                 refreshUI()
                 return
             end
         end
-        currentChar = unusedChars.Minion[count]
+        currentChar = unusedChars.Minion[i]
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.2'
+VERSION = '1.7.3'
 ROW_S = -6.3
 ROW_W = 0.45
 FONT_SIZE = 225
@@ -642,6 +642,7 @@ function swapColors(params)
     if not color1Living and not color2Living then
         return
     end
+
     if color1Living and color2Living then
         living[color1Living].char = chars[color1]
         living[color2Living].char = chars[color2]

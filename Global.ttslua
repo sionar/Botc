@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.1.4'
+VERSION = '16.1.5'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -850,7 +850,6 @@ function onPlayerChangeColor(color)
     if inTable(color, COLORS) and not inTable(color, colors) then
         Player[color].changeColor('Grey')
     else
-        refreshUI()
         updatePlayers()
         local obj = getObjectFromGUID(TEAM_TOOL_GUID)
         if obj then
@@ -1057,14 +1056,16 @@ function chatMessage(color, message)
     end
 end
 
-function chatMove(playerName, seatColor, player)
+function chatMove(playerName, seatColor, player, swap)
     if playerName == nil or seatColor == nil then
         return
     end
 
     local playerFound = false
+    local playerColor = nil
     local colorFound = false
     local playerList = Player.getPlayers()
+    local token, pos, rad, tempChar
 
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
@@ -1104,19 +1105,54 @@ function chatMove(playerName, seatColor, player)
         return
     end
 
+    for k,v in pairs(colors) do
+        if players[v] ~= nil and players[v].steam_id == playerFound.steam_id then
+            playerColor = v
+        end
+    end
+
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
             sitUI(playerFound, _, 'sit'..tableSize..k)
         end
     end
+    playerFound.changeColor('Grey')
+
+    if started and playerColor ~= nil and swap then
+        rad = tableSize * 0.4 + 6
+        for k,v in pairs(getAllObjects()) do
+            if v.getDescription() == chars[playerColor] then
+                token = v
+                v.setColorTint(COLORS_RGB[colorFound])
+                pos = radius(rad, angle[colorFound], 1.0)
+                pos[3] = pos[3] + 83
+                token.setPositionSmooth(pos)
+            elseif chars[colorFound] ~= nil and v.getDescription() == chars[colorFound] then
+                token = v
+                v.setColorTint(COLORS_RGB[playerColor])
+                pos = radius(rad, angle[playerColor], 1.0)
+                pos[3] = pos[3] + 83
+                token.setPositionSmooth(pos)
+            end
+        end
+
+        tempChar = chars[colorFound]
+        chars[colorFound] = chars[playerColor]
+        chars[playerColor] = tempChar
+        obj = getObjectFromGUID(NIGHT_HELPER_GUID)
+        if obj then
+            obj.call('swapColors', {color1 = playerColor, color2 = colorFound})
+        end
+    end
+
     if colorFound == 'Grey' or colorFound == 'Black' or (inTable(colorFound, COLORS) and not Player[colorFound].seated) then
         playerFound.changeColor(colorFound)
-        player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
         sitUI(playerFound, _, 'sit'..tableSize..colorFound)
-        player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     end
+    player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
+    refreshUI()
 end
 
 function chatRemove(seatColor, player)
@@ -1186,8 +1222,18 @@ function chatSwap(seatColor1, seatColor2, player)
     end
 
     updatePlayers()
-    if players[color1] == nil or players[color2] == nil then
-        player.print('Error: At least one of the seats is empty. Use the .move command instead.', {1,0,0})
+    if players[color1] == nil and players[color2] == nil then
+        player.print('Error: No players seated in those colors.', {1,0,0})
+        return
+    end
+
+    if players[color1] == nil then
+        hideUI()
+        Wait.time(function () chatMove(players[color2].steam_name, color1, player, true) end, 0.1)
+        return
+    elseif players[color2] == nil then
+        hideUI()
+        Wait.time(function () chatMove(players[color1].steam_name, color2, player, true) end, 0.1)
         return
     end
 
@@ -1266,11 +1312,20 @@ end
 
 ------------------Functions called when game starts
 function refreshUI()
-    for _, playerColor in pairs(COLORS) do
-        UI.setAttribute('player' .. playerColor, 'visibility', playerColor)
-        if chars[playerColor] then
-            UI.setValue('player' .. playerColor, 'Your character is ' .. chars[playerColor] .. '!')
+    for k, v in pairs(COLORS) do
+        UI.setAttribute('player' .. v, 'visibility', v)
+        if chars[v] then
+            UI.setValue('player' .. v, 'Your character is ' .. chars[v] .. '!')
+        else
+            UI.setValue('player' .. v, '')
         end
+    end
+end
+
+function hideUI()
+    for k, v in pairs(COLORS) do
+        UI.setAttribute('player' .. v, 'visibility', v)
+        UI.setValue('player' .. v, '')
     end
 end
 

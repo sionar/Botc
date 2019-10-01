@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -34,7 +34,7 @@ for k,v in pairs(COLORS_ALL) do
 end
 
 NIGHT_HELPER_GUID = 'bb89aa'
-MODE_SELECTOR_GUID = '884de8'
+CHAR_SETUP_GUID = 'd2ab87'
 CUSTOM_IMPORTER_GUID = '94f3ee'
 TABLE_SIZER_GUID = '00c013'
 
@@ -123,9 +123,9 @@ function dealToPlayers(clickedObject, playerColor)
         nightHelper.call('import')
     end
 
-    local modeSelector = getObjectFromGUID(MODE_SELECTOR_GUID)
-    if modeSelector then
-        modeSelector.destruct()
+    local charSetup = getObjectFromGUID(CHAR_SETUP_GUID)
+    if charSetup then
+        charSetup.destruct()
     end
 
     local customImporter = getObjectFromGUID(CUSTOM_IMPORTER_GUID)

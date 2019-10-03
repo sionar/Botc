@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.1'
+VERSION = '1.3.0'
 TEAMS = {'Clubs', 'Spades', 'Diamonds', 'Hearts'}
 
 
@@ -18,46 +18,64 @@ joiningPlayer = { -- used to store a player reference that's trying to join a te
 }
 jokersDefault = false
 
+
 ------------------Functions
 function onLoad(save_state)
-    self.interactable = false
-    local data = {click_function = 'joinClubsTeam', function_owner = self,
+    jokersDefault = Global.getVar('jokersDefault')
+    started = Global.getVar('started')
+    local params
+
+    params = {click_function = 'joinClubsTeam', function_owner = self,
     label = ' ', tooltip = 'Click here to join the Clubs team to discuss privately',
     position = {5.7, 3.5, 3}, scale = {0.5, 0.5, 0.5},
     width = 2000, height = 1800, font_size = 400,
     color = {1,1,1, 0}}
-    self.createButton(data)
-    data = {click_function  = 'joinSpadesTeam', function_owner = self,
+    self.createButton(params)
+
+    params = {click_function  = 'joinSpadesTeam', function_owner = self,
     label = ' ', tooltip = 'Click here to join the Spades team to discuss privately',
     position = {1.9, 3.5, 3}, scale = {0.5, 0.5, 0.5},
     width = 2000, height = 1800, font_size = 400,
     color = {1,1,1, 0}}
-    self.createButton(data)
-    data = {click_function = 'joinDiamondsTeam', function_owner = self,
+    self.createButton(params)
+
+    params = {click_function = 'joinDiamondsTeam', function_owner = self,
     label = ' ', tooltip = 'Click here to join the Diamonds team to discuss privately',
     position = {-1.87, 3.5, 3}, scale = {0.5, 0.5, 0.5},
     width = 2000, height = 1800, font_size = 400,
     color = {1,1,1, 0}}
-    self.createButton(data)
-    data = {click_function = 'joinHeartsTeam', function_owner = self,
+    self.createButton(params)
+
+    params = {click_function = 'joinHeartsTeam', function_owner = self,
     label = ' ', tooltip = 'Click here to join the Hearts team to discuss privately',
     position = {-5.7, 3.5, 3}, scale = {0.5, 0.5, 0.5},
     width = 2000, height = 1800, font_size = 400,
     color = {1,1,1, 0}}
-    self.createButton(data)
+    self.createButton(params)
 
-    data = {click_function = 'defaultTeamToggle', function_owner = self,
-    label = 'Make Jokers\nDefault Team', tooltip = 'Make Jokers the default team',
+    params = {click_function = 'defaultTeamToggle', function_owner = self,
+    label = 'Make [FF0000]Jokers\n[000000]Default Team', tooltip = 'Make Jokers the default team',
     position = {0, 3.5, 7}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
     width = 5700, height = 1300, font_size = 600, alignment = 3}
-    self.createButton(data)
+    if jokersDefault then
+        params.label = 'Make [0000FF]None\n [000000]Default Team'
+        params.tooltip = 'Make None the default team'
+    end
+    self.createButton(params)
 
-    data = {click_function = 'leaveTeam', function_owner = self,
+    params = {click_function = 'leaveTeam', function_owner = self,
     label = 'Leave Team', tooltip = 'Leave Team',
     position = {0, 3.5, 5}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
     width = 5700, height = 1300, font_size = 800, alignment = 3}
-    self.createButton(data)
+    self.createButton(params)
+
     self.setLock(true)
+    self.interactable = false
+    self.setDescription('Version' .. VERSION)
+
+    if not started then
+        moveAllToDefaultTeam()
+    end
     Wait.time(refreshUI, 1)
 end
 
@@ -66,16 +84,33 @@ function defaultTeamToggle(clickedObject, playerColor)
         local allPlayers = Player.getPlayers()
         if jokersDefault == false then
             jokersDefault = true
-            self.editButton({index = 4, label = 'Make None\nDefault Team', tooltip = 'Make None the default team'})
+            self.editButton({index = 4, label = 'Make [0000FF]None\n [000000]Default Team', tooltip = 'Make None the default team'})
             for k,v in pairs(allPlayers) do
-                v.team = 'Jokers'
+                if v.team == 'None' then
+                    v.team = 'Jokers'
+                end
             end
         else
             jokersDefault = false
-            self.editButton({index = 4, label = 'Make Jokers\nDefault Team', tooltip = 'Make Jokers the default team'})
+            self.editButton({index = 4, label = 'Make [FF0000]Jokers\n [000000]Default Team', tooltip = 'Make Jokers the default team'})
             for k,v in pairs(allPlayers) do
-                v.team = 'None'
+                if v.team == 'Jokers' then
+                    v.team = 'None'
+                end
             end
+        end
+        Global.setVar('jokersDefault', jokersDefault)
+    end
+    Wait.time(refreshUI, 1)
+end
+
+function moveAllToDefaultTeam()
+    local allPlayers = Player.getPlayers()
+    for k,v in pairs(allPlayers) do
+        if jokersDefault and v.team == 'None' then
+            v.team = 'Jokers'
+        elseif not jokersDefault and v.team == 'Jokers' then
+            v.team = 'None'
         end
     end
 end
@@ -118,7 +153,7 @@ function tryToJoinTeam(colorJoining, team)
 
     --check if any player is in the team
     for k,v in pairs(players) do
-        if v.team == team then
+        if v.team == team and k ~= 'Black' then
             teamEmpty = false
         end
     end
@@ -159,6 +194,11 @@ function refreshUI()
                 inTeam[team] = inTeam[team] + 1
                 self.UI.setAttribute(team .. inTeam[team] .. 'Image', 'image', k)
                 self.UI.setAttribute(team .. inTeam[team] ..'Text', 'text', name)
+                if k == 'Black' then
+                    self.UI.setAttribute(team .. inTeam[team] ..'Text', 'color', '#FFFFFF')
+                else
+                    self.UI.setAttribute(team .. inTeam[team] ..'Text', 'color', '#000000')
+                end
             end
         end
     end

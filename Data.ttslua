@@ -193,6 +193,9 @@ CHARACTERS =
     Harlot = {Type = 'Traveler', Ability = false, Prompt = 'Choose a living player.', Description = 'Each night*, choose a living player: if they agree, you learn their character, but you both might die tonight.'},
     Barista = {Type = 'Traveler', Ability = false, Prompt = '', Description = 'Each night, until dusk, 1) a player becomes sober, healthy & gets true info, or 2) their ability works twice. They learn which.'},
     Deviant = {Type = 'Traveler', Ability = false, Prompt = '', Description = 'If you were funny today, you can not be exiled.'},
+
+
+
 }
 
 DECAL_URLS =

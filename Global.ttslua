@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.1.6'
+VERSION = '16.1.7'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -45,6 +45,8 @@ CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orang
 
 ------------------Variables
 tableSize = 10
+jokersDefault = false
+timerID = 0
 started = false
 lights = false
 mode = 'TB'
@@ -103,6 +105,7 @@ customBoardGuids = {}
 function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
+        jokersDefault = save['j']
         started = save['s']
         mode = save['m']
         chars = save['r']
@@ -189,6 +192,7 @@ end
 
 function onSave()
     local save = {}
+    save['j'] = jokersDefault
     save['s'] = started
     save['m'] = mode
     save['r'] = chars
@@ -264,10 +268,6 @@ end
 
 function lockObjects()
     local obj
-    obj = getObjectFromGUID(TEAM_TOOL_GUID)
-    if obj then
-        obj.interactable = false
-    end
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -850,23 +850,33 @@ function onPlayerChangeColor(color)
     if inTable(color, COLORS) and not inTable(color, colors) then
         Player[color].changeColor('Grey')
     else
-        updatePlayers()
         local obj = getObjectFromGUID(TEAM_TOOL_GUID)
         if obj then
             obj.call('refreshUI')
+        else
+            updatePlayers()
         end
     end
 end
 
 function onPlayerConnect(player)
-    Wait.time(function ()
+    Wait.stop(timerID)
+    timerID = Wait.time(function ()
         obj = getObjectFromGUID(TEAM_TOOL_GUID)
         if obj then
             obj.reload()
         end
-    end, 10)
+    end, 60)
 end
 
+function onPlayerDisconnect(color)
+    local obj = getObjectFromGUID(TEAM_TOOL_GUID)
+    if obj then
+        obj.call('refreshUI')
+    else
+        updatePlayers()
+    end
+end
 
 ------------------Chat commands
 function onChat(message, player)
@@ -1700,10 +1710,9 @@ function showExtensionUI()
 end
 
 function sitUI(player, value, id)
-    local textObj
+    local textObj, obj, zoneObj
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
-    local zoneObj
     local color = string.sub(id, 6, #id)
     updatePlayers()
     if playersEx[color] == nil then
@@ -1724,16 +1733,19 @@ function sitUI(player, value, id)
         textObj.setValue(player.steam_name)
         generateAvatar(color)
         printToAll(COLORS_BBC[color] .. player.steam_name .. ' is color ' .. color .. '.[-]')
-        UI.setAttribute(id, 'text', 'Leave ' .. color)
-        UI.setAttribute(id, 'textColor', '#FFFFFF')
+        for i = 11,20 do
+            UI.setAttribute('sit' .. i .. color, 'text', 'Leave ' .. color)
+            UI.setAttribute(id, 'textColor', '#FFFFFF')
+        end
         zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
         zoneObj.setColorTint(FAKE_ZONE_RGB[color])
     else
         if player.steam_id == playersEx[color].steam_id then
             player.print('You are no longer sitting in ' .. color .. '.')
-            UI.setAttribute(id, 'text', 'Sit in ' .. color)
-            UI.setAttribute(id, 'textColor', '#FFFFFF')
-
+            for i = 11,20 do
+                UI.setAttribute('sit' .. i .. color, 'text', 'Sit in ' .. color)
+                UI.setAttribute(id, 'textColor', '#FFFFFF')
+            end
             playersEx[color] = nil
             playersExIds[color] = nil
             textObj = getObjectFromGUID(TEXT_GUIDS[color])
@@ -1746,6 +1758,10 @@ function sitUI(player, value, id)
         else
             player.print('Someone is already sitting in ' .. color .. '.')
         end
+    end
+    obj = getObjectFromGUID(TEAM_TOOL_GUID)
+    if obj then
+        obj.call('refreshUI')
     end
 end
 

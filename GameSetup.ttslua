@@ -7,19 +7,15 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.2.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
-DEAL_BAG_GUID = '43ecc9'
-COLUMN = {-1, 0, 1}
-BUTTON_Y = 0.1
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
+BUTTON_Y = 0.1
 Z_START = -7
 Z_INC = 0.44
-COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 CLONE = {
     Black = {pos = {20, 1.2, 75}, rot = {0,0,0}, scale = {0.63,0.63,0.63}},
     Table = {pos = {0, 1.2, 34}, rot = {0,180,0}, scale = {1,1,1}},
 }
+DEAL_BAG_GUID = '43ecc9'
 
 
 ------------------Variables
@@ -86,7 +82,7 @@ function unusedRemove(clickedObject, playerColor, index)
     refreshUI()
 end
 
-for k = 1,35 do
+for k = 1,40 do
     _G['unusedRemove' .. k] = function(obj, col)
         unusedRemove(obj, col, k)
     end
@@ -103,7 +99,7 @@ function selectedRemove(clickedObject, playerColor, index)
     refreshUI()
 end
 
-for k = 1,25 do
+for k = 1,40 do
     _G['selectedRemove' .. k] = function(obj, col)
         selectedRemove(obj, col, k)
     end
@@ -124,7 +120,7 @@ function toggleLock(clickedObject, playerColor, index)
     refreshUI()
 end
 
-for k = 1,25 do
+for k = 1,40 do
     _G['toggleLock' .. k] = function(obj, col)
         toggleLock(obj, col, k)
     end
@@ -194,7 +190,7 @@ function setMode(state)
         or string.match(v.getName(), ': Reminder Tokens')
         or string.match(v.getName(), ': Travelers')
         or string.match(v.getName(), ': Characters')
-        or string.match(v.getName(), ': Reference') then
+        or string.match(v.getName(), ': Night Sheet') then
             if v.getStateId() ~= state then
                 v.setState(state)
             end

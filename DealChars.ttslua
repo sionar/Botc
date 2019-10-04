@@ -5,37 +5,11 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.1'
-COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-COLORS_15 = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Lavender', 'Navy', 'Lime', 'Coral', 'Maroon'}
-COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+VERSION = '1.5.2'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-ANGLE10 = {White = 45, Brown = 75, Red = 105, Orange = 135, Yellow = 165, Green = 195, Teal = 225, Blue = 255, Purple = 285, Pink = 315,}
-ANGLE15 = {White = 40, Brown = 60, Red = 80, Orange = 100, Yellow = 120, Green = 140, Teal = 160, Blue = 180, Purple = 200, Pink = 220, Lavender = 240, Navy = 260, Lime = 280, Coral = 300, Maroon = 320}
-ANGLE20 = {White = 37.5, Brown = 52.5, Red = 67.5, Orange = 82.5, Yellow = 97.5, Green = 112.5, Teal = 127.5, Blue = 142.5, Purple = 157.5, Pink = 172.5, Magenta = 187.5, Lavender = 202.5, Navy = 217.5, Cyan = 232.5, Mint = 247.5, Lime = 262.5, Peach = 277.5, Coral = 292.5, Maroon = 307.5, Silver = 322.5}
-
-function radius(rad, angle, height)
-    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
-end
-POS10 = {}
-POS15 = {}
-POS20 = {}
-for k,v in pairs(COLORS) do
-    POS10[v] = radius(10, ANGLE10[v], 1.1)
-    POS10[v][3] = POS10[v][3] + 83
-end
-for k,v in pairs(COLORS_15) do
-    POS15[v] = radius(12, ANGLE15[v], 1.1)
-    POS15[v][3] = POS15[v][3] + 83
-end
-for k,v in pairs(COLORS_ALL) do
-    POS20[v] = radius(14, ANGLE20[v], 1.1)
-    POS20[v][3] = POS20[v][3] + 83
-end
 
 NIGHT_HELPER_GUID = 'bb89aa'
 CHAR_SETUP_GUID = 'd2ab87'
-CUSTOM_IMPORTER_GUID = '94f3ee'
 TABLE_SIZER_GUID = '00c013'
 
 
@@ -51,6 +25,10 @@ function onLoad(save_state)
     self.createButton(data)
 end
 
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
 function dealToPlayers(clickedObject, playerColor)
     if playerColor ~= 'Black' and not debug then
         return
@@ -59,9 +37,9 @@ function dealToPlayers(clickedObject, playerColor)
     local tableSize = Global.getVar('tableSize')
     local colors = Global.getTable('colors')
     local angle = Global.getTable('angle')
-    local objectsInBag = self.getObjects()
     local players = Global.call('updatePlayers')
     local allPlayers = Player.getPlayers()
+    local numPlayers = Global.call('getNumPlayers')
     local params, obj, char
     local chars = {}
     local allObjs = getAllObjects()
@@ -87,8 +65,14 @@ function dealToPlayers(clickedObject, playerColor)
         return
     end
 
+
+    if #allPlayers > 1 and numPlayers ~= self.getQuantity() then
+        Player['Black'].print('Error: The number of character tokens in the bag does not match the number of players seated.', {1,0,0})
+        return
+    end
+
     for k,v in pairs(colors) do
-        if players[v] ~= nil or debug or (#allPlayers == 1 and self.getQuantity() ~= 0) then
+        if players[v] ~= nil or debug or #allPlayers == 1 then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,
                 position = posTable[v],
@@ -112,6 +96,7 @@ function dealToPlayers(clickedObject, playerColor)
             end
         end
     end
+
     Global.setTable('chars', chars)
     Global.call('refreshUI')
     Global.call('unlockAliveTokens')
@@ -128,13 +113,6 @@ function dealToPlayers(clickedObject, playerColor)
         charSetup.destruct()
     end
 
-    local customImporter = getObjectFromGUID(CUSTOM_IMPORTER_GUID)
-    if customImporter then
-        local mode = Global.getVar('mode')
-        if mode ~= 'CU' then
-            customImporter.destruct()
-        end
-    end
     self.destruct()
 end
 

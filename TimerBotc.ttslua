@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 BUTTON_W = 420
 BUTTON_H = 300
 BUTTON_SPACING = 0.9
@@ -94,7 +94,7 @@ function timeCustom(obj, player_clicker_color, input_value, selected)
         if input_value == '' then
             input_value = 1
         end
-        time = tonumber(input_value) * 60
+        time = math.floor(tonumber(input_value) * 60)
         if time <= 0 then
             time = 10
         end
@@ -182,7 +182,7 @@ function refreshButtons()
     self.createButton(buttonParam)
 
     local inputParam = {input_function = 'timeCustom', function_owner = self, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-        position = {COL[4],0.2,BUTTON_Z}, rotation = {0,0,0}, width = BUTTON_W, height = FONT_SIZE + 23, font_size = FONT_SIZE, value = 0, alignment = 3, validation = 2, tab = 1, tooltip = 'Start the timer at a custom number of minutes.'}
+        position = {COL[4],0.2,BUTTON_Z}, rotation = {0,0,0}, width = BUTTON_W, height = FONT_SIZE + 23, font_size = FONT_SIZE, value = 0, alignment = 3, validation = 3, tab = 1, tooltip = 'Start the timer at a custom number of minutes.'}
     self.createInput(inputParam)
 
     local buttonParam = {click_function = 'pauseFunc', function_owner = self, label = 'Pause', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),

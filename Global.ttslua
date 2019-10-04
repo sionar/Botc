@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.1.7'
+VERSION = '16.2.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -121,8 +121,12 @@ function onLoad(saveString)
         lights = save ['l']
     end
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-    notes = START_MESSAGE
-    setNotes(START_MESSAGE)
+
+    if not started then
+        notes = START_MESSAGE
+        setNotes(notes)
+        updateNotebookTabs()
+    end
 
     for k,v in pairs(NIGHT_LIGHT_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -208,6 +212,30 @@ function onSave()
     save['l'] = lights
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function updateNotebookTabs()
+    editNotebookTab(6, TB_LIST, 'Trouble Brewing Characters')
+    editNotebookTab(5, BM_LIST, 'Bad Moon Rising Characters')
+    editNotebookTab(4, SV_LIST, 'Sects & Violets Characters')
+end
+
+function editNotebookTab(tabIndex, charList, title)
+    local tab = {index = tabIndex, title = title, color = 'Grey'}
+    local text = ''
+
+    for k,v in pairs(TYPES) do
+        text = text .. '[i]' .. v .. '[/i]\r\n'
+        for k1,v1 in pairs(charList) do
+            if CHARACTERS[v1].Type == v then
+                text = text .. '\r\n[b]' .. string.gsub(v1, '_', ' ') .. '[/b] - ' .. CHARACTERS[v1].Description
+            end
+        end
+        text = text .. '\r\n\n\r\n'
+    end
+
+    tab.body = text
+    Notes.editNotebookTab(tab)
 end
 
 function hideCharSheets()

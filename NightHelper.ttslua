@@ -5,8 +5,8 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.3'
-ROW_S = -6.3
+VERSION = '1.8.0'
+ROW_S = -7.3
 ROW_W = 0.45
 FONT_SIZE = 225
 FONT_SIZE_LABEL = 360
@@ -14,21 +14,21 @@ BUTTON_SIZE = 270
 BUTTON_Y = 0.1
 COLUMN = {-3.6, -1.35, -0.45, 3.6, 6.3}
 ROW = {}
-for i = 1,20 do
+for i = 1,40 do
     ROW[i] = ROW_S + i * ROW_W
 end
-LIVING_LAB_Z = -6.75
-NIGHT_LAB_Z = -6.75
-PREVIEW_LAB_Z = 1.35
-PREVIEW_MSG_Z = 2.7
+LIVING_LAB_Z = -7.75
+NIGHT_LAB_Z = -7.75
+PREVIEW_LAB_Z = 2.35
+PREVIEW_MSG_Z = 3.7
 ADDCHAR_LAB_X = -4.95
-ADDCHAR_LAB_Z = 3.6
+ADDCHAR_LAB_Z = 5.1
 ADD_BUT_X = -1.9
 INPUTS_X = {-6.6, -3.45, 0.3, 3.6, 6.9}
-INPUTS_LAB_Z = 4.275
-INPUT_BUT_Z = 4.95
+INPUTS_LAB_Z = 5.775
+INPUT_BUT_Z = 6.45
 BOTTOM_BUT_X = {-4.05, -1.35, 1.35, 4.05}
-BOTTOM_BUT_Z = 6.75
+BOTTOM_BUT_Z = 7.75
 
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
@@ -159,7 +159,9 @@ function setNightOrder(night)
     local players = Global.call('updatePlayers')
     if blindAuto then
         if lastBlind ~= '' then
-            players[lastBlind].blindfolded = true
+            if players[lastBlind] ~= nil then
+                players[lastBlind].blindfolded = true
+            end
             lastBlind = ''
         end
     end
@@ -243,7 +245,7 @@ function used(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,20 do
+for k = 1,40 do
     _G['used' .. k] = function(obj, col)
         used(obj, col, k)
     end
@@ -293,7 +295,7 @@ function remove(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,20 do
+for k = 1,40 do
     _G['remove' .. k] = function(obj, col)
         remove(obj, col, k)
     end
@@ -305,11 +307,15 @@ function send(clickedObject, playerColor)
     local players = Global.call('updatePlayers')
     if order[1].char == 'Evil_Info' then
         msg = COLORS_BBC[demonColor] .. '<' .. demonColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. evilMsg
-        players[demonColor].print(msg)
+        if players[demonColor] ~= nil then
+            players[demonColor].print(msg)
+        end
         printToColor(msg, 'Black', {1,1,1})
         for i = 1, #minionColors do
             msg = COLORS_BBC[minionColors[i]] .. '<' .. minionColors[i] .. '>[-] [000000]' .. steam_name .. ':[-] ' .. evilMsg
-            players[minionColors[i]].print(msg)
+            if players[minionColors[i]] ~= nil then
+                players[minionColors[i]].print(msg)
+            end
             printToColor(msg, 'Black', {1,1,1})
         end
     elseif order[1].char == 'Next_Night' then
@@ -317,7 +323,9 @@ function send(clickedObject, playerColor)
         setMsg()
         if blindAuto then
             if lastBlind ~= '' then
-                players[lastBlind].blindfolded = true
+                if players[lastBlind] ~= nil then
+                    players[lastBlind].blindfolded = true
+                end
                 lastBlind = ''
             end
         end
@@ -329,16 +337,24 @@ function send(clickedObject, playerColor)
     else
         sendColor = order[1].color
         msg = COLORS_BBC[sendColor] .. '<' .. sendColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. sendMsg
-        players[sendColor].print(msg)
+        if players[sendColor] ~= nil then
+            players[sendColor].print(msg)
+        end
         printToColor(msg, 'Black', {1,1,1})
         if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
             if lastBlind == '' then
                 lastBlind = order[1].color
-                players[lastBlind].blindfolded = false
+                if players[lastBlind] ~= nil then
+                    players[lastBlind].blindfolded = false
+                end
             else
-                players[lastBlind].blindfolded = true
+                if players[lastBlind] ~= nil then
+                    players[lastBlind].blindfolded = true
+                end
                 lastBlind = order[1].color
-                players[lastBlind].blindfolded = false
+                if players[lastBlind] ~= nil then
+                    players[lastBlind].blindfolded = false
+                end
             end
         end
     end
@@ -351,7 +367,7 @@ function skip(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,20 do
+for k = 1,40 do
     _G['skip' .. k] = function(obj, col)
         skip(obj, col, k)
     end
@@ -424,6 +440,8 @@ function p1Input(obj, color, input, stillEditing)
                     textColor = COLORS_BBC['Red']
                 elseif v.Type == 'Traveler' then
                     textColor = COLORS_BBC['Green']
+                elseif v.Type == 'Status' then
+                    textColor = COLORS_BBC['Purple']
                 end
                 p1 = removeUnder(textColor .. k .. '[-]')
                 found = true
@@ -532,12 +550,14 @@ function addChar(clickedObject, playerColor)
     end
     local pos, colorIndex
     local orderPos, orderIndex
+    --[[
     for k,v in pairs(living) do
         if v.color == colorAdd then
             broadcastToColor('ERROR: That player already has a char.', playerColor, {1,0,0})
             return
         end
     end
+    --]]
     if #living == 0 then
         pos = 1
     else
@@ -799,16 +819,16 @@ function refreshUI()
         position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
     self.createInput(inputParam)
 
-    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
+    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
+    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
+    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 900, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
+    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
     if not blindAuto then
         buttonParam.label = 'Auto\nBlindfold\nOFF'
     end

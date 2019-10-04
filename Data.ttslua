@@ -20,6 +20,7 @@ FIRST =
     'Devils_Advocate',
     'Witch',
     'Cerenovus',
+    'Madness',
     'Evil_Twin',
     'Lunatic',
     'Pukka',
@@ -61,6 +62,7 @@ OTHER =
     'Devils_Advocate',
     'Witch',
     'Cerenovus',
+    'Madness',
     'Pit_Hag',
     'Assassin',
     'Exorcist',
@@ -96,6 +98,12 @@ OTHER =
     'Spy',
     'Next_Night'
 }
+
+TB_LIST = {'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune_Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet_Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief'}
+BM_LIST = {'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea_Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils_Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop'}
+SV_LIST = {'Clockmaker', 'Dreamer', 'Snake_Charmer', 'Mathematician', 'Flowergirl', 'Town_Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil_Twin', 'Witch', 'Cerenovus', 'Pit_Hag', 'Fang_Gu', 'Vigormortis', 'No_Dashii', 'Vortox', 'Butcher', 'Bone_Collector', 'Harlot', 'Barista', 'Deviant'}
+
+TYPES = {'Townsfolk', 'Outsider', 'Minion', 'Demon', 'Traveler'}
 
 CHARACTERS =
 {
@@ -173,6 +181,7 @@ CHARACTERS =
     Evil_Twin = {Type = 'Minion', Ability = false, Prompt = 'Your good twin counterpart is P1. Their character is P2.', Description = 'You & an opposing player know each other. If the good player is executed, evil wins. Good can\'t win if you both live.'},
     Witch = {Type = 'Minion', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player: if they nominate tomorrow, they die. If just 3 players live, you lose this ability.'},
     Cerenovus = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night, choose a player & a good character: they are "mad" they are this character tomorrow, or might be executed.'},
+    Madness = {Type = 'Status', Ability = false, Prompt = 'You are "mad" about being a P1.', Description = ''},
     Pit_Hag = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night*, choose a player & a character they become (if not-in-play). If a Demon is made, deaths tonight are arbitrary.'},
     Fang_Gu = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. The 1st Outsider chosen becomes an evil Fang Gu & you die instead. [+1 Outsider]'},
     Vigormortis = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Minions you kill keep their ability & poison 1 Townsfolk neighbor. [-1 Outsider].'},

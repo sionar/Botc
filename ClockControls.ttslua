@@ -49,7 +49,7 @@ function onLoad(saveString)
         allMuted = save['am']
         allBlind = save['ab']
         handRotation = save['h']
-        --colors = save['c']
+        colors = save['c']
     end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)

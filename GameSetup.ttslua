@@ -5,18 +5,14 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.4'
+VERSION = '1.2.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 DEAL_BAG_GUID = '43ecc9'
 COLUMN = {-1, 0, 1}
 BUTTON_Y = 0.1
-TB_LIST = {'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune_Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet_Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief'}
-BM_LIST = {'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea_Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils_Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop'}
-SV_LIST = {'Clockmaker', 'Dreamer', 'Snake_Charmer', 'Mathematician', 'Flowergirl', 'Town_Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil_Twin', 'Witch', 'Cerenovus', 'Pit_Hag', 'Fang_Gu', 'Vigormortis', 'No_Dashii', 'Vortox', 'Butcher', 'Bone_Collector', 'Harlot', 'Barista', 'Deviant'}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 Z_START = -7
 Z_INC = 0.44
-TYPES = {'Townsfolk', 'Outsider', 'Minion', 'Demon', 'Traveler'}
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -431,6 +427,8 @@ function start(clickedObject, playerColor)
 	Wait.time(function() bags.deal.shuffle() end, 0.5)
     if mode == 'CU' then
         import()
+        updateCustomDecalUI()
+        editCustomNotebookTab()
         Wait.time(function () Global.call('updateCustomBoardGuids') end, 3)
     end
 	self.destruct()
@@ -691,6 +689,8 @@ function import()
             table.insert(bags, v)
         elseif string.match(v.getName(), ': Demons') then
             table.insert(bags, v)
+        elseif string.match(v.getName(), ': Reminder Tokens') then
+            table.insert(bags, v)
         elseif string.match(v.getName(), ': Characters') then
             v.destruct()
         end
@@ -737,6 +737,50 @@ end
 
 function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+function updateCustomDecalUI()
+    local xml = UI.getXmlTable()
+    local entry
+    local sortedChars = {}
+
+    for k,v in pairs(TYPES) do
+        for k1,v1 in pairs(characters) do
+            if CHARACTERS[v1].Type == v then
+                table.insert(sortedChars, v1)
+            end
+        end
+    end
+
+    for k,v in pairs(xml) do
+        if v.attributes.id == 'placeDecalCU' then
+            v.children[2].children = {}
+            v.children[2].children[1] = {tag = 'Option', value = 'None', attributes = {selected = 'true'}, children = {}}
+            for k1,v1 in pairs(sortedChars) do
+                entry = {tag = 'Option', value = v1, attributes = {}, children = {}}
+                table.insert(v.children[2].children, entry)
+            end
+        end
+    end
+    UI.setXmlTable(xml)
+end
+
+function editCustomNotebookTab()
+    local tab = {index = 3, title = 'Custom Script Characters', color = 'Grey'}
+    local text = ''
+
+    for k,v in pairs(TYPES) do
+        text = text .. '[i]' .. v .. '[/i]\r\n'
+        for k1,v1 in pairs(characters) do
+            if CHARACTERS[v1].Type == v then
+                text = text .. '\r\n[b]' .. v1 .. '[/b] - ' .. CHARACTERS[v1].Description
+            end
+        end
+        text = text .. '\r\n\n\r\n'
+    end
+
+    tab.body = text
+    Notes.editNotebookTab(tab)
 end
 
 function setSaveName(obj, color, input, stillEditing, index)
@@ -966,14 +1010,14 @@ function refreshUI()
             self.createButton(buttonParam)
 
             buttonParam = {click_function = 'toggleLock' .. k, color = {0,0,0,1}, function_owner = self,
-                position = {7.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 500, height = 250, font_size = 150,}
+                position = {7.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 500, height = 250, font_size = 110,}
             if lock[selected[k]] == true then
-                buttonParam.label = 'Unlock'
-                buttonParam.font_color = {0.12,0.53,1}
+                buttonParam.label = 'Locked'
+                buttonParam.font_color = {1,0,0}
                 buttonParam.tooltip = 'Allow this character to be discarded from a random selection.'
             else
-                buttonParam.label = 'Lock'
-                buttonParam.font_color = {1,0,0}
+                buttonParam.label = 'Unlocked'
+                buttonParam.font_color = {0.12,0.53,1}
                 buttonParam.tooltip = 'Prevent this character from being discarded from a random selection.'
             end
 

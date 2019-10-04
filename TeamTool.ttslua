@@ -20,7 +20,7 @@ jokersDefault = false
 
 
 ------------------Functions
-function onLoad(save_state)
+function onLoad(saveString)
     jokersDefault = Global.getVar('jokersDefault')
     started = Global.getVar('started')
     local params

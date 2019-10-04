@@ -115,10 +115,9 @@ function displayChart()
         for j = 1, NUM_ROWS do
             params = {click_function = 'nullFunc', function_owner = self, label = ROW_COLORS[j]..DIST[i][j], color = {0,0,0,1},
                 position = {COL[i],0.2,ROW[j]}, width = 0, height = 0, font_size = 100}
-            if players[1] >= 5 and i == players[1] - 4 then
+            if (players[1] >= 5 and i == players[1] - 4) or i == 11 and players[1] >= 15 then
                 params.label = HIGHLIGHT_COLOR..DIST[i][j]
             end
-
             self.createButton(params)
         end
     end

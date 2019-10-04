@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.3'
+VERSION = '1.6.4'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -536,7 +536,7 @@ function onObjectDrop(color, obj)
 end
 
 function onObjectEnterScriptingZone(zone, object)
-    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= TABLE_GUID then
+    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= TABLE_GUID and object.getName() ~= 'Waitlist Tool' and object.getName() ~= 'BotC Bingo' then
         if not grimShow then
             Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
         end

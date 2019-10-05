@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.8.1'
+VERSION = '1.8.2'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -105,7 +105,7 @@ function import()
     local lunaticColor = false
     local tempDemonColor
     local demonName
-
+    local found = false
 
     for k,v in pairs(chars) do
         numChars = numChars + 1
@@ -121,7 +121,16 @@ function import()
         entry = {color = k, char = playerChar}
         table.insert(living, entry)
         if CHARACTERS[playerChar].Type == 'Minion' then
-            table.insert(minionColors, entry.color)
+            found = false
+            for k1,v1 in pairs(minionColors) do
+                if v1 == entry.color then
+                    found = true
+                    break
+                end
+            end
+            if not found then
+                table.insert(minionColors, entry.color)
+            end
         elseif CHARACTERS[playerChar].Type == 'Demon' then
             demonColor = entry.color
             demonName = entry.char
@@ -174,19 +183,23 @@ function setNightOrder(night)
         for k2,v2 in pairs(living) do
             if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' then
                 if CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and abilityUsed[v2.color] == false) then
-                    table.insert(order, v2)
                     if v2.char == 'Lunatic' and night == 'first' then
                         table.insert(order, 1, {char = 'Lunatic_InfoA', color = v2.color})
                         table.insert(order, 2, {char = 'Lunatic_InfoB', color = v2.color})
                         table.insert(order, 3, {char = 'Lunatic_InfoC', color = demonColor})
+                        table.insert(order, v2)
                     elseif v2.char == 'Lunatic' and night == 'other' then
+                        table.insert(order, v2)
                         table.insert(order, {char = 'Lunatic_InfoD', color = demonColor})
+                    elseif v2.char == 'Godfather' and night == 'first' then
+                        table.insert(order, {char = 'Godfather_Info', color = v2.color})
+                    else
+                        table.insert(order, v2)
                     end
                 end
             end
         end
     end
-
 
     table.insert(order, {char = 'Next_Night', color = 'White'})
     setMsg()
@@ -287,7 +300,23 @@ function remove(clickedObject, playerColor, i)
                         table.remove(order, i)
                     end
                 end
+            elseif entry.char == 'Godfather' then
+                for i = #order,1,-1 do
+                    if string.match(order[i].char, 'Godfather') then
+                        table.remove(order, i)
+                    end
+                end
             end
+        end
+    end
+    for k,v in pairs(minionColors) do
+        if v == entry.color then
+            table.remove(minionColors,k)
+            local minionStr = 'Minions:'
+            for i = 1, #minionColors do
+                minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
+            end
+            evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
         end
     end
     setMsg()
@@ -548,6 +577,7 @@ function addChar(clickedObject, playerColor)
     end
     local pos, colorIndex
     local orderPos, orderIndex
+    local found
 
     if #living == 0 then
         pos = 1
@@ -572,7 +602,16 @@ function addChar(clickedObject, playerColor)
         if CHARACTERS[charAdd].Type == 'Demon' then
             demonColor = colorAdd
         elseif CHARACTERS[charAdd].Type == 'Minion' then
-            table.insert(minionColors, colorAdd)
+            found = false
+            for k,v in pairs(minionColors) do
+                if v == colorAdd then
+                    found = true
+                    break
+                end
+            end
+            if not found then
+                table.insert(minionColors, colorAdd)
+            end
         end
         local minionStr = 'Minions:'
         for i = 1, #minionColors do
@@ -601,6 +640,8 @@ function addChar(clickedObject, playerColor)
             table.insert(order, 2, {char = 'Lunatic_InfoB', color = colorAdd})
             table.insert(order, 3, {char = 'Lunatic_InfoC', color = demonColor})
             setMsg()
+        elseif charAdd == 'Godfather' then
+            table.insert(order, 1, {char = 'Godfather_Info', color = colorAdd})
         end
     end
     setMsg()

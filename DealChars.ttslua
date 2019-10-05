@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.2'
+VERSION = '1.5.3'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 
 NIGHT_HELPER_GUID = 'bb89aa'
@@ -14,15 +14,11 @@ TABLE_SIZER_GUID = '00c013'
 
 
 ------------------Variables
-
+autoTint = true
 
 ------------------Functions
 function onLoad(save_state)
-    local data = {click_function = 'dealToPlayers', function_owner = self,
-    label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first character will go to White, then Brown, ... if those players are seated.)[-]\nMake sure to shuffle the bag if you want the characters to be dealt out randomly.',
-    position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5},
-    width = 2000, height = 1000, font_size = 800}
-    self.createButton(data)
+    refreshButtons()
 end
 
 function radius(rad, angle, height)
@@ -72,27 +68,29 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     for k,v in pairs(colors) do
-        if players[v] ~= nil or debug or #allPlayers == 1 then
+        if players[v] ~= nil or debug or #allPlayers == 1 and self.getQuantity() > 0 then
             params = {
                 callback_function =  function(obj) take_callback(obj, v) end,
                 position = posTable[v],
                 rotation = {0, 0, 0}
             }
             obj = self.takeObject(params)
-            char = obj.getName()
-            chars[v] = char
+            if obj then
+                char = obj.getName()
+                chars[v] = char
 
-            tokenBagTable = tokenBag.getObjects()
-            size = tokenBag.getQuantity()
-            for j = size,1,-1 do
-                if tokenBagTable[j].name == char then
-                    params = {index = j-1, position = posTable[v], rotation = {0, 0, 0}}
-                    params.position[2] = params.position[2] + 1
-                    tokenBag.takeObject(params)
+                tokenBagTable = tokenBag.getObjects()
+                size = tokenBag.getQuantity()
+                for j = size,1,-1 do
+                    if tokenBagTable[j].name == char then
+                        params = {index = j-1, position = posTable[v], rotation = {0, 0, 0}}
+                        params.position[2] = params.position[2] + 1
+                        tokenBag.takeObject(params)
+                    end
                 end
-            end
-            if not debug and #allPlayers ~= 1 then
-                players[v].print('Your character is ' .. char..'!')
+                if not debug and #allPlayers ~= 1 then
+                    players[v].print('Your character is ' .. char..'!')
+                end
             end
         end
     end
@@ -117,6 +115,32 @@ function dealToPlayers(clickedObject, playerColor)
 end
 
 function take_callback(object_spawned, color)
-    object_spawned.setColorTint(COLORS_RGB[color])
+    if autoTint then
+        object_spawned.setColorTint(COLORS_RGB[color])
+    end
     object_spawned.setLock(true)
+end
+
+function toggleTint()
+    autoTint = not autoTint
+    refreshButtons()
+end
+
+function refreshButtons()
+    self.clearButtons()
+
+    local params
+    params = {click_function = 'toggleTint', function_owner = self, position = {0, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400}
+    if autoTint then
+        params.label = 'Autotint\nON'
+        params.tooltip = 'Click to disable auto-tinting of the Character Tokens.'
+    else
+        params.label = 'Autotint\nOFF'
+        params.tooltip = 'Click to enable auto-tinting of the Character Tokens.'
+    end
+    self.createButton(params)
+
+    params = {click_function = 'dealToPlayers', function_owner = self, label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first character will go to White, then Brown, ... if those players are seated.)[-]\nMake sure to shuffle the bag if you want the characters to be dealt out randomly.',
+    position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 800}
+    self.createButton(params)
 end

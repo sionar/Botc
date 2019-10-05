@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.2.5'
+VERSION = '16.2.6'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -54,9 +54,6 @@ notes = ''
 history = '[FFFFFF]Vote History:[-]'
 currentNominator = ''
 currentNominated = ''
-numAlive = 0
-numPlayers = 0
-currAlive = 0
 currVotes = 0
 currPlayers = 0
 colors = {}
@@ -420,14 +417,16 @@ function getAliveTokens(color)
 end
 
 function handleLifeUI()
-    numAlive = 0
-    numPlayers = 0
+    local numAlive = 0
+    local numPlayers = 0
     local numberOfSkipped = 0 -- number of players not seated
     local numberOfVotes = 0
     local votesNeeded = 0
     local playerDist
     local allObjects = getAllObjects()
     local allPlayers = Player.getPlayers()
+    local numTrav = 0
+
 
     for i=1, 20 do
         if aliveTokens[COLORS_ALL[i]].object ~= 0 and players[COLORS_ALL[i]] ~= nil then
@@ -446,6 +445,9 @@ function handleLifeUI()
                 UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'alive'..i) -- counting skipped players to only make last images transparent
                 numAlive = numAlive +1
                 numberOfVotes = numberOfVotes + 1
+                if aliveTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
+                    numTrav = numTrav + 1
+                end
             end
         else
             if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
@@ -460,7 +462,7 @@ function handleLifeUI()
         for k,v in pairs(allObjects) do
             if v.getName() == 'Player Distribution Chart' then
                 v.call('updatePlayerDist', {num = numAlive})
-                v.call('updateAlive', {living = numAlive, withVotes = numberOfVotes, needed = votesNeeded})
+                v.call('updateAlive', {numP = numPlayers, living = numAlive, nonTrav = numAlive - numTrav, withVotes = numberOfVotes, needed = votesNeeded})
             end
         end
     end

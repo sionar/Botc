@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.1'
+VERSION = '1.1.0'
 DIST = {{5,3,0,1,1},{6,3,1,1,1},{7,5,0,1,1},{8,5,1,1,1},{9,5,2,1,1},{10,7,0,2,1},{11,7,1,2,1},{12,7,2,2,1},{13,9,0,3,1},{14,9,1,3,1},{15,9,2,3,1},{16,9,2,3,1},{17,9,2,3,1},{18,9,2,3,1},{19,9,2,3,1},{20,9,2,3,1}}
 ROW_SPACING = 0.4
 COL_SPACING = 0.4
@@ -20,8 +20,8 @@ ROW_COLORS = {'[FFFFFF]', '[1E87FF]', '[20B09A]', '[F3631C]', '[DA1917]'}
 HIGHLIGHT_COLOR = '[E6E42B]'
 COL_P = {-1.5, 0.8}
 PLAYER_LABELS = {'Players: ', 'Townsfolk: ', 'Outsiders: ', 'Minions: ', 'Demons: '}
-ALIVE_COLORS = {'[FFFFFF]', '[FFFFFF]', '[FFFFFF]'}
-ALIVE_LABELS = {'Living players: ', '[1E87FF]Players with votes: ', '[DA1917]Votes needed to kill: '}
+ALIVE_COLORS = {'[1E87FF]', '[30B22A]', '[E6E42B]', '[F3631C]', '[DA1917]'}
+ALIVE_LABELS = {'Total players: ', 'Living players: ', 'Living non-travelers: ', 'Players with votes: ', 'Votes to execute: '}
 ROW_P_START = -1
 ROW_P = {}
 
@@ -38,8 +38,9 @@ end
 
 ------------------Variables
 players = {0,0,0,0,0}
-alive = {0,0,0}
+alive = {0,0,0,0,0}
 showPlayers = true
+
 
 ------------------Functions
 function onLoad(saveString)
@@ -91,7 +92,7 @@ function updatePlayerDist(params)
 end
 
 function updateAlive(params)
-    alive = {params.living, params.withVotes, params.needed}
+    alive = {params.numP, params.living, params.nonTrav, params.withVotes, params.needed}
     if showPlayers then
         displayPlayers()
     else
@@ -139,7 +140,7 @@ function displayPlayers()
         self.createButton(params)
     end
 
-    for i = 1, 3 do
+    for i = 1, 5 do
         params = {click_function = 'nullFunc', function_owner = self, label = ALIVE_COLORS[i] .. ALIVE_LABELS[i] .. alive[i], color = {0,0,0,1},
             position = {COL_P[2],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 100}
         self.createButton(params)

@@ -7,7 +7,7 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.4.5'
 NAME = 'BotC Bingo'
-START_POS = {x = 100, y = 1.1, z = 0}
+START_POS = {-50,1.15,85}
 START_ROT = {0,180,0}
 X_POS = {}
 Z_POS = {}
@@ -50,7 +50,7 @@ BOOK =
     'Town dies to unclaimed Virgin',
     'Spy dies to Virgin',
     'Non-poisoned Empath finds two evils',
-    'Soldier gets targetted by demon',
+    'Soldier gets targeted by demon',
     'Ravenkeeper ability activates',
     'Imp wins after killing himself',
     'Mayor victory',
@@ -169,18 +169,9 @@ end
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
     if global_name == 'Blood on the Clocktower' then
-        if player_id == nil then
-            local tab = getAllObjects()
-            local foundTab = {}
-            for _, v in pairs(tab) do
-                if string.match(v.getName(), NAME) then
-                    table.insert(foundTab,1,v)
-                end
-            end
-            self.setPositionSmooth({START_POS['x'], START_POS['y'], START_POS['z'] + (#foundTab-1) * 30})
-            self.setRotationSmooth(START_ROT)
-            self.setLock(true)
-        end
+        self.setPositionSmooth(START_POS)
+        self.setRotationSmooth(START_ROT)
+        self.setLock(true)
     end
 end
 

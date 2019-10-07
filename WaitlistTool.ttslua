@@ -1,0 +1,835 @@
+--[[
+Waitlist Tool
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.2.5'
+START_POS = {50,1.15,85}
+COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
+ROW_S = -1
+ROW_W = 0.25
+BUTTON_SIZE = 400
+COLUMN = {-0.9, 0, 0.5, 0.7, 0.9, 1.1, 1.3}
+ROW = {ROW_S + 0 * ROW_W, ROW_S + 1 * ROW_W, ROW_S + 2 * ROW_W, ROW_S + 3 * ROW_W, ROW_S + 4 * ROW_W, ROW_S + 5 * ROW_W, ROW_S + 6 * ROW_W, ROW_S + 7 * ROW_W, ROW_S + 8 * ROW_W, ROW_S + 9 * ROW_W, ROW_S + 10 * ROW_W}
+LOGIN_MSG = '[000000]-------------------------\n[FFFFFF]Waitlist Commands:\n[FFD700]!j [000000]or [FFD700]!join [FFFFFF]-- Join the waitlist.\n[FFD700]!l [000000]or [FFD700]!leave [FFFFFF]-- Leave the waitlist.\n[FFD700]!s [DDA0DD]Color [000000]or [FFD700]!sit [DDA0DD]Color [FFFFFF]-- Sit down at a color.\n[FFD700]!n [000000]or [FFD700]!nudge [FFFFFF]-- Nudge the player at the top of the waitlist.\n[FFD700]!h [000000]or [FFD700]!help [FFFFFF]-- Brings up this text\n[000000]-------------------------'
+ADMIN_MSG = '[000000]-------------------------\n[FFFFFF]Admin Commands:\n[FFD700]!a [FF7F50]Player [000000]or [FFD700]!add [FF7F50]Player [FFFFFF]-- Add a player to the waitlist.\n[FFD700]!r [FF7F50]Player [000000]or [FFD700]!remove [FF7F50]Player [FFFFFF]-- Remove a player from the waitlist.\n[FFD700]!m [FF7F50]Player [DDA0DD]Color [000000]or [FFD700]!move [FF7F50]Player [DDA0DD]Color [FFFFFF]-- Move a player to a seat.\n[FFD700]!v [FF7F50]Player [000000]or [FFD700]!vip [FF7F50]Player [FFFFFF]-- Move a player to the top of the waitlist.\n[FFD700]!b [FF7F50]Player [000000]or [FFD700]!bump [FF7F50]Player [FFFFFF]-- Move a player to the bottom of the waitlist.\n[FFD700]!k [FF7F50]Player [000000]or [FFD700]!kick [FF7F50]Player [FFFFFF]-- Kick a player from the lobby.\n[FFD700]!c [000000]or [FFD700]!clear [FFFFFF]-- Clear the waitlist.\n[FFD700]!p [DDA0DD]Number [000000]or [FFD700]!players [DDA0DD]Number [FFFFFF]-- Set the max number of players that can sit down.\n[FFD700]!ams [DDA0DD]Message [FFFFFF]-- Set the announcement message that players see when they join the lobby.\n[FFD700]!amc [FFFFFF]-- Clear the announcement message.\n[000000]-------------------------'
+
+
+------------------Variables
+annouMsg = ''
+nudgeBlock = false
+maxPlayers = 10
+waitlist = {}
+seatedList = {}
+
+
+------------------Save Load
+function onLoad(saveString)
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        waitlist = save['w']
+        annouMsg = save['am']
+    end
+    moveBoard()
+    pruneWaitlist()
+    refreshButtons()
+    seatedList = getSeatedList()
+    Wait.time(TimerRefresh, 1, -1)
+    for k,v in pairs(Player.getPlayers()) do
+        v.print(LOGIN_MSG)
+        if v.admin then
+            v.print(ADMIN_MSG)
+        end
+    end
+    broadcastToAll(annouMsg, stringColorToRGB('Green'))
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function TimerRefresh()
+    for i=1, #waitlist do
+        local timeLabel = getWaitTime(i)
+        self.editButton({index=(i-1)*7 + 2, label = timeLabel})
+    end
+end
+
+function getWaitTime(entryNum)
+    local diff, minutes, seconds, label
+    diff = math.floor(os.time() - waitlist[entryNum].time)
+    minutes = math.floor((diff / 60))
+    seconds = string.format("%02d",diff % 60)
+    label = minutes .. ':' .. seconds
+    return label
+end
+
+function onSave()
+    local save = {}
+    save['w'] = waitlist
+    save['am'] = annouMsg
+    local saveString = JSON.encode(save)
+    return saveString
+end
+
+function moveBoard()
+    local global_name = Global.getVar('MOD_NAME')
+    print(global_name)
+    if global_name == 'Blood on the Clocktower' then
+        self.setPositionSmooth(START_POS)
+        self.setRotationSmooth({0,180,0})
+        self.setLock(true)
+    end
+end
+
+function pruneWaitlist()
+    for i = #waitlist,1,-1 do
+        if getPlayerBySteamID(waitlist[i].id) == nil then
+            table.remove(waitlist,i)
+        end
+    end
+end
+
+
+------------------Events
+function onChat(message, player)
+    local args = {} -- The arguments following a command
+    local command = nil -- The command. "move" etc
+    local result = false
+
+    for i in string.gmatch(message, "%S+") do
+        if command == nil then
+            command = string.lower(i)
+        else
+            args[#args + 1] = i
+        end
+    end
+
+    if command == '!j' or command == '!join' then
+        result = joinCom(player)
+    elseif command == '!l' or command == '!leave' then
+        result = leaveCom(player)
+    elseif command == '!s' or command == '!sit' then
+        result = sitCom(player, args[1])
+    elseif command == '!n' or command == '!nudge' then
+        result = nudgeCom(player)
+    elseif command == '!h' or command == '!help' then
+        player.broadcast(LOGIN_MSG)
+        if player.admin then
+            player.broadcast(ADMIN_MSG)
+        end
+        result = true
+    elseif command == '!a' or command == '!add' then
+        result = addCom(args[1], player)
+    elseif command == '!r' or command == '!remove' then
+        result = removeCom(args[1], player)
+    elseif command == '!m' or command == '!move' then
+        result = moveCom(args[1], args[2], player)
+    elseif command == '!b' or command == '!bump' then
+        result = bumpCom(args[1], player)
+    elseif command == '!v' or command == '!vip' then
+        result = vipCom(args[1], player)
+    elseif command == '!k' or command == '!kick' then
+        result = kickCom(args[1], player)
+    elseif command == '!c' or command == '!clear' then
+        result = clearCom(player)
+    elseif command == '!p' or command == '!players' then
+        result = playersCom(args[1], player)
+    elseif command == '!ams' then
+        result = amsCom(string.sub(message, 6), player)
+    elseif command == '!amc' then
+        result = amcCom(player)
+    end
+    if result then
+        return false
+    end
+end
+
+function onPlayerConnect(player)
+    for k,v in pairs(waitlist) do
+        if player.steam_id == v.id then
+            return
+        end
+    end
+    local entry = {id = player.steam_id, time = os.time()}
+    table.insert(waitlist, entry)
+    player.broadcast(LOGIN_MSG)
+    player.broadcast(annouMsg,stringColorToRGB('Green'))
+    refreshButtons()
+
+end
+
+function onPlayerDisconnect(player)
+    for k,v in pairs(waitlist) do
+        if player.steam_id == v.id then
+            table.remove(waitlist,k)
+            refreshButtons()
+            return
+        end
+    end
+end
+
+function onPlayerChangeColor(playerColor)
+    if playerColor ~= 'Grey' and playerColor ~= 'Black' then
+        for k,v in pairs(waitlist) do
+            if Player[playerColor].steam_id == v.id then
+                table.remove(waitlist,k)
+                refreshButtons()
+            end
+        end
+    else
+        local found
+        local tempList = getSeatedList()
+
+        for k1,v1 in pairs(seatedList) do
+            found = false
+            for k2,v2 in pairs(tempList) do
+                if v1 == v2 then
+                    found = true
+                end
+            end
+            if found == false then
+                if getPlayerBySteamID(v1) ~= nil then
+                    local entry = {id = v1, time = os.time()}
+                    table.insert(waitlist, entry)
+                    refreshButtons()
+                end
+            end
+        end
+    end
+    seatedList = getSeatedList()
+end
+
+
+------------------Click Functions
+function nullFunc()
+end
+
+function vip(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        local tempEntry = waitlist[index]
+        table.remove(waitlist,index)
+        table.insert(waitlist,1,tempEntry)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['vip' .. k] = function(obj, col)
+        vip(obj, col, k)
+    end
+end
+
+function up(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        if index == 1 then
+            return
+        else
+            local temp = waitlist[index-1]
+            waitlist[index-1] = waitlist[index]
+            waitlist[index] = temp
+        end
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['up' .. k] = function(obj, col)
+        up(obj, col, k)
+    end
+end
+
+function down(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        if index == #waitlist then
+            return
+        else
+            local temp = waitlist[index+1]
+            waitlist[index+1] = waitlist[index]
+            waitlist[index] = temp
+        end
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['down' .. k] = function(obj, col)
+        down(obj, col, k)
+    end
+end
+
+function bump(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        local tempEntry = waitlist[index]
+        table.remove(waitlist,index)
+        table.insert(waitlist,tempEntry)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['bump' .. k] = function(obj, col)
+        bump(obj, col, k)
+    end
+end
+
+function remove(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        table.remove(waitlist,index)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['remove' .. k] = function(obj, col)
+        remove(obj, col, k)
+    end
+end
+
+function move(clickedButton,playerColor,index)
+    if Player[playerColor].admin then
+        local player = getPlayerBySteamID(waitlist[index].id)
+        local seat = findSeat()
+        if seat == nil then
+            broadcastToColor("ERROR: No available seats.", playerColor, {1,0,0})
+            return
+        end
+        if player == nil then
+            broadcastToColor("ERROR: Player not found.", playerColor, {1,0,0})
+        else
+            player.changeColor(seat)
+        end
+        table.remove(waitlist,index)
+        refreshButtons()
+    end
+end
+for k = 1,10 do
+    _G['move' .. k] = function(obj, col)
+        move(obj, col, k)
+    end
+end
+
+
+------------------Chat Command Functions
+function joinCom(player)
+    local i
+    local spectators = Player.getSpectators()
+    if Player['Black'].seated then
+        table.insert(spectators,Player['Black'])
+    end
+    for k,v in pairs(spectators) do
+        if v.steam_id == player.steam_id then
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    player.broadcast('You are already on the waitlist.',stringColorToRGB('Red'))
+                    return true
+                end
+            end
+            local entry = {id = player.steam_id, time = os.time()}
+            table.insert(waitlist, entry)
+            refreshButtons()
+            player.broadcast('You have been added to the waitlist.',stringColorToRGB('Green'))
+            return true
+        end
+    end
+    player.broadcast('Only spectators can interact with the waitlist.',stringColorToRGB('Red'))
+    return true
+end
+
+
+function leaveCom(player)
+    local i
+    local spectators = Player.getSpectators()
+    if Player['Black'].seated then
+        table.insert(spectators,Player['Black'])
+    end
+
+    for k,v in pairs(spectators) do
+        if v.steam_id == player.steam_id then
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    table.remove(waitlist,i)
+                    refreshButtons()
+                    player.broadcast('You have been removed on the waitlist.',stringColorToRGB('Green'))
+                    return true
+                end
+            end
+            player.broadcast('You are not on the waitlist.',stringColorToRGB('Red'))
+            return true
+        end
+    end
+    player.broadcast('Only spectators can interact with the waitlist.',stringColorToRGB('Red'))
+    return true
+end
+
+function sitCom(player, seatColor)
+    local openSeat, seat
+    local colorsFound = 0
+    if player.color ~= 'Grey' and player.color ~= 'Black' then
+        player.broadcast('Only spectators can interact with the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+    if waitlist[1] == nil then
+        player.broadcast('You must join the waitlist in order to sit down.',stringColorToRGB('Red'))
+        return true
+    end
+    if waitlist[1].id == player.steam_id then
+        if seatColor ~= nil then
+            for k,v in pairs(COLOR_TABLE) do
+                if string.match(string.lower(v), string.lower(seatColor)) then
+                    colorsFound = colorsFound + 1
+                    seat = v
+                end
+            end
+            if colorsFound == 0 then
+                player.broadcast('Invalid seat color.',stringColorToRGB('Red'))
+                return true
+            elseif colorsFound > 1 then
+                player.broadcast('Too many colors found. Try narrowing your search.',stringColorToRGB('Red'))
+                return true
+            end
+            if not Player[seat].seated then
+                if findSeat() ~= nil then   --Check to see if the number of players is over capacity
+                    openSeat = seat
+                end
+            else
+                openSeat = findSeat()
+            end
+        else
+            openSeat = findSeat()
+        end
+
+        if openSeat == nil then
+            player.broadcast('There are no open seats.',stringColorToRGB('Red'))
+            return true
+        else
+            local target = getPlayerBySteamID(player.steam_id)
+            target.changeColor(openSeat)
+            table.remove(waitlist,1)
+            refreshButtons()
+            player.broadcast('You are no longer on the waitlist.',stringColorToRGB('Green'))
+            return true
+        end
+    else
+        for i = 1,#waitlist do
+            if waitlist[i].id == player.steam_id then
+                player.broadcast('You are not at the top of the waitlist.',stringColorToRGB('Red'))
+                return true
+            end
+        end
+        player.broadcast('You are not on the waitlist. Type !j to join.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function getSeatedList()
+    local tab = {}
+    for k,v in pairs(COLOR_TABLE) do
+        if Player[v].seated then
+            table.insert(tab,Player[v].steam_id)
+        end
+    end
+    return tab
+end
+
+function findSeat()
+    local numPlayers = #Player.getPlayers() - #Player.getSpectators()
+    if Player['Black'].seated then
+        numPlayers = numPlayers - 1
+    end
+
+    if numPlayers >= maxPlayers then
+        return nil
+    end
+    for k,v in pairs(COLOR_TABLE) do
+        if Player[v].seated == false then
+            return v
+        end
+    end
+    return nil
+end
+
+function nudgeCom(player)
+    local spectators = Player.getSpectators()
+    if Player['Black'].seated then
+        table.insert(spectators,Player['Black'])
+    end
+    for k,v in pairs(spectators) do
+        if v.steam_id == player.steam_id then
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    if findSeat() == nil then
+                        player.broadcast('Nudge failed. No available seats.',stringColorToRGB('Red'))
+                        return true
+                    end
+                    if #waitlist < 2 then
+                        player.broadcast('Nudge failed. Not enough players in the waitlist.',stringColorToRGB('Red'))
+                        return true
+                    end
+                    if not nudgeBlock then
+                        nudgeBlock = true
+                        Wait.time(function()
+                            nudge({waitlist[1].id})
+                        end, 60)
+                        local nudgedPlayer = getPlayerBySteamID(waitlist[1].id)
+                        nudgedPlayer.broadcast('You have been nudged! Join a seat in sixty seconds or lose your spot in the waitlist.', stringColorToRGB('Red'))
+                        player.broadcast('You have nudged the player at the top of the waitlist. They have sixty seconds to sit down or lose their spot.',stringColorToRGB('Blue'))
+                        return true
+                    else
+                        player.broadcast('The player at the top of the waitlist has already been nudged.',stringColorToRGB('Red'))
+                        return true
+                    end
+                end
+            end
+            player.broadcast('You can only nudge a player if you are on the waitlist.',stringColorToRGB('Red'))
+            return true
+        end
+    end
+    player.broadcast('Only spectators can interact with the waitlist.',stringColorToRGB('Red'))
+    return true
+end
+
+function nudge(params)
+    nudgeBlock = false
+    if params[1] == waitlist[1].id then
+        local nudgedPlayer = getPlayerBySteamID(waitlist[1].id)
+        local temp = waitlist[1]
+        table.remove(waitlist,1)
+        table.insert(waitlist,temp)
+        nudgedPlayer.broadcast('You have been moved to the bottom of the waitlist.',stringColorToRGB('Red'))
+    end
+    refreshButtons()
+end
+
+function addCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name to add to the waitlist.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', {1,0,0})
+            return true
+        else
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    player.broadcast(player.steam_name .. ' is already on the waitlist.',stringColorToRGB('Red'))
+                    return true
+                end
+            end
+            local entry = {id = player.steam_id, time = os.time()}
+            table.insert(waitlist, entry)
+            refreshButtons()
+            player.broadcast(player.steam_name .. ' has been added to the waitlist.',stringColorToRGB('Green'))
+            return true
+        end
+    else
+        player.broadcast('Only promoted players can add players to the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function removeCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name to remove from the waitlist.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', stringColorToRGB('Red'))
+            return true
+        else
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    table.remove(waitlist, i)
+                    refreshButtons()
+                    user.broadcast(player.steam_name .. ' has been removed from the waitlist.', stringColorToRGB('Green'))
+                    return true
+                end
+            end
+            user.broadcast(player.steam_name .. ' is not on the waitlist.', stringColorToRGB('Red'))
+            return true
+        end
+    else
+        user.broadcast('Only promoted players can remove players from the waitlist.', stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function moveCom(player_name, seatColor, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a player name.', stringColorToRGB('Red'))
+            return true
+        end
+        local seat
+        local allColors = self.getTable('COLOR_TABLE')
+        table.insert(allColors,'Grey')
+        table.insert(allColors,'Black')
+        local colorsFound = 0
+        local player = getPlayerByName(player_name,'a')
+        if player == nil then
+            user.broadcast('Player not found', stringColorToRGB('Red'))
+            return true
+        elseif seatColor == nil then
+            user.broadcast('Please specify a seat.', stringColorToRGB('Red'))
+            return true
+        end
+        for k,v in pairs(allColors) do
+            if string.match(string.lower(v), string.lower(seatColor)) then
+                colorsFound = colorsFound + 1
+                seat = v
+            end
+        end
+        if colorsFound == 0 then
+            player.broadcast('Invalid seat color.',stringColorToRGB('Red'))
+            return true
+        elseif colorsFound > 1 then
+            player.broadcast('Too many colors found. Try narrowing your search.',stringColorToRGB('Red'))
+            return true
+        end
+        if seat == 'Grey' then
+            player.changeColor(seat)
+            player.broadcast(player.steam_name .. ' has moved to ' .. seat,stringColorToRGB('Green'))
+            return true
+        end
+        if Player[seat].seated == false then
+            player.changeColor(seat)
+            player.broadcast(player.steam_name .. ' has moved to ' .. seat,stringColorToRGB('Green'))
+            return true
+        else
+            player.broadcast('The seat is currently taken.',stringColorToRGB('Red'))
+            return true
+        end
+    else
+        user.broadcast('Only promoted players can move players.', stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function bumpCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', {1,0,0})
+            return true
+        else
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    local tempEntry = waitlist[i]
+                    table.remove(waitlist,i)
+                    table.insert(waitlist,tempEntry)
+                    user.broadcast(player.steam_name .. ' has been bumped to the bottom of the waitlist.',stringColorToRGB('Green'))
+                    refreshButtons()
+                    return true
+                end
+            end
+            user.broadcast(player.steam_name .. ' is not on the waitlist.',stringColorToRGB('Red'))
+            return true
+        end
+    else
+        user.broadcast('Only promoted players can bump players on the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function vipCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', {1,0,0})
+            return true
+        else
+            for i = 1,#waitlist do
+                if waitlist[i].id == player.steam_id then
+                    local tempEntry = waitlist[i]
+                    table.remove(waitlist,i)
+                    table.insert(waitlist,1,tempEntry)
+                    user.broadcast(player.steam_name .. ' has been moved to the top of the waitlist.',stringColorToRGB('Green'))
+                    refreshButtons()
+                    return true
+                end
+            end
+            user.broadcast(player.steam_name .. ' is not on the waitlist.',stringColorToRGB('Red'))
+            return true
+        end
+    else
+        user.broadcast('Only promoted players can bump players on the waitlist.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function kickCom(player_name, user)
+    if user.admin then
+        if player_name == nil then
+            user.broadcast('Please enter a name.', stringColorToRGB('Red'))
+            return true
+        end
+        local player = getPlayerByName(player_name,'s')
+        if player == nil then
+            user.broadcast('Player not found', {1,0,0})
+            return true
+        end
+        player.kick()
+        user.broadcast(player.steam_name .. ' has been kicked.',stringColorToRGB('Green'))
+        return true
+    else
+        user.broadcast('Only promoted players can kick players.',stringColorToRGB('Red'))
+        return true
+    end
+end
+
+
+function clearCom(user)
+    if user.admin then
+        waitlist = {}
+        refreshButtons()
+        user.broadcast('Waitlist cleared.', stringColorToRGB('Green'))
+        return true
+    else
+        user.broadcast('Only promoted players can clear the waitlist.', stringColorToRGB('Gred'))
+        return true
+    end
+end
+
+function amsCom(message, user)
+    if user.admin then
+        if message == nil then
+            user.broadcast('Please enter a message.', stringColorToRGB('Red'))
+            return true
+        end
+        annouMsg = message
+        broadcastToAll(annouMsg, stringColorToRGB('Green'))
+        user.broadcast('Announcement message set.', stringColorToRGB('Green'))
+        return true
+    else
+        user.broadcast('Only promoted players can set the announcement message.', stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function amcCom(user)
+    if user.admin then
+        annouMsg = ''
+        user.broadcast('Announcement message cleared.', stringColorToRGB('Green'))
+        return true
+    else
+        user.broadcast('Only promoted players can clear the announcement message.', stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function playersCom(num, user)
+    if user.admin then
+        if num == nil then
+            num = 10
+        end
+        maxPlayers = tonumber(num)
+        user.broadcast('The maximum number of seated players has been set to ' .. num .. '.', stringColorToRGB('Green'))
+        return true
+    else
+        user.broadcast('Only promoted players can change the number of seated players.', stringColorToRGB('Red'))
+        return true
+    end
+end
+
+function getPlayerByName(playerName, mode)
+    local players
+    if mode == 's' then
+        players = Player.getSpectators()
+        if Player['Black'].seated then
+            table.insert(players,Player['Black'])
+        end
+    elseif mode == 'a' then
+        players = Player.getPlayers()
+    end
+
+    local playersFound = 0
+    local player = nil
+    if playerName == '' then
+        return nil
+    end
+
+    for k,v in pairs(players) do
+        if string.match(string.lower(v.steam_name), string.lower(playerName)) then
+            playersFound = playersFound + 1
+            player = v
+        end
+    end
+
+    if(playersFound == 1) then
+        return player
+    end
+    return nil
+end
+
+function getPlayerBySteamID(playerID)
+	local players = Player.getSpectators()
+    if Player['Black'].seated then
+        table.insert(players,Player['Black'])
+    end
+	local player = nil
+
+	for k,v in pairs(players) do
+		if v.steam_id == playerID then
+			player = v
+		end
+	end
+
+	return player
+end
+
+
+------------------User Interface
+function refreshButtons()
+    self.clearButtons()
+    local timeLabel
+
+    local buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Waitlist', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
+        position = {0,0.2,-1.3}, width = 0, height = 0, font_size = 400, scale = {0.25,0.25,0.25}}
+    self.createButton(buttonParam)
+
+    for i = 1,#waitlist do
+        local buttonParam = {click_function = 'move'..i, function_owner = self, label = getPlayerBySteamID(waitlist[i].id).steam_name, color = {0,0,0,1}, font_color = stringColorToRGB('White'),
+            position = {COLUMN[1],0.2,ROW[i]}, width = 2800, height = BUTTON_SIZE, font_size = 320, tooltip = 'Seat player', scale = {0.25,0.25,0.25}}
+            if string.len(buttonParam.label) > 15 then
+               buttonParam.font_size = 40
+            end
+        self.createButton(buttonParam)
+
+        timeLabel = getWaitTime(i)
+        local buttonParam = {click_function = 'nullFunc', function_owner = self, label = timeLabel, color = {0,0,0,1}, font_color = stringColorToRGB('Grey'),
+            position = {COLUMN[2],0.2,ROW[i]}, width = 0, height = 0, font_size = 320, scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'vip'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Blue'),
+            position = {COLUMN[3],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move to the top of the Waitlist', scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'up'..i, function_owner = self, label = '⇧', color = {0,0,0,1}, font_color = stringColorToRGB('Green'),
+            position = {COLUMN[4],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move up the Waitlist', scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+        local buttonParam = {click_function = 'down'..i, function_owner = self, label = '⇩', color = {0,0,0,1}, font_color = stringColorToRGB('Yellow'),
+            position = {COLUMN[5],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move down the Waitlist', scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'bump'..i, function_owner = self, label = '⇪', color = {0,0,0,1}, font_color = stringColorToRGB('Orange'),
+            position = {COLUMN[6],0.2,ROW[i]-0.02}, rotation = {0, 180, 0}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 400, tooltip = 'Move to the bottom of the Waitlist', scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+
+        local buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'),
+            position = {COLUMN[7],0.2,ROW[i]}, width = BUTTON_SIZE, height = BUTTON_SIZE, font_size = 320, tooltip = 'Remove from the Waitlist', scale = {0.25,0.25,0.25}}
+        self.createButton(buttonParam)
+    end
+end
+
+function printTable()
+    for k,v in pairs(tab) do
+        print('key = ' .. k .. ' , value = ' .. v)
+    end
+
+end

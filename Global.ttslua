@@ -7,8 +7,8 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.2.8'
-DEBUG = false
+VERSION = '16.2.10'
+DEBUG = true
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
@@ -97,6 +97,7 @@ uiMsg = ''
 colorTable = false
 
 customSet = false
+imageLoaded = false
 customList = {}
 customBoardGuids = {}
 
@@ -113,6 +114,7 @@ function onLoad(saveString)
         playersExIds = save['p']
         avatarGuids = save['a']
         customSet = save['c']
+        imageLoaded = save['i']
         customList = save['cl']
         customBoardGuids = save['cb']
         tableSize = save['t']
@@ -209,6 +211,7 @@ function onSave()
     save['p'] = playersExIds
     save['a'] = avatarGuids
     save['c'] = customSet
+    save['i'] = imageLoaded
     save['cl'] = customList
     save['cb'] = customBoardGuids
     save['t'] = tableSize
@@ -540,7 +543,7 @@ function resizeTable()
                 obj.interactable = true
             end
 
-            if customSet then
+            if customSet and not imageLoaded then
                 obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
                 if not obj then
                     obj = getObjectFromGUID(customBoardGuids['White']).clone()
@@ -620,7 +623,7 @@ function resizeTable()
             obj.interactable = false
         end
 
-        if customSet then
+        if customSet and not imageLoaded then
             obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
             if obj then
                 obj.destruct()
@@ -684,7 +687,9 @@ function resizeTable()
         obj.call('updateSettings')
     end
     showExtensionUI()
-    Wait.time(updateCustomBoardGuids, 1)
+    if not imageLoaded then
+        Wait.time(updateCustomBoardGuids, 1)
+    end
 end
 
 function createSnapPoints()

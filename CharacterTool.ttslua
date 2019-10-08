@@ -1,11 +1,11 @@
 --[[
-Game Setup
+Character Tool
 Made by Sionar
 --]]
 
 
 ------------------Constants
-VERSION = '1.2.0'
+VERSION = '1.4.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -16,6 +16,8 @@ CLONE = {
     Table = {pos = {0, 1.2, 34}, rot = {0,180,0}, scale = {1,1,1}},
 }
 DEAL_BAG_GUID = '43ecc9'
+CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a', Black = '49ac3a'}
+DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/788618109330652086/74F8479C94ACCB7BE48E332C889806427F4DDBBB/'
 
 
 ------------------Variables
@@ -28,9 +30,15 @@ unused = {}
 selected = {}
 lock = {}
 found = {}
-saveLists = {Save1 = {}, Save2 = {}, Save3 = {}, Save4 = {}}
-saveNames = {'Save 1', 'Save 2', 'Save 3', 'Save 4'}
+saveFile = {
+    {name = 'Save1', charList = {}, imageUrl = ''},
+    {name = 'Save2', charList = {}, imageUrl = ''},
+    {name = 'Save3', charList = {}, imageUrl = ''},
+    {name = 'Save4', charList = {}, imageUrl = ''},
+}
 batchList = {}
+imageLoaded = false
+customImageUrl = ''
 
 
 ------------------Functions
@@ -38,8 +46,7 @@ function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
         characters = save['c']
-        saveLists = save['sl']
-        saveNames = save['sn']
+        saveFile = save['s']
     end
     local customSet = Global.getVar('customSet')
     if customSet then
@@ -55,8 +62,7 @@ end
 function onSave()
     local save = {}
     save['c'] = characters
-    save['sl'] = saveLists
-    save['sn'] = saveNames
+    save['s'] = saveFile
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -425,7 +431,10 @@ function start(clickedObject, playerColor)
         import()
         updateCustomDecalUI()
         editCustomNotebookTab()
-        Wait.time(function () Global.call('updateCustomBoardGuids') end, 3)
+        if not imageLoaded then
+            createClones()
+            Wait.time(function () Global.call('updateCustomBoardGuids') end, 3)
+        end
     end
 	self.destruct()
 end
@@ -665,13 +674,9 @@ function import()
     local allObjects = getAllObjects()
     local objTable, numObjects
     local bags = {}
-    local takeObj, obj
+    local takeObj
     local found = false
     local name, idx
-    local dealColors
-    local colors = Global.getTable('colors')
-    local angle = Global.getTable('angle')
-    local clone = {}
 
     Global.setVar('customSet', true)
     Global.setTable('customList', characters)
@@ -688,7 +693,9 @@ function import()
         elseif string.match(v.getName(), ': Reminder Tokens') then
             table.insert(bags, v)
         elseif string.match(v.getName(), ': Characters') then
-            v.destruct()
+            if not imageLoaded then
+                v.destruct()
+            end
         end
     end
 
@@ -711,6 +718,13 @@ function import()
             end
         end
     end
+end
+
+function createClones()
+    local colors = Global.getTable('colors')
+    local angle = Global.getTable('angle')
+    local clone = {}
+    local obj
 
     for k,v in pairs(colors) do
         clone[v] = self.clone()
@@ -781,21 +795,36 @@ end
 
 function setSaveName(obj, color, input, stillEditing, index)
     if not stillEditing then
-        saveNames[index] = input
+        saveFile[index].name = input
         saveLoadMenu()
         return 1
     end
 end
 
 function save(clickedObject, playerColor, index)
-    saveLists['Save'..index] = characters
+    saveFile[index].charList = characters
+    if imageLoaded then
+        saveFile[index].imageUrl = customImageUrl
+    else
+        saveFile[index].imageUrl = ''
+    end
+
     Player[playerColor].print('Current character list saved to slot ' .. index .. '.')
     saveLoadMenu()
 end
 
 function load(clickedObject, playerColor, index)
-    characters = saveLists['Save'..index]
-    Player[playerColor].print('Character list ' .. saveNames[index] .. ' loaded.')
+    characters = saveFile[index].charList
+    if saveFile[index].imageUrl == '' then
+        imageLoaded = false
+        customImageUrl = DEFAULT_CUSTOM_IMAGE_URL
+    else
+        imageLoaded = true
+        customImageUrl = saveFile[index].imageUrl
+    end
+    loadImage()
+
+    Player[playerColor].print('Character list ' .. saveFile[index].name .. ' loaded.')
     unused = {}
     selected = {}
     for k,v in pairs(characters) do
@@ -827,51 +856,51 @@ function saveLoadMenu()
     self.createButton(buttonParam)
 
     inputParam = {input_function = 'setSaveName1', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,BUTTON_Y,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[1], alignment = 3, validation = 1, tab = 2}
+        position = {-3.2,BUTTON_Y,-4.2}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[1].name, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName2', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,BUTTON_Y,-4}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[2], alignment = 3, validation = 1, tab = 2}
+        position = {3.2,BUTTON_Y,-4.2}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[2].name, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName3', color = stringColorToRGB('Green'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,BUTTON_Y,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[3], alignment = 3, validation = 1, tab = 2}
+        position = {-3.2,BUTTON_Y,0.6}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[3].name, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'setSaveName4', color = stringColorToRGB('Orange'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,BUTTON_Y,0.8}, rotation = {0,0,0}, width = 2400, height = 350, font_size = 300, value = saveNames[4], alignment = 3, validation = 1, tab = 2}
+        position = {3.2,BUTTON_Y,0.6}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[4].name, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'save1', label = "Save", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 1'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save2', label = "Save", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 2'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save3', label = "Save", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 3'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'save4', label = "Save", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 4'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load1', label = "Load", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 1'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load2', label = "Load", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 2'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load3', label = "Load", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {-2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 3'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'load4', label = "Load", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320}
+        position = {4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 4'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'refreshUI', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
@@ -899,6 +928,87 @@ function startMenu()
     buttonParam = {click_function = 'modeCU', label = 'Custom Game', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
         position = {0,BUTTON_Y,5}, rotation = {0,0,0}, width = 4500, height = 1200, font_size = 500, tooltip = 'Start a Custom game.'}
     self.createButton(buttonParam)
+end
+
+function loadImageMenu()
+    self.clearButtons()
+    self.clearInputs()
+    self.createInput({
+        input_function = 'updateImageUrl',
+        function_owner = self,
+        label = 'Type in a url for the image of your custom script. PDF files are not accepted.',
+        width = 5000,
+        height = 800,
+        font_size = 200,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        alignment = 3,
+    })
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Load Custom Script Image',
+        position = {0,BUTTON_Y,-7.5},
+        width = 0,
+        height = 0,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
+    self.createButton({
+        click_function = 'loadImage',
+        function_owner = self,
+        label = 'Load\nImage',
+        position = {-3,BUTTON_Y,7.5},
+        width = 1600,
+        height = 800,
+        font_size = 300,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+
+    self.createButton({
+        click_function = 'refreshUI',
+        function_owner = self,
+        label = 'Cancel',
+        position = {3,BUTTON_Y,7.5},
+        width = 1600,
+        height = 800,
+        font_size = 300,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+end
+
+function updateImageUrl(obj, color, input, stillEditing)
+    if not stillEditing then
+        customImageUrl = input
+    end
+end
+
+function loadImage(clickedObject,playerColor)
+    local obj, params
+    if customImageUrl == '' then
+        Player[playerColor].print('Error: No URL found.', {1,0,0})
+        return
+    end
+
+    params = {image = customImageUrl, thickness = 0.2, merge_distance = 25, stackable = false}
+    for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.setCustomObject(params)
+            obj.reload()
+        end
+    end
+    if customImageUrl == DEFAULT_CUSTOM_IMAGE_URL then
+        imageLoaded = false
+    else
+        imageLoaded = true
+    end
+    Global.setVar('imageLoaded', imageLoaded)
+    refreshUI()
 end
 
 function refreshUI()
@@ -947,8 +1057,12 @@ function refreshUI()
                 position = {-7.4,BUTTON_Y,3.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Import a bunch of characters at once.'}
             self.createButton(buttonParam)
 
-            buttonParam = {click_function = 'saveLoadMenu', label = 'Load/Save Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,4.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Load or save your custom character list.'}
+            buttonParam = {click_function = 'loadImageMenu', label = 'Load Image', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,4.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Load an image from a url for your custom script.'}
+            self.createButton(buttonParam)
+
+            buttonParam = {click_function = 'saveLoadMenu', label = 'Save/Load Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,5.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Save or load your custom character list.'}
             self.createButton(buttonParam)
 
             buttonParam = {input_function = 'charInput', position = {-3, BUTTON_Y, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}

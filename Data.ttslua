@@ -177,7 +177,7 @@ CHARACTERS =
     Artist = {Type = 'Townsfolk', Ability = true, Prompt = '', Description = 'Once per game, during the day, privately ask the Storyteller any yes/no question.'},
     Juggler = {Type = 'Townsfolk', Ability = true, Prompt = 'You learn that P1 of your guesses were correct.', Description = 'On your 1st day, publicly guess up to 5 player\'s characters. That night, you learn how many you got correct.'},
     Sage = {Type = 'Townsfolk', Ability = false, Prompt = 'You died tonight. The demon is either P1 or P2.', Description = 'If the Demon kills you, you learn that it is 1 of 2 players.'},
-    Mutant = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'If you are mad about being the Mutant, you are executed.'},
+    Mutant = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'If you are "mad" about being an Outsider, you might be executed.'},
     Sweetheart = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'If you die, 1 player is drunk from now on.'},
     Barber = {Type = 'Outsider', Ability = false, Prompt = 'Choose two players to swap characters. You may also choose not to swap anyone.', Description = 'If you die, tonight the Demon may choose 2 players to swap characters.'},
     Klutz = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'When you learn that you died, publicly choose 1 alive good player: if they are evil, your team loses.'},
@@ -205,9 +205,6 @@ CHARACTERS =
     Harlot = {Type = 'Traveler', Ability = false, Prompt = 'Choose a living player.', Description = 'Each night*, choose a living player: if they agree, you learn their character, but you both might die tonight.'},
     Barista = {Type = 'Traveler', Ability = false, Prompt = '', Description = 'Each night, until dusk, 1) a player becomes sober, healthy & gets true info, or 2) their ability works twice. They learn which.'},
     Deviant = {Type = 'Traveler', Ability = false, Prompt = '', Description = 'If you were funny today, you can not be exiled.'},
-
-
-
 }
 
 DECAL_URLS =
@@ -262,7 +259,7 @@ DECAL_URLS =
     Minstrel = 'http://cloud-3.steamusercontent.com/ugc/787490852822035557/4153523AF41DC670AFAAA6834CF349F2F5951CA5/',
     Monk = 'http://cloud-3.steamusercontent.com/ugc/793119007245734711/F1B0854704E52B47A9C52FB13CE980A71034D3E2/',
     Moonchild = 'http://cloud-3.steamusercontent.com/ugc/797621337737710322/3566F04C4BE13021DA555158C50B3A50A53AB7CF/',
-    Mutant = 'http://cloud-3.steamusercontent.com/ugc/913575713674462231/C6C77F55A8AC8ED88F3D568CABE41EF60A4598ED/',
+    Mutant = 'http://cloud-3.steamusercontent.com/ugc/788618505779204765/1D4335A891FA9B608D1C7DC063995EFF8215BBC2/',
     No_Dashii = 'http://cloud-3.steamusercontent.com/ugc/793119007246023822/65D6998B625FAE58B3FD702B0AFDB715760E9003/',
     Oracle = 'http://cloud-3.steamusercontent.com/ugc/793119007245988609/5B7220D9C7F4035ED72E75C2C012C2C52A81B855/',
     Pacifist = 'http://cloud-3.steamusercontent.com/ugc/913575713674427088/4E771C0919CFAA3FD2DE27E47D14A0D4D0F56795/',

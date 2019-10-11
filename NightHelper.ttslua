@@ -181,7 +181,7 @@ function setNightOrder(night)
     end
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do
-            if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' then
+            if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' and v2.char ~= 'Cartographer' then
                 if CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and abilityUsed[v2.color] == false) then
                     if v2.char == 'Lunatic' and night == 'first' then
                         table.insert(order, 1, {char = 'Lunatic_InfoA', color = v2.color})
@@ -265,7 +265,7 @@ end
 function remove(clickedObject, playerColor, i)
     local entry = living[i]
     table.remove(living, i)
-    if entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' then
+    if entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' or entry.char == 'Cartographer' then
         if orderRef ~= nil then
             orderIndex = getKey(orderRef, entry.char)
             if orderIndex == nil then
@@ -281,7 +281,7 @@ function remove(clickedObject, playerColor, i)
             if orderPos == nil then
                 orderPos = #order + 1
             end
-            if entry.char == 'Barber' then
+            if entry.char == 'Barber' or entry.char == 'Cartographer' then
                 entry.color = demonColor
             end
             table.insert(order, orderPos, {color = entry.color, char = entry.char})

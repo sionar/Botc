@@ -777,7 +777,7 @@ end
 
 function editCustomNotebookTab()
     local tab = {index = 3, title = 'Custom Script Characters', color = 'Grey'}
-    local text = ''
+    local text = 'Disclaimer: The custom made characters are made by fans of the game. They are not endorsed by The Pandemonium Institute.\r\n\r\n'
 
     for k,v in pairs(TYPES) do
         text = text .. '[i]' .. v .. '[/i]\r\n'

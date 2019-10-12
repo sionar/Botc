@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.0'
+VERSION = '1.4.1'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -535,7 +535,20 @@ function addChar()
         table.insert(unused, v)
     end
     lock = {}
+    sortChars()
     refreshUI()
+end
+
+function sortChars()
+    local newCharList = {}
+    for k,v in pairs(TYPES) do
+        for k1,v1 in pairs(characters) do
+            if CHARACTERS[v1].Type == v then
+                table.insert(newCharList, v1)
+            end
+        end
+    end
+    characters = newCharList
 end
 
 function clear()
@@ -655,6 +668,7 @@ function batchImport()
         table.insert(unused, v)
     end
     lock = {}
+    sortChars()
     refreshUI()
 end
 
@@ -783,7 +797,7 @@ function editCustomNotebookTab()
         text = text .. '[i]' .. v .. '[/i]\r\n'
         for k1,v1 in pairs(characters) do
             if CHARACTERS[v1].Type == v then
-                text = text .. '\r\n[b]' .. v1 .. '[/b] - ' .. CHARACTERS[v1].Description
+                text = text .. '\r\n[b]' .. string.gsub(v1,'_',' ') .. '[/b] - ' .. CHARACTERS[v1].Description
             end
         end
         text = text .. '\r\n\n\r\n'
@@ -824,7 +838,7 @@ function load(clickedObject, playerColor, index)
     end
     loadImage()
 
-    Player[playerColor].print('Character list ' .. saveFile[index].name .. ' loaded.')
+    Player[playerColor].print('Character list [1E87FF]' .. saveFile[index].name .. ' [-]loaded.')
     unused = {}
     selected = {}
     for k,v in pairs(characters) do

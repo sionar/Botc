@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.1'
+VERSION = '1.4.2'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -38,6 +38,7 @@ saveFile = {
 }
 batchList = {}
 imageLoaded = false
+imageValid = false
 customImageUrl = ''
 
 
@@ -1002,27 +1003,42 @@ function updateImageUrl(obj, color, input, stillEditing)
 end
 
 function loadImage(clickedObject,playerColor)
-    local obj, params
     if customImageUrl == '' then
         Player[playerColor].print('Error: No URL found.', {1,0,0})
         return
     end
-
-    params = {image = customImageUrl, thickness = 0.2, merge_distance = 25, stackable = false}
-    for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.setCustomObject(params)
-            obj.reload()
-        end
-    end
-    if customImageUrl == DEFAULT_CUSTOM_IMAGE_URL then
-        imageLoaded = false
-    else
-        imageLoaded = true
-    end
-    Global.setVar('imageLoaded', imageLoaded)
+    imageValid = false
+    WebRequest.get(customImageUrl, webReqCB)
     refreshUI()
+end
+
+function webReqCB(req)
+    local params, obj
+
+    if req.is_done and not req.is_error then
+        local response = req.text
+        local format = string.sub(response,1,12)
+        if string.match(format, 'PNG') or string.match(format, 'JFIF') then
+            params = {image = customImageUrl, thickness = 0.2, merge_distance = 25, stackable = false}
+            for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
+                obj = getObjectFromGUID(v)
+                if obj then
+                    obj.setCustomObject(params)
+                    obj.reload()
+                end
+            end
+            if customImageUrl == DEFAULT_CUSTOM_IMAGE_URL then
+                imageLoaded = false
+            else
+                imageLoaded = true
+            end
+            Global.setVar('imageLoaded', imageLoaded)
+        else
+            Player['Black'].print('Error: Invalid URL. Make sure the image type is jpg or png.', {1,0,0})
+        end
+    else
+        Player['Black'].print('Error: Invalid URL. Make sure the image type is jpg or png.', {1,0,0})
+    end
 end
 
 function refreshUI()

@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.4'
+VERSION = '1.6.5'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -528,10 +528,12 @@ end
 
 function onObjectDrop(color, obj)
     local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if inZone(obj, scriptingZone) and not grimShow then
-        obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
-    else
-        Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
+    if scriptingZone then
+        if inZone(obj, scriptingZone) and not grimShow then
+            obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+        else
+            Wait.time(function() obj.setInvisibleTo({}) end, 0.2)
+        end
     end
 end
 
@@ -557,12 +559,16 @@ function showGrimoire()
     grimShow = true
     for k,v in pairs(BLACK_ZONES) do
         zoneObj = getObjectFromGUID(v.guid)
-        zoneObj.setScale({0,0,0})
+        if zoneObj then
+            zoneObj.setScale({0,0,0})
+        end
     end
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    objs = scriptZone.getObjects()
-    for k,v in pairs(objs) do
-        v.setInvisibleTo({})
+    if scriptZone then
+        objs = scriptZone.getObjects()
+        for k,v in pairs(objs) do
+            v.setInvisibleTo({})
+        end
     end
     self.editButton({
         index          = 5,
@@ -576,13 +582,17 @@ function hideGrimoire()
     grimShow = false
     for k,v in pairs(BLACK_ZONES) do
         zoneObj = getObjectFromGUID(v.guid)
-        zoneObj.setScale(v.scale)
+        if zoneObj then
+            zoneObj.setScale(v.scale)
+        end
     end
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    objs = scriptZone.getObjects()
-    for k,v in pairs(objs) do
-        if v.getGUID() ~= TABLE_GUID then
-            v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+    if scriptZone then
+        objs = scriptZone.getObjects()
+        for k,v in pairs(objs) do
+            if v.getGUID() ~= TABLE_GUID then
+                v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+            end
         end
     end
     self.editButton({

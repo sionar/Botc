@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.2'
+VERSION = '1.5.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -30,12 +30,11 @@ unused = {}
 selected = {}
 lock = {}
 found = {}
-saveFile = {
-    {name = 'Save1', charList = {}, imageUrl = ''},
-    {name = 'Save2', charList = {}, imageUrl = ''},
-    {name = 'Save3', charList = {}, imageUrl = ''},
-    {name = 'Save4', charList = {}, imageUrl = ''},
-}
+saveFile = {}
+for i = 1,10 do
+    saveFile[i] = {name = 'Save' .. i, charList = {}, imageUrl = ''}
+end
+
 batchList = {}
 imageLoaded = false
 imageValid = false
@@ -849,7 +848,7 @@ function load(clickedObject, playerColor, index)
     refreshUI()
 end
 
-for k = 1,4 do
+for k = 1,10 do
     _G['setSaveName' .. k] = function(obj, col, input, editing)
         setSaveName(obj, col, input, editing, k)
     end
@@ -865,61 +864,28 @@ function saveLoadMenu()
     self.clearButtons()
     self.clearInputs()
     local buttonParam, inputParam
+    local z_offset = 1.5
+    local colors = {'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Brown', 'Black'}
 
-    buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Lists", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,BUTTON_Y,-6}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
+    buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Scripts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
     self.createButton(buttonParam)
 
-    inputParam = {input_function = 'setSaveName1', color = stringColorToRGB('Red'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,BUTTON_Y,-4.2}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[1].name, alignment = 3, validation = 1, tab = 2}
-    self.createInput(inputParam)
+    for i = 1, 10 do
+        inputParam = {input_function = 'setSaveName' .. i, color = stringColorToRGB(colors[i]), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {-2.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 5000, height = 450, font_size = 320, value = saveFile[i].name, alignment = 3, validation = 1, tab = 2}
+        self.createInput(inputParam)
 
-    inputParam = {input_function = 'setSaveName2', color = stringColorToRGB('Blue'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,BUTTON_Y,-4.2}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[2].name, alignment = 3, validation = 1, tab = 2}
-    self.createInput(inputParam)
+        buttonParam = {click_function = 'save' .. i, label = "Save", color = stringColorToRGB(colors[i]), font_color = stringColorToRGB('White'), function_owner = self,
+            position = {4.2,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Save custom script to slot ' .. i}
+        self.createButton(buttonParam)
 
-    inputParam = {input_function = 'setSaveName3', color = stringColorToRGB('Green'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-3.2,BUTTON_Y,0.6}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[3].name, alignment = 3, validation = 1, tab = 2}
-    self.createInput(inputParam)
+        buttonParam = {click_function = 'load' .. i, label = "Load", color = stringColorToRGB(colors[i]), font_color = stringColorToRGB('White'), function_owner = self,
+            position = {6.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Load custom script from slot ' .. i}
+        self.createButton(buttonParam)
+    end
 
-    inputParam = {input_function = 'setSaveName4', color = stringColorToRGB('Orange'), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {3.2,BUTTON_Y,0.6}, rotation = {0,0,0}, width = 2400, height = 700, font_size = 200, value = saveFile[4].name, alignment = 3, validation = 1, tab = 2}
-    self.createInput(inputParam)
-
-    buttonParam = {click_function = 'save1', label = "Save", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 1'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'save2', label = "Save", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 2'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'save3', label = "Save", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 3'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'save4', label = "Save", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Save custom script to slot 4'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'load1', label = "Load", color = stringColorToRGB('Red'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 1'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'load2', label = "Load", color = stringColorToRGB('Blue'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,BUTTON_Y,-2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 2'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'load3', label = "Load", color = stringColorToRGB('Green'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {-2,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 3'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'load4', label = "Load", color = stringColorToRGB('Orange'), font_color = stringColorToRGB('White'), function_owner = self,
-        position = {4.4,BUTTON_Y,2.4}, rotation = {0,0,0}, width = 1000, height = 600, font_size = 320, tooltip = 'Load custom script from slot 4'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'refreshUI', label = "Cancel", color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self,
-        position = {0,BUTTON_Y,5.6}, rotation = {0,0,0}, width = 2000, height = 600, font_size = 320}
+    buttonParam = {click_function = 'refreshUI', function_owner = self, label = 'Cancel', position = {0,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
     self.createButton(buttonParam)
 end
 
@@ -1018,7 +984,7 @@ function webReqCB(req)
     if req.is_done and not req.is_error then
         local response = req.text
         local format = string.sub(response,1,12)
-        if string.match(format, 'PNG') or string.match(format, 'JFIF') then
+        if string.match(format, 'PNG') or string.match(format, 'JFIF') or string.match(format, 'Exif') then
             params = {image = customImageUrl, thickness = 0.2, merge_distance = 25, stackable = false}
             for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
                 obj = getObjectFromGUID(v)

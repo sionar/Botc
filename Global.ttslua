@@ -607,9 +607,8 @@ function resizeTable()
                 obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
-
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
-            if not obj then
+            if not obj and not started then
                 obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
             if obj then
@@ -618,7 +617,6 @@ function resizeTable()
                 obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.16))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
-
             if i <= 10 then
                 Player[COLORS_ALL[i]].setHandTransform({position = radius(82,angle[COLORS_ALL[i]], 1), rotation = {0, angle[COLORS_ALL[i]] + 180, 0}, scale = {14,5,6.5}})
             end

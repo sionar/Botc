@@ -119,6 +119,8 @@ CHARACTERS =
 {
     Good = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = ''},
     Evil = {Type = 'Demon', Ability = false, Prompt = '', Description = ''},
+    has = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = ''},
+    has_not = {Type = 'Demon', Ability = false, Prompt = '', Description = ''},
     Demon_Info = {Type = 'Demon', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
     Washerwoman = {Type = 'Townsfolk', Ability = false, Prompt = 'There is a P1 between P2 and P3.', Description = 'You start knowing that 1 of 2 players is a particular Townsfolk.'},
     Librarian = {Type = 'Townsfolk', Ability = false, Prompt = 'There is a P1 between P2 and P3.', Description = 'You start knowing that 1 of 2 players is a particular Outsider. (Or that zero are in play)'},

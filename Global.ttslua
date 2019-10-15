@@ -7,10 +7,10 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.3.5'
+VERSION = '16.4.0'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
-HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -29,6 +29,7 @@ BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
 SCRIPTING_ZONE_GUID = 'a17a77'
+STORAGE_BAG_GUID = 'af22f9'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
@@ -299,7 +300,7 @@ function refreshObjects()
         end
     end
 
-    Wait.time(lockObjects, 5)
+    Wait.time(lockObjects, 2)
 end
 
 function lockObjects()
@@ -319,12 +320,23 @@ function lockObjects()
         end
     end
 
-    if not started then
-        for k,v in pairs(ALIVE_TOKEN_GUIDS) do
-            obj = getObjectFromGUID(v)
-            if obj then
+    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            if not started then
                 obj.interactable = false
+                obj.setLock(true)
+            else
+                obj.interactable = true
+                obj.setLock(false)
             end
+        end
+    end
+
+    for k,v in pairs(VOTE_PANEL_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
         end
     end
 end
@@ -393,6 +405,12 @@ end
 
 function getAliveTokens(color)
     local base = getObjectFromGUID(ALIVE_BASE_GUIDS[color])
+    if base == nil then
+        aliveTokens[color].vote = 0
+        aliveTokens[color].object = 0
+        return
+    end
+
     local pos = base.getPosition()
     local aliveTokenFound = false
     local voteTokenFound = false
@@ -495,6 +513,7 @@ function resizeTable()
     local charSheetGuids
     local angleFirst, angleInc
     local zoneSize
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 
     if mode == 'TB' then
         charSheetGuids = CHAR_SHEET_GUIDS_TB
@@ -529,7 +548,12 @@ function resizeTable()
     for i = 1, 20 do
     	if i <= tableSize then
             obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
+            if not obj then
+                obj = storageBag.takeObject({guid = ZONE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+            end
+
             if obj then
+                obj.setLock(true)
                 obj.setScale({zoneSize,10,13})
                 obj.setPositionSmooth(radius(71.5,angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
@@ -537,6 +561,7 @@ function resizeTable()
 
             obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
             if obj then
+                obj.setLock(true)
                 obj.setScale({1.64,1,1.64})
                 obj.setPositionSmooth(radius(72.5,angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
@@ -553,27 +578,42 @@ function resizeTable()
             end
 
             obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
+            if not obj then
+                obj = storageBag.takeObject({guid = VOTE_PANEL_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+            end
             if obj then
-                obj.setScale({1.5,0.34,1.5})
+                obj.setLock(true)
+                obj.interactable = false
                 obj.setPositionSmooth(radius(61, angle[COLORS_ALL[i]], 0.8))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
 
             obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
+            if not obj then
+                obj = storageBag.takeObject({guid = VOTEHAND_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+            end
             if obj then
+                obj.setLock(true)
                 obj.setPositionSmooth(radius(75, angle[COLORS_ALL[i]], -5))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
 
             obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
+            if not obj then
+                obj = storageBag.takeObject({guid = ALIVE_BASE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+            end
             if obj then
-                obj.setScale({2.24,1,2.24})
+                obj.setLock(true)
                 obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
 
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
+            if not obj then
+                obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+            end
             if obj then
+                obj.setLock(true)
                 obj.setScale({1.82,1,1.82})
                 obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.16))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
@@ -591,6 +631,9 @@ function resizeTable()
                 end
 
                 obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
+                if not obj then
+                    obj = storageBag.takeObject({guid = AVATAR_LIGHT_GUIDS[COLORS_ALL[i]]})
+                end
                 if obj then
                     obj.setPositionSmooth(radius(81, angle[COLORS_ALL[i]], 6))
                 end
@@ -612,15 +655,13 @@ function resizeTable()
     for i = tableSize+1, 20 do
         obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
         if obj then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-0.1,0})
+            storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
         if obj then
             obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-0.1,0})
-            obj.interactable = false
+            obj.setPositionSmooth({0,-1,0})
         end
 
         if customSet and not imageLoaded then
@@ -632,27 +673,22 @@ function resizeTable()
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
         if obj then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-0.1,0})
+            storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
         if obj then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-0.1,0})
+            storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
         if obj then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-0.1,0})
+            storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
         if obj then
-            obj.setLock(true)
-            obj.setPositionSmooth({0,-0.1,0})
-            obj.setScale({0.01,0.01,0.01})
+            storageBag.putObject(obj)
         end
 
         if i <= 10 then
@@ -674,7 +710,7 @@ function resizeTable()
 
             obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then
-                obj.setPositionSmooth({0,-0.1,0})
+                storageBag.putObject(obj)
             end
         end
     end
@@ -690,6 +726,7 @@ function resizeTable()
     if not imageLoaded then
         Wait.time(updateCustomBoardGuids, 1)
     end
+    Wait.time(lockObjects, 2)
 end
 
 function createSnapPoints()
@@ -1635,7 +1672,9 @@ function hideVoteButtons()
     local votePanel
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         votePanel = getObjectFromGUID(v)
-        votePanel.clearButtons()
+        if votePanel then
+            votePanel.clearButtons()
+        end
     end
     for k,v in pairs(COLORS_ALL) do
         voteButtonsOn[v] = false

@@ -472,7 +472,7 @@ function p1Input(obj, color, input, stillEditing)
             end
         end
         for k,v in pairs(CHARACTERS) do
-            if string.match(string.lower(k), string.lower(input)) then
+            if string.match(string.lower(k), string.lower(string.gsub(input,' ', '_'))) then
                 if v.Type == 'Townsfolk' then
                     textColor = COLORS_BBC['Blue']
                 elseif v.Type == 'Outsider' then

@@ -1,0 +1,179 @@
+--[[
+Character Tool
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.2'
+START_POS = {21,1.2,106}
+TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
+ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
+STORAGE_BAG_GUID = 'af22f9'
+TABLE_SIZER_GUID = '00c013'
+
+------------------Variables
+nameList = {}
+colors = {}
+angles = {}
+numPlayers = 0
+tableSize = 5
+
+
+------------------Functions()
+function onLoad()
+    moveBoard()
+    refreshUI()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function moveBoard()
+    local modName = Global.getVar('MOD_NAME')
+    if modName == 'Blood on the Clocktower' then
+        self.setPositionSmooth(START_POS)
+        self.setLock(true)
+    end
+end
+
+function updateList(obj, color, input, stillEditing)
+    if not stillEditing then
+        nameList = {}
+        local entry
+        for s in input:gmatch("[^\r\n]+") do
+            entry = s
+            table.insert(nameList, entry)
+        end
+    end
+end
+
+function start(clickedObject, playerColor)
+    local obj
+    local numPlayers, rad, radGrim
+    local posTable, posTableGrim
+    local started = Global.getVar('started')
+
+    if #nameList < 5 then
+        Player[playerColor].print('Error: Not enough names in the list.', {1,0,0})
+        return
+    end
+
+    Global.setVar('storytellerMode', true)
+    tableSize = #nameList
+    obj = getObjectFromGUID(TABLE_SIZER_GUID)
+    obj.setVar('tableSize', tableSize)
+    obj.call('refreshUI')
+    obj.call('callResize')
+
+    storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    numPlayers = #nameList
+    rad = numPlayers * 0.6 + 6
+    radGrim = numPlayers * 0.4 + 6
+
+    colors = {}
+    angles = {}
+    posTable = {}
+    posTableGrim = {}
+
+    for i = 1, numPlayers do
+        table.insert(colors, COLORS_ALL[i])
+        angles[COLORS_ALL[i]] = 0 + 180/numPlayers + (i-1)*360/numPlayers
+    end
+
+    for k,v in pairs(colors) do
+        posTable[v] = radius(rad, angles[v], 1.5)
+        posTable[v][3] = posTable[v][3] - 3
+        posTableGrim[v] = radius(radGrim, angles[v], 1.5)
+        posTableGrim[v][3] = posTableGrim[v][3] + 80
+    end
+
+    deleteOldText()
+    for i = 1, numPlayers do
+        obj = spawnObject({type = '3DText', position = posTable[colors[i]], rotation = {90,180,0}})
+        obj.setValue(nameList[i])
+
+        if started then
+            obj = spawnObject({type = '3DText', position = posTableGrim[colors[i]], rotation = {90,180,0}})
+            obj.setValue(nameList[i])
+        end
+    end
+
+end
+
+function generateGrimNames()
+    local numPlayers = #nameList
+    local posTableGrim = {}
+    local radGrim = numPlayers * 0.4 + 6
+
+    for k,v in pairs(colors) do
+        posTableGrim[v] = radius(radGrim, angles[v], 1.5)
+        posTableGrim[v][3] = posTableGrim[v][3] + 80
+    end
+
+    for i = 1, numPlayers do
+        obj = spawnObject({type = '3DText', position = posTableGrim[colors[i]], rotation = {90,180,0}})
+        obj.setValue(nameList[i])
+    end
+end
+
+function deleteOldText()
+    local allObjs = getAllObjects()
+    for k,v in pairs(allObjs) do
+        if v.tag == '3D Text' and not inTable(v.getGUID(), TEXT_GUIDS) then
+            v.destruct()
+        end
+    end
+end
+
+function inTable(input, table)
+    for k,v in pairs(table) do
+        if input == v then
+            return true
+        end
+    end
+    return false
+end
+
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+function refreshUI()
+    self.clearButtons()
+    self.clearInputs()
+    self.createInput({
+        input_function = 'updateList',
+        function_owner = self,
+        label = 'Generate a Town Square for storytelling.\nEnter the name of each player, one name per line.',
+        width = 4000,
+        height = 6000,
+        font_size = 250,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        alignment = 3,
+    })
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Town Square Generator',
+        position = {0,0.2,-7.5},
+        width = 0,
+        height = 0,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
+    self.createButton({
+        click_function = 'start',
+        function_owner = self,
+        label = 'Start',
+        position = {0,0.2,7.5},
+        width = 1300,
+        height = 500,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+end

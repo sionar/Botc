@@ -5,12 +5,13 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.3'
+VERSION = '1.5.4'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-
 NIGHT_HELPER_GUID = 'bb89aa'
 CHAR_SETUP_GUID = 'd2ab87'
 TABLE_SIZER_GUID = '00c013'
+TOWN_SQUARE_GUID = '0c242c'
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 
 
 ------------------Variables
@@ -36,6 +37,7 @@ function dealToPlayers(clickedObject, playerColor)
     local players = Global.call('updatePlayers')
     local allPlayers = Player.getPlayers()
     local numPlayers = Global.call('getNumPlayers')
+    local storytellerMode = Global.getVar('storytellerMode')
     local params, obj, char
     local chars = {}
     local allObjs = getAllObjects()
@@ -43,6 +45,13 @@ function dealToPlayers(clickedObject, playerColor)
     local posTable = {}
     local size, takeIndex
     local rad = tableSize * 0.4 + 6
+
+    if storytellerMode then
+        angle = {}
+        for i = 1, tableSize do
+            angle[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
+        end
+    end
 
     for k,v in pairs(colors) do
         posTable[v] = radius(rad, angle[v], 1.0)
@@ -100,6 +109,13 @@ function dealToPlayers(clickedObject, playerColor)
     Global.call('unlockAliveTokens')
     Global.call('checkSeatedPlayers')
     Global.setVar('started', true)
+
+    local townSquareGen = getObjectFromGUID(TOWN_SQUARE_GUID)
+    if storytellerMode then
+        if townSquareGen then
+            townSquareGen.call('generateGrimNames')
+        end
+    end
 
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     if nightHelper then

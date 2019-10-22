@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 START_POS = {21,1.2,106}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -57,6 +57,9 @@ function start(clickedObject, playerColor)
     if #nameList < 5 then
         Player[playerColor].print('Error: Not enough names in the list.', {1,0,0})
         return
+    elseif #nameList > 20 then
+        Player[playerColor].print('Error: Too many names in the list.', {1,0,0})
+        return
     end
 
     Global.setVar('storytellerMode', true)
@@ -85,7 +88,7 @@ function start(clickedObject, playerColor)
         posTable[v] = radius(rad, angles[v], 1.5)
         posTable[v][3] = posTable[v][3] - 3
         posTableGrim[v] = radius(radGrim, angles[v], 1.5)
-        posTableGrim[v][3] = posTableGrim[v][3] + 80
+        posTableGrim[v][3] = posTableGrim[v][3] + 83
     end
 
     deleteOldText()
@@ -108,7 +111,7 @@ function generateGrimNames()
 
     for k,v in pairs(colors) do
         posTableGrim[v] = radius(radGrim, angles[v], 1.5)
-        posTableGrim[v][3] = posTableGrim[v][3] + 80
+        posTableGrim[v][3] = posTableGrim[v][3] + 80.5
     end
 
     for i = 1, numPlayers do

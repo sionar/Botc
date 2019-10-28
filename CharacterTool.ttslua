@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.2'
+VERSION = '1.6.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -1007,6 +1007,26 @@ function webReqCB(req)
     end
 end
 
+function importLists(clickedObject, playerColor)
+    local allObjs = getAllObjects()
+    local otherBoard = nil
+
+
+    for k,v in pairs(allObjs) do
+        if v.getName() == 'Character Tool' and v.getGUID() ~= self.getGUID() then
+            otherBoard = v
+        end
+    end
+
+    if not otherBoard then
+        Player[playerColor].print('Error: Other Character Tool not found.', {1,0,0})
+        return
+    end
+
+    saveFile = otherBoard.getTable('saveFile')
+    Player[playerColor].print('The custom scripts from the other board have been migrated successfully.')
+end
+
 function refreshUI()
     local buttonParam
     local z
@@ -1059,6 +1079,10 @@ function refreshUI()
 
             buttonParam = {click_function = 'saveLoadMenu', label = 'Save/Load Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
                 position = {-7.4,BUTTON_Y,5.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Save or load your custom character list.'}
+            self.createButton(buttonParam)
+
+            buttonParam = {click_function = 'importLists', label = 'Import Lists\nFrom Other Board', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+                position = {-7.4,BUTTON_Y,6.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 150, tooltip = 'Import your custom scripts from another Character Tool.'}
             self.createButton(buttonParam)
 
             buttonParam = {input_function = 'charInput', position = {-3, BUTTON_Y, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}

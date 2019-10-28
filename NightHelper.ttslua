@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.8.5'
+VERSION = '2.0.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -17,7 +17,7 @@ FONT_SIZE = 225
 FONT_SIZE_LABEL = 360
 BUTTON_SIZE = 270
 BUTTON_Y = 0.1
-COLUMN = {-3.6, -1.35, -0.45, 3.6, 6.3}
+COLUMN = {-6, -4, -3.35, -2.70, -2.05, -1.5, 3.6, 6.3}
 ROW = {}
 for i = 1,40 do
     ROW[i] = ROW_S + i * ROW_W
@@ -32,7 +32,7 @@ ADD_BUT_X = -1.9
 INPUTS_X = {-6.6, -3.45, 0.3, 3.6, 6.9}
 INPUTS_LAB_Z = 5.775
 INPUT_BUT_Z = 6.45
-BOTTOM_BUT_X = {-4.05, -1.35, 1.35, 4.05}
+BOTTOM_BUT_X = {-5, -2.5, 0, 2.5, 5}
 BOTTOM_BUT_Z = 7.75
 
 CLOCK_CONTROLS_GUID = '184d11'
@@ -46,10 +46,7 @@ minionColors = {}
 demonColor = nil
 lastBlind = ''
 blindAuto = true
-abilityUsed = {}
-for k,v in pairs(COLORS) do
-    abilityUsed[v] = false
-end
+checkPrompts = true
 message = ''
 charAdd = ''
 colorAdd = ''
@@ -69,8 +66,8 @@ function onLoad(saveString)
         orderRef = save['r']
         demonColor = save['d']
         lastBlind = save['lb']
+        checkPrompts = save['c']
         blindAuto = save['b']
-        abilityUsed = save['a']
         dayNum = save['day']
     end
     refreshUI()
@@ -84,8 +81,8 @@ function onSave()
     save['r'] = orderRef
     save['d'] = demonColor
     save['lb'] = lastBlind
+    save['c'] = checkPrompts
     save['b'] = blindAuto
-    save['a'] = abilityUsed
     save['day'] = dayNum
     local saveString = JSON.encode(save)
     return saveString
@@ -120,7 +117,7 @@ function import()
     minionColors = {}
     for k,v in pairs(chars) do
         playerChar = string.gsub(v, ' ', '_')
-        entry = {color = k, char = playerChar}
+        entry = {color = k, char = playerChar, used = false, alive = true, sober = true, sane = true}
         table.insert(living, entry)
         if CHARACTERS[playerChar].Type == 'Minion' then
             found = false
@@ -184,7 +181,7 @@ function setNightOrder(night)
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do
             if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' and v2.char ~= 'Cartographer' then
-                if CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and abilityUsed[v2.color] == false) then
+                if v2.alive and (CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and v2.used == false)) then
                     if v2.char == 'Lunatic' and night == 'first' then
                         table.insert(order, 1, {char = 'Lunatic_InfoA', color = v2.color})
                         table.insert(order, 2, {char = 'Lunatic_InfoB', color = v2.color})
@@ -209,6 +206,12 @@ function setNightOrder(night)
                     end
                 end
             end
+        end
+    end
+
+    for k,v in pairs(living) do
+        if not v.sane then
+            table.insert(order, {char = 'Madness', color = v.color})
         end
     end
 
@@ -269,8 +272,8 @@ end
 function used(clickedObject, playerColor, i)
     local entry = living[i]
     local char = string.gsub(living[i].char, ' ', '_')
-    abilityUsed[living[i].color] = not abilityUsed[living[i].color]
-    if CHARACTERS[char].Ability == true and abilityUsed[living[i].color] == true then
+    living[i].used = not living[i].used
+    if CHARACTERS[char].Ability == true and living[i].used == true then
         for k,v in pairs(order) do
             if living[i].char == v.char then
                 table.remove(order, k)
@@ -280,16 +283,17 @@ function used(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,40 do
+for k = 1,30 do
     _G['used' .. k] = function(obj, col)
         used(obj, col, k)
     end
 end
 
-function remove(clickedObject, playerColor, i)
+function alive(clickedObject, playerColor, i)
     local entry = living[i]
-    table.remove(living, i)
-    if entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' or entry.char == 'Cartographer' then
+    living[i].alive = not living[i].alive
+
+    if not living[i].alive and (entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' or entry.char == 'Cartographer') then
         if orderRef ~= nil then
             orderIndex = getKey(orderRef, entry.char)
             if orderIndex == nil then
@@ -333,6 +337,66 @@ function remove(clickedObject, playerColor, i)
             end
         end
     end
+
+    setMsg()
+end
+
+for k = 1,30 do
+    _G['alive' .. k] = function(obj, col)
+        alive(obj, col, k)
+    end
+end
+
+function sober(clickedObject, playerColor, i)
+    living[i].sober = not living[i].sober
+    setMsg()
+end
+
+for k = 1,30 do
+    _G['sober' .. k] = function(obj, col)
+        sober(obj, col, k)
+    end
+end
+
+function sane(clickedObject, playerColor, i)
+    local entry = living[i]
+    local char = string.gsub(living[i].char, ' ', '_')
+    local found = false
+
+    living[i].sane = not living[i].sane
+
+    if living[i].sane then
+        for k,v in pairs(order) do
+            if v.char == 'Madness' and v.color == entry.color then
+                table.remove(order,k)
+            end
+        end
+    else
+        for k,v in pairs(order) do
+            if v.char == 'Madness' and v.color == entry.color then
+                found = true
+                break
+            end
+        end
+        if not found then
+            table.insert(order, {char = 'Madness', color = entry.color})
+            sortOrder()
+        end
+    end
+    setMsg()
+end
+
+for k = 1,30 do
+    _G['sane' .. k] = function(obj, col)
+        sane(obj, col, k)
+    end
+end
+
+
+function remove(clickedObject, playerColor, i)
+    local entry = living[i]
+    table.remove(living, i)
+
     for k,v in pairs(minionColors) do
         if v == entry.color then
             table.remove(minionColors,k)
@@ -346,7 +410,7 @@ function remove(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,40 do
+for k = 1,30 do
     _G['remove' .. k] = function(obj, col)
         remove(obj, col, k)
     end
@@ -391,6 +455,13 @@ function send(clickedObject, playerColor)
         Global.setVar('history', history)
         return
     else
+        if checkPrompts then
+            if string.match(sendMsg, 'P1') or string.match(sendMsg, 'P2') or string.match(sendMsg, 'P3') then
+                Player[playerColor].print('Error: Fill in the prompts before sending the message.', {1,0,0})
+                setMsg()
+                return
+            end
+        end
         sendColor = order[1].color
         msg = COLORS_BBC[sendColor] .. '<' .. sendColor .. '>[-] [000000]' .. steam_name .. ':[-] ' .. sendMsg
         if players[sendColor] ~= nil then
@@ -423,7 +494,7 @@ function skip(clickedObject, playerColor, i)
     setMsg()
 end
 
-for k = 1,40 do
+for k = 1,30 do
     _G['skip' .. k] = function(obj, col)
         skip(obj, col, k)
     end
@@ -622,7 +693,7 @@ function addChar(clickedObject, playerColor)
             pos = #living + 1
         end
     end
-    table.insert(living, pos, {color = colorAdd, char = charAdd})
+    table.insert(living, pos, {color = colorAdd, char = charAdd, used = false, alive = true, sober = true, sane = true})
     if charAdd == 'Ravenkeeper' or charAdd == 'Sage' or charAdd == 'Barber' then
         refreshUI()
         return
@@ -674,6 +745,16 @@ function addChar(clickedObject, playerColor)
         end
     end
     setMsg()
+end
+
+function toggleCheck(clickedObject, playerColor)
+    checkPrompts = not checkPrompts
+    refreshUI()
+    if checkPrompts then
+        broadcastToColor('Prompt checking enabled.', playerColor, {1,1,1})
+    else
+        broadcastToColor('Prompt checking disabled.', playerColor, {1,1,1})
+    end
 end
 
 function toggleBlind(clickedObject, playerColor)
@@ -741,9 +822,6 @@ function swapColors(params)
         table.insert(living, index, {color = color1, char = chars[color1]})
     end
 
-    tempUsed = abilityUsed[color1]
-    abilityUsed[color1] = abilityUsed[color2]
-    abilityUsed[color2] = tempUsed
     setNightOrder('other')
 end
 
@@ -778,12 +856,12 @@ function refreshUI()
     local inputParam = {}
     local char
 
-    buttonParam = {click_function = 'nullFunc', label = 'Living Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COLUMN[1],BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
+    buttonParam = {click_function = 'nullFunc', label = 'Characters', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-4.5,BUTTON_Y,LIVING_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'nullFunc', label = 'Night Order', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COLUMN[4],BUTTON_Y,NIGHT_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
+        position = {4.5,BUTTON_Y,NIGHT_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
     self.createButton(buttonParam)
 
     for i = 1, #living do
@@ -792,43 +870,81 @@ function refreshUI()
 
         char = string.gsub(living[i].char, ' ', '_')
         if CHARACTERS[char].Ability == true then
-            buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 600, height = 200, font_size = 120, tooltip = 'Remove from list'}
-            if abilityUsed[living[i].color] == false then
+            buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 3200, height = 2300, font_size = 1200, scale = {0.1,0.1,0.1}}
+            if living[i].used == false then
                 buttonParam.label = 'Has\nAbility'
                 buttonParam.font_color = stringColorToRGB('Blue')
+                buttonParam.tooltip = 'Player has one time ability'
             else
                 buttonParam.label = 'No\nAbility'
                 buttonParam.font_color = stringColorToRGB('Red')
+                buttonParam.tooltip = 'Player used their one time ability'
             end
             self.createButton(buttonParam)
         end
 
-        buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[3],BUTTON_Y,ROW[i]}, width = 230, height = 230, font_size = FONT_SIZE, tooltip = 'Remove from list'}
+        buttonParam = {click_function = 'alive'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[3],BUTTON_Y,ROW[i]}, width = 3200, height = 2300, font_size = 1200, scale = {0.1,0.1,0.1}}
+        if living[i].alive then
+            buttonParam.label = 'Alive'
+            buttonParam.font_color = stringColorToRGB('Blue')
+            buttonParam.tooltip = 'Player is alive'
+        else
+            buttonParam.label = 'Dead'
+            buttonParam.font_color = stringColorToRGB('Red')
+            buttonParam.tooltip = 'Player is dead'
+        end
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'sober'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 3200, height = 2300, font_size = 1200, scale = {0.1,0.1,0.1}}
+        if living[i].sober then
+            buttonParam.label = 'Sober/\nHealthy'
+            buttonParam.font_color = stringColorToRGB('Blue')
+            buttonParam.tooltip = 'Player is sober or healthy'
+        else
+            buttonParam.label = 'Drunk/\nPoisoned'
+            buttonParam.font_color = stringColorToRGB('Red')
+            buttonParam.tooltip = 'Player is drunk or poisoned'
+        end
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'sane'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 3200, height = 2300, font_size = 1200, scale = {0.1,0.1,0.1}}
+        if living[i].sane then
+            buttonParam.label = 'Sane'
+            buttonParam.font_color = stringColorToRGB('Blue')
+            buttonParam.tooltip = 'Player is sane'
+        else
+            buttonParam.label = 'Mad'
+            buttonParam.font_color = stringColorToRGB('Red')
+            buttonParam.tooltip = 'Player is mad'
+        end
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'remove'..i, function_owner = self, label = '✕', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[6],BUTTON_Y,ROW[i]}, width = 2300, height = 2300, scale = {0.1,0.1,0.1}, font_size = FONT_SIZE * 10, tooltip = 'Remove from list'}
         self.createButton(buttonParam)
     end
 
     if #order > 0 then
-        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[4],BUTTON_Y,ROW[1]}, width = 1350, height = 225, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[7],BUTTON_Y,ROW[1]}, width = 1350, height = 230, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[1]}, width = 675, height = 200, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[8],BUTTON_Y,ROW[1]}, width = 675, height = 230, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 
     for i = 2, #order do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[4],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[7],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[5],BUTTON_Y,ROW[i]}, width = 675, height = 200, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[8],BUTTON_Y,ROW[i]}, width = 675, height = 200, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
     end
 
     buttonParam = {click_function = 'nullFunc', label = 'Preview', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COLUMN[4],BUTTON_Y,PREVIEW_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
+        position = {COLUMN[7],BUTTON_Y,PREVIEW_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'nullFunc', label = format(sendMsg), color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {COLUMN[4],BUTTON_Y,PREVIEW_MSG_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
+        position = {COLUMN[7],BUTTON_Y,PREVIEW_MSG_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
 
@@ -845,15 +961,15 @@ function refreshUI()
         position = {INPUTS_X[2],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt1', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = 'Prompt 1', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {INPUTS_X[3],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt2', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = 'Prompt 2', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {INPUTS_X[4],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt3', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+    buttonParam = {click_function = 'nullFunc', label = 'Prompt 3', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {INPUTS_X[5],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
@@ -889,7 +1005,13 @@ function refreshUI()
     buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
+    buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Check if prompts have been filled in'}
+    if not checkPrompts then
+        buttonParam.label = 'Check\nPrompts\nOFF'
+    end
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[5],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
     if not blindAuto then
         buttonParam.label = 'Auto\nBlindfold\nOFF'
     end

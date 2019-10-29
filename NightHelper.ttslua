@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.0.0'
+VERSION = '2.0.1'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -792,10 +792,11 @@ end
 function swapColors(params)
     local color1 = params.color1
     local color2 = params.color2
-    local color1Living = false
-    local color2Living = false
     local chars = Global.getTable('chars')
     local index, tempUsed
+    local entry
+    local color1Living = nil
+    local color2Living = nil
 
     for i = 1, #living do
         if living[i].color == color1 then
@@ -810,16 +811,20 @@ function swapColors(params)
     end
 
     if color1Living and color2Living then
-        living[color1Living].char = chars[color1]
-        living[color2Living].char = chars[color2]
+        living[color1Living], living[color2Living] = living[color2Living], living[color1Living]
+        living[color1Living].color, living[color2Living].color = living[color2Living].color, living[color1Living].color
     elseif color1Living and not color2Living then
+        entry = living[color1Living]
         table.remove(living, color1Living)
         index = findLivingIndex(color2)
-        table.insert(living, index, {color = color2, char = chars[color2]})
+        table.insert(living, index, entry)
+        living[index].color = color2
     elseif not color1Living and color2Living then
+        entry = living[color2Living]
         table.remove(living, color2Living)
         index = findLivingIndex(color1)
-        table.insert(living, index, {color = color1, char = chars[color1]})
+        table.insert(living, index, entry)
+        living[index].color = color1
     end
 
     setNightOrder('other')
@@ -874,11 +879,9 @@ function refreshUI()
             if living[i].used == false then
                 buttonParam.label = 'Has\nAbility'
                 buttonParam.font_color = stringColorToRGB('Blue')
-                buttonParam.tooltip = 'Player has one time ability'
             else
                 buttonParam.label = 'No\nAbility'
                 buttonParam.font_color = stringColorToRGB('Red')
-                buttonParam.tooltip = 'Player used their one time ability'
             end
             self.createButton(buttonParam)
         end
@@ -887,11 +890,9 @@ function refreshUI()
         if living[i].alive then
             buttonParam.label = 'Alive'
             buttonParam.font_color = stringColorToRGB('Blue')
-            buttonParam.tooltip = 'Player is alive'
         else
             buttonParam.label = 'Dead'
             buttonParam.font_color = stringColorToRGB('Red')
-            buttonParam.tooltip = 'Player is dead'
         end
         self.createButton(buttonParam)
 
@@ -899,11 +900,9 @@ function refreshUI()
         if living[i].sober then
             buttonParam.label = 'Sober/\nHealthy'
             buttonParam.font_color = stringColorToRGB('Blue')
-            buttonParam.tooltip = 'Player is sober or healthy'
         else
             buttonParam.label = 'Drunk/\nPoisoned'
             buttonParam.font_color = stringColorToRGB('Red')
-            buttonParam.tooltip = 'Player is drunk or poisoned'
         end
         self.createButton(buttonParam)
 
@@ -911,11 +910,9 @@ function refreshUI()
         if living[i].sane then
             buttonParam.label = 'Sane'
             buttonParam.font_color = stringColorToRGB('Blue')
-            buttonParam.tooltip = 'Player is sane'
         else
             buttonParam.label = 'Mad'
             buttonParam.font_color = stringColorToRGB('Red')
-            buttonParam.tooltip = 'Player is mad'
         end
         self.createButton(buttonParam)
 

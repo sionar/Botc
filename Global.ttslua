@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.6.0'
+VERSION = '16.8.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -32,6 +32,7 @@ SCRIPTING_ZONE_GUID = 'a17a77'
 STORAGE_BAG_GUID = 'af22f9'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
+TABLE_TEXT_GUIDS = {White = '84a6dc', Brown = 'a2c42d', Red = 'd2d7a9', Orange = '3dd75d', Yellow = 'd506e4', Green = 'f07247', Teal = 'ddb0b2', Blue = '7979e4', Purple = 'e2e890', Pink = '2ca231', Magenta = '048b9e', Lavender = 'b2fce9', Navy = 'c33689', Cyan = '8939ce', Mint = '577520', Lime = '0cb587', Peach = '05bcea', Coral = '60df42', Maroon = '85652b', Silver = '7c3ac7'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
 NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
 ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
@@ -62,6 +63,8 @@ currVotes = 0
 currPlayers = 0
 colors = {}
 chars = {}
+angle = {}
+angleSt = {}
 aliveTokens = {}
 canNominate = {}
 canBeNominated = {}
@@ -71,6 +74,7 @@ voted = {}
 voteLock = {}
 voteButtonsOn = {}
 tokenTable = {}
+decalTable = {}
 
 for k,v in pairs(COLORS_ALL) do
     aliveTokens[v] = {object = 0, vote = 0}
@@ -97,6 +101,11 @@ avatarUrl = ''
 uiColor = {}
 uiMsg = ''
 colorTable = false
+decalsEnabled = true
+uiVisibility = {}
+for k,v in pairs(COLORS) do
+    uiVisibility[v] = true
+end
 
 customSet = false
 imageLoaded = false
@@ -181,6 +190,13 @@ function onLoad(saveString)
     end
 
     for k,v in pairs(TEXT_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.interactable = false
+        end
+    end
+
+    for k,v in pairs(TABLE_TEXT_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
@@ -628,12 +644,31 @@ function resizeTable()
             if obj then
                 obj.setLock(true)
                 obj.setScale({1.82,1,1.82})
+                if obj.is_face_down then
+                    obj.setRotationSmooth({0,0,180})
+                else
+                    obj.setRotationSmooth({0,0,0})
+                end
                 if storytellerMode then
                     obj.setPositionSmooth(radius(radSt, angleSt[COLORS_ALL[i]], 1.35))
                 else
                     obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.35))
                 end
             end
+            if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
+                if storytellerMode then
+                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angleSt[COLORS_ALL[i]], 1.43))
+                else
+                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.43))
+                end
+            end
+
+            obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
+            if obj then
+                obj.setPosition(radius(40,angle[COLORS_ALL[i]], 2))
+                obj.setRotation({90, angle[COLORS_ALL[i]]+180, 0})
+            end
+
             if i <= 10 then
                 Player[COLORS_ALL[i]].setHandTransform({position = radius(82,angle[COLORS_ALL[i]], 1), rotation = {0, angle[COLORS_ALL[i]] + 180, 0}, scale = {14,5,6.5}})
             end
@@ -704,6 +739,16 @@ function resizeTable()
         obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
         if obj then
             storageBag.putObject(obj)
+        end
+
+        if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
+            aliveTokens[COLORS_ALL[i]].vote.destruct()
+        end
+
+        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
+        if obj then
+            obj.setPosition({0,-2,0})
+            obj.setValue(' ')
         end
 
         if i <= 10 then
@@ -833,6 +878,7 @@ function setTokenTable()
         scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
         if scriptZone then
             objs = scriptZone.getObjects()
+
             for k,v in pairs(colors) do
                 tokenTable[v] = {}
                 for k1, v1 in pairs(objs) do
@@ -840,6 +886,25 @@ function setTokenTable()
                         table.insert(tokenTable[v], v1)
                     end
                 end
+            end
+        end
+    end
+end
+
+function setDecalTable()
+    local globalDecals = Global.getDecals()
+    local decalTab
+
+    if globalDecals == nil then
+        return
+    end
+
+    decalTable = {}
+    for k,v in pairs(colors) do
+        decalTable[v] = nil
+        for i = 1,#globalDecals do
+            if math.abs(globalDecals[i].position[1] - radius(48, angle[v], 1.1)[1]) < 0.01 and math.abs(globalDecals[i].position[3] - radius(48, angle[v], 1.1)[3]) < 0.01 then
+                decalTable[v] = i
             end
         end
     end
@@ -871,6 +936,51 @@ function moveTokens()
             end
         end
     end
+end
+
+function moveDecals()
+    local globalDecals = Global.getDecals()
+
+    if globalDecals == nil then
+        return
+    end
+
+    for k,v in pairs(colors) do
+        if decalTable[v] ~= nil then
+            globalDecals[decalTable[v]].position = radius(48, angle[v], 1.1)
+            globalDecals[decalTable[v]].rotation = {90, angle[v] - 180, 0}
+        end
+    end
+
+    local deletingIndexes = {}
+
+    for i = tableSize+1, 20 do
+        if decalTable[COLORS_ALL[i]] ~= nil then
+            if #deletingIndexes == 0 then
+                table.insert(deletingIndexes, decalTable[COLORS_ALL[i]])
+            else
+                for j = 1, #deletingIndexes do
+                    if decalTable[COLORS_ALL[i]] > deletingIndexes[j] then
+                        table.insert(deletingIndexes, j, decalTable[COLORS_ALL[i]])
+                        break
+                    end
+                end
+
+            end
+        end
+    end
+
+    for i = 1, #deletingIndexes do
+        table.remove(globalDecals, deletingIndexes[i])
+    end
+
+    Global.setDecals({})
+    local decalTab = Global.getDecals()
+    while decalTab ~= nil do
+        Global.setDecals({})
+        decalTab = Global.getDecals()
+    end
+    Global.setDecals(globalDecals)
 end
 
 function shuffleTable(tab)
@@ -997,7 +1107,7 @@ function getNumPlayers()
 end
 
 function toggleLockAliveAndVoteTokens(locking)
-    for i=1,20 do
+    for i = 1,20 do
         if aliveTokens[COLORS_ALL[i]].object ~= 0 then
             aliveTokens[COLORS_ALL[i]].object.setLock(locking)
             if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
@@ -1015,7 +1125,7 @@ function onPlayerChangeColor(color)
     else
         local obj = getObjectFromGUID(TEAM_TOOL_GUID)
         if obj then
-            obj.call('refreshUI')
+            Wait.time(function () obj.call('refreshUI') end, 0.1)
         else
             updatePlayers()
         end
@@ -1247,7 +1357,6 @@ function chatMove(playerName, seatColor, player, swap)
     local playerColor = nil
     local colorFound = false
     local playerList = Player.getPlayers()
-    local token, pos, rad, tempChar
 
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
@@ -1302,25 +1411,9 @@ function chatMove(playerName, seatColor, player, swap)
 
     if started and playerColor ~= nil and swap then
         rad = tableSize * 0.4 + 6
-        for k,v in pairs(getAllObjects()) do
-            if v.getDescription() == chars[playerColor] then
-                token = v
-                v.setColorTint(COLORS_RGB[colorFound])
-                pos = radius(rad, angle[colorFound], 1.0)
-                pos[3] = pos[3] + 83
-                token.setPositionSmooth(pos)
-            elseif chars[colorFound] ~= nil and v.getDescription() == chars[colorFound] then
-                token = v
-                v.setColorTint(COLORS_RGB[playerColor])
-                pos = radius(rad, angle[playerColor], 1.0)
-                pos[3] = pos[3] + 83
-                token.setPositionSmooth(pos)
-            end
-        end
+        swapObjects(playerColor, colorFound)
 
-        tempChar = chars[colorFound]
-        chars[colorFound] = chars[playerColor]
-        chars[playerColor] = tempChar
+        chars[colorFound], chars[playerColor] = chars[playerColor], chars[colorFound]
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
         if obj then
             obj.call('swapColors', {color1 = playerColor, color2 = colorFound})
@@ -1372,9 +1465,8 @@ function chatRemove(seatColor, player)
 end
 
 function chatSwap(seatColor1, seatColor2, player)
-    local color1, color2, tempChar
+    local color1, color2
     local player1id, player2id
-    local pos1, pos2, token1, token2
     local obj
 
     color1 = false
@@ -1409,12 +1501,11 @@ function chatSwap(seatColor1, seatColor2, player)
         return
     end
 
+    hideUI()
     if players[color1] == nil then
-        hideUI()
         Wait.time(function () chatMove(players[color2].steam_name, color1, player, true) end, 0.1)
         return
     elseif players[color2] == nil then
-        hideUI()
         Wait.time(function () chatMove(players[color1].steam_name, color2, player, true) end, 0.1)
         return
     end
@@ -1435,22 +1526,8 @@ function chatSwap(seatColor1, seatColor2, player)
     end
 
     if started then
-        for k,v in pairs(getAllObjects()) do
-            if v.getDescription() == chars[color1] then
-                token1 = v
-                pos1 = v.getPosition()
-                v.setColorTint(COLORS_RGB[color2])
-            elseif v.getDescription() == chars[color2] then
-                token2 = v
-                pos2 = v.getPosition()
-                v.setColorTint(COLORS_RGB[color1])
-            end
-        end
-        token1.setPositionSmooth(pos2)
-        token2.setPositionSmooth(pos1)
-        tempChar = chars[color1]
-        chars[color1] = chars[color2]
-        chars[color2] = tempChar
+        swapObjects(color1, color2)
+        chars[color1],chars[color2] = chars[color2], chars[color1]
 
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
         if obj then
@@ -1462,9 +1539,9 @@ function chatSwap(seatColor1, seatColor2, player)
         if v.steam_id == player2id then
             player.print(v.steam_name .. ' has been moved to ' .. color1 .. '.')
             if inTable(color1, COLORS) then
-                v.changeColor(color1)
+                Wait.time(function() v.changeColor(color1) end, 0.1)
             elseif inTable(color1, COLORS_EX) then
-                sitUI(v, _, 'sit'..tableSize..color1)
+                Wait.time(function() sitUI(v, _, 'sit'..tableSize..color1) end, 0,1)
             end
             break
         end
@@ -1474,11 +1551,49 @@ function chatSwap(seatColor1, seatColor2, player)
         if v.steam_id == player1id then
             player.print(v.steam_name .. ' has been moved to ' .. color2 .. '.')
             if inTable(color2, COLORS) then
-                v.changeColor(color2)
+                Wait.time(function () v.changeColor(color2) end, 0.1)
             elseif inTable(color2, COLORS_EX) then
-                sitUI(v, _, 'sit'..tableSize..color2)
+                Wait.time(function () sitUI(v, _, 'sit'..tableSize..color2) end, 0.1)
             end
             break
+        end
+    end
+    Wait.time(refreshUI, 0.5)
+end
+
+function swapObjects(color1, color2)
+    local rad, pos1, pos2
+    local scriptZone, objs
+    local margin = 1.5
+
+    rad = tableSize * 0.4 + 6
+    if storytellerMode then
+        pos1 = radius(rad, angleSt[color1], 1.0)
+        pos1[3] = pos1[3] + 83
+        pos2 = radius(rad, angleSt[color2], 1.0)
+        pos2[3] = pos2[3] + 83
+    else
+        pos1 = radius(rad, angle[color1], 1.0)
+        pos1[3] = pos1[3] + 83
+        pos2 = radius(rad, angle[color2], 1.0)
+        pos2[3] = pos2[3] + 83
+    end
+
+    scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    if scriptZone then
+        objs = scriptZone.getObjects()
+        for k,v in pairs(objs) do
+            if math.abs(pos1[1] - v.getPosition()[1]) < margin and math.abs(pos1[3] - v.getPosition()[3]) < margin then
+                v.setPositionSmooth(pos2)
+                if v.getDescription() ~= '' then
+                    v.setColorTint(COLORS_RGB[color2])
+                end
+            elseif math.abs(pos2[1] - v.getPosition()[1]) < margin and math.abs(pos2[3] - v.getPosition()[3]) < margin then
+                v.setPositionSmooth(pos1)
+                if v.getDescription() ~= '' then
+                    v.setColorTint(COLORS_RGB[color1])
+                end
+            end
         end
     end
 end
@@ -1869,8 +1984,10 @@ function showExtensionUI()
     UI.setAttribute('placeDecalBM', 'active', 'false')
     UI.setAttribute('placeDecalSV', 'active', 'false')
     UI.setAttribute('placeDecalCU', 'active', 'false')
-    UI.setAttribute('placeDecal'.. mode, 'active', 'true')
-    UI.setAttribute('decalText', 'active', 'true')
+    if decalsEnabled then
+        UI.setAttribute('placeDecal'.. mode, 'active', 'true')
+        UI.setAttribute('decalText', 'active', 'true')
+    end
     UI.setAttribute('blackShowMsg', 'active', 'false')
     for i = 11,20 do
         UI.setAttribute('sitTable'..i, 'active', 'false')
@@ -1890,6 +2007,42 @@ function showExtensionUI()
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('sitTable'..tableSize, 'active', 'true')
+    end
+end
+
+function disableTableText()
+    UI.setAttribute('tableTextUI', 'active', 'false')
+end
+
+function enableTableText()
+    UI.setAttribute('tableTextUI', 'active', 'true')
+end
+
+function disableDecals()
+    decalsEnabled = false
+    UI.setAttribute('placeDecalTB', 'active', 'false')
+    UI.setAttribute('placeDecalBM', 'active', 'false')
+    UI.setAttribute('placeDecalSV', 'active', 'false')
+    UI.setAttribute('placeDecalCU', 'active', 'false')
+    UI.setAttribute('decalText', 'active', 'false')
+end
+
+function enableDecals()
+    decalsEnabled = true
+    UI.setAttribute('placeDecal' .. mode, 'active', 'true')
+    UI.setAttribute('decalText', 'active', 'false')
+end
+
+function setTableTextUI(player, value, id)
+    local obj
+    updatePlayers()
+    for k,v in pairs(colors) do
+        if players[v] ~= nil and players[v].steam_id == player.steam_id then
+            obj = getObjectFromGUID(TABLE_TEXT_GUIDS[v])
+            if obj then
+                obj.setValue(value)
+            end
+        end
     end
 end
 
@@ -2206,7 +2359,7 @@ function decalUI(player, value, id)
 
     if globalDecals ~= nil then
         for i = #globalDecals,1,-1 do
-            if math.abs(globalDecals[i].position[1] - radius(45, angle[found], 1.1)[1]) < 0.01 and math.abs(globalDecals[i].position[3] - radius(45, angle[found], 1.1)[3]) < 0.01 then
+            if math.abs(globalDecals[i].position[1] - radius(48, angle[found], 1.1)[1]) < 0.01 and math.abs(globalDecals[i].position[3] - radius(48, angle[found], 1.1)[3]) < 0.01 then
                 table.remove(globalDecals,i)
             end
         end
@@ -2221,9 +2374,31 @@ function decalUI(player, value, id)
     if value ~= "None" then
         params.name = value
         params.url = DECAL_URLS[value]
-        params.position = radius(45, angle[found], 1.1)
+        params.position = radius(48, angle[found], 1.1)
         params.rotation = {90, angle[found] - 180, 0}
         params.scale = {8,8,8}
         Global.addDecal(params)
     end
+end
+
+function toggleUI(player, value, id)
+    local visibilityString = ''
+    uiVisibility[player.color] = not uiVisibility[player.color]
+    for k,v in pairs(COLORS) do
+        if uiVisibility[v] then
+            visibilityString = visibilityString .. v .. '|'
+        end
+    end
+
+    visibilityString = string.sub(visibilityString, 1, #visibilityString-1)
+    if tableSize > 10 then
+        visibilityString = visibilityString .. '|Grey'
+    end
+
+    UI.setAttribute('placeDecalTB', 'visibility', visibilityString)
+    UI.setAttribute('placeDecalBM', 'visibility', visibilityString)
+    UI.setAttribute('placeDecalSV', 'visibility', visibilityString)
+    UI.setAttribute('placeDecalCU', 'visibility', visibilityString)
+    UI.setAttribute('decalText', 'visibility', visibilityString)
+    UI.setAttribute('tableTextUI', 'visibility', visibilityString)
 end

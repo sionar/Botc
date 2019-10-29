@@ -1329,6 +1329,7 @@
     rectAlignment = "LowerCenter"
     text = "+"
     active = "false"
+    visibility = "Black"
 ></Button>
 
 <TableLayout
@@ -1494,3 +1495,31 @@
         </Cell>
     </Row>
 </TableLayout>
+
+<InputField
+    id = "tableTextUI"
+    onEndEdit = "setTableTextUI"
+    placeholder = "Set a message on the table."
+    lineType = "MultiLineNewLine"
+    colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    height = "100"
+    width = "250"
+    rectAlignment = "LowerCenter"
+    offsetXY="-280 7"
+    characterLimit = "500"
+    >
+</InputField>
+
+<Button
+    id = "toggleUIButton"
+    onClick = "toggleUI"
+    text = "Toggle UI"
+    height = "63"
+    width = "63"
+    rectAlignment = "LowerRight"
+    offsetXY = "-9 70"
+    colors = "#FFFFFFFF|#FFFFFFFF|#C8C8C880|#C8C8C880"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    >
+</Button>

@@ -71,7 +71,7 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
 
-    if #allPlayers > 1 and numPlayers ~= self.getQuantity() then
+    if #allPlayers > 1 and numPlayers ~= self.getQuantity() and not debug then
         Player['Black'].print('Error: The number of character tokens in the bag does not match the number of players seated.', {1,0,0})
         return
     end

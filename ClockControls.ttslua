@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.0'
+VERSION = '1.7.1'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -26,7 +26,7 @@ COLORS_EX_HEX = {Magenta = {255/255, 0/255,127/255}, Lavender = {150/255,123/255
 pointedPlayer = 'None'
 mode = 'Clock'
 rotating = false
-rotationRate = 10
+rotationRate = 12
 degreesRotated = 0
 tolerance = 3 -- how few degrees off of the perfect rotation degrees will register for locking the voting cards
 grimShow = false
@@ -160,7 +160,7 @@ function toggleClock(vm)
             self.editButton({index = 0, label = 'Show Clock', color = {0, 1, 0}})
         end
         self.editButton({index = 1, scale = {0, 0, 0}})
-        self.editButton({index = 7, label = 'Exile\nMode', tooltip = 'Show the clock for exiling a traveler.'})
+        self.editButton({index = 9, label = 'Exile\nMode', tooltip = 'Show the clock for exiling a traveler.'})
 
 
 
@@ -299,7 +299,7 @@ function plusRot(clickedObject, playerColor)
         return
     end
 
-    rotationRate = rotationRate + 5
+    rotationRate = rotationRate + 6
     self.editInput({
         index          = 0,
         value          = rotationRate,
@@ -311,7 +311,7 @@ function minusRot(clickedObject, playerColor)
         return
     end
 
-    rotationRate = rotationRate - 5
+    rotationRate = rotationRate - 6
     self.editInput({
         index          = 0,
         value          = rotationRate,
@@ -627,17 +627,17 @@ function toggleExSeatLock(clickedObject, playerColor)
         if seatLock == false then
             seatLock = true
             self.editButton({
-                index          = 8,
-                label          = 'Unlock\nExtension Seats',
-                tooltip        = 'Allow people to join the extension seats.',
+                index          = 6,
+                label          = 'Grey Seats\n[FF0000]OFF[-]',
+                tooltip        = 'Allow people to sit in the grey seats.',
             })
             printToColor('Extension seats are locked.', playerColor, {1,1,1})
         else
             seatLock = false
             self.editButton({
-                index          = 8,
-                label          = 'Lock\nExtension Seats',
-                tooltip        = 'Prevent people from joining the extension seats.',
+                index          = 6,
+                label          = 'Grey Seats\n[0000FF]ON[-]',
+                tooltip        = 'Prevent people from sitting in the grey seats.',
             })
             printToColor('Extension seats are unlocked.', playerColor, {1,1,1})
         end
@@ -652,10 +652,12 @@ function toggleTableText(clickedObject, playerColor)
     tableText = not tableText
     if tableText == false then
         Global.call('disableTableText')
-        self.editButton({index = 8, label = 'Table Text\nOFF', tooltip = 'Click this to enable the Table Text UI for all players.'})
+        self.editButton({index = 7, label = 'Table Text\n[FF0000]OFF[-]', tooltip = 'Click this to enable the Table Text UI for all players.'})
+        printToColor('The Table text UI is disabled.', playerColor, {1,1,1})
     else
         Global.call('enableTableText')
-        self.editButton({index = 8, label = 'Table Text\nON', tooltip = 'Click this to disable the Table Text UI for all players.'})
+        self.editButton({index = 7, label = 'Table Text\n[0000FF]ON[-]', tooltip = 'Click this to disable the Table Text UI for all players.'})
+        printToColor('The Table text UI is enabled.', playerColor, {1,1,1})
     end
 end
 
@@ -667,10 +669,12 @@ function toggleDecals(clickedObject, playerColor)
     decalUI = not decalUI
     if decalUI == false then
         Global.call('disableDecals')
-        self.editButton({index = 9, label = 'Decal UI\nOFF', tooltip = 'Click this to enable the Decal UI for all players.'})
+        self.editButton({index = 8, label = 'Decal UI\n[FF0000]OFF[-]', tooltip = 'Click this to enable the Decal UI for all players.'})
+        printToColor('The decal UI is disabled.', playerColor, {1,1,1})
     else
         Global.call('enableDecals')
-        self.editButton({index = 9, label = 'Decal UI\nON', tooltip = 'Click this to disable the Decal UI for all players.'})
+        self.editButton({index = 8, label = 'Decal UI\n[0000FF]ON[-]', tooltip = 'Click this to disable the Decal UI for all players.'})
+        printToColor('The decal UI is enabled.', playerColor, {1,1,1})
     end
 end
 
@@ -741,17 +745,17 @@ function refreshButtons()
 
     params = {input_function = 'setRotValue', function_owner = self, label = 'Rotation Value',
     position = {0, 1, 0.6}, scale = UI_SCALE,
-    width = 800, height = 500, font_size = 400,
-    tooltip = 'How fast the hour hand rotates\n(in degrees per second)', validation = 3, alignment = 3, value = rotationRate}
+    width = 1000, height = 500, font_size = 465,
+    tooltip = 'How fast the purple hand rotates\n(in degrees per second)', validation = 3, alignment = 3, value = rotationRate}
     self.createInput(params)
 
     params = {click_function = 'minusRot', function_owner = self, label = '-',
-    position = {-0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Decrease clock speed by 5',
+    position = {-0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Decrease clock speed by 6',
     width = 500, height = 500, font_size = 400, alignment = 3}
     self.createButton(params)
 
     params = {click_function = 'plusRot', function_owner = self, label = '+',
-    position = {0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Increase clock speed by 5',
+    position = {0.85, 1, 0.6}, scale = UI_SCALE, tooltip = 'Increase clock speed by 6',
     width = 500, height = 500, font_size = 400, alignment = 3}
     self.createButton(params)
 
@@ -778,40 +782,47 @@ function refreshButtons()
     color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Click this to show the grimoire.'}
     self.createButton(params)
 
-    params = {click_function = 'toggleExSeatLock', function_owner = self,
-    label = 'Lock\nExtension Seats', position = {-1.3, 1, -1.8}, scale = UI_SCALE,
-    color = {1, 1, 1}, width = 1200, height = 500, font_size = 150, tooltip = 'Prevent people from joining the extension seats.'}
+    params = {click_function = 'toggleExSeatLock', function_owner = self, position = {-1.3, 1, -1.8}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200}
+    if seatLock then
+        params.label = 'Grey Seats\n[FF0000]OFF[-]'
+        params.tooltip = 'Allow people to sit in the grey seats.'
+    else
+        params.label = 'Grey Seats\n[0000FF]ON[-]'
+        params.tooltip = 'Prevent people from sitting in the grey seats.'
+    end
+
+    self.createButton(params)
+
+    params = {click_function = 'toggleTableText', function_owner = self, position = {0, 1, -1.8}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200}
+    if tableText then
+        params.label = 'Table Text\n[0000FF]ON[-]'
+        params.tooltip = 'Click this to disable the Table Text UI for all players.'
+    else
+        params.label = 'Table Text\n[FF0000]OFF[-]'
+        params.tooltip = 'Click this to enable the Table Text UI for all players.'
+    end
+    self.createButton(params)
+
+    params = {click_function = 'toggleDecals', function_owner = self, position = {1.3, 1, -1.8}, scale = UI_SCALE,
+    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200}
+    if decalUI then
+        params.label = 'Decal UI\n[0000FF]ON[-]'
+        params.tooltip = 'Click this to disable the Decal UI for all players.'
+    else
+        params.label = 'Decal UI\n[FF0000]OFF[-]'
+        params.tooltip = 'Click this to enable the Decal UI for all players.'
+    end
     self.createButton(params)
 
     params = {click_function = 'toggleClockExile', function_owner = self,
-    position = {0, 1, -1.8}, scale = UI_SCALE,
+    position = {2.6, 1, -1.8}, scale = UI_SCALE,
     color = {1, 1, 1}, width = 1200, height = 500, font_size = 200, tooltip = 'Show the clock for exiling a traveler.'}
     if clock.getScale().x == 0 then
         params.label = 'Exile\nMode'
     else
         params.label = 'Hide\nClock'
-    end
-    self.createButton(params)
-
-    params = {click_function = 'toggleTableText', function_owner = self, position = {1.3, 1, -1.8}, scale = UI_SCALE,
-    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200}
-    if tableText then
-        params.label = 'Table Text\nON'
-        params.tooltip = 'Click this to disable the Table Text UI for all players.'
-    else
-        params.label = 'Table Text\nOFF'
-        params.tooltip = 'Click this to enable the Table Text UI for all players.'
-    end
-    self.createButton(params)
-
-    params = {click_function = 'toggleDecals', function_owner = self, position = {2.6, 1, -1.8}, scale = UI_SCALE,
-    color = {1, 1, 1}, width = 1200, height = 500, font_size = 200}
-    if decalUI then
-        params.label = 'Decal UI\nON'
-        params.tooltip = 'Click this to disable the Decal UI for all players.'
-    else
-        params.label = 'Decal UI\nOFF'
-        params.tooltip = 'Click this to enable the Decal UI for all players.'
     end
     self.createButton(params)
 

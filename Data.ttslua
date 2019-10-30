@@ -286,7 +286,7 @@ CHARACTERS =
     Herald = {Type = 'Townsfolk', Ability = false, Prompt = 'P1 is the Majesty.', Description = 'You start knowing the Majesty.'},
     Chamberlain = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'The Majesty is safe from the Demon.'},
     Cup_Bearer = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'Once per day, you may offer someone a cup. If they accept, they die if evil. If you are poisoned, they die if they are good.'},
-    Friar = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player.', Description = 'On the first night, choose a player: when the first of either of you dies, the Majesty learns their alignment.'},
+    Friar = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player.', Description = 'On your first night, choose a player: when the first of either of you dies, the Majesty learns their alignment.'},
     Food_Taster = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose another player: until dusk, abilities that affect them affect you instead.'},
     Pretender = {Type = 'Outsider', Ability = false, Prompt = 'Tonight, your subjects reported to you the following information:', Description = 'You think you are the Majesty and register as them. Each night, you receive false info from your subjects.'},
     Pawn = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'You have a Townsfolk ability, but you don\'t know what it is.'},

@@ -198,7 +198,7 @@ function toggleClock(vm)
             self.editButton({index = 0, label = 'Hide Clock', color = {1, 0, 0}})
         end
         self.editButton({index = 1, scale = UI_SCALE})
-        self.editButton({index = 7, label = 'Hide\nClock', tooltip = 'Hide the clock.'})
+        self.editButton({index = 9, label = 'Hide\nClock', tooltip = 'Hide the clock.'})
 
         pointHand({handGUID = PURPLE_HAND_GUID, color = 'None'})
         pointHand({handGUID = RED_HAND_GUID, color = 'None'})
@@ -344,7 +344,7 @@ function toggleModes(clickedObject, playerColor, altClick)
 
         for i, c in ipairs(colors) do
             self.editButton({
-                index          = 8 + i,
+                index          = 9 + i,
                 click_function = 'mute'..c,
                 tooltip        = 'Mute '..c,
             })
@@ -372,7 +372,7 @@ function toggleModes(clickedObject, playerColor, altClick)
 
         for i, c in ipairs(colors) do
             self.editButton({
-                index          = 8 + i,
+                index          = 9 + i,
                 click_function = 'blindfold'..c,
                 tooltip        = 'Blindfold player '..c,
             })
@@ -408,7 +408,7 @@ function toggleModes(clickedObject, playerColor, altClick)
 
         for i, c in ipairs(colors) do
             self.editButton({
-                index          = 8 + i,
+                index          = 9 + i,
                 click_function = 'pointTo'..c,
                 tooltip        = 'Point the clock to '..c,
             })

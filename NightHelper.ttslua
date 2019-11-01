@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.0.1'
+VERSION = '2.0.2'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -98,7 +98,15 @@ function moveBoard()
     end
 end
 
-function import()
+function importCall()
+    import(_, 'Black')
+end
+
+function import(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local chars = Global.getTable('chars')
     local numChars = 0
     local lunaticColor = false
@@ -270,6 +278,10 @@ function inTable(table, value)
 end
 
 function used(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local entry = living[i]
     local char = string.gsub(living[i].char, ' ', '_')
     living[i].used = not living[i].used
@@ -290,6 +302,10 @@ for k = 1,30 do
 end
 
 function alive(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local entry = living[i]
     living[i].alive = not living[i].alive
 
@@ -348,6 +364,10 @@ for k = 1,30 do
 end
 
 function sober(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     living[i].sober = not living[i].sober
     setMsg()
 end
@@ -359,6 +379,10 @@ for k = 1,30 do
 end
 
 function sane(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local entry = living[i]
     local char = string.gsub(living[i].char, ' ', '_')
     local found = false
@@ -394,6 +418,10 @@ end
 
 
 function remove(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local entry = living[i]
     table.remove(living, i)
 
@@ -417,6 +445,10 @@ for k = 1,30 do
 end
 
 function send(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local steam_name = Player[playerColor].steam_name
     local sendColor, msg
@@ -490,6 +522,10 @@ function send(clickedObject, playerColor)
 end
 
 function skip(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     table.remove(order, i)
     setMsg()
 end
@@ -503,10 +539,18 @@ end
 function nullFunc() end
 
 function firstNight(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     setNightOrder('first')
 end
 
 function otherNight(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     setNightOrder('other')
 end
 
@@ -671,6 +715,10 @@ function editMsg()
 end
 
 function addChar(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     if colorAdd == '' or charAdd == '' then
         broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
         return
@@ -748,6 +796,10 @@ function addChar(clickedObject, playerColor)
 end
 
 function toggleCheck(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     checkPrompts = not checkPrompts
     refreshUI()
     if checkPrompts then
@@ -758,6 +810,10 @@ function toggleCheck(clickedObject, playerColor)
 end
 
 function toggleBlind(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
     blindAuto = not blindAuto
     refreshUI()
     if blindAuto then

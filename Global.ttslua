@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.8.5'
+VERSION = '16.9.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -219,7 +219,7 @@ function onLoad(saveString)
     updatePlayers()
     refreshUI()
     showExtensionUI()
-    Wait.time(refreshObjects,10)
+    Wait.time(refreshObjects,5)
     Wait.time(refreshNotes,1,-1)
     Wait.time(updateTokenStatus,2,-1)
 end
@@ -320,6 +320,11 @@ function refreshObjects()
         obj.reload()
     end
 
+    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if obj then
+        obj.reload()
+    end
+
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
@@ -353,6 +358,11 @@ end
 
 function lockObjects()
     local obj
+
+    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if obj then
+        obj.interactable = false
+    end
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -1787,7 +1797,7 @@ function nominate(params)
     else
         updatePlayers()
         if players[v] ~= nil then
-            players[v].print(currentNominator .. ' is currently in the process of nominating a player. Please wait.', {1,0,0})
+            players[v].print(currentNominator .. ' is nominating a player. Please wait.', {1,0,0})
         end
     end
 end
@@ -1985,7 +1995,7 @@ function resetVotes(params)
     local buttonParams = {}
     local handObj
     for k,v in pairs(colors) do
-        if players[v] ~= nil and voteButtonsOn[v] then
+        if voteButtonsOn[v] then
             if hasVote[v] or params.voteMode == 'exile' then
                 buttonParams.color = {1,1,1}
                 buttonParams.font_color = {0,0,0}

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.8.3'
+VERSION = '16.8.5'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -563,6 +563,7 @@ function resizeTable()
     local zoneSize
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local radSt = tableSize * 0.6 + 6
+    local fontSize
 
     if mode == 'TB' then
         charSheetGuids = CHAR_SHEET_GUIDS_TB
@@ -691,7 +692,7 @@ function resizeTable()
 
             obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
             if obj then
-                obj.setPosition(radius(40,angle[COLORS_ALL[i]], 2))
+                obj.setPosition(radius(35,angle[COLORS_ALL[i]], 2))
                 obj.setRotation({90, angle[COLORS_ALL[i]]+180, 0})
             end
 
@@ -801,6 +802,21 @@ function resizeTable()
         end
     end
 
+    if tableSize <= 10 then
+        fontSize = 108
+    elseif tableSize <= 15 then
+        fontSize = 72
+    else
+        fontSize = 36
+    end
+
+    for i = 1,20 do
+        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
+        if obj then
+            obj.TextTool.setFontSize(fontSize)
+        end
+
+    end
     createSnapPoints()
     toggleLights({switching = false})
     UI.setAttribute('colorSelection','active',false)
@@ -1000,7 +1016,6 @@ function moveDecals()
         table.remove(globalDecals, deletingIndexes[i])
     end
 
-    Global.setDecals({})
     local decalTab = Global.getDecals()
     while decalTab ~= nil do
         Global.setDecals({})
@@ -2025,6 +2040,7 @@ function showExtensionUI()
         UI.setAttribute('blackMessage', 'active', 'false')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
+        UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
     else
         UI.setAttribute('teamMenu', 'active', 'true')
         UI.setAttribute('leaveTeam', 'active', 'true')
@@ -2032,12 +2048,20 @@ function showExtensionUI()
         UI.setAttribute('colorMsgDropdown'..tableSize, 'active', 'true')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('sitTable'..tableSize, 'active', 'true')
     end
 end
 
 function disableTableText()
+    local obj
     UI.setAttribute('tableTextUI', 'active', 'false')
+    for k,v in pairs(COLORS_ALL) do
+        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[v])
+        if obj then
+            obj.setValue(' ')
+        end
+    end
 end
 
 function enableTableText()
@@ -2051,6 +2075,12 @@ function disableDecals()
     UI.setAttribute('placeDecalSV', 'active', 'false')
     UI.setAttribute('placeDecalCU', 'active', 'false')
     UI.setAttribute('decalText', 'active', 'false')
+
+    local decalTab = Global.getDecals()
+    while decalTab ~= nil do
+        Global.setDecals({})
+        decalTab = Global.getDecals()
+    end
 end
 
 function enableDecals()
@@ -2066,6 +2096,9 @@ function setTableTextUI(player, value, id)
         if players[v] ~= nil and players[v].steam_id == player.steam_id then
             obj = getObjectFromGUID(TABLE_TEXT_GUIDS[v])
             if obj then
+                if value == '' then
+                    value = ' '
+                end
                 obj.setValue(value)
             end
         end

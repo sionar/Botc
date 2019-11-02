@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 DIST = {{5,3,0,1,1},{6,3,1,1,1},{7,5,0,1,1},{8,5,1,1,1},{9,5,2,1,1},{10,7,0,2,1},{11,7,1,2,1},{12,7,2,2,1},{13,9,0,3,1},{14,9,1,3,1},{15,9,2,3,1},{16,9,2,3,1},{17,9,2,3,1},{18,9,2,3,1},{19,9,2,3,1},{20,9,2,3,1}}
 ROW_SPACING = 0.4
 COL_SPACING = 0.4
@@ -18,7 +18,7 @@ ROW = {}
 CHART_LABEL = '[FFFFFF]Players, [1E87FF]Townsfolk, [20B09A]Outsiders, [F3631C]Minions, [DA1917]Demons'
 ROW_COLORS = {'[FFFFFF]', '[1E87FF]', '[20B09A]', '[F3631C]', '[DA1917]'}
 HIGHLIGHT_COLOR = '[E6E42B]'
-COL_P = {-1.5, 0.8}
+COL_P = {-1.5, 1.2}
 PLAYER_LABELS = {'Players: ', 'Townsfolk: ', 'Outsiders: ', 'Minions: ', 'Demons: '}
 ALIVE_COLORS = {'[1E87FF]', '[30B22A]', '[E6E42B]', '[F3631C]', '[DA1917]'}
 ALIVE_LABELS = {'Total players: ', 'Living players: ', 'Living non-travelers: ', 'Players with votes: ', 'Votes to execute: '}
@@ -109,13 +109,13 @@ function displayChart()
     local params
 
     params = {click_function = 'nullFunc', function_owner = self, label = CHART_LABEL, color = {0,0,0,1},
-        position = {0,0.2,-1.1}, width = 0, height = 0, font_size = 100}
+        position = {0,0.2,-1.1}, width = 0, height = 0, font_size = 1000, scale = {0.1,0.1,0.1}}
     self.createButton(params)
 
     for i = 1, NUM_COLS do
         for j = 1, NUM_ROWS do
             params = {click_function = 'nullFunc', function_owner = self, label = ROW_COLORS[j]..DIST[i][j], color = {0,0,0,1},
-                position = {COL[i],0.2,ROW[j]}, width = 0, height = 0, font_size = 100}
+                position = {COL[i],0.2,ROW[j]}, width = 0, height = 0, font_size = 1000, scale = {0.1,0.1,0.1}}
             if (players[1] >= 5 and i == players[1] - 4) or i == 11 and players[1] >= 15 then
                 params.label = HIGHLIGHT_COLOR..DIST[i][j]
             end
@@ -124,7 +124,7 @@ function displayChart()
     end
 
     params = {click_function = 'displayPlayers', function_owner = self, label = "Display Player Count", tooltip = "Display Player Count", color = {1,1,1,1}, font_color = {0,0,0,1},
-        position = {0,0.2,1.1}, width = 1500, height = 150, font_size = 100}
+        position = {0,0.2,1.1}, width = 10000, height = 1500, font_size = 1000, scale = {0.1,0.1,0.1}}
     self.createButton(params)
 end
 
@@ -136,17 +136,17 @@ function displayPlayers()
 
     for i = 1, 5 do
         params = {click_function = 'nullFunc', function_owner = self, label = ROW_COLORS[i] .. PLAYER_LABELS[i] .. players[i], color = {0,0,0,1},
-            position = {COL_P[1],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 100}
+            position = {COL_P[1],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 1000, scale = {0.1,0.1,0.1}}
         self.createButton(params)
     end
 
     for i = 1, 5 do
         params = {click_function = 'nullFunc', function_owner = self, label = ALIVE_COLORS[i] .. ALIVE_LABELS[i] .. alive[i], color = {0,0,0,1},
-            position = {COL_P[2],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 100}
+            position = {COL_P[2],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 1000, scale = {0.1,0.1,0.1}}
         self.createButton(params)
     end
 
     params = {click_function = 'displayChart', function_owner = self, label = "Display Distribution Chart", tooltip = "Display Distribution Chart",  color = {1,1,1,1}, font_color = {0,0,0,1},
-        position = {0,0.2,1.1}, width = 1500, height = 150, font_size = 100}
+        position = {0,0.2,1.1}, width = 10000, height = 1500, font_size = 1000, scale = {0.1,0.1,0.1}}
     self.createButton(params)
 end

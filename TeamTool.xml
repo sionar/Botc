@@ -1,0 +1,106 @@
+<Defaults>
+    <Image class="teamHeader" width="200" height="200"/>
+    <Button class="headerButton" width="250" height="250"/>
+    <Text class="teamText" resizeTextForBestFit="true" horizontalOverflow="Wrap" color="#000000"/>
+    <Panel class="teamPanel" padding="5 5 5 5"/>
+</Defaults>
+
+<Panel id="main"
+    width = "1500"
+    height = "600"
+    position = "0 -100 -100">
+    <Panel height= "300" position = "-575 400 0">
+        <Image id="clubHeader" class="teamHeader" image="Club"></Image>
+    </Panel>
+    <Panel height= "300" position = "-190 400 0">
+        <Image id="spadeHeader" class="teamHeader" image="Spade"></Image>
+    </Panel>
+    <Panel height= "300" position = "190 400 0">
+        <Image id="diamondHeader" class="teamHeader" image="Diamond"></Image>
+    </Panel>
+    <Panel height= "300" position = "575 400 0">
+        <Image id="heartHeader" class="teamHeader" image="Heart"></Image>
+    </Panel>
+    <HorizontalLayout>
+        <Panel><VerticalLayout>
+            <Panel class="teamPanel"><Image id="Clubs1Image" image = "empty">
+                <Text id="Clubs1Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs2Image" image = "empty">
+                <Text id="Clubs2Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs3Image" image = "empty">
+                <Text id="Clubs3Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs4Image" image = "empty">
+                <Text id="Clubs4Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs5Image" image = "empty">
+                <Text id="Clubs5Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs6Image" image = "empty">
+                <Text id="Clubs6Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs7Image" image = "empty">
+                <Text id="Clubs7Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs8Image" image = "empty">
+                <Text id="Clubs8Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Clubs9Image" image = "empty">
+                <Text id="Clubs9Text" class="teamText" text=""></Text></Image></Panel>
+        </VerticalLayout></Panel>
+        <Panel><VerticalLayout>
+            <Panel class="teamPanel"><Image id="Spades1Image" image = "empty">
+                <Text id="Spades1Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades2Image" image = "empty">
+                <Text id="Spades2Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades3Image" image = "empty">
+                <Text id="Spades3Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades4Image" image = "empty">
+                <Text id="Spades4Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades5Image" image = "empty">
+                <Text id="Spades5Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades6Image" image = "empty">
+                <Text id="Spades6Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades7Image" image = "empty">
+                <Text id="Spades7Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades8Image" image = "empty">
+                <Text id="Spades8Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Spades9Image" image = "empty">
+                <Text id="Spades9Text" class="teamText" text=""></Text></Image></Panel>
+        </VerticalLayout></Panel>
+        <Panel><VerticalLayout>
+            <Panel class="teamPanel"><Image id="Diamonds1Image" image = "empty">
+                <Text id="Diamonds1Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds2Image" image = "empty">
+                <Text id="Diamonds2Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds3Image" image = "empty">
+                <Text id="Diamonds3Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds4Image" image = "empty">
+                <Text id="Diamonds4Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds5Image" image = "empty">
+                <Text id="Diamonds5Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds6Image" image = "empty">
+                <Text id="Diamonds6Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds7Image" image = "empty">
+                <Text id="Diamonds7Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds8Image" image = "empty">
+                <Text id="Diamonds8Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Diamonds9Image" image = "empty">
+                <Text id="Diamonds9Text" class="teamText" text=""></Text></Image></Panel>
+        </VerticalLayout></Panel>
+        <Panel><VerticalLayout>
+            <Panel class="teamPanel"><Image id="Hearts1Image" image = "empty">
+                <Text id="Hearts1Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts2Image" image = "empty">
+                <Text id="Hearts2Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts3Image" image = "empty">
+                <Text id="Hearts3Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts4Image" image = "empty">
+                <Text id="Hearts4Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts5Image" image = "empty">
+                <Text id="Hearts5Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts6Image" image = "empty">
+                <Text id="Hearts6Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts7Image" image = "empty">
+                <Text id="Hearts7Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts8Image" image = "empty">
+                <Text id="Hearts8Text" class="teamText" text=""></Text></Image></Panel>
+            <Panel class="teamPanel"><Image id="Hearts9Image" image = "empty">
+                <Text id="Hearts9Text" class="teamText" text=""></Text></Image></Panel>
+        </VerticalLayout></Panel>
+    </HorizontalLayout>
+</Panel>

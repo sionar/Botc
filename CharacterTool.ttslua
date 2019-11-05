@@ -70,7 +70,7 @@ end
 function moveBoard()
     local modName = Global.getVar('MOD_NAME')
     if modName == 'Blood on the Clocktower' then
-        self.setPositionSmooth({0,1.2,86})
+        self.setPositionSmooth({0,1.2,126})
         self.setRotationSmooth({0,0,0})
         self.setLock(true)
     end

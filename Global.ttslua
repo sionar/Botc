@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '16.9.1'
+VERSION = '17.1.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -21,6 +21,8 @@ VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 
 TABLE_GUID = '7f1f5f'
+STORYTELLER_TABLE_GUID = 'fb2b1a'
+ROOM_GUID = '038c16'
 NIGHT_HELPER_GUID = 'bb89aa'
 CLOCK_CONTROLS_GUID = '184d11'
 TEAM_TOOL_GUID = '6fbc83'
@@ -64,7 +66,6 @@ currPlayers = 0
 colors = {}
 chars = {}
 angle = {}
-angleSt = {}
 aliveTokens = {}
 canNominate = {}
 canBeNominated = {}
@@ -136,6 +137,16 @@ function onLoad(saveString)
 
     local obj
     obj = getObjectFromGUID(TABLE_GUID)
+    if obj then
+        obj.interactable = false
+    end
+
+    obj = getObjectFromGUID(STORYTELLER_TABLE_GUID)
+    if obj then
+        obj.interactable = false
+    end
+
+    obj = getObjectFromGUID(ROOM_GUID)
     if obj then
         obj.interactable = false
     end
@@ -358,11 +369,6 @@ end
 
 function lockObjects()
     local obj
-
-    obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    if obj then
-        obj.interactable = false
-    end
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -588,11 +594,9 @@ function resizeTable()
     updatePlayers()
     colors = {}
     angle = {}
-    angleSt = {}
     for i = 1, tableSize do
         table.insert(colors, COLORS_ALL[i])
-        angle[COLORS_ALL[i]] = 30 + 150/tableSize + (i-1)*300/tableSize
-        angleSt[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
+        angle[COLORS_ALL[i]] = 180/tableSize + (i-1)*360/tableSize
     end
     zoneSize = 2 * 71.5 * math.sin(math.pi / tableSize) * 0.67
     if zoneSize > 40 then
@@ -667,8 +671,8 @@ function resizeTable()
             if obj then
                 obj.setLock(true)
                 if storytellerMode then
-                    obj.setPositionSmooth(radius(radSt, angleSt[COLORS_ALL[i]], 1))
-                    obj.setRotationSmooth({0, angleSt[COLORS_ALL[i]], 0})
+                    obj.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1))
+                    obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
                 else
                     obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1))
                     obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
@@ -687,14 +691,14 @@ function resizeTable()
                     obj.setRotationSmooth({0,0,0})
                 end
                 if storytellerMode then
-                    obj.setPositionSmooth(radius(radSt, angleSt[COLORS_ALL[i]], 1.35))
+                    obj.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1.35))
                 else
                     obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.35))
                 end
             end
             if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
                 if storytellerMode then
-                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angleSt[COLORS_ALL[i]], 1.43))
+                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1.43))
                 else
                     aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.43))
                 end
@@ -843,30 +847,21 @@ end
 
 function createSnapPoints()
     local snapTable = {}
-    local angles = {}
     local pos, rad, radTokens
     rad = tableSize * 0.4 + 6
     radTokens = tableSize * 0.6 + 6
 
-    if not storytellerMode then
-        angles = angle
-    else
-        for i = 1, tableSize do
-            angles[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
-        end
-    end
-
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-26,0,65}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-26,0,103}, rotation = {0,0,0}, rotation_snap = true})
     for i = 1,tableSize do
         if not storytellerMode then
-            table.insert(snapTable, {position = radius(55, angles[COLORS_ALL[i]], 1.16), rotation = {0, angles[COLORS_ALL[i]], 0}, rotation_snap = true})
+            table.insert(snapTable, {position = radius(55, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
         else
-            table.insert(snapTable, {position = radius(radTokens, angles[COLORS_ALL[i]], 1.16), rotation = {0, angles[COLORS_ALL[i]], 0}, rotation_snap = true})
+            table.insert(snapTable, {position = radius(radTokens, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
         end
-        pos = radius(rad, angles[COLORS_ALL[i]], 1.0)
-        pos[3] = pos[3] + 83
-        table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = true})
+        pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
+        pos[3] = pos[3] + 121
+        table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = false})
     end
     self.setSnapPoints(snapTable)
 end
@@ -911,20 +906,11 @@ function setTokenTable()
     local posTable = {}
     local rad = tableSize * 0.4 + 6
     local margin = 1.5
-    local angles = {}
-
-    if not storytellerMode then
-        angles = angle
-    else
-        for i = 1, tableSize do
-            angles[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
-        end
-    end
 
     if started then
         for k,v in pairs(colors) do
-            posTable[v] = radius(rad, angles[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 83
+            posTable[v] = radius(rad, angle[v], 1.0)
+            posTable[v][3] = posTable[v][3] + 121
         end
         tokenTable = {}
         scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
@@ -966,20 +952,11 @@ function moveTokens()
     local objs, pos
     local posTable = {}
     local rad = tableSize * 0.4 + 6
-    local angles = {}
-
-    if not storytellerMode then
-        angles = angle
-    else
-        for i = 1, tableSize do
-            angles[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
-        end
-    end
 
     if started then
         for k,v in pairs(colors) do
-            posTable[v] = radius(rad, angles[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 83
+            posTable[v] = radius(rad, angle[v], 1.0)
+            posTable[v][3] = posTable[v][3] + 121
             if tokenTable[v] ~= nil then
                 for k1,v1 in pairs(tokenTable[v]) do
                     pos = v1.getPosition()
@@ -1119,7 +1096,7 @@ function toggleLights(params)
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
         if obj then
-            obj.setPosition({0,10,83})
+            obj.setPosition({0,10,121})
             obj.call('powerOn')
         end
 
@@ -1618,17 +1595,10 @@ function swapObjects(color1, color2)
     local margin = 1.5
 
     rad = tableSize * 0.4 + 6
-    if storytellerMode then
-        pos1 = radius(rad, angleSt[color1], 1.0)
-        pos1[3] = pos1[3] + 83
-        pos2 = radius(rad, angleSt[color2], 1.0)
-        pos2[3] = pos2[3] + 83
-    else
-        pos1 = radius(rad, angle[color1], 1.0)
-        pos1[3] = pos1[3] + 83
-        pos2 = radius(rad, angle[color2], 1.0)
-        pos2[3] = pos2[3] + 83
-    end
+    pos1 = radius(rad, angle[color1], 1.0)
+    pos1[3] = pos1[3] + 121
+    pos2 = radius(rad, angle[color2], 1.0)
+    pos2[3] = pos2[3] + 121
 
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     if scriptZone then

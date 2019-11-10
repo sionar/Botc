@@ -55,7 +55,7 @@ function dealToPlayers(clickedObject, playerColor)
 
     for k,v in pairs(colors) do
         posTable[v] = radius(rad, angle[v], 1.1)
-        posTable[v][3] = posTable[v][3] + 121
+        posTable[v][3] = posTable[v][3] + 119
     end
 
     for k,v in pairs(allObjs) do

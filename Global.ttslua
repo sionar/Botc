@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '17.1.0'
+VERSION = '17.1.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -30,6 +30,7 @@ PURPLE_HAND_GUID = '88ad59'
 BLUE_HAND_GUID = '12ad6f'
 RED_HAND_GUID = 'eaee43'
 CLOCK_GUID = '0d5f75'
+PLAYER_DIST_GUID = '7527ae'
 SCRIPTING_ZONE_GUID = 'a17a77'
 STORAGE_BAG_GUID = 'af22f9'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
@@ -136,6 +137,11 @@ function onLoad(saveString)
     end
 
     local obj
+
+    obj = getObjectFromGUID(STORAGE_BAG_GUID)
+    obj.setPosition({0,-1,0})
+    obj.setScale({0,0,0})
+
     obj = getObjectFromGUID(TABLE_GUID)
     if obj then
         obj.interactable = false
@@ -411,9 +417,7 @@ end
 
 function updateTokenStatus()
     updatePlayers()
-    for k,v in pairs(COLORS_ALL) do
-        getAliveTokens(v)
-    end
+    getAliveTokens()
     handleLifeUI()
 end
 
@@ -467,39 +471,43 @@ function updatePlayers()
     return players
 end
 
-function getAliveTokens(color)
-    local base = getObjectFromGUID(ALIVE_BASE_GUIDS[color])
-    if base == nil then
-        aliveTokens[color].vote = 0
-        aliveTokens[color].object = 0
-        return
-    end
+function getAliveTokens()
+    local base, pos
+    local aliveTokenFound, voteTokenFound, objectsFound
 
-    local pos = base.getPosition()
-    local aliveTokenFound = false
-    local voteTokenFound = false
-    local objectsFound = Physics.cast({
-        origin       = pos,
-        direction    = {0, 1, 0},
-        type         = 1, -- int (1: Ray, 2: Sphere, 3: Box),
-        max_distance = 3,
-        debug        = false-- bool (true = visualize cast),
-    }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
+    for k,v in pairs(COLORS_ALL) do
+        base = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        if not base then
+            aliveTokens[v].vote = nil
+            aliveTokens[v].object = nil
+        else
+            pos = base.getPosition()
+            aliveTokenFound = false
+            voteTokenFound = false
+            objectsFound = Physics.cast({
+                origin       = pos,
+                direction    = {0, 1, 0},
+                type         = 1, -- int (1: Ray, 2: Sphere, 3: Box),
+                max_distance = 3,
+                debug        = false-- bool (true = visualize cast),
+            }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
 
-    for i, hit in ipairs(objectsFound) do
-        if hit.hit_object.getName() == 'Alive Token' then
-            aliveTokens[color].object = hit.hit_object
-            aliveTokenFound = true
-        elseif hit.hit_object.getName() == 'Vote Token' then
-            aliveTokens[color].vote = hit.hit_object
-            voteTokenFound = true
+            for i, hit in ipairs(objectsFound) do
+                if hit.hit_object.getName() == 'Alive Token' then
+                    aliveTokens[v].object = hit.hit_object
+                    aliveTokenFound = true
+                elseif hit.hit_object.getName() == 'Vote Token' then
+                    aliveTokens[v].vote = hit.hit_object
+                    voteTokenFound = true
+                end
+            end
+            if not voteTokenFound then
+                aliveTokens[v].vote = nil
+            end
+            if not aliveTokenFound then
+                aliveTokens[v].object = nil
+            end
         end
-    end
-    if not voteTokenFound then
-        aliveTokens[color].vote = 0
-    end
-    if not aliveTokenFound then
-        aliveTokens[color].object = 0
     end
 end
 
@@ -513,16 +521,16 @@ function handleLifeUI()
     local allObjects = getAllObjects()
     local allPlayers = Player.getPlayers()
     local numTrav = 0
-
+    local aliveTrav = 0
 
     for i=1, 20 do
-        if aliveTokens[COLORS_ALL[i]].object ~= 0 and players[COLORS_ALL[i]] ~= nil then
+        if aliveTokens[COLORS_ALL[i]].object ~= nil and (players[COLORS_ALL[i]] ~= nil or storytellerMode) then
             if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Grey' and #allPlayers > 1 then
                 getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue(COLORS[i])
             end
             numPlayers = numPlayers + 1
             if aliveTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
-                if aliveTokens[COLORS_ALL[i]].vote ~= 0 then -- ..then if a vote token is present
+                if aliveTokens[COLORS_ALL[i]].vote ~= nil then -- ..then if a vote token is present
                     UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'deadWithVote'..i)  -- counting skipped players to only make last images transparent
                     numberOfVotes = numberOfVotes + 1
                 else
@@ -533,8 +541,11 @@ function handleLifeUI()
                 numAlive = numAlive +1
                 numberOfVotes = numberOfVotes + 1
                 if aliveTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
-                    numTrav = numTrav + 1
+                    aliveTrav = aliveTrav + 1
                 end
+            end
+            if aliveTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
+                numTrav = numTrav + 1
             end
         else
             if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
@@ -548,11 +559,19 @@ function handleLifeUI()
     if currPlayers ~= numAlive or currVotes ~= numberOfVotes then
         for k,v in pairs(allObjects) do
             if v.getName() == 'Player Distribution Chart' then
-                v.call('updatePlayerDist', {num = numAlive})
-                v.call('updateAlive', {numP = numPlayers, living = numAlive, nonTrav = numAlive - numTrav, withVotes = numberOfVotes, needed = votesNeeded})
+                v.call('updatePlayerDist', {num = numPlayers - numTrav})
+                v.call('updateAlive', {numP = numPlayers, living = numAlive, nonTrav = numAlive - aliveTrav, withVotes = numberOfVotes, needed = votesNeeded})
             end
         end
     end
+    if storytellerMode then
+        for k,v in pairs(allObjects) do
+            if v.getName() == 'Player Distribution Chart' then
+                v.call('updatePlayerDistST', {num = numPlayers - numTrav})
+            end
+        end
+    end
+
     currPlayers = numAlive
     currVotes = numberOfVotes
 end
@@ -573,7 +592,7 @@ function radius(rad, angle, height)
 end
 
 function resizeTable()
-    local obj, tab, pos, rot, colorPos
+    local obj, objs, tab, pos, rot, colorPos
     local charSheetGuids
     local angleFirst, angleInc
     local zoneSize
@@ -680,7 +699,15 @@ function resizeTable()
             end
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
             if not obj and not started then
-                obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]]})
+                objs = storageBag.getObjects()
+                for k,v in pairs(objs) do
+                    if v.guid == ALIVE_TOKEN_GUIDS[COLORS_ALL[i]] then
+                        obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]]})
+                    end
+                end
+            end
+            if not obj then
+                obj = aliveTokens[COLORS_ALL[i]].object
             end
             if obj then
                 obj.setLock(true)
@@ -696,7 +723,7 @@ function resizeTable()
                     obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.35))
                 end
             end
-            if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
+            if aliveTokens[COLORS_ALL[i]].vote ~= nil then
                 if storytellerMode then
                     aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1.43))
                 else
@@ -782,7 +809,7 @@ function resizeTable()
             storageBag.putObject(obj)
         end
 
-        if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
+        if aliveTokens[COLORS_ALL[i]].vote ~= nil then
             aliveTokens[COLORS_ALL[i]].vote.destruct()
         end
 
@@ -842,6 +869,16 @@ function resizeTable()
     if not imageLoaded then
         Wait.time(updateCustomBoardGuids, 1)
     end
+
+    if storytellerMode then
+        obj = getObjectFromGUID(PLAYER_DIST_GUID)
+        if obj then
+            obj.setPositionSmooth({0,1.25,0})
+            obj.setRotationSmooth({0,0,0})
+            obj.setScale({2 + 0.2 *(tableSize-5), 1, 2 + 0.2 *(tableSize-5)})
+        end
+    end
+
     Wait.time(lockObjects, 2)
 end
 
@@ -852,7 +889,7 @@ function createSnapPoints()
     radTokens = tableSize * 0.6 + 6
 
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-26,0,103}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-26,0,101}, rotation = {0,0,0}, rotation_snap = true})
     for i = 1,tableSize do
         if not storytellerMode then
             table.insert(snapTable, {position = radius(55, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
@@ -860,7 +897,7 @@ function createSnapPoints()
             table.insert(snapTable, {position = radius(radTokens, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
         end
         pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
-        pos[3] = pos[3] + 121
+        pos[3] = pos[3] + 119
         table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = false})
     end
     self.setSnapPoints(snapTable)
@@ -910,7 +947,7 @@ function setTokenTable()
     if started then
         for k,v in pairs(colors) do
             posTable[v] = radius(rad, angle[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 121
+            posTable[v][3] = posTable[v][3] + 119
         end
         tokenTable = {}
         scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
@@ -956,7 +993,7 @@ function moveTokens()
     if started then
         for k,v in pairs(colors) do
             posTable[v] = radius(rad, angle[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 121
+            posTable[v][3] = posTable[v][3] + 119
             if tokenTable[v] ~= nil then
                 for k1,v1 in pairs(tokenTable[v]) do
                     pos = v1.getPosition()
@@ -1096,7 +1133,7 @@ function toggleLights(params)
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
         if obj then
-            obj.setPosition({0,10,121})
+            obj.setPosition({0,10,119})
             obj.call('powerOn')
         end
 
@@ -1136,9 +1173,9 @@ end
 
 function toggleLockAliveAndVoteTokens(locking)
     for i = 1,20 do
-        if aliveTokens[COLORS_ALL[i]].object ~= 0 then
+        if aliveTokens[COLORS_ALL[i]].object ~= nil then
             aliveTokens[COLORS_ALL[i]].object.setLock(locking)
-            if aliveTokens[COLORS_ALL[i]].vote ~= 0 then
+            if aliveTokens[COLORS_ALL[i]].vote ~= nil then
                 aliveTokens[COLORS_ALL[i]].vote.setLock(locking)
             end
         end
@@ -1596,9 +1633,9 @@ function swapObjects(color1, color2)
 
     rad = tableSize * 0.4 + 6
     pos1 = radius(rad, angle[color1], 1.0)
-    pos1[3] = pos1[3] + 121
+    pos1[3] = pos1[3] + 119
     pos2 = radius(rad, angle[color2], 1.0)
-    pos2[3] = pos2[3] + 121
+    pos2[3] = pos2[3] + 119
 
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     if scriptZone then
@@ -1650,12 +1687,12 @@ end
 function checkSeatedPlayers()
     local obj
     local allPlayers = Player.getPlayers()
-    if DEBUG or #allPlayers == 1 then
+    if DEBUG then
         return
     end
     updatePlayers()
     for k,v in pairs(COLORS) do
-        if not Player[v].seated then
+        if chars[v] == nil then
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
                 obj.setValue('Grey')
@@ -1667,7 +1704,7 @@ function checkSeatedPlayers()
         end
     end
     for k,v in pairs(COLORS_EX) do
-        if players[v] == nil then
+        if chars[v] == nil then
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
                 obj.destruct()
@@ -1835,10 +1872,10 @@ end
 
 function checkLiving()
     for k,v in pairs(COLORS_ALL) do
-        if aliveTokens[v].object ~= 0 then
+        if aliveTokens[v].object ~= nil then
             if aliveTokens[v].object.is_face_down == true then -- if life token is face down...
                 living[v] = false
-                if aliveTokens[v].vote ~= 0 then -- ..then if a vote token is present
+                if aliveTokens[v].vote ~= nil then -- ..then if a vote token is present
                     hasVote[v] = true
                 else
                     hasVote[v] = false
@@ -1873,7 +1910,7 @@ function showVoteButtons(params)
     checkLiving()
     updatePlayers()
     for k,v in pairs(COLORS_ALL) do
-        if aliveTokens[v].object ~= 0 then
+        if aliveTokens[v].object ~= nil then
             votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
             votePanel.call('createButtons')
             voteButtonsOn[v] = true

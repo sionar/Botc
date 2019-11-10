@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.4'
+VERSION = '1.1.0'
 START_POS = {21,1.2,145}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -88,7 +88,7 @@ function start(clickedObject, playerColor)
         posTable[v] = radius(rad, angles[v], 1.5)
         posTable[v][3] = posTable[v][3] - 3
         posTableGrim[v] = radius(radGrim, angles[v], 1.5)
-        posTableGrim[v][3] = posTableGrim[v][3] + 133
+        posTableGrim[v][3] = posTableGrim[v][3] + 116.5
     end
 
     deleteOldText()
@@ -111,7 +111,7 @@ function generateGrimNames()
 
     for k,v in pairs(colors) do
         posTableGrim[v] = radius(radGrim, angles[v], 1.5)
-        posTableGrim[v][3] = posTableGrim[v][3] + 130.5
+        posTableGrim[v][3] = posTableGrim[v][3] + 116.5
     end
 
     for i = 1, numPlayers do

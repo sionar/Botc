@@ -130,7 +130,7 @@ function displayChart()
         end
     end
 
-    params = {click_function = 'displayPlayers', function_owner = self, label = "Display Player Count", tooltip = "Display Player Count", color = {1,1,1,1}, font_color = {0,0,0,1},
+    params = {click_function = 'displayPlayers', function_owner = self, label = "Display Player Count", tooltip = "Display Player Count", color = {0,0,0,0.2}, font_color = {1,1,1,1},
         position = {0,0.2,1.1}, width = 10000, height = 1500, font_size = 1000, scale = {0.1,0.1,0.1}}
     self.createButton(params)
 end
@@ -153,7 +153,7 @@ function displayPlayers()
         self.createButton(params)
     end
 
-    params = {click_function = 'displayChart', function_owner = self, label = "Display Distribution Chart", tooltip = "Display Distribution Chart",  color = {1,1,1,1}, font_color = {0,0,0,1},
+    params = {click_function = 'displayChart', function_owner = self, label = "Display Distribution Chart", tooltip = "Display Distribution Chart",  color = {0,0,0,0.2}, font_color = {1,1,1,1},
         position = {0,0.2,1.1}, width = 10000, height = 1500, font_size = 1500, scale = {0.1,0.1,0.1}}
     self.createButton(params)
 end

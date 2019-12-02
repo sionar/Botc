@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '17.1.4'
+VERSION = '17.1.5'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -1035,12 +1035,7 @@ function moveDecals()
     for i = 1, #deletingIndexes do
         table.remove(globalDecals, deletingIndexes[i])
     end
-
-    local decalTab = Global.getDecals()
-    while decalTab ~= nil do
-        Global.setDecals({})
-        decalTab = Global.getDecals()
-    end
+    Global.setDecals({})
     Global.setDecals(globalDecals)
 end
 
@@ -2088,12 +2083,7 @@ function disableDecals()
     UI.setAttribute('placeDecalSV', 'active', 'false')
     UI.setAttribute('placeDecalCU', 'active', 'false')
     UI.setAttribute('decalText', 'active', 'false')
-
-    local decalTab = Global.getDecals()
-    while decalTab ~= nil do
-        Global.setDecals({})
-        decalTab = Global.getDecals()
-    end
+    Global.setDecals({})
 end
 
 function enableDecals()
@@ -2427,7 +2417,6 @@ function decalUI(player, value, id)
         return
     end
     local globalDecals = Global.getDecals()
-    local decalTab
 
     if globalDecals ~= nil then
         for i = #globalDecals,1,-1 do
@@ -2436,11 +2425,6 @@ function decalUI(player, value, id)
             end
         end
         Global.setDecals({})
-        decalTab = Global.getDecals()
-        while decalTab ~= nil do
-            Global.setDecals({})
-            decalTab = Global.getDecals()
-        end
         Global.setDecals(globalDecals)
     end
     if value ~= "None" then

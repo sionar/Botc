@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '17.1.10'
+VERSION = '17.2.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -15,7 +15,7 @@ COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
-COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255,0.5}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
@@ -34,8 +34,6 @@ PLAYER_DIST_GUID = '7527ae'
 SCRIPTING_ZONE_GUID = 'a17a77'
 STORAGE_BAG_GUID = 'af22f9'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
-TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
-TABLE_TEXT_GUIDS = {White = '84a6dc', Brown = 'a2c42d', Red = 'd2d7a9', Orange = '3dd75d', Yellow = 'd506e4', Green = 'f07247', Teal = 'ddb0b2', Blue = '7979e4', Purple = 'e2e890', Pink = '2ca231', Magenta = '048b9e', Lavender = 'b2fce9', Navy = 'c33689', Cyan = '8939ce', Mint = '577520', Lime = '0cb587', Peach = '05bcea', Coral = '60df42', Maroon = '85652b', Silver = '7c3ac7'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
 NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
 ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
@@ -202,30 +200,13 @@ function onLoad(saveString)
         end
     end
 
-    for k,v in pairs(TEXT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-        end
-    end
-
-    for k,v in pairs(TABLE_TEXT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-        end
-    end
-
-    obj = getObjectFromGUID(TEXT_GUIDS['Version'])
-    if obj then
-        obj.setValue('v ' .. VERSION)
-    end
-
     if not started then
         notes = START_MESSAGE
         setNotes(notes)
         updateNotebookTabs()
     end
+
+
 
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     hideCharSheets()
@@ -351,20 +332,6 @@ function refreshObjects()
         end
     end
 
-    for k,v in pairs(TEXT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-        end
-    end
-
-    for k,v in pairs(TABLE_TEXT_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = false
-        end
-    end
-
     Wait.time(lockObjects, 2)
 end
 
@@ -420,6 +387,7 @@ function updatePlayers()
     local allPlayers = Player.getPlayers()
     local found
     local textObj
+    local mainTable = getObjectFromGUID(TABLE_GUID)
 
     for k,v in pairs(COLORS) do
         if Player[v].seated then
@@ -448,10 +416,7 @@ function updatePlayers()
             if found == nil then        --cannot find player with that id
                 playersExIds[v] = nil
                 playersEx[v] = nil
-                textObj = getObjectFromGUID(TEXT_GUIDS[v])
-                if textObj then
-                    textObj.setValue(' ')
-                end
+                mainTable.call('setName', {color = v, name = ''})
                 for i = 11, 20 do
                     UI.setAttribute('sit' .. i .. v, 'text', 'Sit in ' .. v)
                     UI.setAttribute('sit' .. i .. v, 'textColor', '#FFFFFF')
@@ -726,23 +691,11 @@ function resizeTable()
                 end
             end
 
-            obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
-            if obj then
-                obj.setPosition(radius(35,angle[COLORS_ALL[i]], 2))
-                obj.setRotation({90, angle[COLORS_ALL[i]]+180, 0})
-            end
-
             if i <= 10 then
                 Player[COLORS_ALL[i]].setHandTransform({position = radius(82,angle[COLORS_ALL[i]], 1), rotation = {0, angle[COLORS_ALL[i]] + 180, 0}, scale = {14,5,6.5}})
             end
 
             if i > 10 then
-                obj = getObjectFromGUID(TEXT_GUIDS[COLORS_ALL[i]])
-                if obj then
-                    obj.setPosition(radius(83.6,angle[COLORS_ALL[i]], 1))
-                    obj.setRotation({90, angle[COLORS_ALL[i]], 0})
-                end
-
                 obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
                 if not obj then
                     obj = storageBag.takeObject({guid = AVATAR_LIGHT_GUIDS[COLORS_ALL[i]]})
@@ -808,12 +761,6 @@ function resizeTable()
             aliveTokens[COLORS_ALL[i]].vote.destruct()
         end
 
-        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
-        if obj then
-            obj.setPosition({0,-2,0})
-            obj.setValue(' ')
-        end
-
         if i <= 10 then
             Player[COLORS_ALL[i]].setHandTransform({position = {0,1000,0}, scale = {0,0,0}})
             if Player[COLORS_ALL[i]].seated then
@@ -826,11 +773,6 @@ function resizeTable()
             if players[COLORS_ALL[i]] ~= nil then
                 sitUI(players[COLORS_ALL[i]], _, 'sit'..tableSize..COLORS_ALL[i])
             end
-            obj = getObjectFromGUID(TEXT_GUIDS[COLORS_ALL[i]])
-            if obj then
-                obj.setPosition({0,-0.1,0})
-            end
-
             obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then
                 storageBag.putObject(obj)
@@ -838,21 +780,8 @@ function resizeTable()
         end
     end
 
-    if tableSize <= 10 then
-        fontSize = 108
-    elseif tableSize <= 15 then
-        fontSize = 72
-    else
-        fontSize = 36
-    end
-
-    for i = 1,20 do
-        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[COLORS_ALL[i]])
-        if obj then
-            obj.TextTool.setFontSize(fontSize)
-        end
-
-    end
+    mainTable = getObjectFromGUID(TABLE_GUID)
+    mainTable.call('moveText', {tableSize = tableSize})
     createSnapPoints()
     toggleLights({switching = false})
     UI.setAttribute('colorSelection','active',false)
@@ -2078,12 +2007,8 @@ end
 function disableTableText()
     local obj
     UI.setAttribute('tableTextUI', 'active', 'false')
-    for k,v in pairs(COLORS_ALL) do
-        obj = getObjectFromGUID(TABLE_TEXT_GUIDS[v])
-        if obj then
-            obj.setValue(' ')
-        end
-    end
+    local mainTable = getObjectFromGUID(TABLE_GUID)
+    mainTable.call('clearText')
 end
 
 function enableTableText()
@@ -2108,16 +2033,11 @@ end
 
 function setTableTextUI(player, value, id)
     local obj
+    local mainTable = getObjectFromGUID(TABLE_GUID)
     updatePlayers()
     for k,v in pairs(colors) do
         if players[v] ~= nil and players[v].steam_id == player.steam_id then
-            obj = getObjectFromGUID(TABLE_TEXT_GUIDS[v])
-            if obj then
-                if value == '' then
-                    value = ' '
-                end
-                obj.setValue(formatTableText(value))
-            end
+            mainTable.call('setText', {color = v, text = value})
         end
     end
 end
@@ -2152,6 +2072,7 @@ function sitUI(player, value, id)
     local textObj, obj, zoneObj
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
+    local mainTable = getObjectFromGUID(TABLE_GUID)
     local color = string.sub(id, 6, #id)
     updatePlayers()
     if playersEx[color] == nil then
@@ -2168,10 +2089,7 @@ function sitUI(player, value, id)
         player.print('You are now sitting in ' .. color .. '.')
         playersExIds[color] = player.steam_id
         playersEx[color] = player
-        textObj = getObjectFromGUID(TEXT_GUIDS[color])
-        if textObj then
-            textObj.setValue(player.steam_name)
-        end
+        mainTable.call('setName', {color = color, name = player.steam_name})
         generateAvatar(color)
         printToAll(COLORS_BBC[color] .. player.steam_name .. ' is color ' .. color .. '.[-]')
         for i = 11,20 do
@@ -2191,10 +2109,7 @@ function sitUI(player, value, id)
             end
             playersEx[color] = nil
             playersExIds[color] = nil
-            textObj = getObjectFromGUID(TEXT_GUIDS[color])
-            if textObj then
-                textObj.setValue(' ')
-            end
+            mainTable.call('setName', {color = color, name = ''})
             deleteAvatar(color)
             if started then
                 zoneObj = getObjectFromGUID(ZONE_GUIDS[color])

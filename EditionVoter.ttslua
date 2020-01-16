@@ -1,0 +1,126 @@
+--[[
+Edition Voter
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.0'
+COLORS_BBC = {Black = '[333333]', White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
+X_DIFF = 3.7
+START_X = X_DIFF * 1.5 * -1
+START_Z = -2
+
+------------------Variables
+time = 0
+currentTimerID = 0
+votingEnabled = false
+voters = {TB = {}, BM = {}, SV = {}, CU = {}}
+startButtonLabel = 'Start Vote'
+
+
+------------------Functions
+function onLoad()
+    moveBoard()
+    refreshUI()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+
+end
+
+function moveBoard()
+    self.setPositionSmooth({0,1.2,0})
+    self.setRotationSmooth({0,180,0})
+    self.setLock(true)
+end
+
+function timeRefresh()
+    local minutes, seconds
+    time = time - 1
+    if time <= 30 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Yellow')})
+    end
+    if time <= 10 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Orange')})
+    end
+
+    self.editButton({index = 0, label = time})
+    if time == 0 then
+        self.editButton({index = 0, font_color = stringColorToRGB('Red')})
+        votingEnabled = false
+        return
+    else
+        currentTimerID = Wait.time(timeRefresh, 1)
+    end
+end
+
+function startVote(clickedObject, playerColor)
+    if Player[playerColor].admin then
+        for k,v in pairs(voters) do
+            voters[k] = {}
+        end
+        self.editButton({index = 0, label = '60', font_color = stringColorToRGB('Blue')})
+        time = 60
+        votingEnabled = true
+        startTimer()
+        refreshUI()
+    end
+end
+
+function startTimer()
+    self.setLock(true)
+    Wait.stop(currentTimerID)
+    startButtonLabel = 'Reset Vote'
+    currentTimerID = Wait.time(timeRefresh, 1)
+end
+
+function vote(player, value, id)
+    if votingEnabled then
+        local color = nil
+        local players = Global.getTable('players')
+        local found = false
+        for k,v in pairs(players) do
+            if v.steam_id == player.steam_id then
+                color = k
+            end
+        end
+        if color == nil then
+            return
+        end
+
+        for k,v in pairs(voters[value]) do
+            if v == color then
+                table.remove(voters[value], k)
+                found = true
+            end
+        end
+        if not found then
+            table.insert(voters[value], color)
+        end
+        refreshUI()
+    end
+end
+
+
+function refreshUI()
+    self.clearButtons()
+
+    local z = START_Z
+    local params
+    params = {click_function = 'null', function_owner = self, label = time, position = {0,0.2,-7.7}, scale = {1.5, 1.5, 1.5}, width = 0, height = 0, font_size = 1000, font_color = {1,0,0}}
+    self.createButton(params)
+
+    params = {click_function = 'startVote', function_owner = self, label = startButtonLabel, font_color = stringColorToRGB('White'), color = {0,0,0,0.5},
+            position = {-3.5,0.2,-7.7}, width = 3500, height = 1500, font_size = 2000, scale = {0.5,0.5,0.5}}
+    self.createButton(params)
+
+    x = START_X
+    for k,v in pairs(voters) do
+        z = START_Z
+        for k1,v1 in pairs(v) do
+            params = {click_function = 'null', function_owner = self, label = COLORS_BBC[v1]..v1..'[-]', position = {x,0.1,z}, scale = {1, 1, 1}, width = 0, height = 0, font_size = 300,}
+            self.createButton(params)
+            z = z + 0.8
+        end
+        x = x + X_DIFF
+    end
+end

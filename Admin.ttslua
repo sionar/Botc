@@ -23,6 +23,10 @@ function nums_to_bbc(color)
     return "[" .. r .. g .. b .. "]"
 end
 
+function randomColor()
+    return {math.random(), math.random(), math.random()}
+end
+
 function onChat(message, player)
     local args = {} -- The arguments following a command
     local command, msg, len
@@ -190,7 +194,10 @@ function onChat(message, player)
 
     if player.steam_id == ADMIN_ID then
         name = gradient(player.steam_name, {73/255,213/255,253/255}, {1,1,1})
-        message = gradient(message, {1,1,1}, {73/255,213/255,253/255})
+        if playersExIds['Cyan'] == ADMIN_ID then
+            name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
+        end
+        message = gradient(message, {1,1,1}, randomColor())
         printToAll('[i]' .. name .. ': ' .. message .. '[/i]')
         return false
     end

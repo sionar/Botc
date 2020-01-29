@@ -16,6 +16,7 @@ CLONE = {
     Table = {pos = {0, 1.2, 34}, rot = {0,180,0}, scale = {1,1,1}},
 }
 DEAL_BAG_GUID = '43ecc9'
+STORAGE_BAG_GUID = 'af22f9'
 CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a', Black = '49ac3a'}
 DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/788618109330652086/74F8479C94ACCB7BE48E332C889806427F4DDBBB/'
 
@@ -48,15 +49,10 @@ function onLoad(saveString)
         characters = save['c']
         saveFile = save['s']
     end
-    local customSet = Global.getVar('customSet')
-    if customSet then
-        characters = Global.getTable('customList')
-        refreshUI()
-    else
-        moveBoard()
-        startMenu()
-        self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
-    end
+
+    moveBoard()
+    startMenu()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
 function onSave()
@@ -378,6 +374,7 @@ function start(clickedObject, playerColor)
     local bagObjs
     local name, foundIndex
     local objs = getAllObjects()
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 
 	if playerColor ~= 'Black' and not debug then
 		return
@@ -431,12 +428,8 @@ function start(clickedObject, playerColor)
         import()
         updateCustomDecalUI()
         editCustomNotebookTab()
-        if not imageLoaded then
-            createClones()
-            Wait.time(function () Global.call('updateCustomBoardGuids') end, 3)
-        end
     end
-	self.destruct()
+    storageBag.putObject(self)
 end
 
 function checkValid(char)
@@ -691,9 +684,11 @@ function import()
     local takeObj
     local found = false
     local name, idx
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 
     Global.setVar('customSet', true)
     Global.setTable('customList', characters)
+    Global.call('drawAllCharSheets')
 
     for k,v in pairs(allObjects) do
         if string.match(v.getName(), ': Townsfolk') then
@@ -706,10 +701,6 @@ function import()
             table.insert(bags, v)
         elseif string.match(v.getName(), ': Reminder Tokens') then
             table.insert(bags, v)
-        elseif string.match(v.getName(), ': Characters') then
-            if not imageLoaded then
-                v.destruct()
-            end
         end
     end
 
@@ -728,34 +719,9 @@ function import()
             if not found then
                 idx = objTable[i].index
                 takeObj = v1.takeObject({index = idx})
-                takeObj.destruct()
+                storageBag.putObject(takeObj)
             end
         end
-    end
-end
-
-function createClones()
-    local colors = Global.getTable('colors')
-    local angle = Global.getTable('angle')
-    local clone = {}
-    local obj
-
-    for k,v in pairs(colors) do
-        clone[v] = self.clone()
-        clone[v].setName('Custom Characters List')
-        clone[v].setPosition(radius(72.5,angle[v], 1))
-        clone[v].setRotation({0, angle[v], 0})
-        clone[v].setScale({0.6,0.6,0.6})
-        clone[v].setLock(true)
-    end
-
-    for k,v in pairs(CLONE) do
-        obj = self.clone()
-        obj.setName('Custom Characters List')
-        obj.setPositionSmooth(v.pos)
-        obj.setRotationSmooth(v.rot)
-        obj.setScale(v.scale)
-        obj.setLock(true)
     end
 end
 
@@ -989,6 +955,7 @@ function webReqCB(req)
             for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
                 obj = getObjectFromGUID(v)
                 if obj then
+                    obj.setColorTint({1,1,1})
                     obj.setCustomObject(params)
                     obj.reload()
                 end
@@ -1033,162 +1000,123 @@ function refreshUI()
 
     self.clearButtons()
     self.clearInputs()
-    customSet = Global.getVar('customSet')
 
-    if not customSet then
-        buttonParam = {click_function = 'nullFunc', label = 'Characters', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {-3,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+    buttonParam = {click_function = 'nullFunc', label = 'Characters', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {-3,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Unused', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {1.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Selected', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {5.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeTB', label = 'Trouble Brewing', color = {0.85,0.1,0.1,1}, font_color = {1,1,1}, function_owner = self,
+        position = {-7.4,BUTTON_Y,-1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Trouble Brewing game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeBM', label = 'Bad Moon Rising', color = {0.85,0.73,0.09,1}, font_color = {0,0,0}, function_owner = self,
+        position = {-7.4,BUTTON_Y,-0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Bad Moon Rising game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeSV', label = 'Sects & Violets', color = {0.62,0.13,0.94,1}, font_color = {1,1,1}, function_owner = self,
+        position = {-7.4,BUTTON_Y,0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Sects & Violets game.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'modeCU', label = 'Custom Game', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+        position = {-7.4,BUTTON_Y,1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Custom game.'}
+    self.createButton(buttonParam)
+
+    if mode == 'CU' then
+        buttonParam = {click_function = 'clear', label = 'Clear List', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,2.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Clear the Character list.'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'nullFunc', label = 'Unused', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {1.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+        buttonParam = {click_function = 'batchImportMenu', label = 'Batch Import', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,3.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Import a bunch of characters at once.'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'nullFunc', label = 'Selected', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {5.5,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400,}
+        buttonParam = {click_function = 'loadImageMenu', label = 'Load Image', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,4.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Load an image from a url for your custom script.'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'modeTB', label = 'Trouble Brewing', color = {0.85,0.1,0.1,1}, font_color = {1,1,1}, function_owner = self,
-            position = {-7.4,BUTTON_Y,-1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Trouble Brewing game.'}
+        buttonParam = {click_function = 'saveLoadMenu', label = 'Save/Load Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,5.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Save or load your custom character list.'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'modeBM', label = 'Bad Moon Rising', color = {0.85,0.73,0.09,1}, font_color = {0,0,0}, function_owner = self,
-            position = {-7.4,BUTTON_Y,-0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Bad Moon Rising game.'}
+        buttonParam = {click_function = 'importLists', label = 'Import Lists\nFrom Other Board', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
+            position = {-7.4,BUTTON_Y,6.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 150, tooltip = 'Import your custom scripts from another Character Tool.'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'modeSV', label = 'Sects & Violets', color = {0.62,0.13,0.94,1}, font_color = {1,1,1}, function_owner = self,
-            position = {-7.4,BUTTON_Y,0.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Sects & Violets game.'}
-        self.createButton(buttonParam)
-
-        buttonParam = {click_function = 'modeCU', label = 'Custom Game', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-            position = {-7.4,BUTTON_Y,1.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Start a Custom game.'}
-        self.createButton(buttonParam)
-
-        if mode == 'CU' then
-            buttonParam = {click_function = 'clear', label = 'Clear List', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,2.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Clear the Character list.'}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'batchImportMenu', label = 'Batch Import', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,3.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Import a bunch of characters at once.'}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'loadImageMenu', label = 'Load Image', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,4.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Load an image from a url for your custom script.'}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'saveLoadMenu', label = 'Save/Load Lists', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,5.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 200, tooltip = 'Save or load your custom character list.'}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'importLists', label = 'Import Lists\nFrom Other Board', color = {0.5,0.5,0.5,1}, font_color = {0,0,0}, function_owner = self,
-                position = {-7.4,BUTTON_Y,6.5}, rotation = {0,0,0}, width = 1500, height = 400, font_size = 150, tooltip = 'Import your custom scripts from another Character Tool.'}
-            self.createButton(buttonParam)
-
-            buttonParam = {input_function = 'charInput', position = {-3, BUTTON_Y, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}
-            self.createInput(buttonParam)
-
-            buttonParam = {click_function = 'removeChar', label = 'Remove', position = {-4, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Remove character from game'}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'addChar', label = 'Add', position = {-2, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Add character to game'}
-            self.createButton(buttonParam)
-        end
-
-        buttonParam = {click_function = 'nullFunc', label = '# Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {0.6,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
-        self.createButton(buttonParam)
-
-        buttonParam = {click_function = 'nullFunc', label = '# Travelers', color = {1,1,1,1}, font_color = stringColorToRGB('Green'), function_owner = self,
-            position = {2.9,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
-        self.createButton(buttonParam)
-
-        buttonParam = {input_function = 'numPlayersInput', position = {0.6, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numPlayers, label = '5', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of non-travelers in the game'}
+        buttonParam = {input_function = 'charInput', position = {-3, BUTTON_Y, 7.8}, width = 1600, height = 250, font_size = 200, value = charAdd, label = 'Character', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 1, tab = 2}
         self.createInput(buttonParam)
 
-        buttonParam = {input_function = 'numTravInput', position = {2.9, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numTrav, label = '0', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of travelers in the game'}
-        self.createInput(buttonParam)
-
-        buttonParam = {click_function = 'random', label = 'Random', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
-            position = {5.2,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Select random character tokens based on the player count.'}
+        buttonParam = {click_function = 'removeChar', label = 'Remove', position = {-4, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Remove character from game'}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'start', label = 'Start', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
-            position = {7.5,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Put the selected character tokens into the Deal bag.'}
+        buttonParam = {click_function = 'addChar', label = 'Add', position = {-2, BUTTON_Y, 8.5}, width = 800, height = 300, font_size = 200, color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, rotation = {0,0,0}, tooltip = 'Add character to game'}
+        self.createButton(buttonParam)
+    end
+
+    buttonParam = {click_function = 'nullFunc', label = '# Players', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0.6,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = '# Travelers', color = {1,1,1,1}, font_color = stringColorToRGB('Green'), function_owner = self,
+        position = {2.9,BUTTON_Y,7.5}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+    self.createButton(buttonParam)
+
+    buttonParam = {input_function = 'numPlayersInput', position = {0.6, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numPlayers, label = '5', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of non-travelers in the game'}
+    self.createInput(buttonParam)
+
+    buttonParam = {input_function = 'numTravInput', position = {2.9, BUTTON_Y, 8.2}, width = 800, height = 380, font_size = 340, value = numTrav, label = '0', color = stringColorToRGB('White'), function_owner = self, font_color = {0,0,0}, function_owner = self, rotation = {0,0,0}, alignment = 3, validation = 2, tab = 2, tooltip = 'Number of travelers in the game'}
+    self.createInput(buttonParam)
+
+    buttonParam = {click_function = 'random', label = 'Random', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
+        position = {5.2,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Select random character tokens based on the player count.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'start', label = 'Start', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
+        position = {7.5,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Put the selected character tokens into the Deal bag.'}
+    self.createButton(buttonParam)
+
+    z = Z_START
+    for k,v in pairs(characters) do
+        buttonParam = {click_function = 'nullFunc', label = label(v), color = {0,0,0,1}, font_color = {1,1,1}, function_owner = self,
+            position = {-3,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 200, tooltip = CHARACTERS[v].Description}
+        self.createButton(buttonParam)
+        z = z + Z_INC
+    end
+
+    z = Z_START
+    for k,v in pairs(unused) do
+        buttonParam = {click_function = 'unusedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
+            position = {1.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
+        self.createButton(buttonParam)
+        z = z + Z_INC
+    end
+
+    z = Z_START
+    for k,v in pairs(selected) do
+        buttonParam = {click_function = 'selectedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
+            position = {5.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
         self.createButton(buttonParam)
 
-        z = Z_START
-        for k,v in pairs(characters) do
-            buttonParam = {click_function = 'nullFunc', label = label(v), color = {0,0,0,1}, font_color = {1,1,1}, function_owner = self,
-                position = {-3,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 200, tooltip = CHARACTERS[v].Description}
-            self.createButton(buttonParam)
-            z = z + Z_INC
-        end
-
-        z = Z_START
-        for k,v in pairs(unused) do
-            buttonParam = {click_function = 'unusedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
-                position = {1.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
-            self.createButton(buttonParam)
-            z = z + Z_INC
-        end
-
-        z = Z_START
-        for k,v in pairs(selected) do
-            buttonParam = {click_function = 'selectedRemove' .. k, label = label(v), color = {0,0,0,1}, function_owner = self,
-                position = {5.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 1500, height = 250, font_size = 200,}
-            self.createButton(buttonParam)
-
-            buttonParam = {click_function = 'toggleLock' .. k, color = {0,0,0,1}, function_owner = self,
-                position = {7.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 500, height = 250, font_size = 110,}
-            if lock[selected[k]] == true then
-                buttonParam.label = 'Locked'
-                buttonParam.font_color = {1,0,0}
-                buttonParam.tooltip = 'Allow this character to be discarded from a random selection.'
-            else
-                buttonParam.label = 'Unlocked'
-                buttonParam.font_color = {0.12,0.53,1}
-                buttonParam.tooltip = 'Prevent this character from being discarded from a random selection.'
-            end
-
-            self.createButton(buttonParam)
-            z = z + Z_INC
-        end
-    else
-        z = -8.5
-        if #characters < 26 then
-            z_inc = Z_INC
+        buttonParam = {click_function = 'toggleLock' .. k, color = {0,0,0,1}, function_owner = self,
+            position = {7.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 500, height = 250, font_size = 110,}
+        if lock[selected[k]] == true then
+            buttonParam.label = 'Locked'
+            buttonParam.font_color = {1,0,0}
+            buttonParam.tooltip = 'Allow this character to be discarded from a random selection.'
         else
-            z_inc = 0.40
+            buttonParam.label = 'Unlocked'
+            buttonParam.font_color = {0.12,0.53,1}
+            buttonParam.tooltip = 'Prevent this character from being discarded from a random selection.'
         end
 
-        for k,v in pairs(TYPES) do
-            found[v] = false
-        end
-
-        for k,v in pairs(characters) do
-            found[CHARACTERS[v].Type] = true
-        end
-
-        for k,v in pairs(TYPES) do
-            if found[v] then
-                params = {click_function = 'nullFunc', label = COLORS_BBC[v] .. v, color = {1,1,1,1}, function_owner = self,
-                    position = {0,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 200,}
-                self.createButton(params)
-                z = z + z_inc * 1.5
-            end
-
-            for k1,v1 in pairs(characters) do
-                if CHARACTERS[v1].Type == v then
-                    charLabel = string.gsub(v1, '_', ' ')
-                    params = {click_function = 'nullFunc', color = {1,1,1,1}, function_owner = self,
-                        position = {0,BUTTON_Y,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 280, scale = {0.5,0.5,0.5}}
-                    params.label = COLORS_BBC[CHARACTERS[v1].Type] .. charLabel .. '[FFFFFF] - ' .. CHARACTERS[v1].Description .. '[-]'
-                    self.createButton(params)
-                    z = z + z_inc
-                end
-            end
-            z = z + z_inc
-        end
+        self.createButton(buttonParam)
+        z = z + Z_INC
     end
 end

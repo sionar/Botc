@@ -70,6 +70,7 @@ function onLoad(saveString)
         blindAuto = save['b']
         dayNum = save['day']
     end
+
     refreshUI()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
@@ -84,6 +85,7 @@ function onSave()
     save['c'] = checkPrompts
     save['b'] = blindAuto
     save['day'] = dayNum
+
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -907,6 +909,16 @@ function colorIndex(color)
         index = index + 1
     end
     return nil
+end
+
+function reset()
+    living = {}
+    order = {}
+    orderRef = {}
+    demonColor = nil
+    lastBlind = nil
+    dayNum = 0
+    refreshUI()
 end
 
 ------------------UI

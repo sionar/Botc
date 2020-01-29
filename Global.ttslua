@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '17.2.4'
+VERSION = '18.0.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -15,6 +15,7 @@ COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
+COLORS_TYPE = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
@@ -33,6 +34,8 @@ CLOCK_GUID = '0d5f75'
 PLAYER_DIST_GUID = '7527ae'
 SCRIPTING_ZONE_GUID = 'a17a77'
 STORAGE_BAG_GUID = 'af22f9'
+TRAVELER_BAG_GUID = '847fca'
+VOTE_TOKEN_BAG_GUID = 'aa3ceb'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
 NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
@@ -110,7 +113,7 @@ end
 customSet = false
 imageLoaded = false
 customList = {}
-customBoardGuids = {}
+
 
 
 ------------------Functions
@@ -127,7 +130,6 @@ function onLoad(saveString)
         customSet = save['c']
         imageLoaded = save['i']
         customList = save['cl']
-        customBoardGuids = save['cb']
         tableSize = save['t']
         colors = save['co']
         angle = save['an']
@@ -135,7 +137,6 @@ function onLoad(saveString)
     end
 
     local obj
-
     obj = getObjectFromGUID(TABLE_GUID)
     if obj then
         obj.interactable = false
@@ -186,7 +187,7 @@ function onLoad(saveString)
         for k,v in pairs(ALIVE_TOKEN_GUIDS) do
             obj = getObjectFromGUID(v)
             if obj then
-                obj.setLock(true)
+                obj.setLock(false)
                 obj.interactable = false
             end
         end
@@ -206,7 +207,7 @@ function onLoad(saveString)
         updateNotebookTabs()
     end
 
-
+    createFlipButtons()
 
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     hideCharSheets()
@@ -230,7 +231,6 @@ function onSave()
     save['c'] = customSet
     save['i'] = imageLoaded
     save['cl'] = customList
-    save['cb'] = customBoardGuids
     save['t'] = tableSize
     save['co'] = colors
     save['an'] = angle
@@ -355,15 +355,12 @@ function lockObjects()
     for k,v in pairs(ALIVE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
-            if not started and not storytellerMode then
-                obj.interactable = false
-                obj.setLock(true)
-            else
-                obj.interactable = true
-                obj.setLock(false)
-            end
+            obj.interactable = false
+            obj.setLock(true)
         end
     end
+
+    createFlipButtons()
 
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         obj = getObjectFromGUID(v)
@@ -613,15 +610,6 @@ function resizeTable()
                 obj.interactable = true
             end
 
-            if customSet and not imageLoaded then
-                obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
-                if not obj then
-                    obj = getObjectFromGUID(customBoardGuids['White']).clone()
-                end
-                obj.setPosition(radius(72.5,angle[COLORS_ALL[i]], 1))
-                obj.setRotation({0, angle[COLORS_ALL[i]], 0})
-            end
-
             obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
             if not obj then
                 obj = storageBag.takeObject({guid = VOTE_PANEL_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
@@ -730,13 +718,6 @@ function resizeTable()
             obj.setPositionSmooth({0,-1,0})
         end
 
-        if customSet and not imageLoaded then
-            obj = getObjectFromGUID(customBoardGuids[COLORS_ALL[i]])
-            if obj then
-                obj.destruct()
-            end
-        end
-
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
         if obj then
             storageBag.putObject(obj)
@@ -790,9 +771,6 @@ function resizeTable()
         obj.call('updateSettings')
     end
     showExtensionUI()
-    if not imageLoaded then
-        Wait.time(updateCustomBoardGuids, 1)
-    end
 
     if storytellerMode then
         obj = getObjectFromGUID(PLAYER_DIST_GUID)
@@ -825,41 +803,6 @@ function createSnapPoints()
         table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = false})
     end
     self.setSnapPoints(snapTable)
-end
-
-function updateCustomBoardGuids()
-    local allObjects = getAllObjects()
-    local foundObj
-
-    for k,v in pairs(COLORS_ALL) do
-        if inTable(v, colors) then
-            colorPos = radius(72.5,angle[v], 1)
-            foundObj = false
-            for k1,v1 in pairs(allObjects) do
-                pos = v1.getPosition()
-                if v1.getName() == 'Custom Characters List' and math.abs(pos[1] - colorPos[1]) < 0.1 and math.abs(pos[3] - colorPos[3]) < 0.1 then
-                    foundObj = true
-                    customBoardGuids[v] = v1.getGUID()
-                    if inTable(v, COLORS_EX) then
-                        v1.setInvisibleTo({'White','Brown','Red','Orange','Yellow','Green','Teal','Blue','Purple','Pink'})
-                    end
-                    break
-                end
-            end
-            if not foundObj then
-                customBoardGuids[v] = nil
-            end
-        else
-            if customBoardGuids[v] ~= nil then
-                obj = getObjectFromGUID(customBoardGuids[v])
-                if obj then
-                    obj.destruct()
-                    customBoardGuids[v] = nil
-                end
-            end
-        end
-    end
-    toggleLights({switching = false})
 end
 
 function setTokenTable()
@@ -1078,6 +1021,150 @@ function toggleLights(params)
     end
 end
 
+function createFlipButtons()
+    local obj
+    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+        obj = getObjectFromGUID(v)
+        if obj then
+            obj.clearButtons()
+            obj.createButton({click_function = 'flipAliveToDead', function_owner = Global, position = {0,0.3,0}, rotation = {0,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
+            obj.createButton({click_function = 'flipDeadToAlive', function_owner = Global, position = {0,-0.1,0}, rotation = {180,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
+        end
+    end
+end
+
+function flipAliveToDead(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        local pos = clickedObject.getPosition()
+        pos['y'] = 1.44
+        clickedObject.interactable = true
+        clickedObject.setLock(false)
+        clickedObject.flip()
+        voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
+        voteToken.setLock(true)
+        voteToken.interactable = false
+        Wait.time(function () checkAndLock(clickedObject) end, 1)
+        Wait.time(checkLiving, 1)
+    end
+end
+
+function flipDeadToAlive(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        local pos = clickedObject.getPosition()
+        local objectsFound = Physics.cast({origin = pos, direction    = {0, 1, 0}, type = 1, max_distance = 3, debug = false})
+        local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
+        clickedObject.interactable = true
+        clickedObject.setLock(false)
+        clickedObject.flip()
+        Wait.time(function () checkAndLock(clickedObject) end, 1)
+        for i, hit in ipairs(objectsFound) do
+            if hit.hit_object.getName() == 'Vote Token' then
+                voteTokenBag.putObject(hit.hit_object)
+            end
+        end
+        Wait.time(checkLiving, 1)
+    end
+end
+
+function checkAndLock(obj)
+    local pos = obj.getPosition()
+    obj.setLock(true)
+    if pos['y'] < 1 then
+        pos['y'] = 1.36
+    end
+    obj.setPosition(pos)
+    obj.interactable = false
+end
+
+function resetGame()
+    local mainTable = getObjectFromGUID(TABLE_GUID)
+    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local allObjs = getAllObjects()
+    local bags = {}
+    for k,v in pairs(allObjs) do
+        if string.match(v.getName(), ': Demons') then
+            bags.Demon = v
+        elseif string.match(v.getName(), ': Minions') then
+            bags.Minion = v
+        elseif string.match(v.getName(), ': Outsiders') then
+            bags.Outsider = v
+        elseif string.match(v.getName(), ': Townsfolk') then
+            bags.Townsfolk = v
+		elseif string.match(v.getName(), ': Travelers') then
+			bags.Traveler = v
+        elseif string.match(v.getName(), ': Reminder Tokens') then
+            bags.Reminder = v
+        end
+    end
+
+    local obj
+    mainTable.call('clearText')
+    Global.setDecals({})
+    started = false
+    chars = {}
+    refreshUI()
+    resizeTable()
+    for k,v in pairs(COLORS) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        if obj then
+            obj.setValue(v)
+        end
+    end
+
+    for k,v in pairs(COLORS_EX) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        if obj then
+            obj.setColorTint(FAKE_ZONE_RGB[v])
+        end
+    end
+
+    for k,v in pairs(allObjs) do
+        if v.getName() == 'Alive Token' then
+            if v.getDescription() == 'Traveler' then
+                travelerBag.putObject(v)
+            else
+                if v.is_face_down then
+                    flipDeadToAlive(v, 'Black')
+                end
+            end
+        end
+        if v.getDescription() == 'Townsfolk' then
+            v.setColorTint({1,1,1})
+            bags.Townsfolk.putObject(v)
+        elseif v.getDescription() == 'Outsider' then
+            v.setColorTint({1,1,1})
+            bags.Outsider.putObject(v)
+        elseif v.getDescription() == 'Minion' then
+            v.setColorTint({1,1,1})
+            bags.Minion.putObject(v)
+        elseif v.getDescription() == 'Demon' then
+            v.setColorTint({1,1,1})
+            bags.Demon.putObject(v)
+        elseif v.getDescription() == 'Traveler' then
+            v.setColorTint({1,1,1})
+            bags.Traveler.putObject(v)
+        elseif v.getDescription() == 'Reminder Token' then
+            bags.Reminder.putObject(v)
+        end
+    end
+
+    local storageBagObjects = storageBag.getObjects()
+    grabObjectFromBag('Character Token Bag', storageBag, {0,1,108})
+    Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
+    nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    nightHelper.call('reset')
+end
+
+function grabObjectFromBag(name, bag, position)
+    local bagObjects = bag.getObjects()
+    for k,v in pairs(bagObjects) do
+        if v.name == name then
+            bag.takeObject({index = v.index, position = position, rotation = {0,0,0}})
+            return
+        end
+    end
+end
 
 ------------------Object Calls
 function getNumPlayers()
@@ -1100,6 +1187,63 @@ function toggleLockAliveAndVoteTokens(locking)
         end
     end
 end
+
+function drawAllCharSheets()
+    local allObjs = getAllObjects()
+    for k,v in pairs(allObjs) do
+        if string.match(v.getName(), ': Characters') then
+            drawCharSheet(v)
+        end
+    end
+end
+
+function drawCharSheet(object)
+    local found = {}
+    object.clearButtons()
+    object.setColorTint({0,0,0})
+
+    local count = 0
+    for k,v in pairs(customList) do
+        count = count + 1
+    end
+    local z = -2
+
+    if count < 30 then
+        z_inc = 0.12
+    else
+        z_inc = 0.1
+    end
+
+    for k,v in pairs(TYPES) do
+        found[v] = false
+    end
+
+    for k,v in pairs(customList) do
+        found[CHARACTERS[v].Type] = true
+    end
+
+    for k,v in pairs(TYPES) do
+        if found[v] then
+            params = {click_function = 'nullFunc', label = COLORS_TYPE[v] .. v, color = {1,1,1,1}, function_owner = self,
+                position = {0,0.15,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 140, scale = {0.25,0.25,0.25}}
+            object.createButton(params)
+            z = z + z_inc * 1.5
+        end
+
+        for k1,v1 in pairs(customList) do
+            if CHARACTERS[v1].Type == v then
+                charLabel = string.gsub(v1, '_', ' ')
+                params = {click_function = 'nullFunc', color = {1,1,1,1}, function_owner = self,
+                    position = {0,0.15,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120, scale = {0.25,0.25,0.25}}
+                params.label = COLORS_TYPE[CHARACTERS[v1].Type] .. charLabel .. '[FFFFFF] - ' .. CHARACTERS[v1].Description .. '[-]'
+                object.createButton(params)
+                z = z + z_inc
+            end
+        end
+        z = z + z_inc
+    end
+end
+
 
 
 ------------------Events
@@ -1606,6 +1750,8 @@ end
 function checkSeatedPlayers()
     local obj
     local allPlayers = Player.getPlayers()
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+
     if DEBUG then
         return
     end
@@ -1618,7 +1764,7 @@ function checkSeatedPlayers()
             end
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
-                obj.destruct()
+                storageBag.putObject(obj)
             end
         end
     end
@@ -1626,27 +1772,12 @@ function checkSeatedPlayers()
         if chars[v] == nil then
             obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
             if obj then
-                obj.destruct()
+                storageBag.putObject(obj)
             end
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
                 obj.setColorTint({0.69,0.69,0.69,0.25})
             end
-        end
-    end
-end
-
-function unlockAliveTokens()
-    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj then
-            obj.interactable = true
-        end
-    end
-    for k,v in pairs(colors) do
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
-        if obj then
-            obj.setLock(false)
         end
     end
 end
@@ -1907,6 +2038,7 @@ function updateVoteResults(params)
 
     updateNominations()
     resetVotes({voteMode = vM})
+    removeVoteTokens({voteMode = vM})
 end
 
 function updateNominations()
@@ -1956,6 +2088,17 @@ function resetVotes(params)
         voted[v] = false
     end
     hideVotehands()
+end
+
+function removeVoteTokens(params)
+    local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
+    for k,v in pairs(colors) do
+        if not (hasVote[v] or params.voteMode == 'exile') then
+            if aliveTokens[v].vote then
+                voteTokenBag.putObject(aliveTokens[v].vote)
+            end
+        end
+    end
 end
 
 function hideVotehands()

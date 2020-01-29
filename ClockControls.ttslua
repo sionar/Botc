@@ -597,8 +597,12 @@ function onObjectEnterScriptingZone(zone, object)
 end
 
 function onObjectLeaveScriptingZone(zone, object)
-    if object.getGUID() == TABLE_GUID then
+    if object.getGUID() == TABLE_GUID  then
         return
+    end
+
+    if object.getName() == 'Vote Token' then
+        Wait.time(function () object.setInvisibleTo({}) end, 0.5)
     end
 
     if zone.getGUID() == SCRIPTING_ZONE_GUID then

@@ -32,6 +32,7 @@ FIRST =
     'Madness',
     'Evil_Twin',
     'Counterfeiter',
+    'Spy',
     'Lunatic',
     'Pukka',
     'Hastur',
@@ -60,7 +61,6 @@ FIRST =
     'Mathematician',
     'Butler',
     'Goon',
-    'Spy',
     'Next_Night'
 }
 
@@ -100,6 +100,7 @@ OTHER =
     'Assassin',
     'Counterfeiter',
     'Pomme_de_Terror',
+    'Spy',
     'Exorcist',
     'Lunatic',
     'Imp',
@@ -148,7 +149,6 @@ OTHER =
     'Mathematician',
     'Butler',
     'Goon',
-    'Spy',
     'Next_Night'
 }
 

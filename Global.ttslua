@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.0.0'
+VERSION = '18.0.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -36,6 +36,7 @@ SCRIPTING_ZONE_GUID = 'a17a77'
 STORAGE_BAG_GUID = 'af22f9'
 TRAVELER_BAG_GUID = '847fca'
 VOTE_TOKEN_BAG_GUID = 'aa3ceb'
+SHROUD_BAG_GUID = '7eca97'
 ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
 AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
 NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
@@ -554,6 +555,7 @@ function resizeTable()
     local angleFirst, angleInc
     local zoneSize
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     local radSt = tableSize * 0.6 + 6
     local fontSize
 
@@ -739,7 +741,7 @@ function resizeTable()
         end
 
         if aliveTokens[COLORS_ALL[i]].vote ~= nil then
-            aliveTokens[COLORS_ALL[i]].vote.destruct()
+            voteTokenBag.putObject(aliveTokens[COLORS_ALL[i]].vote)
         end
 
         if i <= 10 then
@@ -1080,6 +1082,8 @@ function resetGame()
     local mainTable = getObjectFromGUID(TABLE_GUID)
     local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
+    local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
     local allObjs = getAllObjects()
     local bags = {}
     for k,v in pairs(allObjs) do
@@ -1129,6 +1133,7 @@ function resetGame()
                 end
             end
         end
+
         if v.getDescription() == 'Townsfolk' then
             v.setColorTint({1,1,1})
             bags.Townsfolk.putObject(v)
@@ -1146,6 +1151,15 @@ function resetGame()
             bags.Traveler.putObject(v)
         elseif v.getDescription() == 'Reminder Token' then
             bags.Reminder.putObject(v)
+        end
+    end
+
+    allObjs = getAllObjects()
+    for k,v in pairs(allObjs) do
+        if v.getName() == 'Vote Token' then
+            voteTokenBag.putObject(v)
+        elseif v.getName() == 'Shroud' then
+            shroudBag.putObject(v)
         end
     end
 

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.0.2'
+VERSION = '2.1.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -36,6 +36,8 @@ BOTTOM_BUT_X = {-5, -2.5, 0, 2.5, 5}
 BOTTOM_BUT_Z = 7.75
 
 CLOCK_CONTROLS_GUID = '184d11'
+SHROUD_BAG_GUID = '7eca97'
+SCRIPTING_ZONE_GUID = 'a17a77'
 
 
 ------------------Variables
@@ -356,6 +358,7 @@ function alive(clickedObject, playerColor, i)
         end
     end
 
+    placeShroud(i)
     setMsg()
 end
 
@@ -363,6 +366,47 @@ for k = 1,30 do
     _G['alive' .. k] = function(obj, col)
         alive(obj, col, k)
     end
+end
+
+function placeShroud(i)
+    local started = Global.getVar('started')
+    if not started then
+        return
+    end
+    local tableSize = Global.getVar('tableSize')
+    local angle = Global.getTable('angle')
+    local color = living[i].color
+    local rad = tableSize * 0.4 + 6
+    local pos = radius(rad, angle[color], 1.25)
+    pos['z'] = pos['z'] + 119
+    local found = nil
+    local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
+    local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
+    local vPos
+
+    for k,v in pairs(zoneObjs) do
+        if v.getName() == 'Shroud' then
+            vPos = v.getPosition()
+            if math.abs(vPos['x'] - pos['x']) < 1 and math.abs(vPos['z'] - pos['z']) < 1 then
+                found = v
+                break
+            end
+        end
+    end
+
+    if living[i].alive then
+        if found then
+            shroudBag.putObject(found)
+        end
+    else
+        if not found then
+            shroudBag.takeObject({position = pos, rotation = {0,0,0}})
+        end
+    end
+end
+
+function radius(rad, angle, height)
+    return {x = rad*math.sin(angle*math.pi/180), y = height, z = rad*math.cos(angle*math.pi/180)}
 end
 
 function sober(clickedObject, playerColor, i)

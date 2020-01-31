@@ -10,7 +10,7 @@ COLORS_BBC = {Black = '[333333]', White = '[FFFFFF]', Brown = '[703A16]', Red = 
 X_DIFF = 3.7
 START_X = X_DIFF * 1.5 * -1
 START_Z = -2
-STORAGE_BAG_GUID = 'af22f9'
+TOOL_BAG_GUID = '232b20'
 
 
 ------------------Variables
@@ -109,9 +109,9 @@ function vote(player, value, id)
 end
 
 function destroySelf(clickedObject, playerColor)
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local storageBag = getObjectFromGUID(TOOL_BAG_GUID)
     if Player[playerColor].admin or playerColor == 'Black' then
-        self.putObject(storageBag)
+        storageBag.putObject(self)
     end
 end
 

@@ -13,38 +13,31 @@ end
 
 function flipAliveToDead(clickedObject, playerColor)
     if playerColor == 'Black' then
+        self.setLock(true)
         local pos = clickedObject.getPosition()
-        pos['y'] = 1.44
-        clickedObject.setLock(false)
-        clickedObject.flip()
+        pos['y'] = 1.36
+        clickedObject.setPositionSmooth(pos)
+        clickedObject.setRotationSmooth({180,0,0})
         voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
         voteToken.setLock(true)
         voteToken.interactable = false
-        Wait.time(function () checkAndLock(clickedObject) end, 1)
+        Wait.time(function () Global.call('checkLiving') end, 1)
     end
 end
 
 function flipDeadToAlive(clickedObject, playerColor)
     if playerColor == 'Black' then
         local pos = clickedObject.getPosition()
-        local objectsFound = Physics.cast({origin = pos, direction    = {0, 1, 0}, type = 1, max_distance = 3, debug = false})
+        local objectsFound = Physics.cast({origin = pos, direction = {0, 1, 0}, type = 2, max_distance = 3, debug = false})
         local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
-        clickedObject.setLock(false)
-        clickedObject.flip()
-        Wait.time(function () checkAndLock(clickedObject) end, 1)
+        pos['y'] = 1.15
+        clickedObject.setPositionSmooth(pos)
+        clickedObject.setRotationSmooth({0,0,0})
         for i, hit in ipairs(objectsFound) do
             if hit.hit_object.getName() == 'Vote Token' then
                 voteTokenBag.putObject(hit.hit_object)
             end
         end
+        Wait.time(function () Global.call('checkLiving') end, 1)
     end
-end
-
-function checkAndLock(obj)
-    local pos = obj.getPosition()
-    obj.setLock(true)
-    if pos['y'] < 1 then
-        pos['y'] = 1.36
-    end
-    obj.setPosition(pos)
 end

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.0.3'
+VERSION = '18.0.5'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -24,6 +24,7 @@ VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 TABLE_GUID = '7f1f5f'
 STORYTELLER_TABLE_GUID = 'fb2b1a'
 ROOM_GUID = '038c16'
+GUILLOTINE_GUID = '597735'
 NIGHT_HELPER_GUID = 'bb89aa'
 CLOCK_CONTROLS_GUID = '184d11'
 TEAM_TOOL_GUID = '6fbc83'
@@ -57,6 +58,7 @@ jokersDefault = false
 timerID = 0
 started = false
 lights = false
+flipTimerExpired = true
 mode = 'TB'
 notes = ''
 history = '[FFFFFF]Vote History:[-]'
@@ -188,7 +190,7 @@ function onLoad(saveString)
     for k,v in pairs(ALIVE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
-            obj.setLock(false)
+            obj.setLock(true)
             obj.interactable = false
         end
     end
@@ -1035,7 +1037,9 @@ function createFlipButtons()
 end
 
 function flipAliveToDead(clickedObject, playerColor)
-    if playerColor == 'Black' then
+    if playerColor == 'Black' and flipTimerExpired then
+        flipTimerExpired = false
+        Wait.time(flipCooldown, 1.5)
         local pos = clickedObject.getPosition()
         pos['y'] = 1.36
         clickedObject.setPositionSmooth(pos)
@@ -1048,7 +1052,9 @@ function flipAliveToDead(clickedObject, playerColor)
 end
 
 function flipDeadToAlive(clickedObject, playerColor)
-    if playerColor == 'Black' then
+    if playerColor == 'Black' and flipTimerExpired then
+        flipTimerExpired = false
+        Wait.time(flipCooldown, 1.5)
         local pos = clickedObject.getPosition()
         local objectsFound = Physics.cast({origin = pos, direction = {0, 1, 0}, type = 2, max_distance = 3, debug = false})
         local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
@@ -1062,6 +1068,10 @@ function flipDeadToAlive(clickedObject, playerColor)
         end
         Wait.time(checkLiving, 1)
     end
+end
+
+function flipCooldown()
+    flipTimerExpired = true
 end
 
 function resetGame()
@@ -1150,6 +1160,11 @@ function resetGame()
             shroudBag.putObject(v)
         end
     end
+    local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
+    if guillotine then
+        guillotine.setPositionSmooth({-26, 1, 101})
+        guillotine.setRotationSmooth({0,0,0})
+    end
 
     local storageBagObjects = storageBag.getObjects()
     grabObjectFromBag('Character Token Bag', storageBag, {0,1,113})
@@ -1177,17 +1192,6 @@ function getNumPlayers()
         end
     end
     return numPlayers
-end
-
-function toggleLockAliveAndVoteTokens(locking)
-    for i = 1,20 do
-        if aliveTokens[COLORS_ALL[i]].object ~= nil then
-            aliveTokens[COLORS_ALL[i]].object.setLock(locking)
-            if aliveTokens[COLORS_ALL[i]].vote ~= nil then
-                aliveTokens[COLORS_ALL[i]].vote.setLock(locking)
-            end
-        end
-    end
 end
 
 function drawAllCharSheets()

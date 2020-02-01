@@ -144,6 +144,7 @@ function toggleClock(vm)
     local blueHand = getObjectFromGUID(BLUE_HAND_GUID)
     local clock = getObjectFromGUID(CLOCK_GUID)
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+    local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
     local started = Global.getVar('started')
     local tableSize = Global.getVar('tableSize')
 
@@ -168,7 +169,6 @@ function toggleClock(vm)
         Global.call('hideVoteButtons')
         Global.call('hideVotehands')
         if started then
-            Global.call('toggleLockAliveAndVoteTokens', false)
             Global.setVar('notes', '')
         end
         votingMode = ''
@@ -176,7 +176,10 @@ function toggleClock(vm)
         if rotating then
             toggleClockMovementButton(rotating)
             rotating = false
-            Global.call('toggleLockAliveAndVoteTokens', false)
+        end
+        if vm == 'execution' then
+            guillotine.setPositionSmooth({-26,1,101})
+            guillotine.setRotationSmooth({0,0,0})
         end
     else -- if clock is CURRENTLY down
         Global.call('showVoteButtons', {voteMode = vm})
@@ -206,6 +209,12 @@ function toggleClock(vm)
         pointHand({handGUID = PURPLE_HAND_GUID, color = 'None'})
         pointHand({handGUID = RED_HAND_GUID, color = 'None'})
         pointHand({handGUID = BLUE_HAND_GUID, color = 'None'})
+
+        if vm == 'execution' then
+            guillotine.setPositionSmooth({0,2,0})
+            guillotine.setRotationSmooth({0,0,0})
+            guillotine.setInvisibleTo({})
+        end
     end
 end
 
@@ -238,7 +247,6 @@ function toggleClockMovement(clickedObject, playerColor)
         players = Global.call('updatePlayers')
         toggleClockMovementButton(rotating)
         rotating = true
-        Global.call('toggleLockAliveAndVoteTokens', true)
         numAlive = Global.getVar('numAlive')
         numPlayers = Global.getVar('numPlayers')
         if votingMode == 'execution' then
@@ -252,7 +260,6 @@ function toggleClockMovement(clickedObject, playerColor)
     else
         toggleClockMovementButton(rotating)
         rotating = false
-        Global.call('toggleLockAliveAndVoteTokens', false)
     end
 end
 

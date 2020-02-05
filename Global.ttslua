@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.0.6'
+VERSION = '18.0.7'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -358,7 +358,7 @@ function lockObjects()
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
-            obj.setLock(true)
+            obj.setLock(false)
         end
     end
 
@@ -1045,8 +1045,6 @@ function flipAliveToDead(clickedObject, playerColor)
         clickedObject.setPositionSmooth(pos)
         clickedObject.setRotationSmooth({180,0,0})
         voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
-        voteToken.setLock(true)
-        voteToken.interactable = false
     end
 end
 
@@ -1072,9 +1070,6 @@ function flipDeadToAlive(clickedObject)
     end
 end
 
-
-
-
 function flipCooldown()
     flipTimerExpired = true
 end
@@ -1083,7 +1078,6 @@ function resetGame()
     local mainTable = getObjectFromGUID(TABLE_GUID)
     local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
-    local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
     local allObjs = getAllObjects()
     local bags = {}
@@ -1157,7 +1151,22 @@ function resetGame()
         end
     end
 
-    allObjs = getAllObjects()
+    local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
+    if guillotine then
+        guillotine.setPositionSmooth({-26, 1, 101})
+        guillotine.setRotationSmooth({0,0,0})
+    end
+    local storageBagObjects = storageBag.getObjects()
+    grabObjectFromBag('Character Token Bag', storageBag, {0,1,113})
+    Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
+    nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    nightHelper.call('reset')
+    Wait.time(putVoteTokensInBag, 0.5)
+end
+
+function putVoteTokensInBag()
+    local allObjs = getAllObjects()
+    local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     for k,v in pairs(allObjs) do
         if v.getName() == 'Vote Token' then
             voteTokenBag.putObject(v)
@@ -1165,17 +1174,6 @@ function resetGame()
             shroudBag.putObject(v)
         end
     end
-    local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
-    if guillotine then
-        guillotine.setPositionSmooth({-26, 1, 101})
-        guillotine.setRotationSmooth({0,0,0})
-    end
-
-    local storageBagObjects = storageBag.getObjects()
-    grabObjectFromBag('Character Token Bag', storageBag, {0,1,113})
-    Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
-    nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-    nightHelper.call('reset')
 end
 
 function grabObjectFromBag(name, bag, position)

@@ -46,7 +46,9 @@ function onChat(message, player)
         player.print(HELP_MESSAGE)
         return false
     elseif command == 'h' then
-        player.print(history)
+        for k,v in pairs(history) do
+            player.print(v)
+        end
         return false
     elseif command == 'r' then
         updatePlayers()

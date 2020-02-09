@@ -15,11 +15,9 @@ CLONE = {
     Black = {pos = {20, 1.2, 75}, rot = {0,0,0}, scale = {0.63,0.63,0.63}},
     Table = {pos = {0, 1.2, 34}, rot = {0,180,0}, scale = {1,1,1}},
 }
-DEAL_BAG_GUID = '43ecc9'
-STORAGE_BAG_GUID = 'af22f9'
-CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a', Black = '49ac3a'}
 DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/788618109330652086/74F8479C94ACCB7BE48E332C889806427F4DDBBB/'
 
+#include GUIDs.ttslua
 
 ------------------Variables
 mode = 'TB'

@@ -7,12 +7,11 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.1.0'
 START_POS = {21,1.2,145}
-TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
-ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
-STORAGE_BAG_GUID = 'af22f9'
-TABLE_SIZER_GUID = '00c013'
+TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
+
+#include GUIDs.ttslua
+
 
 ------------------Variables
 nameList = {}

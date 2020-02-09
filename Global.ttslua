@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.0.7'
+VERSION = '18.1.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -21,35 +21,7 @@ FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 
-TABLE_GUID = '7f1f5f'
-STORYTELLER_TABLE_GUID = 'fb2b1a'
-ROOM_GUID = '038c16'
-GUILLOTINE_GUID = '597735'
-NIGHT_HELPER_GUID = 'bb89aa'
-CLOCK_CONTROLS_GUID = '184d11'
-TEAM_TOOL_GUID = '6fbc83'
-PURPLE_HAND_GUID = '88ad59'
-BLUE_HAND_GUID = '12ad6f'
-RED_HAND_GUID = 'eaee43'
-CLOCK_GUID = '0d5f75'
-PLAYER_DIST_GUID = '7527ae'
-SCRIPTING_ZONE_GUID = 'a17a77'
-STORAGE_BAG_GUID = 'af22f9'
-TRAVELER_BAG_GUID = '847fca'
-VOTE_TOKEN_BAG_GUID = 'aa3ceb'
-SHROUD_BAG_GUID = '7eca97'
-ZONE_GUIDS = {Black = 'cf55c7', White = '3fbf54', Brown = '0bbe0f', Red = 'f8da43', Orange = '1af215', Yellow = '9c2b70', Green = '7fd6f6', Teal = '5e5e3d', Blue = '23abba', Purple = '450eab', Pink = '834ef0', Magenta = '96a42d', Lavender = '7b2386', Navy = '494209', Cyan = '604320', Mint = 'c6330e', Lime = 'c0e83a', Peach = 'ccc4cd', Coral = 'a89813', Maroon = '989c33', Silver = '37fabf'}
-AVATAR_LIGHT_GUIDS = {Magenta = '2f23e0', Lavender = 'df8ffd', Navy = 'a4df0a', Cyan = '9e4db0', Mint = 'a32fa1', Lime = '7830b8', Peach = 'c83e23', Coral = '81444e', Maroon = 'cf48c9', Silver = 'c0e7c1'}
-NIGHT_LIGHT_GUIDS = {Table = 'c90087', Black = 'afd88b', White = '8e52a5', Brown = 'fded4d', Red = '448bf2', Orange = '20ddd6', Yellow = '598d41', Green = '36f6d8', Teal = 'c88bf0', Blue = '16bfe5', Purple = 'ff418c', Pink = '8827cb', Magenta = 'a52b26', Lavender = 'a07e05', Navy = 'eb5eb1', Cyan = '75c1ed', Mint = 'ccb91a', Lime = '7b3c62', Peach = '339595', Coral = '5c6b6d', Maroon = '60d3eb', Silver = '992bf1'}
-ALIVE_BASE_GUIDS = {White = '56627e', Brown = '3c798c', Red = '2e008b', Orange = '4f9c19', Yellow = '9872ef', Green = '8d3944', Teal = 'd96881', Blue = '042a74', Purple = '0d98a5', Pink = '969b3b', Magenta = '4b9fd7', Lavender = '07c7fc', Navy = '2655ea', Cyan = 'b370ab', Mint = 'b1b554',  Lime = '6b1f76', Peach = '5de91f', Coral = '775d89', Maroon = 'e7050a', Silver = '48ee96'}
-ALIVE_TOKEN_GUIDS = {White = 'e086a9', Brown = '1ee3a8', Red = '295c1a', Orange = '8d0617', Yellow = '6c495f', Green = '3871b1', Teal = 'e093e4', Blue = '33f167', Purple = '61ec25', Pink = '4f2471', Magenta = '2eb912', Lavender = 'ec1a85', Navy = 'f451d7', Cyan = 'b0a452', Mint = '5d12f3', Lime = '9bd823', Peach = '9635c8', Coral = '781ec7', Maroon = 'f87b13', Silver = 'e666d2'}
-VOTE_PANEL_GUIDS = {White = '5eb60a', Brown = '99b89d', Red = '83bfb8', Orange = '4bff0a', Yellow = 'ccf37c', Green = '57b463', Teal = '47aff8', Blue = 'c2f614', Purple = '77ef86', Pink = '8b7a08', Magenta = '0be973', Lavender = 'eb07d8', Navy = '958d03', Cyan = '40952d', Mint = '99ffd7', Lime = '9d5300', Peach = '39111c', Coral = '2612cf', Maroon = 'c85c07', Silver = '5d6725',}
-VOTEHAND_GUIDS = {White = '7d483f', Brown = 'd04712', Red = '5f127b', Orange = 'cd9709', Yellow = '77fafc', Green = '252431', Teal = '0f6d9f', Blue = '0ae7c8', Purple = '002931', Pink = '971c6f', Magenta = 'bf3d0e', Lavender = '9e5049', Navy = 'c5c592', Cyan = '2b4030', Mint = '23e513', Lime = 'd4ee32', Peach = '1d92dd', Coral = '58ad10', Maroon = '3e670e', Silver = '72ea95'}
-CHAR_SHEET_GUIDS_TB = {White = '7e8816', Brown = 'f59d97', Red = 'd3f94f', Orange = '74a1bb', Yellow = '3c8021', Green = 'f42ef4', Teal = '4c0520', Blue = '176862', Purple = 'a872de', Pink = 'd79c68', Magenta = 'f332be', Lavender = 'e3323e', Navy = '73de24', Cyan = 'b913d3', Mint = 'f2eecc', Lime = '6730eb', Peach = '98a909', Coral = '748526', Maroon = 'ef6ac7', Silver = '3258d7'}
-CHAR_SHEET_GUIDS_BM = {White = '49666f', Brown = '310d86', Red = 'd09bb7', Orange = '6e1318', Yellow = '9ffd3b', Green = '674ac7', Teal = '28f902', Blue = '98a423', Purple = 'f3bb6f', Pink = '8721d3', Magenta = '793761', Lavender = '81ade5', Navy = '53e3d9', Cyan = 'c89b19', Mint = 'c94ca5', Lime = '27a7d6', Peach = '1e6331', Coral = 'a472a7', Maroon = 'c15727', Silver = 'b693a5',}
-CHAR_SHEET_GUIDS_SV = {White = '87bc56', Brown = 'c4c57e', Red = '58ece2', Orange = '5f523a', Yellow = 'bc0275', Green = '531a2a', Teal = '9dd592', Blue = 'fbdc69', Purple = 'c096af', Pink = '44a632', Magenta = '7fa413', Lavender = '85dfac', Navy = 'c79858', Cyan = '330c9d', Mint = 'b4fa88', Lime = 'e9e503', Peach = '745bdd', Coral = 'b3b035', Maroon = 'ab2437', Silver = 'dbe7f7',}
-CHAR_SHEET_GUIDS_CU = {White = 'a56758', Brown = '1e5461', Red = 'bc13b3', Orange = 'cb9aeb', Yellow = '578b2f', Green = '82f9f5', Teal = 'e3f397', Blue = 'd18938', Purple = '4baef3', Pink = '8b1b5a', Magenta = '7c5b4f', Lavender = '92b01a', Navy = 'b19bd8', Cyan = '50ae25', Mint = '6de365', Lime = '48dc0c', Peach = '3a069c', Coral = 'f5da9a', Maroon = '578321', Silver = '83492a',}
-
+#include GUIDs.ttslua
 
 ------------------Variables
 tableSize = 10
@@ -61,7 +33,7 @@ lights = false
 flipTimerExpired = true
 mode = 'TB'
 notes = ''
-history = '[FFFFFF]Vote History:[-]'
+history = {'[FFFFFF]Vote History:[-]'}
 currentNominator = ''
 currentNominated = ''
 numAlive = 0
@@ -358,7 +330,7 @@ function lockObjects()
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
-            obj.setLock(false)
+            obj.setLock(true)
         end
     end
 
@@ -1098,6 +1070,7 @@ function resetGame()
     end
 
     local obj
+    history = {'[FFFFFF]Vote History:[-]'}
     mainTable.call('clearText')
     Global.setDecals({})
     started = false
@@ -1123,31 +1096,47 @@ function resetGame()
             if v.getDescription() == 'Traveler' then
                 v.setLock(false)
                 v.setRotation({0,0,0})
-                travelerBag.putObject(v)
+                    travelerBag.putObject(v)
             else
                 if v.is_face_down then
                     flipDeadToAlive(v)
                 end
             end
+        elseif v.getName() == 'Shroud' then
+            shroudBag.putObject(v)
         end
 
         if v.getDescription() == 'Townsfolk' then
             v.setColorTint({1,1,1})
+            v.setLock(false)
             bags.Townsfolk.putObject(v)
         elseif v.getDescription() == 'Outsider' then
             v.setColorTint({1,1,1})
+            v.setLock(false)
             bags.Outsider.putObject(v)
         elseif v.getDescription() == 'Minion' then
             v.setColorTint({1,1,1})
+            v.setLock(false)
             bags.Minion.putObject(v)
         elseif v.getDescription() == 'Demon' then
             v.setColorTint({1,1,1})
+            v.setLock(false)
             bags.Demon.putObject(v)
-        elseif v.getDescription() == 'Traveler' then
+        elseif v.getDescription() == 'Traveler' and v.getName() ~= 'Alive Token' then
             v.setColorTint({1,1,1})
+            v.setLock(false)
             bags.Traveler.putObject(v)
         elseif v.getDescription() == 'Reminder Token' then
             bags.Reminder.putObject(v)
+        end
+    end
+
+    local dealBag = getObjectFromGUID(DEAL_BAG_GUID)
+    if dealBag then
+        local bagObjs = dealBag.getObjects()
+        for k1, v1 in pairs(bagObjs) do
+            takeObj = dealBag.takeObject()
+            bags[takeObj.getDescription()].putObject(takeObj)
         end
     end
 
@@ -1161,6 +1150,8 @@ function resetGame()
     Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
     nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     nightHelper.call('reset')
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    clockControls.call('hideGrimoire')
     Wait.time(putVoteTokensInBag, 0.5)
 end
 
@@ -1170,8 +1161,6 @@ function putVoteTokensInBag()
     for k,v in pairs(allObjs) do
         if v.getName() == 'Vote Token' then
             voteTokenBag.putObject(v)
-        elseif v.getName() == 'Shroud' then
-            shroudBag.putObject(v)
         end
     end
 end
@@ -1291,7 +1280,7 @@ end
 function onPlayerDisconnect(color)
     local obj = getObjectFromGUID(TEAM_TOOL_GUID)
     if obj then
-        obj.call('refreshUI')
+        Wait.time(function () obj.call('refreshUI') end, 0.1)
     else
         updatePlayers()
     end
@@ -1316,7 +1305,9 @@ function onChat(message, player)
         player.print(HELP_MESSAGE)
         return false
     elseif command == 'h' then
-        player.print(history)
+        for k,v in pairs(history) do
+            player.print(v)
+        end
         return false
     elseif command == 'r' then
         updatePlayers()
@@ -1749,6 +1740,13 @@ function refreshUI()
     end
 end
 
+function setCharText(color)
+    if inTable(color, COLORS) then
+        UI.setAttribute('player' .. color, 'visibility', color)
+        UI.setValue('player' .. color, 'Your character is ' .. chars[color] .. '!')
+    end
+end
+
 function hideUI()
     for k, v in pairs(COLORS) do
         UI.setAttribute('player' .. v, 'visibility', v)
@@ -2047,10 +2045,11 @@ function updateVoteResults(params)
         voterString = '[888888]Voters: None[-]'
     end
     broadcastToAll(voterString, {1,1,1})
-    history = history .. '\n' .. nominationString .. voterString .. '\n'
+    history[#history] = history[#history] .. '\n' .. nominationString .. voterString .. '\n'
     notes = nominationString .. voterString
     setNotes(notes)
 
+    checkLiving()
     updateNominations()
     resetVotes({voteMode = vM})
     removeVoteTokens({voteMode = vM})
@@ -2107,7 +2106,6 @@ end
 
 function removeVoteTokens(params)
     local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
-    checkLiving()
     for k,v in pairs(colors) do
         if not (hasVote[v] or params.voteMode == 'exile') then
             if aliveTokens[v].vote then
@@ -2282,7 +2280,7 @@ function sitUI(player, value, id)
     end
     obj = getObjectFromGUID(TEAM_TOOL_GUID)
     if obj then
-        obj.call('refreshUI')
+        Wait.time(function () obj.call('refreshUI') end, 0.1)
     end
 end
 

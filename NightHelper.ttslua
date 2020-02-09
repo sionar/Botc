@@ -35,9 +35,7 @@ INPUT_BUT_Z = 6.45
 BOTTOM_BUT_X = {-5, -2.5, 0, 2.5, 5}
 BOTTOM_BUT_Z = 7.75
 
-CLOCK_CONTROLS_GUID = '184d11'
-SHROUD_BAG_GUID = '7eca97'
-SCRIPTING_ZONE_GUID = 'a17a77'
+#include GUIDs.ttslua
 
 
 ------------------Variables
@@ -528,9 +526,9 @@ function send(clickedObject, playerColor)
         setNightOrder('other')
         setMsg()
         dayNum = dayNum + 1
-        local history = Global.getVar('history')
-        history = history .. '\n[808080]----------Day ' .. dayNum .. '----------[-]'
-        Global.setVar('history', history)
+        local history = Global.getTable('history')
+        table.insert(history, '\n[808080]----------Day ' .. dayNum .. '----------[-]')
+        Global.setTable('history', history)
         return
     else
         if checkPrompts then
@@ -792,6 +790,7 @@ function addChar(clickedObject, playerColor)
         refreshUI()
         return
     end
+
     if CHARACTERS[charAdd].Type == 'Demon' or CHARACTERS[charAdd].Type == 'Minion' then
         if CHARACTERS[charAdd].Type == 'Demon' then
             demonColor = colorAdd
@@ -813,6 +812,12 @@ function addChar(clickedObject, playerColor)
         end
         evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
     end
+
+    local chars = Global.getTable('chars')
+    chars[colorAdd] = charAdd
+    Global.setTable('chars', chars)
+    Global.call('setCharText', colorAdd)
+
     if orderRef ~= nil then
         orderIndex = getKey(orderRef, charAdd)
         if orderIndex == nil then

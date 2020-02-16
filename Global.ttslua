@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.1.1'
+VERSION = '18.1.2'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -31,6 +31,7 @@ timerID = 0
 started = false
 lights = false
 flipTimerExpired = true
+autoBluff = false
 mode = 'TB'
 notes = ''
 history = {'[FFFFFF]Vote History:[-]'}
@@ -767,6 +768,10 @@ function createSnapPoints()
 
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
     table.insert(snapTable, {position = {-26,0,101}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-4,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {0,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {4,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
+
     for i = 1,tableSize do
         if not storytellerMode then
             table.insert(snapTable, {position = radius(55, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})

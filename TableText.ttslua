@@ -140,6 +140,7 @@ function formatTableText(text)
     for newL in text:gmatch("[^\r\n]+") do
         lineLen = 0
         for word in string.gmatch(newL, '%g+') do
+            print(word)
             if lineLen + string.len(word) > LINE_WIDTH then
                 while lineLen < LINE_WIDTH do
                     output = output .. ' '
@@ -156,4 +157,8 @@ function formatTableText(text)
     end
 
     return output
+end
+
+function stripBBC(string)
+
 end

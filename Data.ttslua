@@ -32,6 +32,7 @@ FIRST =
     'Madness',
     'Evil_Twin',
     'Counterfeiter',
+    'Spy',
     'Lunatic',
     'Pukka',
     'Hastur',
@@ -60,7 +61,6 @@ FIRST =
     'Mathematician',
     'Butler',
     'Goon',
-    'Spy',
     'Next_Night'
 }
 
@@ -100,6 +100,7 @@ OTHER =
     'Assassin',
     'Counterfeiter',
     'Pomme_de_Terror',
+    'Spy',
     'Exorcist',
     'Lunatic',
     'Imp',
@@ -148,7 +149,6 @@ OTHER =
     'Mathematician',
     'Butler',
     'Goon',
-    'Spy',
     'Next_Night'
 }
 
@@ -196,7 +196,7 @@ CHARACTERS =
     Innkeeper = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose two players to keep alive.', Description = 'Each night*, choose 2 players: they cannot die tonight, but 1 is drunk until dusk.'},
     Gambler = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player and their character.', Description = 'Each night*, choose a player & guess their character: if you guess wrong, you die.'},
     Gossip = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'Each day, you may make a public statement. Tonight, if it was true, a player dies.'},
-    Courtier = {Type = 'Townsfolk', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night, choose a character: they are poisoned for 3 nights & 3 days.'},
+    Courtier = {Type = 'Townsfolk', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night, choose a character: they are drunk for 3 nights & 3 days.'},
     Professor = {Type = 'Townsfolk', Ability = true, Prompt = 'Do you want to use your ability?', Description = 'Once per game, at night*, choose a dead player. If they are a Townsfolk, they are resurrected.'},
     Minstrel = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'If a Minion died today, all other players (except Travelers) are drunk all night, until dusk.'},
     Tea_Lady = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'If both your alive neighbors are good, they can not die.'},
@@ -218,7 +218,7 @@ CHARACTERS =
     Mastermind = {Type = 'Minion', Ability = false, Prompt = '', Description = 'If the Demon dies by execution, play for 1 more day. If a player is then executed, their team loses.'},
     Zombuul = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, if no-one died today, choose a player: they die. The 1st time you die, you live but register as dead.'},
     Pukka = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill', Description = 'Each night, choose a player: they are poisoned until tomorrow night, then die. You act on the 1st night.'},
-    Shabaloth = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill', Description = 'Each night*, choose 2 players: they die. A dead player you attacked last night might be regurgitated.'},
+    Shabaloth = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill', Description = 'Each night*, choose 2 players: they die. A dead player you chose last night might be regurgitated.'},
     Clockmaker = {Type = 'Townsfolk', Ability = false, Prompt = 'The Demon is P1 steps away from its nearest Minion.', Description = 'You start knowing how many steps from the Demon to its nearest Minion.'},
     Dreamer = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player (not yourself): you learn 1 good & 1 evil character, 1 of which is correct.'},
     Snake_Charmer = {Type = 'Townsfolk', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose an alive player: a chosen Demon swaps characters & alignments with you & is then poisoned.'},
@@ -325,7 +325,7 @@ DECAL_URLS =
     Chambermaid = 'http://cloud-3.steamusercontent.com/ugc/794252431662887242/C31441953741833CE54D48B36F4588F44136B07A/',
     Chef = 'http://cloud-3.steamusercontent.com/ugc/788617313254834055/BDFEEEB82EB8F4439A524E1112DEA593AC0339B6/',
     Clockmaker = 'http://cloud-3.steamusercontent.com/ugc/913575713674455021/77EFE580ECF43F28F2CF6E0555AE0F16B6443610/',
-    Courtier = 'http://cloud-3.steamusercontent.com/ugc/913575713674423215/29575EA22E17E495249D1E972E6ACFC767DC05FD/',
+    Courtier = 'http://cloud-3.steamusercontent.com/ugc/792004915767345490/7421ACB5775E149C7E4D0E1782C917C38A7D3525/',
     Deviant = 'http://cloud-3.steamusercontent.com/ugc/913575713675357335/E61A0628E3A4EC7FF78E8DF14E6E3BCE80BB259C/',
     Devils_Advocate = 'http://cloud-3.steamusercontent.com/ugc/913575713674443712/9FDA0279BB0D3372FEC123F270E7C238E9CFD482/',
     Dreamer = 'http://cloud-3.steamusercontent.com/ugc/913575713674455304/D9D66AC2D81B2223462E39885D49136E407D4910/',
@@ -378,7 +378,7 @@ DECAL_URLS =
     Scapegoat = 'http://cloud-3.steamusercontent.com/ugc/913575713674410156/E695610D7B4852D6ACD87EAC6B744C37CB040982/',
     Scarlet_Woman = 'http://cloud-3.steamusercontent.com/ugc/789742488131094439/0ACA783BD57EBBAC0823B18A2D87245144737251/',
     Seamstress = 'http://cloud-3.steamusercontent.com/ugc/913575713674460275/E3F36E693832A68AACCD2D9FE9B8FC9CF1BADA1A/',
-    Shabaloth = 'http://cloud-3.steamusercontent.com/ugc/793119007245793338/4B3DD772E70DA84E4BD860536F1C3A8DB74D7DCF/',
+    Shabaloth = 'http://cloud-3.steamusercontent.com/ugc/792004915767376274/71CF8E17CD6EF42AA9D3533DD10251CBD69EFDF5/',
     Slayer = 'http://cloud-3.steamusercontent.com/ugc/913575713674403454/9629D408B35D00409CFDEF237B700F74233CE692/',
     Snake_Charmer = 'http://cloud-3.steamusercontent.com/ugc/913575713674460653/157009843D46F6E841228A7466239D3BC1245752/',
     Soldier = 'http://cloud-3.steamusercontent.com/ugc/913575713674403702/A7043BE4AF599413BBBBE767E7FFA4511955A46A/',

@@ -5,17 +5,15 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.6'
+VERSION = '1.6.0'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-NIGHT_HELPER_GUID = 'bb89aa'
-CHAR_SETUP_GUID = 'd2ab87'
-TABLE_SIZER_GUID = '00c013'
-TOWN_SQUARE_GUID = '0c242c'
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 
+#include GUIDs.ttslua
 
 ------------------Variables
 autoTint = true
+autoBluff = false
 
 ------------------Functions
 function onLoad(save_state)
@@ -41,17 +39,10 @@ function dealToPlayers(clickedObject, playerColor)
     local params, obj, char
     local chars = {}
     local allObjs = getAllObjects()
-    local tokenBag, tokenBagTable
+    local tokenBag, tokenBagTable, townsfolkBag
     local posTable = {}
     local size, takeIndex
     local rad = tableSize * 0.4 + 6
-
-    if storytellerMode then
-        angle = {}
-        for i = 1, tableSize do
-            angle[COLORS_ALL[i]] = 0 + 180/tableSize + (i-1)*360/tableSize
-        end
-    end
 
     for k,v in pairs(colors) do
         posTable[v] = radius(rad, angle[v], 1.1)
@@ -104,10 +95,25 @@ function dealToPlayers(clickedObject, playerColor)
         end
     end
 
+    if autoBluff then
+        for k,v in pairs(allObjs) do
+            if string.match(v.getName(), ': Townsfolk') then
+                townsfolkBag = v
+                break
+            end
+        end
+        if townsfolkBag then
+            townsfolkBag.shuffle()
+            townsfolkBag.takeObject({position = {-4,2,119}, rotation = {0,0,0}})
+            townsfolkBag.takeObject({position = {0,2,119}, rotation = {0,0,0}})
+            townsfolkBag.takeObject({position = {4,2,119}, rotation = {0,0,0}})
+        end
+    end
+
     Global.setTable('chars', chars)
     Global.call('refreshUI')
-    Global.call('unlockAliveTokens')
     Global.call('checkSeatedPlayers')
+    Global.setVar('autoBluff', autoBluff)
     Global.setVar('started', true)
 
     local townSquareGen = getObjectFromGUID(TOWN_SQUARE_GUID)
@@ -123,11 +129,12 @@ function dealToPlayers(clickedObject, playerColor)
     end
 
     local charSetup = getObjectFromGUID(CHAR_SETUP_GUID)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     if charSetup then
-        charSetup.destruct()
+        storageBag.putObject(charSetup)
     end
 
-    self.destruct()
+    Wait.time(function () storageBag.putObject(self) end, 2)
 end
 
 function take_callback(object_spawned, color)
@@ -145,21 +152,39 @@ function toggleTint(clickedObject, playerColor)
     refreshButtons()
 end
 
+function toggleBluff(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    autoBluff = not autoBluff
+    refreshButtons()
+end
+
 function refreshButtons()
     self.clearButtons()
 
     local params
-    params = {click_function = 'toggleTint', function_owner = self, position = {0, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400}
+    params = {click_function = 'toggleTint', function_owner = self, position = {-1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400}
     if autoTint then
-        params.label = 'Autotint\nON'
+        params.label = 'Autotint\n[0000FF]ON'
         params.tooltip = 'Click to disable auto-tinting of the Character Tokens.'
     else
-        params.label = 'Autotint\nOFF'
+        params.label = 'Autotint\n[FF0000]OFF'
         params.tooltip = 'Click to enable auto-tinting of the Character Tokens.'
     end
     self.createButton(params)
 
-    params = {click_function = 'dealToPlayers', function_owner = self, label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first character will go to White, then Brown, ... if those players are seated.)[-]\nMake sure to shuffle the bag if you want the characters to be dealt out randomly.',
+    params = {click_function = 'toggleBluff', function_owner = self, position = {1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400}
+    if autoBluff then
+        params.label = 'Autobluff\n[0000FF]ON'
+        params.tooltip = 'Click to disable automatically grabbing three random bluffs for the Demon.'
+    else
+        params.label = 'Autobluff\n[FF0000]OFF'
+        params.tooltip = 'Click to enable automatically grabbing three random bluffs for the Demon.'
+    end
+    self.createButton(params)
+
+    params = {click_function = 'dealToPlayers', function_owner = self, label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first character will go to White, then Brown, ... if those players are seated.',
     position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 800}
     self.createButton(params)
 end

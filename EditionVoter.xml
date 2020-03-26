@@ -1,0 +1,28 @@
+<Defaults>
+    <Image class="editionImage" width="350" height="350"/>
+    <Button class="headerButton" width="350" height="350"/>
+</Defaults>
+
+<HorizontalLayout
+    width = "1500"
+    height = "600"
+    position = "0 -450 0"
+    rotation = "0 0 180"
+    >
+    <Panel>
+        <Button class="headerButton" onClick="vote(TB)"></Button>
+        <Image id="tbImg" class="editionImage" image="TB"></Image>
+    </Panel>
+    <Panel>
+        <Button class="headerButton" onClick="vote(BM)"></Button>
+        <Image id="bmImg" class="editionImage" image="BM"></Image>
+    </Panel>
+    <Panel>
+        <Button class="headerButton" onClick="vote(SV)"></Button>
+        <Image id="svImg" class="editionImage" image="SV"></Image>
+    </Panel>
+    <Panel>
+        <Button class="headerButton" onClick="vote(CU)"></Button>
+        <Image id="cuImg" class="editionImage" image="CU"></Image>
+    </Panel>
+</HorizontalLayout>

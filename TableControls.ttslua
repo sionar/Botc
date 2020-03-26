@@ -94,6 +94,45 @@ function callToggleLights(clickedObject, playerColor)
     Global.call('toggleLights', {switching = true})
 end
 
+function toggleBackground(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    ROOM_GUID = Global.getVar('ROOM_GUID')
+    local object = getObjectFromGUID(ROOM_GUID)
+    if object then
+        object.destruct()
+    else
+        local objParam = {
+            type = "Custom_Assetbundle",
+            position = {67,-50,240},
+            rotation = {0,90,0},
+            scale = {6,6,6},
+            sound = false,
+            callback_function = function(obj) room_cb(obj) end
+        }
+
+        object = spawnObject(objParam)
+        object.setLock(true)
+        object.interactable = false
+        local customParam = {
+            assetbundle = 'http://cloud-3.steamusercontent.com/ugc/779613613824421966/7C69009F83B57F1CA2F390A4129FD11FC7814C3B/',
+            cast_shadows = false,
+        }
+        object.setCustomObject(customParam)
+    end
+end
+
+function room_cb(obj)
+    Global.setVar('ROOM_GUID', obj.getGUID())
+end
+
+function callReset(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    Global.call('resetGame')
+end
 
 ------------------User Interface
 function refreshUI()
@@ -116,11 +155,19 @@ function refreshUI()
             position = {1.05,0.2,-0.9}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Add a seat.'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'callShufflePlayers', function_owner = self, label = 'Shuffle Seats', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {0,0.2,0}, width = 1500, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Shuffle seats (Before the game starts).'}
+    buttonParam = {click_function = 'callShufflePlayers', function_owner = self, label = 'Shuffle\nSeats', font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {-0.85,0.2,0}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Shuffle seats (Before the game starts).'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'callToggleLights', function_owner = self, label = 'Toggle Lights', color = {0,0,0,1}, font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
-            position = {0,0.2,1}, width = 1500, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
+    buttonParam = {click_function = 'callToggleLights', function_owner = self, label = 'Toggle\nLights', font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {0.85,0.2,0}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'toggleBackground', function_owner = self, label = 'Toggle\nBackground', font_color = stringColorToRGB('Black'), color = stringColorToRGB('White'),
+            position = {-0.85,0.2,1}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Show/hide the background model'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'callReset', function_owner = self, label = 'Reset\nTable', font_color = stringColorToRGB('White'), color = stringColorToRGB('Red'),
+            position = {0.85,0.2,1}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Reset the game.'}
     self.createButton(buttonParam)
 end

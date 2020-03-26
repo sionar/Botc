@@ -99,7 +99,7 @@ function moveText(params)
         self.editButton({index = i-1, position = radius(TEXT_RAD, angle[COLORS_ALL[i]], 1.1), rotation = {0, angle[COLORS_ALL[i]], 0}, font_size = fontSize})
     end
 
-    for i = tableSize, 20 do
+    for i = tableSize+1, 20 do
         self.editButton({index = i-1, position = {0,0,0}, font_size = fontSize})
     end
 

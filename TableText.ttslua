@@ -1,11 +1,12 @@
 --[[
-Vote Panel
+Table Text
 Made by Sionar
 --]]
 
 
 ------------------Constants
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 COLORS_INDEX = {White = 0, Brown = 1, Red = 2, Orange = 3, Yellow = 4, Green = 5, Teal = 6, Blue = 7, Purple = 8, Pink = 9, Magenta = 10, Lavender = 11, Navy = 12, Cyan = 13, Mint = 14, Lime = 15, Peach = 16, Coral = 17, Maroon = 18, Silver = 19}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 TEXT_RAD = 36
@@ -99,7 +100,7 @@ function moveText(params)
         self.editButton({index = i-1, position = radius(TEXT_RAD, angle[COLORS_ALL[i]], 1.1), rotation = {0, angle[COLORS_ALL[i]], 0}, font_size = fontSize})
     end
 
-    for i = tableSize+1, 20 do
+    for i = tableSize, 20 do
         self.editButton({index = i-1, position = {0,0,0}, font_size = fontSize})
     end
 
@@ -136,21 +137,24 @@ function formatTableText(text)
     local output = ''
     local lineLen = 0
     local LINE_WIDTH = 30
+    local wordLen = 0
+    local colorizedWord
 
     for newL in text:gmatch("[^\r\n]+") do
         lineLen = 0
         for word in string.gmatch(newL, '%g+') do
-            print(word)
-            if lineLen + string.len(word) > LINE_WIDTH then
+            wordLen = stripBBCLength(word)
+            colorizedWord = colorFormat(word)
+            if lineLen + wordLen > LINE_WIDTH then
                 while lineLen < LINE_WIDTH do
                     output = output .. ' '
                     lineLen = lineLen + 1
                 end
-                output = output .. '\n' .. word .. ' '
-                lineLen = string.len(word) + 1
+                output = output .. '\n' .. colorizedWord .. ' '
+                lineLen = wordLen + 1
             else
-                output = output .. word .. ' '
-                lineLen = lineLen + string.len(word) + 1
+                output = output .. colorizedWord .. ' '
+                lineLen = lineLen + wordLen + 1
             end
         end
         output = output .. '\n'
@@ -159,6 +163,34 @@ function formatTableText(text)
     return output
 end
 
-function stripBBC(string)
+function colorFormat(str)
+    function capitalize(str)
+        str = string.lower(str)
+        return (str:gsub("^%l", string.upper))
+    end
+    local capStr = capitalize(str)
+    if (COLORS_BBC[capStr]) then
+        return COLORS_BBC[capStr] .. capStr
+    end
 
+    return '[-]'..str
+end
+
+function stripBBCLength(str)
+    local len = string.len(str)
+    local found = true
+    local idx = 1
+    local foundIdx
+    while (found) do
+        found = false
+        if idx <= string.len(str) then
+            foundIdx = string.find(string.sub(str, idx), '%[%x%x%x%x%x%x%]')
+            if (foundIdx) then
+                found = true
+                idx = idx + 8
+                len = len - 8
+            end
+        end
+    end
+    return len
 end

@@ -172,6 +172,7 @@ function toggleClock(vm)
             guillotine.setPositionSmooth({-26,1,101})
             guillotine.setRotationSmooth({0,0,0})
         end
+        Global.setVar('currMostVotes', 0)
     else -- if clock is CURRENTLY down
         Global.call('showVoteButtons', {voteMode = vm})
         Global.call('resetVotes', {voteMode = vm})

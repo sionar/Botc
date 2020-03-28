@@ -100,7 +100,7 @@ function moveText(params)
         self.editButton({index = i-1, position = radius(TEXT_RAD, angle[COLORS_ALL[i]], 1.1), rotation = {0, angle[COLORS_ALL[i]], 0}, font_size = fontSize})
     end
 
-    for i = tableSize, 20 do
+    for i = tableSize+1, 20 do
         self.editButton({index = i-1, position = {0,0,0}, font_size = fontSize})
     end
 
@@ -169,11 +169,12 @@ function colorFormat(str)
         return (str:gsub("^%l", string.upper))
     end
     local capStr = capitalize(str)
-    if (COLORS_BBC[capStr]) then
-        return COLORS_BBC[capStr] .. capStr
+    local capStrSymbolStripped = string.match(capStr, '%a+')
+    if (COLORS_BBC[capStrSymbolStripped]) then
+        return COLORS_BBC[capStrSymbolStripped] .. capStr .. '[-]'
     end
 
-    return '[-]'..str
+    return str
 end
 
 function stripBBCLength(str)

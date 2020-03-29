@@ -686,7 +686,9 @@ function import()
 
     Global.setVar('customSet', true)
     Global.setTable('customList', characters)
-    Global.call('drawAllCharSheets')
+    if not imageLoaded then
+        Global.call('drawAllCharSheets')
+    end
 
     for k,v in pairs(allObjects) do
         if string.match(v.getName(), ': Townsfolk') then

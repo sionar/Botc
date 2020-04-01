@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.1.4'
+VERSION = '18.1.8'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n\n[89C381]Storyteller commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[FF007F].Magenta[-] [967BB6].Lavender[-] [616BD4].Navy[-] [49D5FD].Cyan[-] [89C381].Mint[-]\n[B8F161].Lime[-] [F1D4A2].Peach[-] [E29A8A].Coral[-] [800000].Maroon[-] [BEBEBE].Silver[-]:\nPrivately message those players.'
@@ -41,6 +41,7 @@ numAlive = 0
 numPlayers = 0
 currVotes = 0
 currPlayers = 0
+currMostVotes = 0
 colors = {}
 chars = {}
 angle = {}
@@ -2033,13 +2034,13 @@ function showVoteButtons(params)
 end
 
 function updateVoteResults(params)
-    local vM = params.voteMode
+    local voteMode = params.voteMode
     local numVotes = 0
     local nominationString = '[888888]Nomination: ' .. COLORS_BBC[currentNominator] .. currentNominator .. ' [888888]> ' .. COLORS_BBC[currentNominated] .. currentNominated .. '[-]\n'
     local voterString = '[888888]Voters:[-]'
     local actionStr
 
-    if vM == 'execution' then
+    if voteMode == 'execution' then
         actionStr = 'execute'
     else
         actionStr = 'exile'
@@ -2056,6 +2057,7 @@ function updateVoteResults(params)
     else
         broadcastToAll('Votes are in! '.. numVotes ..' players voted to '.. actionStr .. ' ' .. currentNominated ..'!', {1,0,0})
     end
+    moveGuillotine({player = currentNominated, numVotes = numVotes, voteMode = voteMode})
     if numVotes == 0 then
         voterString = '[888888]Voters: None[-]'
     end
@@ -2066,8 +2068,37 @@ function updateVoteResults(params)
 
     checkLiving()
     updateNominations()
-    resetVotes({voteMode = vM})
-    removeVoteTokens({voteMode = vM})
+    resetVotes({voteMode = voteMode})
+    removeVoteTokens({voteMode = voteMode})
+end
+
+function moveGuillotine(params)
+    local player = params.player
+    local numVotes = params.numVotes
+    local voteMode = params.voteMode
+    local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
+    local pos
+
+    if voteMode ~= 'execution' then
+        return
+    end
+
+    if not guillotine then
+        return
+    end
+
+    if numVotes >= math.ceil(numAlive/2) then
+        if numVotes == currMostVotes then
+            guillotine.setPositionSmooth({0,2,0})
+            guillotine.setRotationSmooth({0,180,0})
+        elseif numVotes > currMostVotes then
+            currMostVotes = numVotes
+            pos = getObjectFromGUID(ALIVE_BASE_GUIDS[player]).getPosition()
+            pos[2] = 1.6
+            guillotine.setPositionSmooth(pos)
+            guillotine.setRotationSmooth({0, angle[player], 0})
+        end
+    end
 end
 
 function updateNominations()

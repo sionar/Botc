@@ -831,22 +831,22 @@ function saveLoadMenu()
     self.clearInputs()
     local buttonParam, inputParam
     local z_offset = 1.5
-    local colors = {'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Brown', 'Black'}
+    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 
     buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Scripts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
     self.createButton(buttonParam)
 
     for i = 1, 10 do
-        inputParam = {input_function = 'setSaveName' .. i, color = stringColorToRGB(colors[i]), function_owner = self, font_color = stringColorToRGB('White'), function_owner = self,
+        inputParam = {input_function = 'setSaveName' .. i, font_color = stringColorToRGB(colors[i]), function_owner = self, color = {0.3,0.3,0.3}, function_owner = self,
             position = {-2.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 5000, height = 450, font_size = 320, value = saveFile[i].name, alignment = 3, validation = 1, tab = 2}
         self.createInput(inputParam)
 
-        buttonParam = {click_function = 'save' .. i, label = "Save", color = stringColorToRGB(colors[i]), font_color = stringColorToRGB('White'), function_owner = self,
+        buttonParam = {click_function = 'save' .. i, label = "Save", color = {1,0.6,0.6}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {4.2,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Save custom script to slot ' .. i}
         self.createButton(buttonParam)
 
-        buttonParam = {click_function = 'load' .. i, label = "Load", color = stringColorToRGB(colors[i]), font_color = stringColorToRGB('White'), function_owner = self,
+        buttonParam = {click_function = 'load' .. i, label = "Load", color = {0.6,0.6,1}, font_color = stringColorToRGB('White'), function_owner = self,
             position = {6.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Load custom script from slot ' .. i}
         self.createButton(buttonParam)
     end

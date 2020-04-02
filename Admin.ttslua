@@ -30,16 +30,22 @@ end
 function onChat(message, player)
     local args = {} -- The arguments following a command
     local command, msg, len
-    local hasAccess = player.color == 'Black' or player.admin or DEBUG or player.steam_id == ADMIN_ID
+    local receiverColor, receiverStrLen
 
     for v in string.gmatch(message, "%S+") do
-            args[#args + 1] = v
+        args[#args + 1] = v
     end
 
     if args[1] ~= nil then
         command = string.lower(args[1])
         len = string.len(command)
-        msg = string.sub(message, len + 2)
+        if args[1] == '.w' then
+            receiverColor = args[2]
+            receiverStrLen = string.len(receiverColor)
+            msg = string.sub(message, len + receiverStrLen + 3)
+        else
+            msg = string.sub(message, len + 2)
+        end
     end
 
     if command == 'c' then
@@ -72,135 +78,28 @@ function onChat(message, player)
     elseif command == 'v' then
         player.print('Version ' .. VERSION)
         return false
-    elseif command == '.white' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('White', msg)
-        end
-        return false
-    elseif command == '.brown' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Brown', msg)
-        end
-        return false
-    elseif command == '.red' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Red', msg)
-        end
-        return false
-    elseif command == '.orange' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Orange', msg)
-        end
-        return false
-    elseif command == '.yellow' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Yellow', msg)
-        end
-        return false
-    elseif command == '.green' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Green', msg)
-        end
-        return false
-    elseif command == '.teal' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Teal', msg)
-        end
-        return false
-    elseif command == '.blue' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Blue', msg)
-        end
-        return false
-    elseif command == '.purple' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Purple', msg)
-        end
-        return false
-    elseif command == '.pink' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Pink', msg)
-        end
-        return false
-    elseif command == '.magenta' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Magenta', msg)
-        end
-        return false
-    elseif command == '.lavender' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Lavender', msg)
-        end
-        return false
-    elseif command == '.navy' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Navy', msg)
-        end
-        return false
-    elseif command == '.cyan' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Cyan', msg)
-        end
-        return false
-    elseif command == '.mint' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Mint', msg)
-        end
-        return false
-    elseif command == '.lime' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Lime', msg)
-        end
-        return false
-    elseif command == '.peach' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Peach', msg)
-        end
-        return false
-    elseif command == '.coral' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Coral', msg)
-        end
-        return false
-    elseif command == '.maroon' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Maroon', msg)
-        end
-        return false
-    elseif command == '.silver' then
-        if player.color == 'Black' or DEBUG then
-            chatMessage('Silver', msg)
-        end
+    elseif command == '.w' then
+        chatWhisper(player, capitalize(receiverColor), msg)
         return false
     elseif command == '.move' then
-        if hasAccess then
-            chatMove(args[2], args[3], player)
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatMove(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
     elseif command == '.remove' then
-        if hasAccess then
-            chatRemove(args[2], player)
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatRemove(capitalize(args[2]), player)
             return false
         end
     elseif command == '.swap' then
-        if hasAccess then
-            chatSwap(args[2], args[3], player)
+        if player.color == 'Black' or player.admin or DEBUG then
+            chatSwap(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
     elseif command == 'debug' and DEBUG then
         return false
     elseif command == 'look' and DEBUG then
         chatLook(args[2], player)
-        return false
-    end
-
-    if player.steam_id == ADMIN_ID then
-        name = gradient(player.steam_name, {73/255,213/255,253/255}, {1,1,1})
-        if playersExIds['Cyan'] == ADMIN_ID then
-            name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
-        end
-        message = gradient(message, {1,1,1}, randomColor())
-        printToAll('[i]' .. name .. ': ' .. message .. '[/i]')
         return false
     end
 

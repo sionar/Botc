@@ -30,6 +30,7 @@ end
 function onChat(message, player)
     local args = {} -- The arguments following a command
     local command, msg, len
+    local hasAccess = player.color == 'Black' or player.admin or DEBUG or player.steam_id == ADMIN_ID
     local receiverColor, receiverStrLen
 
     for v in string.gmatch(message, "%S+") do
@@ -82,17 +83,17 @@ function onChat(message, player)
         chatWhisper(player, capitalize(receiverColor), msg)
         return false
     elseif command == '.move' then
-        if player.color == 'Black' or player.admin or DEBUG then
+        if hasAccess then
             chatMove(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
     elseif command == '.remove' then
-        if player.color == 'Black' or player.admin or DEBUG then
+        if hasAccess then
             chatRemove(capitalize(args[2]), player)
             return false
         end
     elseif command == '.swap' then
-        if player.color == 'Black' or player.admin or DEBUG then
+        if hasAccess then
             chatSwap(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
@@ -100,6 +101,16 @@ function onChat(message, player)
         return false
     elseif command == 'look' and DEBUG then
         chatLook(args[2], player)
+        return false
+    end
+
+    if player.steam_id == ADMIN_ID then
+        name = gradient(player.steam_name, {73/255,213/255,253/255}, {1,1,1})
+        if playersExIds['Cyan'] == ADMIN_ID then
+            name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
+        end
+        message = gradient(message, {1,1,1}, randomColor())
+        printToAll('[i]' .. name .. ': ' .. message .. '[/i]')
         return false
     end
 

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.2.1'
+VERSION = '18.3.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
@@ -1171,6 +1171,28 @@ function resetGame()
         guillotine.setRotationSmooth({0,0,0})
     end
     local storageBagObjects = storageBag.getObjects()
+    for i = #storageBagObjects,1,-1 do
+        if storageBagObjects[i].description == 'Townsfolk' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Townsfolk.putObject(obj)
+        elseif storageBagObjects[i].description == 'Outsider' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Outsider.putObject(obj)
+        elseif storageBagObjects[i].description == 'Minion' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Minion.putObject(obj)
+        elseif storageBagObjects[i].description == 'Demon' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Demon.putObject(obj)
+        elseif storageBagObjects[i].description == 'Traveler' and storageBagObjects[i].getName() ~= 'Alive Token' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Traveler.putObject(obj)
+        elseif storageBagObjects[i].description == 'Reminder Token' then
+            obj = storageBag.takeObject({index = i-1})
+            bags.Reminder.putObject(obj)
+        end
+    end
+
     grabObjectFromBag('Character Token Bag', storageBag, {0,1,113})
     Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
     nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)

@@ -333,17 +333,25 @@ function random(clickedObject, playerColor)
         end
         adjustOutsiders(currentChar)
     end
-    for i = 1, dist[2] do
-        currentChar = unusedChars.Outsider[i]
+    local townIdx = 1
+    while dist[1] > 0 do
+        currentChar = unusedChars.Townsfolk[townIdx]
+        if currentChar == 'Balloonist' and dist[1] == 1 then
+            townIdx = townIdx + 1
+            currentChar = unusedChars.Townsfolk[townIdx]
+        end
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then
                 table.remove(unused,k)
             end
         end
+        dist[1] = dist[1] - 1
+        townIdx = townIdx + 1
+        adjustOutsiders(currentChar)
     end
-    for i = 1, dist[1] do
-        currentChar = unusedChars.Townsfolk[i]
+    for i = 1, dist[2] do
+        currentChar = unusedChars.Outsider[i]
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar then
@@ -431,7 +439,7 @@ function start(clickedObject, playerColor)
 end
 
 function checkValid(char)
-    if char == 'Fang_Gu' or char == 'Godfather' then
+    if char == 'Fang_Gu' or char == 'Godfather' or chat == 'Balloonist' then
         if dist[1] == 0 then
             return false
         end
@@ -439,7 +447,7 @@ function checkValid(char)
         if dist[2] == 0 then
             return false
         end
-    elseif char == 'Baron' or char == 'Conspirator'then
+    elseif char == 'Baron' or char == 'Conspirator' then
         if dist[1] <= 1 then
             return false
         end
@@ -448,7 +456,7 @@ function checkValid(char)
 end
 
 function adjustOutsiders(char)
-    if char == 'Fang_Gu' or char == 'Godfather' then
+    if char == 'Fang_Gu' or char == 'Godfather' or char == 'Balloonist' then
         dist[2] = dist[2] + 1
         dist[1] = dist[1] - 1
 	elseif char == 'Vigormortis' then

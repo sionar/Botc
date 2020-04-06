@@ -62,7 +62,7 @@ function timeRefresh()
 end
 
 function startVote(clickedObject, playerColor)
-    if Player[playerColor].admin then
+    if Player[playerColor].admin or playerColor == 'Black' then
         for k,v in pairs(voters) do
             voters[k] = {}
         end

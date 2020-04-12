@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.6.0'
+VERSION = '1.7.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -374,14 +374,6 @@ function random(clickedObject, playerColor)
 end
 
 function start(clickedObject, playerColor)
-    local bags = {}
-    local dealBagPos
-	local takeObj
-    local bagObjs
-    local name, foundIndex
-    local objs = getAllObjects()
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
-
 	if playerColor ~= 'Black' and not debug then
 		return
 	end
@@ -390,6 +382,26 @@ function start(clickedObject, playerColor)
         Player[playerColor].print('Error: No characters have been selected.')
         return
     end
+
+    if mode == 'CU' then
+        updateCustomDecalUI()
+        editCustomNotebookTab()
+        import()
+    else
+        dealChars()
+    end
+
+
+end
+
+function dealChars()
+    local bags = {}
+    local dealBagPos
+	local takeObj
+    local bagObjs
+    local name, foundIndex
+    local objs = getAllObjects()
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 
     bags.deal = getObjectFromGUID(DEAL_BAG_GUID)
     if bags.deal == nil then
@@ -408,8 +420,8 @@ function start(clickedObject, playerColor)
             bags.Outsider = v
         elseif string.match(v.getName(), ': Townsfolk') then
             bags.Townsfolk = v
-		elseif string.match(v.getName(), ': Travelers') then
-			bags.Traveler = v
+        elseif string.match(v.getName(), ': Travelers') then
+            bags.Traveler = v
         end
     end
 
@@ -429,14 +441,58 @@ function start(clickedObject, playerColor)
         end
     end
 
-	Wait.time(function() bags.deal.shuffle() end, 0.5)
-    if mode == 'CU' then
-        import()
-        updateCustomDecalUI()
-        editCustomNotebookTab()
-    end
+    Wait.time(function() bags.deal.shuffle() end, 0.5)
     storageBag.putObject(self)
 end
+
+function import()
+    local objs = getAllObjects()
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local reminderBagJSON
+
+    Global.setVar('customSet', true)
+    Global.setTable('customList', characters)
+    if not imageLoaded then
+        Global.call('drawAllCharSheets')
+    end
+
+    for k,v in pairs(objs) do
+        if string.match(v.getName(), ': Demons')
+        or string.match(v.getName(), ': Minions')
+        or string.match(v.getName(), ': Outsiders')
+        or string.match(v.getName(), ': Townsfolk')
+        or string.match(v.getName(), ': Travelers') then
+            storageBag.putObject(v)
+        end
+        if string.match(v.getName(), ': Reminder') then
+            reminderBagJSON = v.getJSON()
+            storageBag.putObject(v)
+        end
+    end
+
+    local chars = {
+        Townsfolk = {},
+        Outsider = {},
+        Minion = {},
+        Demon = {},
+        Traveler = {}
+    }
+
+    for k,v in pairs(characters) do
+        table.insert(chars[CHARACTERS[v].Type], v)
+    end
+
+    spawnBag({Nickname = 'Custom: Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 101}})
+    spawnBag({Nickname = 'Custom: Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 101}})
+    spawnBag({Nickname = 'Custom: Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 101}})
+    spawnBag({Nickname = 'Custom: Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 101}})
+    spawnBag({Nickname = 'Custom: Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 101}})
+    spawnReminders(reminderBagJSON, characters)
+
+    Wait.time(function () dealChars() end, 1)
+end
+
+
 
 function checkValid(char)
     if char == 'Fang_Gu' or char == 'Godfather' or chat == 'Balloonist' then
@@ -681,56 +737,6 @@ function getKey(table, value)
         end
     end
     return false
-end
-
-function import()
-    local allObjects = getAllObjects()
-    local objTable, numObjects
-    local bags = {}
-    local takeObj
-    local found = false
-    local name, idx
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
-
-    Global.setVar('customSet', true)
-    Global.setTable('customList', characters)
-    if not imageLoaded then
-        Global.call('drawAllCharSheets')
-    end
-
-    for k,v in pairs(allObjects) do
-        if string.match(v.getName(), ': Townsfolk') then
-            table.insert(bags, v)
-        elseif string.match(v.getName(), ': Outsiders') then
-            table.insert(bags, v)
-        elseif string.match(v.getName(), ': Minions') then
-            table.insert(bags, v)
-        elseif string.match(v.getName(), ': Demons') then
-            table.insert(bags, v)
-        elseif string.match(v.getName(), ': Reminder Tokens') then
-            table.insert(bags, v)
-        end
-    end
-
-    for k1,v1 in pairs(bags) do
-        numObjects = v1.getQuantity()
-        objTable = v1.getObjects()
-
-        for i = numObjects,1,-1 do
-            found = false
-            name = string.gsub(objTable[i].name, ' ', '_')
-            for k,v in pairs(characters) do
-                if name == v then
-                    found = true
-                end
-            end
-            if not found then
-                idx = objTable[i].index
-                takeObj = v1.takeObject({index = idx})
-                storageBag.putObject(takeObj)
-            end
-        end
-    end
 end
 
 function radius(rad, angle, height)

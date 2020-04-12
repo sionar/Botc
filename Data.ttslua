@@ -460,3 +460,9 @@ DECAL_URLS =
     Xolotl = 'http://cloud-3.steamusercontent.com/ugc/778486750207336897/668FC86E04C1B147D36752F7F60E3D66F6B3A27A/',
     Turncoat = 'http://cloud-3.steamusercontent.com/ugc/778486750207336737/FAAD1F1B20A793A9CE529C5F3DFA788B49669C85/',
 }
+
+REMINDER_TOKENS = {
+
+
+
+}

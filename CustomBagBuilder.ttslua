@@ -1,6 +1,7 @@
 function bagJSON(params)
     local bag = {}
-    bag.Name = "Bag"
+    local entry = {}
+    bag.Name = 'Bag'
     bag.Transform = {
         posX = 0,
         posY = 0,
@@ -12,9 +13,9 @@ function bagJSON(params)
         scaleY = 1,
         scaleZ = 1
     }
-    bag.Nickname = params.Nickname or ""
-    bag.Description = params.Description or ""
-    bag.GMNotes = ""
+    bag.Nickname = params.Nickname or ''
+    bag.Description = params.Description or ''
+    bag.GMNotes = ''
     bag.ColorDiffuse = params.ColorDiffuse
     bag.Locked = true
     bag.Grid = true
@@ -28,54 +29,109 @@ function bagJSON(params)
     bag.Hands = false
     bag.MaterialIndex = -1
     bag.MeshIndex = -1
-    bag.XmlUI = ""
-    bag.LuaScript = ""
+    bag.XmlUI = ''
+    bag.LuaScript = ''
     bag.ContainedObjects = {}
-    for _, name in pairs(params.characters) do
-        entry = {}
-        entry.Name = "Custom_Token"
-        entry.Transform = {
-            posX = 0,
-            posY = 0,
-            posZ = 0,
-            rotX = 0,
-            rotY = 0,
-            rotZ = 0,
-            scaleX = 1,
-            scaleY = 1,
-            scaleZ = 1
-        }
-        entry.Nickname = name
-        entry.description = CHARACTERS[name].Type
-        entry.GMNotes = ""
-        entry.ColorDiffuse = {r = 1, g = 1, b = 1}
-        entry.Locked = false
-        entry.Grid = false
-        entry.Snap = true
-        entry.IgnoreFoW = false
-        entry.Autoraise = true
-        entry.Sticky = true
-        entry.Tooltip = false
-        entry.GridProjection = false
-        entry.HideWhenFaceDown = true
-        entry.Hands = true
-        entry.CustomImage = {
-            ImageURL = DECAL_URLS[name],
-            ImageSecondaryURL = "",
-            ImageScalar = 1.0,
-            WidthScale = 0.0,
-            CustomToken = {
-                Thickness = 0.2,
-                MergeDistancePixels = 25.0,
-                Stackable = false
+    if not (params.reminder) then
+        for _, name in pairs(params.characters) do
+            entry = {}
+            entry.Name = 'Custom_Token'
+            entry.Transform = {
+                posX = 0,
+                posY = 0,
+                posZ = 0,
+                rotX = 0,
+                rotY = 0,
+                rotZ = 0,
+                scaleX = 1,
+                scaleY = 1,
+                scaleZ = 1,
             }
-        }
-        entry.XMLUI = ""
-        entry.LuaScript = ""
-        entry.LuaScriptState = ""
-        entry.GUID = ""
+            entry.Nickname = name
+            entry.description = CHARACTERS[name].Type
+            entry.GMNotes = ''
+            entry.ColorDiffuse = {r = 1, g = 1, b = 1}
+            entry.Locked = false
+            entry.Grid = false
+            entry.Snap = true
+            entry.IgnoreFoW = false
+            entry.Autoraise = true
+            entry.Sticky = true
+            entry.Tooltip = false
+            entry.GridProjection = false
+            entry.HideWhenFaceDown = true
+            entry.Hands = true
+            entry.CustomImage = {
+                ImageURL = DECAL_URLS[name],
+                ImageSecondaryURL = '',
+                ImageScalar = 1.0,
+                WidthScale = 0.0,
+                CustomToken = {
+                    Thickness = 0.2,
+                    MergeDistancePixels = 25.0,
+                    Stackable = false
+                }
+            }
+            entry.XMLUI = ''
+            entry.LuaScript = ''
+            entry.LuaScriptState = ''
+            entry.GUID = ''
 
-        table.insert(bag.ContainedObjects, entry)
+            table.insert(bag.ContainedObjects, entry)
+        end
+    else
+        for _, name in pairs(params.characters) do
+            if REMINDER_TOKENS[name] then
+                for k,v in pairs(REMINDER_TOKENS[name]) do
+                    for i = 1, v.num do
+                        entry = {}
+                        entry.Name = 'Custom_Token'
+                        entry.Transform = {
+                            posX = 0,
+                            posY = 0,
+                            posZ = 0,
+                            rotX = 0,
+                            rotY = 0,
+                            rotZ = 0,
+                            scaleX = 0.5,
+                            scaleY = 1,
+                            scaleZ = 0.5,
+                        }
+                        entry.Nickname = string.gsub(name, '_', ' ')
+                        entry.description = 'Reminder Token'
+                        entry.GMNotes = ''
+                        entry.ColorDiffuse = {r = 1, g = 1, b = 1}
+                        entry.Locked = false
+                        entry.Grid = false
+                        entry.Snap = true
+                        entry.IgnoreFoW = false
+                        entry.Autoraise = true
+                        entry.Sticky = true
+                        entry.Tooltip = false
+                        entry.GridProjection = false
+                        entry.HideWhenFaceDown = true
+                        entry.Hands = true
+                        entry.CustomImage = {
+                            ImageURL = v.url,
+                            ImageSecondaryURL = '',
+                            ImageScalar = 1.0,
+                            WidthScale = 0.0,
+                            CustomToken = {
+                                Thickness = 0.2,
+                                MergeDistancePixels = 25.0,
+                                Stackable = false
+                            }
+                        }
+                        entry.XMLUI = ''
+                        entry.LuaScript = ''
+                        entry.LuaScriptState = ''
+                        entry.GUID = ''
+
+                        table.insert(bag.ContainedObjects, 1, entry)
+                    end
+                end
+            end
+        end
     end
 
     return JSON.encode(bag)
@@ -87,7 +143,8 @@ function spawnBag(params)
         Description = params.Description,
         ColorDiffuse = params.ColorDiffuse,
         characters = params.characters,
-        position = params.position
+        position = params.position,
+        reminder = params.reminder,
     })
     spawnObjectJSON({json = bagJsonStr, position = params.position, rotation = {0,0,0}})
 end

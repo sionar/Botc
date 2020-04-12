@@ -462,7 +462,358 @@ DECAL_URLS =
 }
 
 REMINDER_TOKENS = {
-
-
-
+    Washerwoman = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193554457/73DDE7CEA5A10137C428FF57E4A9482FC8DF5316/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193554726/333D4AE1304006C7F2651DF3890FF5D6FF2DCF9B/'},
+    },
+    Librarian = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193551015/FEE6B6C0AE608DDE8B75F952FC709BB0AD6CFC0E/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193552243/05C070300E8C409FAA4875F873F1FA80C0B198BA/'},
+    },
+    Investigator = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193550527/DF533903B0DE39C13F0946BD6992E4CEDB19B05D/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193550741/D59FCED76ACF3C2A3DD0788E283CFB73483A7527/'},
+    },
+    Fortune_Teller = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193549967/6254EC099608E728F3A6A45A0CFE2BA151C863E5/'},
+    },
+    Undertaker = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195770682/136EF0D298266FB1403A6F4B1687AD4D37EAD658/'},
+    },
+    Monk = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193552627/18B776038E405C67695208B8138912CA0A1311B2/'},
+    },
+    Slayer = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284203434717/71657101F8327A802E575707A6D63334224936AC/'},
+    },
+    Virgin = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193564198/0FB5324B79D008FEF5BE82BFACC49A80C343AFBB/'},
+    },
+    Butler = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193548986/BB736DC8537673AF3F837F8FD67E20C633E1B20D/'},
+    },
+    Drunk = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195777368/29413530FF5370CE0271189D5AD46996FB58753C/'},
+    },
+    Poisoner = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193552870/F9D99BEA975E112BD4D7CE3166AEB3A7F02683DB/'},
+    },
+    Scarlet_Woman = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193553415/C4EE0A5D1486812F317E3A50BD3ADE90FE149DB4/'},
+    },
+    Imp = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193550261/932B05A9D8ACA93195EF6411F608B4862A40DBA8/'},
+    },
+    Thief = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193554059/325F32E64899338334D959537F380653C917FD52/'},
+    },
+    Bureaucrat = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193549581/D60A2A56435B89320B31D91402DFF60F29E6FA6C/'},
+    },
+    Grandmother = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193670780/23BA8D9BB36E8658D676AE7AC53D1B68C255372E/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193671044/0BD081B558D0155F221A2DCAECF5216C3FC71C0C/'},
+    },
+    Sailor = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195787247/2E0927387F10FEB6A1A51988352EADA80CDD378F/'},
+    },
+    Exorcist = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193675221/24B5DF740D4E4CF93DE9C3E559A166475ADAD147/'},
+    },
+    Innkeeper = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193671416/1E764397FEEDECD9652584297E8C2768203680D3/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193671777/0E75989A4A608AA47E6D1282CB95AC5515033C5C/'},
+    },
+    Gambler = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193672039/A9A368E42001E5F412F06E84408DD38B379CB009/'},
+    },
+    Gossip = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193672432/E62A9BC1E55C7D3556D1C3C7D27286A1F1C5BA6B/'},
+    },
+    Courtier = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193672726/19AEB155C64EE220BCE1F646B3CB50468C5AADDD/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193672991/526EC0502D50730E3F3DF4262BC5C96994FAD389/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193673209/BDBA806DB8397911106FA62333361A54159BF61D/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193673446/07DBE9FD41CF8A72C02008509DB5AD391650BA24/'},
+    },
+    Professor = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193678787/5D24FD6A46047FD9E28EC626B3492705B6ED9B2B/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193679076/C2E816B7D9380E29EF3FAB7D325714E0C02FB570/'},
+    },
+    Minstrel = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193679322/28ACBE494340755511ADAB2A4277D741AADCAFB5/'},
+    },
+    Tea_Lady = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195797430/246396C77AC3A592A1F348AB8C81DBEE1C9518BD/'},
+    },
+    Fool = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193679899/339C444EEE62A33C178EC7DBCA571C808570BCC2/'},
+    },
+    Tinker = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193681724/633DD98E1A16478B8F2C87465AE928A30B0AD12D/'},
+    },
+    Moonchild = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193682172/FC910049C909762BD03BE7C053722425809C2E19/'},
+    },
+    Goon = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284202438749/0BDF10E690F15C1BADA79D46D632DF487411137B/'},
+    },
+    Lunatic = {
+        {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193683012/ADFE3204697BBA1695CE843258654D0333842393/'},
+    },
+    Godfather = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193685096/A882FF121F86D8B4FE3EE9157C889F127A575458/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193685415/6FBFCC0F28373EF14D8A7FDDDA5E746A858E2573/'},
+    },
+    Devils_Advocate = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193685675/4BC5ACAA04BBD779355C8E5BEE66EC4944156211/'},
+    },
+    Assassin = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193685878/CD27877702C0314D64470F10DD146047DB1E5CF6/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193689671/E54FB397E66E64ED78A62665C29FE6BC0E27BC79/'},
+    },
+    Zombuul = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193690694/52A99F45421A968CC561475D738466E86328DD40/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193690972/86B025FEE054560327EF13614A734FFFD5242DAB/'},
+    },
+    Pukka = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193691225/8BDC1F69A6A9292C2D247E60582C66B6D3C5B369/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193691549/4FD547BD09951257FD9656A02B5B7A18B8512680/'},
+    },
+    Shabaloth = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193691823/77CB2D49599FA82F559638D71F38EB16882B5719/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193692106/D1ABB897567B150C66CBB43B1EF9CF9CF8C17F4B/'},
+    },
+    Po = {
+        {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193692381/A3E243A0CA4EFE80C944D0DDD2B48128F56D81C8/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193692640/4EDF136855B9A77219C1D04E5255E2AA92674F3D/'},
+    },
+    Apprentice = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193859062/5C3AF11BFED80AF4FBBF279A1BC16B2639FDAE4B/'},
+    },
+    Judge = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193695959/1237246136E8437C3A2C73622B3149E42EFB9848/'},
+    },
+    Bishop = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284203434982/8EEBF56F78853133013FCB132B69DE69F62CDC6E/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284203435241/41005F30372375143FA6265372F2B391485C79E3/'},
+    },
+    Snake_Charmer = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193793516/2910344FD99F5EFF910C9CF3E23445E1764B5D71/'},
+    },
+    Mathematician = {
+        {num = 5, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195808077/E73FF319DAB14084C3BC4C4D1BA022D3FDEA99FA/'},
+    },
+    Flowergirl = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193794120/A9D11AA69F9765BC586E1F68AC15068954D4934B/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193794372/19931D92BBAE865C43952D8AF6B88013D35AD864/'},
+    },
+    Town_Crier = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195819839/6B78E269E602417969154373AB3EB05BC5C5387D/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195820117/7C5EA6402BEC51401FA225836D2AC0C713009B48/'},
+    },
+    Seamstress = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193795569/5144871CA3835CCBCE72BB8F1BAE6AD46A91B903/'},
+    },
+    Philosopher = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193859604/6FA06049792762E29D56C002862BEC322641D349/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193859947/9368B36505C757926D85CF100E68D565F6A3CA2F/'},
+    },
+    Artist = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193797012/96F1AF24F5FB13D08AFBD61D04803EAC027FC186/'},
+    },
+    Juggler = {
+        {num = 5, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193797427/E10CF9C06C08AFE51EDC9D2F017FC24A814B58A9/'},
+    },
+    Sweetheart = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193809026/880C4CDE1DF2E22BBB7D4F46E0026A67CA297B0D/'},
+    },
+    Barber = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193809255/E8ECCA5BE45A062D1866EDD9C8522646FB4E3428/'},
+    },
+    Evil_Twin = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195829016/4D4E53FEB764A99B502A0524B58BAC143A62F36F/'},
+    },
+    Witch = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193812205/950C2672E4CB9F597D4A4E1B1D173EAE01FC1273/'},
+    },
+    Cerenovus = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193812457/D34DFC0CA0803E07C34CE17A7ABDDF18FFBED786/'},
+    },
+    Fang_Gu = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193815061/480056EC1C01FE932607D1A39A0ECABCB2F4A844/'},
+    },
+    Vigormortis = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193815351/225AA8F0DAC4502D359B319BC77057897FC4D903/'},
+        {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193815614/10CB6E5FDA863FE2DE4B5650047DAF1B570C82FE/'},
+        {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193815875/8B88B92FDD209E0CE6B77159DB6F2456377263BA/'},
+    },
+    No_Dashii = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193816133/CEDD4FD33AD6DCA4067DA7A05C804F6657E89B21/'},
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193816475/8AAF56664D35E0D8D1C835998CD0F029BD5B32A2/'},
+    },
+    Vortox = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193816743/34100B2E2151B788D8121AA0E2423B9BD1002254/'},
+    },
+    Bone_Collector = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193820818/B23D2BE78B420ABB0D1ED7EDD7C43B44F1CD65CF/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193821092/B7D6F8E1819E71D3E6ADA1BEBE80BF669346345D/'},
+    },
+    Harlot = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193821358/9B5E134BDCC7C82B5BC8B9126CA996E316CECA67/'},
+    },
+    Barista = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195847209/BD76A553F6B121CF3A1C9AC13BFBC41C7ADBC515/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/779613284195847465/D956B3139BE98A0EE2940F964497FB8A2043492F/'},
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193822264/74CDE0F1BE038B826869C66B2F0F10EBF25076D0/'},
+    },
+    Amnesiac = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134466/D64FF8F31B59D3AE6ED6A11C70FD46541F08D649/'},
+    },
+    Balloonist = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134726/46FB4F4D8B0FA5E9F5E66EF67B2DF123360F7EBA/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134941/2A2F3CAB93EFB2118D839BC6A59857504BD0AD55/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546135146/1F205C703656D046DC2C32D383C8F77C4597CBC6/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546135377/0844E0F92A69CCEEF904A4A7CA8839F095EB7CA5/'},
+    },
+    Cannibal = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546135567/FAA4766D3BF327475B261DBDB845F5D1A8FD4A96/'},
+    },
+    Fisherman = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546136019/E1CEC7CA50807C92CF194013FAA9C13621C00D78/'},
+    },
+    Widow = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546138429/B7C0CA2BEF4EAAA601686D2C57FE3EC5C414E7A3/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546138770/BDA4F043B602534D557448A3B3C672635E4B0EAA/'},
+    },
+    Leviathan = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546136353/3DB89DD753DA8A3C2A14C975C510681B1BAD2D57/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546136644/14A3C448EFD682815991E7A24229D3B34D9EEC02/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546136929/4601F3AB6AEFD68017F9E7AE268BEE4A26D8680B/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546137215/9BE7ACA79CE411D0C440473F29D995B335E03534/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546137479/EF443CC89641A9956FCF9731E99B70EFC0628B41/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546137745/8AAEA3C399C27BC0AC0ABD46099CD105F8822D18/'},
+    },
+    Prince = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},
+    },
+    Princess = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027887/C3C1850471EC7111A4A6613293D62F7794B23BCF/'},
+    },
+    Knight = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541026967/3E30D77CFE24CE6B0DA3DD78471AEB0457E9D570/'},
+    },
+    Cardinal = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541023142/47163B08DFC09242E964C14B05A97B3AA0C20666/'},
+    },
+    Rook = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541028077/46FE88DD11638CE3F8107293C0CE80638DF5B6EB/'},
+    },
+    Scribe = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541028483/B513BA8AA0A865EF61427994C350F25BDF814855/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541028656/C9543BD89C925AADB2C63BBA5E5D657057EE5723/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541028834/DE3659C5D0203AA453CCF1EC7021C514D0289C8F/'},
+    },
+    Chamberlain = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541092628/E6D8835E9A6B7E73B346076DE017FB9E2EC0F595/'},
+    },
+    Cup_Bearer = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541023962/8F43BB5A03C14F0B45AA7B08F067AE5F66008346/'},
+    },
+    Friar = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541025547/98DB96405A3EFD7AC78F8AD384CF9007D8EDA1EE/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541025731/AF08C24F47512FE68D106100BDCD4D3AA29E8D34/'},
+    },
+    Food_Taster = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541025355/FD31191DE4A722131D4D502CC1F45A2DE550914B/'},
+    },
+    Pretender = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750213014514/BCEA30EDF32200B9ABED7ED0955FDDC457201CE8/'},
+    },
+    Pawn = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027402/25BCC33397681E6A373651BACE7F6FD383B3842F/'},
+    },
+    Emissary = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541024549/5ED4A8A40DFB031B229615EC73483691C3B72AC9/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541024935/5214521F4A4947A28A0FA102AA32B34DCF8DDF65/'},
+    },
+    Concubine = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316543925014/213BCD44966DFF5156ADC4806CC6888572DC2099/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316543925194/2582D35E08BC535B1D07BEF458B5E40A3DD5BE70/'},
+    },
+    Charlatan = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541023659/0E57FE7840F1622DD94D5A234B7E58E5DB6861B2/'},
+    },
+    Conspirator = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541023804/D2FE58B1B0C31BCE1F80CB6C230AA5741CDD6C5D/'},
+    },
+    Scoundrel = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541028258/33056BBB246EEB47B3C4A19C1F5616294C2EA903/'},
+    },
+    Ysbaddaden = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541029040/DF1AB6B7AD25455024F2159ED4F6C67DAEE25B65/'},
+    },
+    Draco = {
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541024130/82CE2CC386C0D8D1CA1029D1601F64347364FDBF/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541024289/6C957EA3737C43CFA9078C194A5C6566C34C5CCB/'},
+    },
+    Jabberwocky = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541025953/71BADACEECFE9B3878761F552E93B90B6AA4D535/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541026122/A9251BCD37D0AB8B16D46D6D87D327BDFD0AFBA7/'},
+    },
+    Morgana = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027185/8ED4A4F47EDD3C6E9EBC35234D7861879359DA47/'},
+    },
+    Cartographer = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507704877/9E4601F873EBD5BE12058C3D44494B61C3F465FB/'},
+    },
+    Child = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207379956/C0DEEF80671F0561A678B722B33E882B95FA8097/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207380137/3F89528877185B6D684F61964B4422104222EFBA/'},
+    },
+    Censor = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/794251883243032907/68ED807D20D3FB54F9A20EE6A35DD0A4E1ADE1AF/'},
+    },
+    Counterfeiter = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207383660/E60457D24A42AD02B327DE7A6A35F84F56E70765/'},
+    },
+    Cultist = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207383895/310D1D598A669A7F667214DE418C6E8665114692/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207384071/78FD1E16257749164E0268E120F104593BD81CFE/'},
+    },
+    Cursebearer = {
+        {num = 5, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207384284/A5CE8B4FDF54F32BA343B5AE85636C5DEBF5213D/'},
+    },
+    Fanatic = {
+        {num = 5, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207389466/86947F7014F862152A6CC4D9EACAC51FA5BF546E/'},
+    },
+    Hastur = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207389697/1DA50992DF0F18D113CFCB59DF2D84BFCCEC1879/'},
+    },
+    Lobotomizer = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507705335/5669B3B3FD9BCA88ED79D2DC74F8CBBFD6856958/'},
+    },
+    Mother = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507705701/CB11C9FAD42F0B8466E09C622284D84355E2A3BB/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507706033/C8C3A17484D7DA536D721584614383DE4B38EABC/'},
+    },
+    Rakshasa = {
+        {num = 5, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507706761/667D7BAA5FFB88CD9F84163C448932D6376E68FE/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507706560/9AF9925E15830CB430276DD7B8EF2B8DE2B5F65D/'},
+    },
+    Reveler = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207390242/995429BB08297BC66B52A3D12CD2ECE881CDF5F3/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207390410/77DDEBE463633975ACBE95FEC216BA9A01B03B14/'},
+    },
+    Schizophrenic = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207390555/479E666F4E5AFAC314C65A0AF80FABDE03DDABA7/'},
+    },
+    Turncoat = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207390747/4B6DBF6261AD3F2EDC61C98C3FAE78A624E7D088/'},
+    },
+    Xolotl = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207390902/7BA61311BAB838ECB6EB729458A00B2877E204DD/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207391079/0EDA9681C58BCC851BB46E336C544A7DBD0CF672/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/778486750207391246/8DA84F0044D989E9E5857B067A5A6849427A8050/'},
+    }
 }

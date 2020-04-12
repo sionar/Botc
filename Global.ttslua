@@ -1093,7 +1093,7 @@ function resetGame()
         end
     end
 
-    local obj
+    local obj, name, description
     history = {'[FFFFFF]Vote History:[-]'}
     mainTable.call('clearText')
     Global.setDecals({})
@@ -1116,7 +1116,9 @@ function resetGame()
     end
 
     for k,v in pairs(allObjs) do
-        if v.getName() == 'Alive Token' then
+        name = v.getName()
+        description = v.getDescription()
+        if name == 'Alive Token' then
             if v.getDescription() == 'Traveler' then
                 v.setLock(false)
                 v.setRotation({0,0,0})
@@ -1126,33 +1128,30 @@ function resetGame()
                     flipDeadToAlive(v)
                 end
             end
-        elseif v.getName() == 'Shroud' then
+        elseif name == 'Shroud' then
             shroudBag.putObject(v)
         end
 
-        if v.getDescription() == 'Townsfolk' then
-            v.setColorTint({1,1,1})
-            v.setLock(false)
-            bags.Townsfolk.putObject(v)
-        elseif v.getDescription() == 'Outsider' then
-            v.setColorTint({1,1,1})
-            v.setLock(false)
-            bags.Outsider.putObject(v)
-        elseif v.getDescription() == 'Minion' then
-            v.setColorTint({1,1,1})
-            v.setLock(false)
-            bags.Minion.putObject(v)
-        elseif v.getDescription() == 'Demon' then
-            v.setColorTint({1,1,1})
-            v.setLock(false)
-            bags.Demon.putObject(v)
-        elseif v.getDescription() == 'Traveler' and v.getName() ~= 'Alive Token' then
-            v.setColorTint({1,1,1})
-            v.setLock(false)
-            bags.Traveler.putObject(v)
-        elseif v.getDescription() == 'Reminder Token' then
-            v.setColorTint({1,1,1})
-            bags.Reminder.putObject(v)
+
+        if description == 'Townsfolk' or description == 'Outsider' or description == 'Minion' or description == 'Demon' or description == 'Traveler' then
+            if mode == 'CU' then
+                v.destruct()
+            else
+                v.setColorTint({1,1,1})
+                v.setLock(false)
+                bags[description].putObject(v)
+            end
+        elseif description == 'Reminder Token' then
+            if mode == 'CU' then
+                v.destruct()
+            else
+                v.setColorTint({1,1,1})
+                bags.Reminder.putObject(v)
+            end
+        end
+
+        if mode == 'CU' and (name == 'Custom: Townsfolk' or name == 'Custom: Outsiders' or name == 'Custom: Minions' or name == 'Custom: Demons' or name == 'Custom: Travelers' or name == 'Custom: Reminder Tokens') then
+            v.destruct()
         end
     end
 
@@ -1170,31 +1169,15 @@ function resetGame()
         guillotine.setPositionSmooth({-26, 1, 101})
         guillotine.setRotationSmooth({0,0,0})
     end
-    local storageBagObjects = storageBag.getObjects()
-    for i = #storageBagObjects,1,-1 do
-        if storageBagObjects[i].description == 'Townsfolk' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Townsfolk.putObject(obj)
-        elseif storageBagObjects[i].description == 'Outsider' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Outsider.putObject(obj)
-        elseif storageBagObjects[i].description == 'Minion' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Minion.putObject(obj)
-        elseif storageBagObjects[i].description == 'Demon' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Demon.putObject(obj)
-        elseif storageBagObjects[i].description == 'Traveler' and storageBagObjects[i].getName() ~= 'Alive Token' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Traveler.putObject(obj)
-        elseif storageBagObjects[i].description == 'Reminder Token' then
-            obj = storageBag.takeObject({index = i-1})
-            bags.Reminder.putObject(obj)
-        end
-    end
 
-    grabObjectFromBag('Character Token Bag', storageBag, {0,1,113})
-    Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}) end, 0.1)
+    grabObjectFromBag('Custom: Townsfolk', storageBag, {10,0.82,101}, true)
+    grabObjectFromBag('Custom: Outsiders', storageBag, {6,0.82,101}, true)
+    grabObjectFromBag('Custom: Minions', storageBag, {2,0.82,101}, true)
+    grabObjectFromBag('Custom: Demons', storageBag, {-2,0.82,101}, true)
+    grabObjectFromBag('Custom: Travelers', storageBag, {-6,0.82,101}, true)
+    grabObjectFromBag('Custom: Reminder Tokens', storageBag, {-10,0.82,101}, true)
+    grabObjectFromBag('Character Token Bag', storageBag, {0,1,113}, false)
+    Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}, true) end, 0.1)
     nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     nightHelper.call('reset')
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
@@ -1212,11 +1195,13 @@ function putVoteTokensInBag()
     end
 end
 
-function grabObjectFromBag(name, bag, position)
+function grabObjectFromBag(name, bag, position, locked)
     local bagObjects = bag.getObjects()
+    local obj
     for k,v in pairs(bagObjects) do
         if v.name == name then
-            bag.takeObject({index = v.index, position = position, rotation = {0,0,0}})
+            obj = bag.takeObject({index = v.index, position = position, rotation = {0,0,0}})
+            obj.setLock(locked)
             return
         end
     end

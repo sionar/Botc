@@ -482,12 +482,21 @@ function import()
         table.insert(chars[CHARACTERS[v].Type], v)
     end
 
-    spawnBag({Nickname = 'Custom: Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 101}})
-    spawnBag({Nickname = 'Custom: Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 101}})
-    spawnBag({Nickname = 'Custom: Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 101}})
-    spawnBag({Nickname = 'Custom: Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 101}})
-    spawnBag({Nickname = 'Custom: Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 101}})
-    spawnReminders(reminderBagJSON, characters)
+    local reminderChars = {}
+    for k1,v1 in pairs(TYPES) do
+        for k2,v2 in pairs(characters) do
+            if CHARACTERS[v2].Type == v1 then
+                table.insert(reminderChars, v2)
+            end
+        end
+    end
+
+    spawnBag({Nickname = 'Custom: Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 101}, reminder = false})
+    spawnBag({Nickname = 'Custom: Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 101}, reminder = false})
+    spawnBag({Nickname = 'Custom: Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 101}, reminder = false})
+    spawnBag({Nickname = 'Custom: Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 101}, reminder = false})
+    spawnBag({Nickname = 'Custom: Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 101}, reminder = false})
+    spawnBag({Nickname = 'Custom: Reminder Tokens', Description = '', ColorDiffuse = {r = 241/255, g = 212/255, b = 162/255}, characters = reminderChars, position = {-10, 0.82, 101}, reminder = true})
 
     Wait.time(function () dealChars() end, 1)
 end

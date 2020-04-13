@@ -779,7 +779,7 @@ function updateCustomDecalUI()
 end
 
 function editCustomNotebookTab()
-    local tab = {index = 8, title = 'Custom Script Characters', color = 'Grey'}
+    local tab = {index = 6, title = 'Custom Script Characters', color = 'Grey'}
     local text = 'Disclaimer: The custom made characters are made by fans of the game. They are not endorsed by The Pandemonium Institute.\r\n\r\n'
 
     for k,v in pairs(TYPES) do

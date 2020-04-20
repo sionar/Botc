@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.4.1'
+VERSION = '18.4.2'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
@@ -1130,10 +1130,7 @@ function resetGame()
             end
         elseif name == 'Shroud' then
             shroudBag.putObject(v)
-        end
-
-
-        if description == 'Townsfolk' or description == 'Outsider' or description == 'Minion' or description == 'Demon' or description == 'Traveler' then
+        elseif description == 'Townsfolk' or description == 'Outsider' or description == 'Minion' or description == 'Demon' or description == 'Traveler' then
             if mode == 'CU' then
                 v.destruct()
             else
@@ -1404,6 +1401,9 @@ function onChat(message, player)
 end
 
 function capitalize(str)
+    if not str then
+        return
+    end
     str = string.lower(str)
     return (str:gsub("^%l", string.upper))
 end
@@ -1576,6 +1576,10 @@ function chatSwap(seatColor1, seatColor2, player)
     local color1, color2
     local player1id, player2id
     local obj
+
+    if not seatColor1 or not seatColor2 then
+        return
+    end
 
     color1 = false
     for k,v in pairs(COLORS_ALL) do

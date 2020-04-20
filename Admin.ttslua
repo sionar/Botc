@@ -41,6 +41,9 @@ function onChat(message, player)
         command = string.lower(args[1])
         len = string.len(command)
         if args[1] == '.w' then
+            if not args[2] then
+                return false
+            end
             receiverColor = args[2]
             receiverStrLen = string.len(receiverColor)
             msg = string.sub(message, len + receiverStrLen + 3)

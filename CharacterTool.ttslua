@@ -15,7 +15,7 @@ CLONE = {
     Black = {pos = {20, 1.2, 75}, rot = {0,0,0}, scale = {0.63,0.63,0.63}},
     Table = {pos = {0, 1.2, 34}, rot = {0,180,0}, scale = {1,1,1}},
 }
-DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/788618109330652086/74F8479C94ACCB7BE48E332C889806427F4DDBBB/'
+DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/794260766603642376/C9EF974279D8B421F1784592C5C7D444AD283EFE/'
 
 #include GUIDs.ttslua
 

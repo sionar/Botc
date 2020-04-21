@@ -502,6 +502,7 @@ function blindfoldAll(clickedObject, playerColor)
                 v.blindfolded = true
             end
         end
+        Global.call('resetNotes')
     else
         self.editButton({index = 0, label = 'Blindfold All', color = {0,1,0}})
         for k, v in pairs(allPlayers) do

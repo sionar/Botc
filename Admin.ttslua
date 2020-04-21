@@ -82,6 +82,20 @@ function onChat(message, player)
     elseif command == 'v' then
         player.print('Version ' .. VERSION)
         return false
+    elseif command == 'n' and player.color == 'Black' then
+        local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+        local nightLog = nightHelper.getTable('nightLog')
+        for k,v in pairs(nightLog) do
+            Player['Black'].print(v)
+        end
+        return false
+    elseif command == 'd' and player.color == 'Black' then
+        local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+        local dayLog = nightHelper.getTable('dayLog')
+        for k,v in pairs(dayLog) do
+            Player['Black'].print(v)
+        end
+        return false
     elseif command == '.w' then
         chatWhisper(player, capitalize(receiverColor), msg)
         return false

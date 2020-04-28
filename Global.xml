@@ -3,11 +3,11 @@
     <Panel class="panels" rectAlignment= "UpperRight" offsetXY="-200 -80" width="20%" height="8%" display="false"/>
     <Image class="aliveImages" width="20" height="20"/>
     <Image class="aliveImages" width="20" height="20"/>
-    <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840" fontStyle="Bold"/>
+    <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"/>
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
     <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold"/>
     <Option class="cuDecal" active="true"/>
-    <Dropdown class = "blackMsgDropdown" onValueChanged="colorSelectUI" colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880" active = "false"/>
+    <Dropdown class="decalDropdown" dropdownHeight = "500" colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880" onValueChanged = "decalUI"/>
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -315,7 +315,7 @@
     height = "138"
 	width = "150"
     rectAlignment = "LowerCenter"
-    offsetXY = "230 7"
+    offsetXY = "-485 10"
     visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     >
@@ -327,18 +327,17 @@
 	height = "138"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "230 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
-    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller1" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
         id = "decalTB"
-        onValueChanged = "decalUI"
+        class = "decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Washerwoman</Option>
@@ -376,7 +375,7 @@
 	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "230 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
@@ -387,7 +386,7 @@
 
     <Dropdown
         id = "decalBM"
-        onValueChanged = "decalUI"
+        class = "decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Grandmother</Option>
@@ -428,7 +427,7 @@
 	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "230 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
 	spacing = "-5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
@@ -439,7 +438,7 @@
 
     <Dropdown
         id = "decalSV"
-        onValueChanged = "decalUI"
+        class = "decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Clockmaker</Option>
@@ -480,7 +479,7 @@
 	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "230 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
@@ -491,7 +490,7 @@
 
     <Dropdown
         id = "decalCU"
-        onValueChanged = "decalUI"
+        class = "decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Apprentice</Option>
@@ -1267,38 +1266,36 @@
 	id = "teamMenu"
 	height = "50"
 	width = "200"
-	offsetXY = "0 70"
+	offsetXY = "255 60"
 	rectAlignment = "LowerCenter"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
-	visibility = "Grey"
-    active = "false"
 	>
 	<Image
 		id = "Clubs"
 		image = "Club"
-		tooltip = "Click here to join the Clubs team to discuss privately"
+		tooltip = "Join the Clubs team to talk privately"
 		tooltipPosition = "Above"
 		onClick = "joinTeamUI"
 	></Image>
 		<Image
 		id = "Spades"
 		image = "Spade"
-		tooltip = "Click here to join the Spades team to discuss privately"
+		tooltip = "Join the Spades team to talk privately"
 		tooltipPosition = "Above"
 		onClick = "joinTeamUI"
 	></Image>
 		<Image
 		id = "Diamonds"
 		image = "Diamond"
-		tooltip = "Click here to join the Diamonds team to discuss privately"
+		tooltip = "Join the Diamonds team to talk privately"
 		tooltipPosition = "Above"
 		onClick = "joinTeamUI"
 	></Image>
 		<Image
 		id = "Hearts"
 		image = "Heart"
-		tooltip = "Click here to join the Hearts team to discuss privately"
+		tooltip = "Join the Hearts team to talk privately"
 		tooltipPosition = "Above"
 		onClick = "joinTeamUI"
 	></Image>
@@ -1306,176 +1303,40 @@
 
 <Button
     class = "tp50"
-    height = "60"
+    height = "50"
     width = "200"
     id = "leaveTeam"
     onClick = "leaveTeamUI"
     text = "Leave Team"
 	rectAlignment = "LowerCenter"
     textColor = "black"
-    fontSize = "30"
-    visibility = "Grey"
-    offsetXY = "0 7"
-    active = "false"
-></Button>
-
-<Button
-    id = "blackShowMsg"
-    height = "20"
-    width = "40"
-    onClick = "showMessageUI"
-    tooltip = "Show the message box UI."
-    offsetXY = "0 10"
-    rectAlignment = "LowerCenter"
-    text = "+"
-    active = "false"
-    visibility = "Black"
+    fontSize = "15"
+    offsetXY = "255 7"
 ></Button>
 
 <TableLayout
-    id = "blackMessage"
-    height = "120"
+    id = "whisperUI"
+    height = "100"
     width = "300"
     rectAlignment = "LowerCenter"
-    visibility = "Black"
-    offsetXY = "0 10"
-    active = "false"
+    offsetXY = "0 7"
     >
     <!-- Row 1 -->
-    <Row preferredHeight = "20">
-        <Cell columnSpan = "9" dontUseTableCellBackground = "true"></Cell><Cell cellBackgroundColor = "clear" fontSize = "200"><Button onClick="hideMessageUI" tooltip = "Hide this message box UI." text = "-"></Button></Cell>
-    </Row>
-    <Row preferredHeight = "50">
-        <Cell columnSpan = "5">
+    <Row preferredHeight = "30">
+        <Cell columnSpan = "1">
             <Dropdown
-                id = "colorMsgDropdown11"
-                class = "blackMsgDropdown"
+                id = "whisperDropdown"
+                onValueChanged="whisperColorUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                dropdownHeight = "500"
                 >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            </Dropdown>
-
-            <Dropdown
-                id = "colorMsgDropdown12"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            </Dropdown>
-
-            <Dropdown
-                id = "colorMsgDropdown13"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            </Dropdown>
-
-            <Dropdown
-                id = "colorMsgDropdown14"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            </Dropdown>
-
-            <Dropdown
-                id = "colorMsgDropdown15"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            </Dropdown>
-
-            <Dropdown
-                id="colorMsgDropdown16"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-			<Option>Lime</Option>
-            </Dropdown>
-
-            <Dropdown
-                id="colorMsgDropdown17"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-			<Option>Lime</Option>
-            <Option>Peach</Option>
-            </Dropdown>
-
-            <Dropdown
-                id="colorMsgDropdown18"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-			<Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            </Dropdown>
-
-            <Dropdown
-                id="colorMsgDropdown19"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-			<Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            <Option>Maroon</Option>
-            </Dropdown>
-
-            <Dropdown
-                id="colorMsgDropdown20"
-                class = "blackMsgDropdown"
-                >
-            <Option selected="true">Select a color</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-			<Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            <Option>Maroon</Option>
-            <Option>Silver</Option>
+            <Option selected="true">Select a Color</Option>
             </Dropdown>
         </Cell>
-        <Cell columnSpan = "5">
+        <Cell columnSpan = "1">
             <Button
                 id = "sendMessageButton"
-                onClick = "sendMessageUI"
+                onClick = "sendWhisperUI"
                 colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
 				text = "Send"
 				fontSize = "15"
@@ -1483,12 +1344,12 @@
             </Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "50">
-        <Cell columnSpan = "10">
+    <Row preferredHeight = "70">
+        <Cell columnSpan = "2">
             <InputField
-                id = "messageInput"
-                onEndEdit = "messageInputUI"
-                placeholder = "Send a message to one of the players sitting in one of the extended colors."
+                id = "whisperInput"
+                onEndEdit = "whisperInputUI"
+                placeholder = "Whisper to a player."
                 colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
                 >
             </InputField>
@@ -1520,6 +1381,6 @@
     rectAlignment = "LowerRight"
     offsetXY = "-9 70"
     colors = "#FFFFFFFF|#FFFFFFFF|#C8C8C880|#C8C8C880"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
     >
 </Button>

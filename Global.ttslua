@@ -7,10 +7,10 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.5.1'
+VERSION = '18.6.0'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.\n[967BB6]d[-] : Show the day logs.\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
-HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.\n[967BB6]d[-] : Show the day logs.\n[967BB6].move[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].remove[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].swap[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.\n[967BB6].w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -78,14 +78,20 @@ for k,v in pairs(COLORS_EX) do
 end
 
 avatarUrl = ''
-uiColor = {}
-uiMsg = ''
+uiWhisperColor = {}
+for k,v in pairs(COLORS_ALL) do
+    uiWhisperColor[v] = 'Black'
+end
+uiWhisperColor['Black'] = 'Black'
+
+uiWhisperInput = {}
 colorTable = false
 decalsEnabled = true
 uiVisibility = {}
 for k,v in pairs(COLORS) do
     uiVisibility[v] = true
 end
+uiVisibility['Black'] = true
 
 customSet = false
 imageLoaded = false
@@ -421,6 +427,15 @@ function updatePlayers()
         players[v] = playersEx[v]
     end
     return players
+end
+
+function getPlayer(steam_id)
+    for k,v in pairs(players) do
+        if v ~= nil and v.steam_id == steam_id then
+            return k
+        end
+    end
+    return nil
 end
 
 function getAliveTokens()
@@ -1374,14 +1389,14 @@ function onChat(message, player)
         return false
     elseif command == 'n' and player.color == 'Black' then
         local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-        local nightLog = nightHelper.getTable(nightLog)
+        local nightLog = nightHelper.getTable('nightLog')
         for k,v in pairs(nightLog) do
             Player['Black'].print(v)
         end
         return false
     elseif command == 'd' and player.color == 'Black' then
         local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-        local dayLog = nightHelper.getTable(dayLog)
+        local dayLog = nightHelper.getTable('dayLog')
         for k,v in pairs(dayLog) do
             Player['Black'].print(v)
         end
@@ -1389,17 +1404,17 @@ function onChat(message, player)
     elseif command == '.w' then
         chatWhisper(player, capitalize(receiverColor), msg)
         return false
-    elseif command == '.move' then
+    elseif command == '.m' then
         if player.color == 'Black' or player.admin or DEBUG then
             chatMove(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
-    elseif command == '.remove' then
+    elseif command == '.b' then
         if player.color == 'Black' or player.admin or DEBUG then
             chatRemove(capitalize(args[2]), player)
             return false
         end
-    elseif command == '.swap' then
+    elseif command == '.s' then
         if player.color == 'Black' or player.admin or DEBUG then
             chatSwap(capitalize(args[2]), capitalize(args[3]), player)
             return false
@@ -1408,6 +1423,10 @@ function onChat(message, player)
         return false
     elseif command == 'look' and DEBUG then
         chatLook(args[2], player)
+        return false
+    end
+
+    if checkAdmin(player, message) == false then
         return false
     end
 
@@ -1428,20 +1447,13 @@ function capitalize(str)
 end
 
 function chatWhisper(player, color, message)
-    if message == nil then
+    updatePlayers()
+    if not message or string.len(message) == 0 then
         return
     end
-
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-    local playerColor = nil
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            playerColor = k
-            break
-        end
-    end
-
+    local playerColor = getPlayer(player.steam_id)
     local receiverColor = nil
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(color)) then
@@ -2183,28 +2195,21 @@ function showExtensionUI()
         UI.setAttribute('placeDecal'.. mode, 'active', 'true')
         UI.setAttribute('decalText', 'active', 'true')
     end
-    UI.setAttribute('blackShowMsg', 'active', 'false')
     for i = 11,20 do
         UI.setAttribute('sitTable'..i, 'active', 'false')
-        UI.setAttribute('colorMsgDropdown'..i, 'active', 'false')
     end
     if tableSize <= 10 then
-        UI.setAttribute('teamMenu', 'active', 'false')
-        UI.setAttribute('leaveTeam', 'active', 'false')
-        UI.setAttribute('blackMessage', 'active', 'false')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
     else
-        UI.setAttribute('teamMenu', 'active', 'true')
-        UI.setAttribute('leaveTeam', 'active', 'true')
-        UI.setAttribute('blackMessage', 'active', 'true')
-        UI.setAttribute('colorMsgDropdown'..tableSize, 'active', 'true')
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('sitTable'..tableSize, 'active', 'true')
     end
+    setWhisperUIVisibility()
+    Wait.time(function () updateWhisperDropdownUI() end, 0.5)
 end
 
 function disableTableText()
@@ -2399,17 +2404,8 @@ function deleteAvatar(color)
     end
 end
 
-function colorSelectUI(player, value, id)
-	uiColor[tableSize] = value
-end
-
 function voteUI(player, value, id)
-    local found = false
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            found = k
-        end
-    end
+    local found = getPlayer(player.steam_id)
     if not found then
         return
     end
@@ -2425,13 +2421,7 @@ function voteUI(player, value, id)
 end
 
 function nominatedDropdown(player, value, id)
-    local found = false
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            found = k
-        end
-    end
-
+    local found = getPlayer(player.steam_id)
     if not found or found ~= currentNominator then
         return
     end
@@ -2446,12 +2436,7 @@ function nominatedDropdown(player, value, id)
 end
 
 function nominateUI(player, value, id)
-    local found = false
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            found = k
-        end
-    end
+    local found = getPlayer(player.steam_id)
     if not found then
         return
     end
@@ -2467,14 +2452,8 @@ function nominateUI(player, value, id)
 end
 
 function nominatedUI(player, value, id)
-    local found = false
+    local found = getPlayer(player.steam_id)
     local target = UI.getAttribute(id, 'text')
-
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            found = k
-        end
-    end
 
     if not found then
         return
@@ -2532,45 +2511,54 @@ function leaveTeamUI(player, value, id)
     end
 end
 
-function messageInputUI(player, value, id)
-    uiMsg = value
+function updateWhisperDropdownUI()
+    local xml = UI.getXmlTable()
+    local tab = {}
+    table.insert(tab, {tag = 'Option', value = 'Select a Color', attributes = {}, children = {}})
+    table.insert(tab, {tag = 'Option', value = 'Black', attributes = {}, children = {}})
+    local entry
+    for k,v in pairs(colors) do
+        entry = {tag = 'Option', value = v, attributes = {}, children = {}}
+        table.insert(tab, entry)
+    end
+
+    for k,v in pairs(xml) do
+        if v.attributes.id == 'whisperUI' then
+            v.children[1].children[1].children[1].children = tab
+        end
+    end
+    UI.setXmlTable(xml)
 end
 
-function showMessageUI(player, value, id)
-    UI.setAttribute('blackShowMsg', 'active', 'false')
-    UI.setAttribute('blackMessage', 'active', 'true')
-end
-
-function hideMessageUI(player, value, id)
-    UI.setAttribute('blackMessage', 'active', 'false')
-    UI.setAttribute('blackShowMsg', 'active', 'true')
-end
-
-function sendMessageUI(blackPlayer, value, id)
-    if not inTable(uiColor[tableSize], COLORS_EX) then
+function whisperColorUI(player, value, id)
+    local sender = getPlayer(player.steam_id)
+    if not sender then
         return
     end
+	uiWhisperColor[sender] = value
+end
 
-    updatePlayers()
-    local player = players[uiColor[tableSize]]
-    if player ~= nil then
-        local msg = COLORS_BBC[uiColor[tableSize]] .. '<' .. uiColor[tableSize] .. '>[-] [000000]' .. blackPlayer.steam_name .. ':[-] ' .. uiMsg
-        player.print(msg)
-        blackPlayer.print(msg)
-    else
-        blackPlayer.print('No one is playing as ' .. uiColor[tableSize] .. '.', {1,0,0})
+function whisperInputUI(player, value, id)
+    local sender = getPlayer(player.steam_id)
+    if not sender then
+        return
     end
+    uiWhisperInput[sender] = value
+end
+
+function sendWhisperUI(player, value, id)
+    local sender = getPlayer(player.steam_id)
+    if not sender then
+        return
+    end
+    chatWhisper(player, uiWhisperColor[sender], uiWhisperInput[sender])
+    uiWhisperInput[sender] = ''
 end
 
 function decalUI(player, value, id)
     updatePlayers()
-    local found = false
     local params = {}
-    for k,v in pairs(players) do
-        if v ~= nil and v.steam_id == player.steam_id then
-            found = k
-        end
-    end
+    local found = getPlayer(player.steam_id)
     if not found then
         return
     end
@@ -2596,23 +2584,36 @@ function decalUI(player, value, id)
 end
 
 function toggleUI(player, value, id)
-    local visibilityString = ''
     uiVisibility[player.color] = not uiVisibility[player.color]
+    setWhisperUIVisibility()
+end
+
+function setWhisperUIVisibility()
+    local visStr = ''
+    local whisperStr = ''
     for k,v in pairs(COLORS) do
         if uiVisibility[v] then
-            visibilityString = visibilityString .. v .. '|'
+            visStr = visStr .. v .. '|'
         end
     end
 
-    visibilityString = string.sub(visibilityString, 1, #visibilityString-1)
+    visStr = string.sub(visStr, 1, #visStr-1)
     if tableSize > 10 then
-        visibilityString = visibilityString .. '|Grey'
+        visStr = visStr .. '|Grey'
+
+    end
+    whisperStr = visStr
+    if uiVisibility['Black'] then
+        whisperStr = whisperStr .. '|' ..'Black'
     end
 
-    UI.setAttribute('placeDecalTB', 'visibility', visibilityString)
-    UI.setAttribute('placeDecalBM', 'visibility', visibilityString)
-    UI.setAttribute('placeDecalSV', 'visibility', visibilityString)
-    UI.setAttribute('placeDecalCU', 'visibility', visibilityString)
-    UI.setAttribute('decalText', 'visibility', visibilityString)
-    UI.setAttribute('tableTextUI', 'visibility', visibilityString)
+    UI.setAttribute('placeDecalTB', 'visibility', visStr)
+    UI.setAttribute('placeDecalBM', 'visibility', visStr)
+    UI.setAttribute('placeDecalSV', 'visibility', visStr)
+    UI.setAttribute('placeDecalCU', 'visibility', visStr)
+    UI.setAttribute('decalText', 'visibility', visStr)
+    UI.setAttribute('tableTextUI', 'visibility', visStr)
+    UI.setAttribute('teamMenu', 'visibility', visStr)
+    UI.setAttribute('leaveTeam', 'visibility', visStr)
+    UI.setAttribute('whisperUI', 'visibility', whisperStr)
 end

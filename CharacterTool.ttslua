@@ -164,15 +164,19 @@ function setMode(state)
     if state == 1 then
         mode = 'TB'
         characters = TB_LIST
+        updateDecalUI()
     elseif state == 2 then
         mode = 'BM'
         characters = BM_LIST
+        updateDecalUI()
     elseif state == 3 then
         mode = 'SV'
         characters = SV_LIST
+        updateDecalUI()
     elseif state == 4 then
         mode = 'CU'
         characters = {}
+        updateDecalUI()
     end
     unused = {}
     for k,v in pairs(characters) do
@@ -384,7 +388,7 @@ function start(clickedObject, playerColor)
     end
 
     if mode == 'CU' then
-        updateCustomDecalUI()
+        updateDecalUI()
         editCustomNotebookTab()
         import()
     else
@@ -580,6 +584,7 @@ function removeChar()
     end
     selected = {}
     lock = {}
+    updateDecalUI()
     refreshUI()
 end
 
@@ -600,6 +605,7 @@ function addChar()
     end
     lock = {}
     sortChars()
+    updateDecalUI()
     refreshUI()
 end
 
@@ -733,6 +739,7 @@ function batchImport()
     end
     lock = {}
     sortChars()
+    updateDecalUI()
     refreshUI()
 end
 
@@ -752,7 +759,7 @@ function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
 end
 
-function updateCustomDecalUI()
+function updateDecalUI()
     local xml = UI.getXmlTable()
     local entry
     local sortedChars = {}
@@ -766,7 +773,7 @@ function updateCustomDecalUI()
     end
 
     for k,v in pairs(xml) do
-        if v.attributes.id == 'placeDecalCU' then
+        if v.attributes.id == 'placeDecal' then
             v.children[2].children = {}
             v.children[2].children[1] = {tag = 'Option', value = 'None', attributes = {selected = 'true'}, children = {}}
             for k1,v1 in pairs(sortedChars) do
@@ -834,6 +841,7 @@ function load(clickedObject, playerColor, index)
         table.insert(unused, v)
     end
     lock = {}
+    updateDecalUI()
     refreshUI()
 end
 

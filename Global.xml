@@ -3,11 +3,18 @@
     <Panel class="panels" rectAlignment= "UpperRight" offsetXY="-200 -80" width="20%" height="8%" display="false"/>
     <Image class="aliveImages" width="20" height="20"/>
     <Image class="aliveImages" width="20" height="20"/>
-    <Button class="tp50" fontSize="22" colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"/>
+    <Button class="tp50" fontSize="22" colors="#66666680|#666666FF|#66666680|#66666680" textColor="#FFFFFF"/>
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
     <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold"/>
     <Option class="cuDecal" active="true"/>
-    <Dropdown class="decalDropdown" dropdownHeight = "500" colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880" onValueChanged = "decalUI"/>
+    <Dropdown class="decalDropdown" dropdownHeight = "500"
+        colors = "#66666680|#666666FF|#66666680|#66666680"
+        itemBackgroundColors = "#000000EE|#000000|#00000080|#00000080"
+        textColor="#FF0000" onValueChanged = "decalUI"
+        scrollbarColors = "#000000DD|#FFFFFFEE|#000000EE|#000000EE"
+        checkColor = "#FF0000"
+        arrowColor = "#FFFFFF"
+    />
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -103,9 +110,8 @@
     <Button
         id="greyNominated"
 		onClick = "nominatedDropdown"
-        colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
-        textColor = "#FF0000"
-		fontStyle = "Bold"
+        colors = "#66666680|#666666FF|#66666680|#66666680"
+        textColor = "#FFFFFF"
 		text = "Select color&#xA;to nominate"
         fontSize = "18"
     ></Button>
@@ -114,7 +120,6 @@
 		id = "greyVote"
 		onClick = "voteUI"
 		text = "Vote"
-		textColor = "Black"
 		fontSize = "40"
 	></Button>
 	<Button
@@ -122,7 +127,8 @@
 		id = "greyNominate"
 		onClick = "nominateUI"
 		text = "Become&#xA;Nominator"
-		textColor = "#0000FF"
+        colors = "#66666680|#666666FF|#66666680|#66666680"
+		textColor = "#FFFFFF"
 		fontSize = "20"
 	></Button>
 </HorizontalLayout>
@@ -323,7 +329,7 @@
 </Text>
 
 <VerticalLayout
-    id = "placeDecalTB"
+    id = "placeDecal"
 	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
@@ -336,927 +342,24 @@
     <Text class="outline" id="decalFiller1" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decalTB"
+        id = "decal"
         class = "decalDropdown"
         >
         <Option selected="true">None</Option>
-        <Option>Washerwoman</Option>
-        <Option>Librarian</Option>
-        <Option>Investigator</Option>
-        <Option>Chef</Option>
-        <Option>Empath</Option>
-        <Option>Fortune_Teller</Option>
-        <Option>Undertaker</Option>
-        <Option>Monk</Option>
-        <Option>Ravenkeeper</Option>
-        <Option>Virgin</Option>
-        <Option>Slayer</Option>
-        <Option>Soldier</Option>
-        <Option>Mayor</Option>
-        <Option>Butler</Option>
-        <Option>Drunk</Option>
-        <Option>Recluse</Option>
-        <Option>Saint</Option>
-        <Option>Poisoner</Option>
-        <Option>Spy</Option>
-        <Option>Scarlet_Woman</Option>
-        <Option>Baron</Option>
-        <Option>Imp</Option>
-        <Option>Scapegoat</Option>
-        <Option>Gunslinger</Option>
-        <Option>Beggar</Option>
-        <Option>Bureaucrat</Option>
-        <Option>Thief</Option>
-    </Dropdown>
-</VerticalLayout>
-
-<VerticalLayout
-    id = "placeDecalBM"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-    spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
-    active = "false"
-    >
-    <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
-
-    <Dropdown
-        id = "decalBM"
-        class = "decalDropdown"
-        >
-        <Option selected="true">None</Option>
-        <Option>Grandmother</Option>
-        <Option>Sailor</Option>
-        <Option>Chambermaid</Option>
-        <Option>Exorcist</Option>
-        <Option>Innkeeper</Option>
-        <Option>Gambler</Option>
-        <Option>Gossip</Option>
-        <Option>Courtier</Option>
-        <Option>Professor</Option>
-        <Option>Minstrel</Option>
-        <Option>Tea_Lady</Option>
-        <Option>Pacifist</Option>
-        <Option>Fool</Option>
-        <Option>Tinker</Option>
-        <Option>Moonchild</Option>
-        <Option>Goon</Option>
-        <Option>Lunatic</Option>
-        <Option>Godfather</Option>
-        <Option>Devils_Advocate</Option>
-        <Option>Assassin</Option>
-        <Option>Mastermind</Option>
-        <Option>Zombuul</Option>
-        <Option>Pukka</Option>
-        <Option>Shabaloth</Option>
-        <Option>Po</Option>
-        <Option>Apprentice</Option>
-        <Option>Matron</Option>
-        <Option>Voudon</Option>
-        <Option>Judge</Option>
-        <Option>Bishop</Option>
-    </Dropdown>
-</VerticalLayout>
-
-<VerticalLayout
-    id = "placeDecalSV"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-	spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
-    active = "false"
-    >
-    <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
-
-    <Dropdown
-        id = "decalSV"
-        class = "decalDropdown"
-        >
-        <Option selected="true">None</Option>
-        <Option>Clockmaker</Option>
-        <Option>Dreamer</Option>
-        <Option>Snake_Charmer</Option>
-        <Option>Mathematician</Option>
-        <Option>Flowergirl</Option>
-        <Option>Town_Crier</Option>
-        <Option>Oracle</Option>
-        <Option>Savant</Option>
-        <Option>Seamstress</Option>
-        <Option>Philosopher</Option>
-        <Option>Artist</Option>
-        <Option>Juggler</Option>
-        <Option>Sage</Option>
-        <Option>Mutant</Option>
-        <Option>Sweetheart</Option>
-        <Option>Barber</Option>
-        <Option>Klutz</Option>
-        <Option>Evil_Twin</Option>
-        <Option>Witch</Option>
-        <Option>Cerenovus</Option>
-        <Option>Pit_Hag</Option>
-        <Option>Fang_Gu</Option>
-        <Option>Vigormortis</Option>
-        <Option>No_Dashii</Option>
-        <Option>Vortox</Option>
-        <Option>Butcher</Option>
-        <Option>Bone_Collector</Option>
-        <Option>Harlot</Option>
-        <Option>Barista</Option>
-        <Option>Deviant</Option>
-    </Dropdown>
-</VerticalLayout>
-
-<VerticalLayout
-    id = "placeDecalCU"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-    spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
-    active = "false"
-    >
-    <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
-
-    <Dropdown
-        id = "decalCU"
-        class = "decalDropdown"
-        >
-        <Option selected="true">None</Option>
-        <Option>Apprentice</Option>
-        <Option>Artist</Option>
-        <Option>Assassin</Option>
-        <Option>Barber</Option>
-        <Option>Barista</Option>
-        <Option>Baron</Option>
-        <Option>Beggar</Option>
-        <Option>Bishop</Option>
-        <Option>Bone_Collector</Option>
-        <Option>Bureaucrat</Option>
-        <Option>Butcher</Option>
-        <Option>Butler</Option>
-        <Option>Cerenovus</Option>
-        <Option>Chambermaid</Option>
-        <Option>Chef</Option>
-        <Option>Clockmaker</Option>
-        <Option>Courtier</Option>
-        <Option>Deviant</Option>
-        <Option>Devils_Advocate</Option>
-        <Option>Dreamer</Option>
-        <Option>Drunk</Option>
-        <Option>Empath</Option>
-        <Option>Evil_Twin</Option>
-        <Option>Exorcist</Option>
-        <Option>Fang_Gu</Option>
-        <Option>Flowergirl</Option>
-        <Option>Fool</Option>
-        <Option>Fortune_Teller</Option>
-        <Option>Gambler</Option>
-        <Option>Godfather</Option>
-        <Option>Goon</Option>
-        <Option>Gossip</Option>
-        <Option>Grandmother</Option>
-        <Option>Gunslinger</Option>
-        <Option>Harlot</Option>
-        <Option>Imp</Option>
-        <Option>Innkeeper</Option>
-        <Option>Investigator</Option>
-        <Option>Judge</Option>
-        <Option>Juggler</Option>
-        <Option>Klutz</Option>
-        <Option>Librarian</Option>
-        <Option>Lunatic</Option>
-        <Option>Mastermind</Option>
-        <Option>Mathematician</Option>
-        <Option>Matron</Option>
-        <Option>Mayor</Option>
-        <Option>Minstrel</Option>
-        <Option>Monk</Option>
-        <Option>Moonchild</Option>
-        <Option>Mutant</Option>
-        <Option>No_Dashii</Option>
-        <Option>Oracle</Option>
-        <Option>Pacifist</Option>
-        <Option>Philosopher</Option>
-        <Option>Pit_Hag</Option>
-        <Option>Po</Option>
-        <Option>Poisoner</Option>
-        <Option>Professor</Option>
-        <Option>Pukka</Option>
-        <Option>Ravenkeeper</Option>
-        <Option>Recluse</Option>
-        <Option>Sage</Option>
-        <Option>Sailor</Option>
-        <Option>Saint</Option>
-        <Option>Savant</Option>
-        <Option>Scapegoat</Option>
-        <Option>Scarlet_Woman</Option>
-        <Option>Seamstress</Option>
-        <Option>Shabaloth</Option>
-        <Option>Slayer</Option>
-        <Option>Snake_Charmer</Option>
-        <Option>Soldier</Option>
-        <Option>Spy</Option>
-        <Option>Sweetheart</Option>
-        <Option>Tea_Lady</Option>
-        <Option>Thief</Option>
-        <Option>Tinker</Option>
-        <Option>Town_Crier</Option>
-        <Option>Undertaker</Option>
-        <Option>Vigormortis</Option>
-        <Option>Virgin</Option>
-        <Option>Vortox</Option>
-        <Option>Voudon</Option>
-        <Option>Washerwoman</Option>
-        <Option>Witch</Option>
-        <Option>Zombuul</Option>
     </Dropdown>
 </VerticalLayout>
 
 <TableLayout
-	id = "sitTable11"
+	id = "sitTable"
 	cellSpacing = "0"
 	height = "100"
     width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
-    active = "false"
+    active = "true"
     columnWidths = "90 90 90 90 90"
 	>
-    <Row></Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit11Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable12"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
-	>
-    <Row></Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit12Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit12Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable13"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
-	>
-    <Row></Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit13Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit13Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit13Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable14"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
-	>
-    <Row></Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit14Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit14Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit14Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit14Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-</TableLayout>
-<TableLayout
-	id = "sitTable15"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit15Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit15Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit15Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit15Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit15Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable16"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell>
-            <Button
-                id = "sit16Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit16Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit16Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit16Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit16Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit16Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable17"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell>
-            <Button
-                id = "sit17Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit17Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
-                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit17Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit17Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit17Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit17Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit17Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable18"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell>
-            <Button
-                id = "sit18Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit18Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
-                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit18Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
-                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit18Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit18Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit18Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit18Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit18Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable19"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell>
-            <Button
-                id = "sit19Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit19Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
-                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit19Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
-                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit19Maroon"
-                class = "sitButton"
-                text = "Sit in Maroon"
-                colors="#80000080|#800000FF|#80000080|#80000080"
-                >
-            </Button>
-        </Cell>
-        <Cell active = "false"></Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit19Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit19Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit19Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit19Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit19Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-	id = "sitTable20"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-	>
-    <Row>
-        <Cell>
-            <Button
-                id = "sit20Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
-                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit20Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
-                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit20Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
-                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit20Maroon"
-                class = "sitButton"
-                text = "Sit in Maroon"
-                colors="#80000080|#800000FF|#80000080|#80000080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-                id = "sit20Silver"
-                class = "sitButton"
-                text = "Sit in Silver"
-                colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
-                >
-            </Button>
-        </Cell>
-    </Row>
-	<Row>
-        <Cell>
-            <Button
-        		id = "sit20Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
-                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit20Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
-                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit20Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
-                colors="#00008080|#000080FF|#00008080|#00008080"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit20Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
-                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
-                >
-            </Button>
-        </Cell>
-        <Cell>
-            <Button
-        		id = "sit20Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
-                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
-                >
-            </Button>
-        </Cell>
-    </Row>
 </TableLayout>
 
 <HorizontalLayout
@@ -1307,7 +410,6 @@
     onClick = "leaveTeamUI"
     text = "Leave Team"
 	rectAlignment = "LowerCenter"
-    textColor = "black"
     fontSize = "15"
     offsetXY = "325 7"
     visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
@@ -1317,27 +419,38 @@
     id = "whisperUI"
     height = "100"
     width = "250"
+    cellSpacing = "0.5"
     rectAlignment = "LowerCenter"
     offsetXY = "125 7"
     visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
     >
     <!-- Row 1 -->
     <Row preferredHeight = "30">
-        <Cell columnSpan = "1">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "1">
             <Dropdown
                 id = "whisperDropdown"
                 onValueChanged="whisperColorUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                itemBackgroundColors = "#000000EE|#000000FF|#00000080|#00000080"
+                scrollbarColors = "#000000EE|#000000FF|#00000080|#00000080"
+                textColor = "#FF0000"
+                checkColor = "#FF0000"
+                arrowColor = "#FFFFFF"
                 dropdownHeight = "500"
                 >
             <Option selected="true">Select a Color</Option>
             </Dropdown>
         </Cell>
-        <Cell columnSpan = "1">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "1">
             <Button
                 id = "sendMessageButton"
                 onClick = "sendWhisperUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                textColor = "#FFFFFF"
 				text = "Send"
 				fontSize = "15"
                 >
@@ -1345,12 +458,15 @@
         </Cell>
     </Row>
     <Row preferredHeight = "70">
-        <Cell columnSpan = "2">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "2">
             <InputField
                 id = "whisperInput"
                 onEndEdit = "whisperInputUI"
                 placeholder = "Whisper to a player."
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                textColor = "#FFFFFF"
                 lineType = "MultiLineNewLine"
                 >
             </InputField>
@@ -1364,25 +480,36 @@
     width = "250"
     rectAlignment = "LowerCenter"
     offsetXY = "0 7"
+    cellSpacing = "0.5"
     visibility = "Black"
     >
     <!-- Row 1 -->
     <Row preferredHeight = "30">
-        <Cell columnSpan = "1">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "1">
             <Dropdown
                 id = "blackWhisperDropdown"
                 onValueChanged="whisperColorUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                itemBackgroundColors = "#000000EE|#000000FF|#00000080|#00000080"
+                scrollbarColors = "#000000EE|#000000FF|#00000080|#00000080"
+                textColor = "#FF0000"
+                checkColor = "#FF0000"
+                arrowColor = "#FFFFFF"
                 dropdownHeight = "500"
                 >
             <Option selected="true">Select a Color</Option>
             </Dropdown>
         </Cell>
-        <Cell columnSpan = "1">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "1">
             <Button
                 id = "blackSendMessageButton"
                 onClick = "sendWhisperUI"
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                textColor = "#FFFFFF"
 				text = "Send"
 				fontSize = "15"
                 >
@@ -1390,12 +517,15 @@
         </Cell>
     </Row>
     <Row preferredHeight = "70">
-        <Cell columnSpan = "2">
+        <Cell
+            dontUseTableCellBackground = "true"
+            columnSpan = "2">
             <InputField
                 id = "blackWhisperInput"
                 onEndEdit = "whisperInputUI"
                 placeholder = "Whisper to a player."
-                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                colors = "#66666680|#666666FF|#66666680|#66666680"
+                textColor = "#FFFFFF"
                 lineType = "MultiLineNewLine"
                 >
             </InputField>
@@ -1408,7 +538,8 @@
     onEndEdit = "setTableTextUI"
     placeholder = "Set a message on the table."
     lineType = "MultiLineNewLine"
-    colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+    colors = "#66666680|#666666FF|#66666680|#66666680"
+    textColor = "#FFFFFF"
     visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
     height = "100"
     width = "250"
@@ -1426,7 +557,8 @@
     width = "63"
     rectAlignment = "LowerRight"
     offsetXY = "-9 70"
-    colors = "#FFFFFFFF|#FFFFFFFF|#C8C8C880|#C8C8C880"
+    colors = "#66666680|#666666FF|#66666680|#66666680"
+    textColor = "#FFFFFF"
     visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
     >
 </Button>

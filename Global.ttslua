@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.6.2'
+VERSION = '18.6.4'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -17,6 +17,7 @@ COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blu
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]'}
 COLORS_TYPE = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
@@ -416,8 +417,8 @@ function updatePlayers()
                 playersEx[v] = nil
                 mainTable.call('setName', {color = v, name = ''})
                 for i = 11, 20 do
-                    UI.setAttribute('sit' .. i .. v, 'text', 'Sit in ' .. v)
-                    UI.setAttribute('sit' .. i .. v, 'textColor', '#FFFFFF')
+                    UI.setAttribute('sit' .. v, 'text', 'Sit in ' .. v)
+                    UI.setAttribute('sit' .. v, 'textColor', '#FFFFFF')
                 end
                 deleteAvatar(v)
             else
@@ -591,10 +592,8 @@ function resizeTable()
     end
 
     if tableSize > 10 and tableSize < 15 then
-        UI.setAttribute('sitTable', 'width', 100*(tableSize-10))
         UI.setAttribute('colorSelection', 'height', 150)
     else
-        UI.setAttribute('sitTable', 'width', 500)
         UI.setAttribute('colorSelection', 'height', 200)
     end
 
@@ -767,7 +766,7 @@ function resizeTable()
             UI.setAttribute('cell'..COLORS_ALL[i],'active','false')
             UI.setAttribute('select'..COLORS_ALL[i],'active','false')
             if players[COLORS_ALL[i]] ~= nil then
-                sitUI(players[COLORS_ALL[i]], _, 'sit'..tableSize..COLORS_ALL[i])
+                sitUI(players[COLORS_ALL[i]], _, 'sit'..COLORS_ALL[i])
             end
             obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then
@@ -960,7 +959,7 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            sitUI(players[v], _, 'sit'..tableSize..v)
+            sitUI(players[v], _, 'sit'..v)
         end
     end
     if playerTab == nil then
@@ -975,7 +974,7 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    sitUI(v1, _, 'sit'..tableSize..v)
+                    sitUI(v1, _, 'sit'..v)
                 end
                 break
             end
@@ -1554,7 +1553,7 @@ function chatMove(playerName, seatColor, player, swap)
 
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            sitUI(playerFound, _, 'sit'..tableSize..k)
+            sitUI(playerFound, _, 'sit'..k)
         end
     end
     playerFound.changeColor('Grey')
@@ -1574,7 +1573,7 @@ function chatMove(playerName, seatColor, player, swap)
         playerFound.changeColor(colorFound)
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        sitUI(playerFound, _, 'sit'..tableSize..colorFound)
+        sitUI(playerFound, _, 'sit'..colorFound)
     end
     player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     refreshUI()
@@ -1607,7 +1606,7 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            sitUI(players[colorFound], _, 'sit'..tableSize..colorFound)
+            sitUI(players[colorFound], _, 'sit'..colorFound)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1670,13 +1669,13 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        sitUI(players[color1], _, 'sit'..tableSize..color1)
+        sitUI(players[color1], _, 'sit'..color1)
     end
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        sitUI(players[color2], _, 'sit'..tableSize..color2)
+        sitUI(players[color2], _, 'sit'..color2)
     end
 
     if started then
@@ -1695,7 +1694,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 Wait.time(function() v.changeColor(color1) end, 0.1)
             elseif inTable(color1, COLORS_EX) then
-                Wait.time(function() sitUI(v, _, 'sit'..tableSize..color1) end, 0,1)
+                Wait.time(function() sitUI(v, _, 'sit'..color1) end, 0,1)
             end
             break
         end
@@ -1707,7 +1706,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 Wait.time(function () v.changeColor(color2) end, 0.1)
             elseif inTable(color2, COLORS_EX) then
-                Wait.time(function () sitUI(v, _, 'sit'..tableSize..color2) end, 0.1)
+                Wait.time(function () sitUI(v, _, 'sit'..color2) end, 0.1)
             end
             break
         end
@@ -2261,29 +2260,23 @@ end
 
 ------------------Grey UI
 function showExtensionUI()
-    UI.setAttribute('placeDecalTB', 'active', 'false')
-    UI.setAttribute('placeDecalBM', 'active', 'false')
-    UI.setAttribute('placeDecalSV', 'active', 'false')
-    UI.setAttribute('placeDecalCU', 'active', 'false')
     if decalsEnabled then
-        UI.setAttribute('placeDecal'.. mode, 'active', 'true')
+        UI.setAttribute('placeDecal', 'active', 'true')
         UI.setAttribute('decalText', 'active', 'true')
     end
-    for i = 11,20 do
-        UI.setAttribute('sitTable'..i, 'active', 'false')
-    end
     if tableSize <= 10 then
-        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
+        UI.setAttribute('placeDecal', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
     else
-        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('placeDecal', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        UI.setAttribute('sitTable'..tableSize, 'active', 'true')
     end
+
     setWhisperUIVisibility()
-    Wait.time(function () updateWhisperDropdownUI() end, 0.5)
+    Wait.time(function () setSitUI() end, 0.5)
+    Wait.time(function () updateWhisperDropdownUI() end, 1)
 end
 
 function disableTableText()
@@ -2299,17 +2292,14 @@ end
 
 function disableDecals()
     decalsEnabled = false
-    UI.setAttribute('placeDecalTB', 'active', 'false')
-    UI.setAttribute('placeDecalBM', 'active', 'false')
-    UI.setAttribute('placeDecalSV', 'active', 'false')
-    UI.setAttribute('placeDecalCU', 'active', 'false')
+    UI.setAttribute('placeDecal', 'active', 'false')
     UI.setAttribute('decalText', 'active', 'false')
     Global.setDecals({})
 end
 
 function enableDecals()
     decalsEnabled = true
-    UI.setAttribute('placeDecal' .. mode, 'active', 'true')
+    UI.setAttribute('placeDecal', 'active', 'true')
     UI.setAttribute('decalText', 'active', 'false')
 end
 
@@ -2355,7 +2345,7 @@ function sitUI(player, value, id)
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local seatLock = clockControls.getVar('seatLock')
     local mainTable = getObjectFromGUID(TABLE_GUID)
-    local color = string.sub(id, 6, #id)
+    local color = string.sub(id, 4, #id)
     updatePlayers()
     if playersEx[color] == nil then
         for k,v in pairs(playersEx) do
@@ -2375,8 +2365,8 @@ function sitUI(player, value, id)
         generateAvatar(color)
         printToAll(COLORS_BBC[color] .. player.steam_name .. ' is color ' .. color .. '.[-]')
         for i = 11,20 do
-            UI.setAttribute('sit' .. i .. color, 'text', 'Leave ' .. color)
-            UI.setAttribute('sit' .. i .. color, 'textColor', '#FFFFFF')
+            UI.setAttribute('sit' .. color, 'text', 'Leave ' .. color)
+            UI.setAttribute('sit' .. color, 'textColor', '#FFFFFF')
         end
         zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
         if zoneObj then
@@ -2386,8 +2376,8 @@ function sitUI(player, value, id)
         if player.steam_id == playersEx[color].steam_id then
             player.print('You are no longer sitting in ' .. color .. '.')
             for i = 11,20 do
-                UI.setAttribute('sit' .. i .. color, 'text', 'Sit in ' .. color)
-                UI.setAttribute('sit' .. i .. color, 'textColor', '#FFFFFF')
+                UI.setAttribute('sit' .. color, 'text', 'Sit in ' .. color)
+                UI.setAttribute('sit' .. color, 'textColor', '#FFFFFF')
             end
             playersEx[color] = nil
             playersExIds[color] = nil
@@ -2675,14 +2665,74 @@ function setWhisperUIVisibility()
         visStr = visStr .. '|Grey'
     end
 
-    UI.setAttribute('placeDecalTB', 'visibility', visStr)
-    UI.setAttribute('placeDecalBM', 'visibility', visStr)
-    UI.setAttribute('placeDecalSV', 'visibility', visStr)
-    UI.setAttribute('placeDecalCU', 'visibility', visStr)
+    UI.setAttribute('placeDecal', 'visibility', visStr)
     UI.setAttribute('decalText', 'visibility', visStr)
     UI.setAttribute('tableTextUI', 'visibility', visStr)
     UI.setAttribute('teamMenu', 'visibility', visStr)
     UI.setAttribute('leaveTeam', 'visibility', visStr)
     UI.setAttribute('whisperUI', 'visibility', visStr)
     UI.setAttribute('blackWhisperUI', 'visibility', blackStr)
+end
+
+function setSitUI()
+    local xml = UI.getXmlTable()
+    local entry = {}
+    local bottomRow = {
+        tag = 'Row',
+        attributes = {},
+        children = {},
+    }
+    local topRow = {
+        tag = 'Row',
+        attributes = {},
+        children = {},
+    }
+    for i = 11, 15 do
+        entry = generateSitUIXML(i)
+        table.insert(bottomRow.children, entry)
+    end
+    for i = 16, 20 do
+        entry = generateSitUIXML(i)
+        table.insert(topRow.children, entry)
+    end
+
+    for k,v in pairs(xml) do
+        if v.attributes.id == 'sitTable' then
+            v.children = {topRow, bottomRow}
+        end
+    end
+    for k,v in pairs(xml) do
+        if v.attributes.id == 'sitTable' then
+            log(v)
+        end
+    end
+    UI.setXmlTable(xml)
+end
+
+function generateSitUIXML(i)
+    if tableSize >= i then
+        entry = {
+            tag = 'Cell',
+            attributes = { dontUseTableCellBackground = "true" },
+            children = {
+                {
+                    tag = 'Button',
+                    attributes = {
+                        id = "sit" .. COLORS_ALL[i],
+                        class = "sitButton",
+                        text = "Sit in " .. COLORS_ALL[i],
+                        colors = COLORS_UI[COLORS_ALL[i]]
+                    },
+                    children = {}
+                }
+            }
+        }
+    else
+        entry = {
+            tag = 'Cell',
+            attributes = {active = "false"},
+            children = {}
+        }
+    end
+    return entry
 end

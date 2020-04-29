@@ -76,7 +76,7 @@
     </VerticalLayout>
 </Panel>
 
-<VerticalLayout padding="0 0 100 0" width="30%" rectAlignment="UpperLeft" childAlignment="UpperCenter" childForceExpandHeight="false">
+<VerticalLayout padding="0 0 100 0" width="30%" rectAlignment="LowerLeft" childAlignment="UpperCenter" childForceExpandHeight="false">
    <Text class="outline" id="playerWhite" color="#FFFFFF" fontSize="28"></Text>
    <Text class="outline" id="playerBrown" color="#703A16" fontSize="28"></Text>
    <Text class="outline" id="playerRed" color="#DA1917" fontSize="28"></Text>
@@ -315,7 +315,7 @@
     height = "138"
 	width = "150"
     rectAlignment = "LowerCenter"
-    offsetXY = "-485 10"
+    offsetXY = "-325 0"
     visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
     >
@@ -324,10 +324,10 @@
 
 <VerticalLayout
     id = "placeDecalTB"
-	height = "138"
+	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-485 7"
+	offsetXY = "-325 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
@@ -372,15 +372,14 @@
 
 <VerticalLayout
     id = "placeDecalBM"
-	height = "130"
+	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-485 7"
+	offsetXY = "-325 7"
 	childAlignment = "MiddleCenter"
-	spacing = "5"
+    spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
-    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
 
@@ -424,15 +423,14 @@
 
 <VerticalLayout
     id = "placeDecalSV"
-	height = "130"
+	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-485 7"
+	offsetXY = "-325 7"
 	childAlignment = "MiddleCenter"
-	spacing = "-5"
+	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
-    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
 
@@ -476,15 +474,14 @@
 
 <VerticalLayout
     id = "placeDecalCU"
-	height = "130"
+	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-485 7"
+	offsetXY = "-325 7"
 	childAlignment = "MiddleCenter"
-	spacing = "5"
+    spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
-    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
 
@@ -585,14 +582,14 @@
 
 <TableLayout
 	id = "sitTable11"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
     active = "false"
-    columnWidths = "100 100 100 100 100"
+    columnWidths = "90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
@@ -614,14 +611,14 @@
 
 <TableLayout
 	id = "sitTable12"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
     active = "false"
-    columnWidths = "100 100 100 100 100"
+    columnWidths = "90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
@@ -651,14 +648,14 @@
 
 <TableLayout
 	id = "sitTable13"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
     active = "false"
-    columnWidths = "100 100 100 100 100"
+    columnWidths = "90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
@@ -696,14 +693,14 @@
 
 <TableLayout
 	id = "sitTable14"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
     active = "false"
-    columnWidths = "100 100 100 100 100"
+    columnWidths = "90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
@@ -748,9 +745,9 @@
 </TableLayout>
 <TableLayout
 	id = "sitTable15"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -814,9 +811,9 @@
 
 <TableLayout
 	id = "sitTable16"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -888,9 +885,9 @@
 
 <TableLayout
 	id = "sitTable17"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -970,9 +967,9 @@
 
 <TableLayout
 	id = "sitTable18"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -1060,9 +1057,9 @@
 
 <TableLayout
 	id = "sitTable19"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -1158,9 +1155,9 @@
 
 <TableLayout
 	id = "sitTable20"
-	cellSpacing = "5"
-	height = "120"
-    width = "500"
+	cellSpacing = "0"
+	height = "100"
+    width = "450"
     rectAlignment = "LowerRight"
     visibility = "Grey"
     offsetXY = "-100 7"
@@ -1264,12 +1261,13 @@
 
 <HorizontalLayout
 	id = "teamMenu"
-	height = "50"
-	width = "200"
-	offsetXY = "255 60"
+	height = "37.5"
+	width = "150"
+	offsetXY = "325 60"
 	rectAlignment = "LowerCenter"
 	childAlignment = "MiddleCenter"
-	spacing = "5"
+	spacing = "0"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
 	>
 	<Image
 		id = "Clubs"
@@ -1304,22 +1302,24 @@
 <Button
     class = "tp50"
     height = "50"
-    width = "200"
+    width = "150"
     id = "leaveTeam"
     onClick = "leaveTeamUI"
     text = "Leave Team"
 	rectAlignment = "LowerCenter"
     textColor = "black"
     fontSize = "15"
-    offsetXY = "255 7"
+    offsetXY = "325 7"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
 ></Button>
 
 <TableLayout
     id = "whisperUI"
     height = "100"
-    width = "300"
+    width = "250"
     rectAlignment = "LowerCenter"
-    offsetXY = "0 7"
+    offsetXY = "125 7"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
     >
     <!-- Row 1 -->
     <Row preferredHeight = "30">
@@ -1351,6 +1351,52 @@
                 onEndEdit = "whisperInputUI"
                 placeholder = "Whisper to a player."
                 colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                lineType = "MultiLineNewLine"
+                >
+            </InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id = "blackWhisperUI"
+    height = "100"
+    width = "250"
+    rectAlignment = "LowerCenter"
+    offsetXY = "0 7"
+    visibility = "Black"
+    >
+    <!-- Row 1 -->
+    <Row preferredHeight = "30">
+        <Cell columnSpan = "1">
+            <Dropdown
+                id = "blackWhisperDropdown"
+                onValueChanged="whisperColorUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                dropdownHeight = "500"
+                >
+            <Option selected="true">Select a Color</Option>
+            </Dropdown>
+        </Cell>
+        <Cell columnSpan = "1">
+            <Button
+                id = "blackSendMessageButton"
+                onClick = "sendWhisperUI"
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+				text = "Send"
+				fontSize = "15"
+                >
+            </Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight = "70">
+        <Cell columnSpan = "2">
+            <InputField
+                id = "blackWhisperInput"
+                onEndEdit = "whisperInputUI"
+                placeholder = "Whisper to a player."
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+                lineType = "MultiLineNewLine"
                 >
             </InputField>
         </Cell>
@@ -1363,11 +1409,11 @@
     placeholder = "Set a message on the table."
     lineType = "MultiLineNewLine"
     colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
     height = "100"
     width = "250"
     rectAlignment = "LowerCenter"
-    offsetXY="-280 7"
+    offsetXY="-125 7"
     characterLimit = "500"
     >
 </InputField>

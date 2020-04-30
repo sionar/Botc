@@ -83,7 +83,7 @@
     </VerticalLayout>
 </Panel>
 
-<VerticalLayout padding="0 0 100 0" width="30%" rectAlignment="LowerLeft" childAlignment="UpperCenter" childForceExpandHeight="false">
+<VerticalLayout padding="0 0 100 0" width="30%" rectAlignment="UpperLeft" childAlignment="UpperCenter" childForceExpandHeight="false">
    <Text class="outline" id="playerWhite" color="#FFFFFF" fontSize="28"></Text>
    <Text class="outline" id="playerBrown" color="#703A16" fontSize="28"></Text>
    <Text class="outline" id="playerRed" color="#DA1917" fontSize="28"></Text>
@@ -321,19 +321,25 @@
     height = "138"
 	width = "150"
     rectAlignment = "LowerCenter"
+<<<<<<< HEAD
     offsetXY = "-325 0"
     visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
     active = "true"
+=======
+    offsetXY = "-485 10"
+    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    active = "false"
+>>>>>>> parent of c622962... Add logs, team UI element
     >
     Place Decal
 </Text>
 
 <VerticalLayout
     id = "placeDecalTB"
-	height = "120"
+	height = "138"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
 	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
@@ -378,14 +384,15 @@
 
 <VerticalLayout
     id = "placeDecalBM"
-	height = "120"
+	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
-    spacing = "5"
+	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
 
@@ -429,14 +436,15 @@
 
 <VerticalLayout
     id = "placeDecalSV"
-	height = "120"
+	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
-	spacing = "5"
+	spacing = "-5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
 
@@ -480,14 +488,15 @@
 
 <VerticalLayout
     id = "placeDecalCU"
-	height = "120"
+	height = "130"
 	width = "150"
 	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
+	offsetXY = "-485 7"
 	childAlignment = "MiddleCenter"
-    spacing = "5"
+	spacing = "5"
 	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     active = "false"
+    cellBackgroundColor = "rgba(1,1,1,0)"
     >
     <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
 
@@ -500,6 +509,7 @@
 </VerticalLayout>
 
 <TableLayout
+<<<<<<< HEAD
 	id = "sitTable"
 	cellSpacing = "0"
 	height = "100"
@@ -510,17 +520,694 @@
     active = "true"
     columnWidths = "90 90 90 90 90"
 	>
+=======
+	id = "sitTable11"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+    columnWidths = "100 100 100 100 100"
+	>
+    <Row></Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit11Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable12"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+    columnWidths = "100 100 100 100 100"
+	>
+    <Row></Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit12Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit12Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable13"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+    columnWidths = "100 100 100 100 100"
+	>
+    <Row></Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit13Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit13Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit13Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable14"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+    columnWidths = "100 100 100 100 100"
+	>
+    <Row></Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit14Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit14Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit14Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit14Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+</TableLayout>
+<TableLayout
+	id = "sitTable15"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit15Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit15Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit15Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit15Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit15Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable16"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell>
+            <Button
+                id = "sit16Lime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit16Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit16Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit16Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit16Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit16Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable17"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell>
+            <Button
+                id = "sit17Lime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit17Peach"
+                class = "sitButton"
+                text = "Sit in Peach"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit17Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit17Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit17Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit17Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit17Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable18"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell>
+            <Button
+                id = "sit18Lime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit18Peach"
+                class = "sitButton"
+                text = "Sit in Peach"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit18Coral"
+                class = "sitButton"
+                text = "Sit in Coral"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit18Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit18Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit18Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit18Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit18Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable19"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell>
+            <Button
+                id = "sit19Lime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit19Peach"
+                class = "sitButton"
+                text = "Sit in Peach"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit19Coral"
+                class = "sitButton"
+                text = "Sit in Coral"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit19Maroon"
+                class = "sitButton"
+                text = "Sit in Maroon"
+                colors="#80000080|#800000FF|#80000080|#80000080"
+                >
+            </Button>
+        </Cell>
+        <Cell active = "false"></Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit19Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit19Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit19Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit19Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit19Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+	id = "sitTable20"
+	cellSpacing = "5"
+	height = "120"
+    width = "500"
+    rectAlignment = "LowerRight"
+    visibility = "Grey"
+    offsetXY = "-100 7"
+    active = "false"
+	>
+    <Row>
+        <Cell>
+            <Button
+                id = "sit20Lime"
+                class = "sitButton"
+                text = "Sit in Lime"
+                colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit20Peach"
+                class = "sitButton"
+                text = "Sit in Peach"
+                colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit20Coral"
+                class = "sitButton"
+                text = "Sit in Coral"
+                colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit20Maroon"
+                class = "sitButton"
+                text = "Sit in Maroon"
+                colors="#80000080|#800000FF|#80000080|#80000080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+                id = "sit20Silver"
+                class = "sitButton"
+                text = "Sit in Silver"
+                colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
+                >
+            </Button>
+        </Cell>
+    </Row>
+	<Row>
+        <Cell>
+            <Button
+        		id = "sit20Magenta"
+                class = "sitButton"
+        		text = "Sit in Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit20Lavender"
+        		class = "sitButton"
+        		text = "Sit in Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit20Navy"
+        		class = "sitButton"
+        		text = "Sit in Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit20Cyan"
+        		class = "sitButton"
+        		text = "Sit in Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                >
+            </Button>
+        </Cell>
+        <Cell>
+            <Button
+        		id = "sit20Mint"
+        		class = "sitButton"
+        		text = "Sit in Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
+                >
+            </Button>
+        </Cell>
+    </Row>
+>>>>>>> parent of c622962... Add logs, team UI element
 </TableLayout>
 
 <HorizontalLayout
 	id = "teamMenu"
-	height = "37.5"
-	width = "150"
-	offsetXY = "325 60"
+	height = "50"
+	width = "200"
+	offsetXY = "255 60"
 	rectAlignment = "LowerCenter"
 	childAlignment = "MiddleCenter"
-	spacing = "0"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+	spacing = "5"
 	>
 	<Image
 		id = "Clubs"
@@ -555,24 +1242,26 @@
 <Button
     class = "tp50"
     height = "50"
-    width = "150"
+    width = "200"
     id = "leaveTeam"
     onClick = "leaveTeamUI"
     text = "Leave Team"
 	rectAlignment = "LowerCenter"
     fontSize = "15"
-    offsetXY = "325 7"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    offsetXY = "255 7"
 ></Button>
 
 <TableLayout
     id = "whisperUI"
     height = "100"
+<<<<<<< HEAD
     width = "250"
     cellSpacing = "0.5"
+=======
+    width = "300"
+>>>>>>> parent of c622962... Add logs, team UI element
     rectAlignment = "LowerCenter"
-    offsetXY = "125 7"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    offsetXY = "0 7"
     >
     <!-- Row 1 -->
     <Row preferredHeight = "30">
@@ -615,6 +1304,7 @@
                 id = "whisperInput"
                 onEndEdit = "whisperInputUI"
                 placeholder = "Whisper to a player."
+<<<<<<< HEAD
                 colors = "#66666680|#666666FF|#66666680|#66666680"
                 textColor = "#FFFFFF"
                 lineType = "MultiLineNewLine"
@@ -677,6 +1367,9 @@
                 colors = "#66666680|#666666FF|#66666680|#66666680"
                 textColor = "#FFFFFF"
                 lineType = "MultiLineNewLine"
+=======
+                colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+>>>>>>> parent of c622962... Add logs, team UI element
                 >
             </InputField>
         </Cell>
@@ -688,13 +1381,18 @@
     onEndEdit = "setTableTextUI"
     placeholder = "Set a message on the table."
     lineType = "MultiLineNewLine"
+<<<<<<< HEAD
     colors = "#66666680|#666666FF|#66666680|#66666680"
     textColor = "#FFFFFF"
     visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+=======
+    colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C880"
+    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+>>>>>>> parent of c622962... Add logs, team UI element
     height = "100"
     width = "250"
     rectAlignment = "LowerCenter"
-    offsetXY="-125 7"
+    offsetXY="-280 7"
     characterLimit = "500"
     >
 </InputField>

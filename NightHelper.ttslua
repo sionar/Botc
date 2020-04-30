@@ -55,8 +55,8 @@ sendMsg = ''
 evilMsg = ''
 p1, p2, p3 = '', '', ''
 dayNum = 0
-dayLog = {{}}
-nightLog = {{}}
+nightLog = {'Night Logs: \n[808080]----------Night 0----------[-]'}
+dayLog = {'Day Logs: \n[808080]----------Day 0----------[-]'}
 
 ------------------Load/save
 function onLoad(saveString)
@@ -511,7 +511,7 @@ function send(clickedObject, playerColor)
             players[demonColor].print(msg)
         end
         printToColor(msg, 'Black', {1,1,1})
-        table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = msg})
+        nightLog[#nightLog] = nightLog[#nightLog] .. '\n' .. msg
         for i = 1, #minionColors do
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. ':[-] ' .. evilMsg
             if players[minionColors[i]] ~= nil then
@@ -535,9 +535,9 @@ function send(clickedObject, playerColor)
         dayNum = dayNum + 1
         local history = Global.getTable('history')
         table.insert(history, '\n[808080]----------Day ' .. dayNum .. '----------[-]')
+        table.insert(dayLog, '\n[808080]----------Day ' .. dayNum .. '----------[-]')
         Global.setTable('history', history)
-        table.insert(dayLog, {})
-        table.insert(nightLog, {})
+        table.insert(nightLog, '\n[808080]----------Night ' .. dayNum .. '----------[-]')
         return
     else
         if checkPrompts then
@@ -553,7 +553,7 @@ function send(clickedObject, playerColor)
             players[sendColor].print(msg)
         end
         printToColor(msg, 'Black', {1,1,1})
-        table.insert(nightLog[#nightLog], {sender = 'Black', receiver = sendColor, message = msg})
+        nightLog[#nightLog] = nightLog[#nightLog] .. '\n' .. msg
         if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
             if lastBlind == '' then
                 lastBlind = order[1].color
@@ -977,8 +977,8 @@ function reset()
     demonColor = nil
     lastBlind = nil
     dayNum = 0
-    nightLog = {{}}
-    dayLog = {{}}
+    nightLog = {'Night Logs: \n[808080]----------Night 0----------[-]'}
+    dayLog = {'Day Logs: \n[808080]----------Day 0----------[-]'}
     refreshUI()
 end
 

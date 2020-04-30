@@ -2279,7 +2279,6 @@ function showExtensionUI()
     end
 
     setUIVisibility()
-    Wait.time(function () setSitUI() end, 0.5)
     Wait.time(function () updateWhisperDropdownUI() end, 1)
 end
 
@@ -2682,67 +2681,4 @@ function setUIVisibility()
     UI.setAttribute('leaveTeam', 'visibility', visStr)
     UI.setAttribute('whisperUI', 'visibility', visStr)
     UI.setAttribute('blackWhisperUI', 'visibility', blackStr)
-end
-
-function setSitUI()
-    local xml = UI.getXmlTable()
-    local entry = {}
-    local bottomRow = {
-        tag = 'Row',
-        attributes = {},
-        children = {},
-    }
-    local topRow = {
-        tag = 'Row',
-        attributes = {},
-        children = {},
-    }
-    for i = 11, 15 do
-        entry = generateSitUIXML(i)
-        table.insert(bottomRow.children, entry)
-    end
-    for i = 16, 20 do
-        entry = generateSitUIXML(i)
-        table.insert(topRow.children, entry)
-    end
-
-    for k,v in pairs(xml) do
-        if v.attributes.id == 'sitTable' then
-            v.children = {topRow, bottomRow}
-        end
-    end
-    for k,v in pairs(xml) do
-        if v.attributes.id == 'sitTable' then
-            log(v)
-        end
-    end
-    UI.setXmlTable(xml)
-end
-
-function generateSitUIXML(i)
-    if tableSize >= i then
-        entry = {
-            tag = 'Cell',
-            attributes = { dontUseTableCellBackground = "true" },
-            children = {
-                {
-                    tag = 'Button',
-                    attributes = {
-                        id = "sit" .. COLORS_ALL[i],
-                        class = "sitButton",
-                        text = "Sit in " .. COLORS_ALL[i],
-                        colors = COLORS_UI[COLORS_ALL[i]]
-                    },
-                    children = {}
-                }
-            }
-        }
-    else
-        entry = {
-            tag = 'Cell',
-            attributes = {active = "false"},
-            children = {}
-        }
-    end
-    return entry
 end

@@ -47,7 +47,7 @@ function bagJSON(params)
                 scaleY = 1,
                 scaleZ = 1,
             }
-            entry.Nickname = name
+            entry.Nickname = string.gsub(name, '_', ' ')
             entry.description = CHARACTERS[name].Type
             entry.GMNotes = ''
             entry.ColorDiffuse = {r = 1, g = 1, b = 1}

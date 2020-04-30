@@ -29,19 +29,17 @@ end
 
 function checkAdmin(player, message)
     if player.steam_id == ADMIN_ID then
-        name = gradient(player.steam_name, {73/255,213/255,253/255}, {1,1,1})
+        color = getPlayer(player)
+        if not color then
+            color = 'Grey'
+        end
+
+        name = player.steam_name
         if playersExIds['Cyan'] == ADMIN_ID then
             name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
         end
-        message = gradient(message, {1,1,1}, randomColor())
-        printToAll('[i]' .. name .. ': ' .. message .. '[/i]')
+        message = gradient(message, {73/255,213/255,253/255}, {1,1,1})
+        printToAll( COLORS_BBC[color] .. name .. ':[-] [i]' .. message .. '[/i]')
         return false
-    end
-
-    for k,v in pairs(COLORS_EX) do
-        if playersExIds[v] == player.steam_id then
-            printToAll(COLORS_BBC[v] .. player.steam_name .. ':[-] ' .. message)
-            return false
-        end
     end
 end

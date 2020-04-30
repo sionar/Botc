@@ -3,7 +3,7 @@
     <Panel class="panels" rectAlignment= "UpperRight" offsetXY="-200 -80" width="20%" height="8%" display="false"/>
     <Image class="aliveImages" width="20" height="20"/>
     <Image class="aliveImages" width="20" height="20"/>
-    <Button class="tp50" fontSize="22" colors="#66666680|#666666FF|#66666680|#66666680" textColor="#FFFFFF"/>
+    <Button class="tp50" fontSize="22" colors="#66666680|#666666FF|#66666680|#66666680" textColor="White"/>
 	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
     <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold" />
     <Option class="cuDecal" active="true"/>
@@ -1311,7 +1311,7 @@
 	id = "teamMenu"
 	height = "37.5"
 	width = "150"
-	offsetXY = "325 60"
+	offsetXY = "325 58"
 	rectAlignment = "LowerCenter"
 	childAlignment = "MiddleCenter"
 	spacing = "0"
@@ -1353,8 +1353,8 @@
     id = "leaveTeam"
     onClick = "leaveTeamUI"
     text = "Leave Team"
-    colors="#66666680|#666666FF|#66666680|#66666680"
-    textColor="#FFFFFF"
+    colors = "#66666680|#666666FF|#66666680|#66666680"
+    textColor = "#FFFFFF"
 	rectAlignment = "LowerCenter"
     fontSize = "15"
     offsetXY = "325 7"

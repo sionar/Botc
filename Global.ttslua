@@ -2260,21 +2260,25 @@ end
 
 ------------------Grey UI
 function showExtensionUI()
+    UI.setAttribute('placeDecalTB', 'active', 'false')
+    UI.setAttribute('placeDecalBM', 'active', 'false')
+    UI.setAttribute('placeDecalSV', 'active', 'false')
+    UI.setAttribute('placeDecalCU', 'active', 'false')
     if decalsEnabled then
-        UI.setAttribute('placeDecal', 'active', 'true')
+        UI.setAttribute('placeDecal'.. mode, 'active', 'true')
         UI.setAttribute('decalText', 'active', 'true')
     end
     if tableSize <= 10 then
-        UI.setAttribute('placeDecal', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
+        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
     else
-        UI.setAttribute('placeDecal', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
+        UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
     end
 
-    setWhisperUIVisibility()
+    setUIVisibility()
     Wait.time(function () setSitUI() end, 0.5)
     Wait.time(function () updateWhisperDropdownUI() end, 1)
 end
@@ -2292,14 +2296,17 @@ end
 
 function disableDecals()
     decalsEnabled = false
-    UI.setAttribute('placeDecal', 'active', 'false')
+    UI.setAttribute('placeDecalTB', 'active', 'false')
+    UI.setAttribute('placeDecalBM', 'active', 'false')
+    UI.setAttribute('placeDecalSV', 'active', 'false')
+    UI.setAttribute('placeDecalCU', 'active', 'false')
     UI.setAttribute('decalText', 'active', 'false')
     Global.setDecals({})
 end
 
 function enableDecals()
     decalsEnabled = true
-    UI.setAttribute('placeDecal', 'active', 'true')
+    UI.setAttribute('placeDecal' .. mode, 'active', 'true')
     UI.setAttribute('decalText', 'active', 'false')
 end
 
@@ -2644,10 +2651,10 @@ end
 
 function toggleUI(player, value, id)
     uiVisibility[player.color] = not uiVisibility[player.color]
-    setWhisperUIVisibility()
+    setUIVisibility()
 end
 
-function setWhisperUIVisibility()
+function setUIVisibility()
     local visStr = ''
     local blackStr = 'None'
     if uiVisibility['Black'] then
@@ -2665,7 +2672,10 @@ function setWhisperUIVisibility()
         visStr = visStr .. '|Grey'
     end
 
-    UI.setAttribute('placeDecal', 'visibility', visStr)
+    UI.setAttribute('placeDecalTB', 'visibility', visStr)
+    UI.setAttribute('placeDecalBM', 'visibility', visStr)
+    UI.setAttribute('placeDecalSV', 'visibility', visStr)
+    UI.setAttribute('placeDecalCU', 'visibility', visStr)
     UI.setAttribute('decalText', 'visibility', visStr)
     UI.setAttribute('tableTextUI', 'visibility', visStr)
     UI.setAttribute('teamMenu', 'visibility', visStr)

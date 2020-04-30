@@ -322,14 +322,14 @@
 	width = "150"
     rectAlignment = "LowerCenter"
     offsetXY = "-325 0"
-    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
-    active = "false"
+    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    active = "true"
     >
     Place Decal
 </Text>
 
 <VerticalLayout
-    id = "placeDecal"
+    id = "placeDecalTB"
 	height = "120"
 	width = "150"
 	rectAlignment = "LowerCenter"
@@ -342,7 +342,157 @@
     <Text class="outline" id="decalFiller1" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decal"
+        id = "decalTB"
+        class = "decalDropdown"
+        >
+        <Option selected="true">None</Option>
+        <Option>Washerwoman</Option>
+        <Option>Librarian</Option>
+        <Option>Investigator</Option>
+        <Option>Chef</Option>
+        <Option>Empath</Option>
+        <Option>Fortune_Teller</Option>
+        <Option>Undertaker</Option>
+        <Option>Monk</Option>
+        <Option>Ravenkeeper</Option>
+        <Option>Virgin</Option>
+        <Option>Slayer</Option>
+        <Option>Soldier</Option>
+        <Option>Mayor</Option>
+        <Option>Butler</Option>
+        <Option>Drunk</Option>
+        <Option>Recluse</Option>
+        <Option>Saint</Option>
+        <Option>Poisoner</Option>
+        <Option>Spy</Option>
+        <Option>Scarlet_Woman</Option>
+        <Option>Baron</Option>
+        <Option>Imp</Option>
+        <Option>Scapegoat</Option>
+        <Option>Gunslinger</Option>
+        <Option>Beggar</Option>
+        <Option>Bureaucrat</Option>
+        <Option>Thief</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalBM"
+	height = "120"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "-325 7"
+	childAlignment = "MiddleCenter"
+    spacing = "5"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    active = "false"
+    >
+    <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalBM"
+        class = "decalDropdown"
+        >
+        <Option selected="true">None</Option>
+        <Option>Grandmother</Option>
+        <Option>Sailor</Option>
+        <Option>Chambermaid</Option>
+        <Option>Exorcist</Option>
+        <Option>Innkeeper</Option>
+        <Option>Gambler</Option>
+        <Option>Gossip</Option>
+        <Option>Courtier</Option>
+        <Option>Professor</Option>
+        <Option>Minstrel</Option>
+        <Option>Tea_Lady</Option>
+        <Option>Pacifist</Option>
+        <Option>Fool</Option>
+        <Option>Tinker</Option>
+        <Option>Moonchild</Option>
+        <Option>Goon</Option>
+        <Option>Lunatic</Option>
+        <Option>Godfather</Option>
+        <Option>Devils_Advocate</Option>
+        <Option>Assassin</Option>
+        <Option>Mastermind</Option>
+        <Option>Zombuul</Option>
+        <Option>Pukka</Option>
+        <Option>Shabaloth</Option>
+        <Option>Po</Option>
+        <Option>Apprentice</Option>
+        <Option>Matron</Option>
+        <Option>Voudon</Option>
+        <Option>Judge</Option>
+        <Option>Bishop</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalSV"
+	height = "120"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "-325 7"
+	childAlignment = "MiddleCenter"
+	spacing = "5"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    active = "false"
+    >
+    <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalSV"
+        class = "decalDropdown"
+        >
+        <Option selected="true">None</Option>
+        <Option>Clockmaker</Option>
+        <Option>Dreamer</Option>
+        <Option>Snake_Charmer</Option>
+        <Option>Mathematician</Option>
+        <Option>Flowergirl</Option>
+        <Option>Town_Crier</Option>
+        <Option>Oracle</Option>
+        <Option>Savant</Option>
+        <Option>Seamstress</Option>
+        <Option>Philosopher</Option>
+        <Option>Artist</Option>
+        <Option>Juggler</Option>
+        <Option>Sage</Option>
+        <Option>Mutant</Option>
+        <Option>Sweetheart</Option>
+        <Option>Barber</Option>
+        <Option>Klutz</Option>
+        <Option>Evil_Twin</Option>
+        <Option>Witch</Option>
+        <Option>Cerenovus</Option>
+        <Option>Pit_Hag</Option>
+        <Option>Fang_Gu</Option>
+        <Option>Vigormortis</Option>
+        <Option>No_Dashii</Option>
+        <Option>Vortox</Option>
+        <Option>Butcher</Option>
+        <Option>Bone_Collector</Option>
+        <Option>Harlot</Option>
+        <Option>Barista</Option>
+        <Option>Deviant</Option>
+    </Dropdown>
+</VerticalLayout>
+
+<VerticalLayout
+    id = "placeDecalCU"
+	height = "120"
+	width = "150"
+	rectAlignment = "LowerCenter"
+	offsetXY = "-325 7"
+	childAlignment = "MiddleCenter"
+    spacing = "5"
+	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    active = "false"
+    >
+    <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
+
+    <Dropdown
+        id = "decalCU"
         class = "decalDropdown"
         >
         <Option selected="true">None</Option>

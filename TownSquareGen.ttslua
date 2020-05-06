@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 START_POS = {21,1.2,145}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
@@ -80,7 +80,7 @@ function start(clickedObject, playerColor)
 
     for i = 1, numPlayers do
         table.insert(colors, COLORS_ALL[i])
-        angles[COLORS_ALL[i]] = 0 + 180/numPlayers + (i-1)*360/numPlayers
+        angles[COLORS_ALL[i]] = (180 + 360 / numPlayers * (i-1)) % 360
     end
 
     for k,v in pairs(colors) do

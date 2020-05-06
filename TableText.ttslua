@@ -43,7 +43,7 @@ function onLoad(saveString)
     end
 
     for i = 1, tableSize do
-        angle[COLORS_ALL[i]] = 180/tableSize + (i-1)*360/tableSize
+        angle[COLORS_ALL[i]] = (180 + 360 / tableSize * (i-1)) % 360
     end
     for i = 1, tableSize do
         params = {click_function = 'null', function_owner = self, label = text[COLORS_ALL[i]], position = radius(TEXT_RAD, angle[COLORS_ALL[i]], 1.1), rotation = {0, angle[COLORS_ALL[i]], 0}, font_color = COLORS_RGB[COLORS_ALL[i]], width = 0, height = 0, font_size = fontSize}
@@ -84,7 +84,7 @@ function moveText(params)
     local tableSize = params.tableSize
     angle = {}
     for i = 1, tableSize do
-        angle[COLORS_ALL[i]] = 180/tableSize + (i-1)*360/tableSize
+        angle[COLORS_ALL[i]] = (180 + 360 / tableSize * (i-1)) % 360
     end
 
     local fontSize

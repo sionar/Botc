@@ -71,7 +71,7 @@ function onLoad(saveString)
         checkPrompts = save['c']
         blindAuto = save['b']
         dayNum = save['day']
-        nightLog = save['n']
+        nightLog = save['nl']
         dayLog = save['dl']
     end
 
@@ -89,7 +89,7 @@ function onSave()
     save['c'] = checkPrompts
     save['b'] = blindAuto
     save['day'] = dayNum
-    save['n'] = nightLog
+    save['nl'] = nightLog
     save['dl'] = dayLog
 
     local saveString = JSON.encode(save)

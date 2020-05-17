@@ -5,10 +5,10 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.1'
+VERSION = '1.2.0'
 START_POS = {21,1.2,145}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-TEXT_GUIDS = {Magenta = '1f5c30', Lavender = 'b6123b', Navy = 'aaf90e', Cyan = 'f91039', Mint = '7ccfd8', Lime = '955539', Peach = '5e50cf', Coral = '516c8f', Maroon = 'c71439', Silver = '25fc49', Version = '276848'}
+COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[AAAAAA]'}
 
 #include GUIDs.ttslua
 
@@ -24,7 +24,7 @@ tableSize = 5
 ------------------Functions()
 function onLoad()
     moveBoard()
-    refreshUI()
+    renderSetup()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
@@ -100,7 +100,7 @@ function start(clickedObject, playerColor)
             obj.setValue(nameList[i])
         end
     end
-
+    renderStart()
 end
 
 function generateGrimNames()
@@ -122,26 +122,17 @@ end
 function deleteOldText()
     local allObjs = getAllObjects()
     for k,v in pairs(allObjs) do
-        if v.tag == '3D Text' and not inTable(v.getGUID(), TEXT_GUIDS) then
+        if v.tag == '3D Text' then
             v.destruct()
         end
     end
-end
-
-function inTable(input, table)
-    for k,v in pairs(table) do
-        if input == v then
-            return true
-        end
-    end
-    return false
 end
 
 function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
 end
 
-function refreshUI()
+function renderSetup()
     self.clearButtons()
     self.clearInputs()
     self.createInput({
@@ -178,4 +169,38 @@ function refreshUI()
         color = {1,1,1,1},
         font_color = {0,0,0},
     })
+end
+
+function renderStart()
+    self.clearButtons()
+    self.clearInputs()
+
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Town Square',
+        position = {0,0.2,-7.5},
+        width = 0,
+        height = 0,
+        font_size = 400,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
+    local z = -6
+    for i,v in ipairs(nameList) do
+        self.createButton({
+            click_function = 'nullFunc',
+            function_owner = self,
+            label = COLORS_BBC[COLORS_ALL[i]] .. v .. '[-]',
+            position = {0,0.2, z},
+            width = 0,
+            height = 0,
+            font_size = 200,
+            color = {1,1,1,1},
+            font_color = {1,1,1},
+        })
+        z = z + 0.65
+    end
+
 end

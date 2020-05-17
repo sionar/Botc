@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '18.6.7'
+VERSION = '19.0.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -128,6 +128,7 @@ function onLoad(saveString)
     end
 
     local obj
+    local allObjects = getAllObjects()
     obj = getObjectFromGUID(TABLE_GUID)
     if obj then
         obj.interactable = false
@@ -190,6 +191,12 @@ function onLoad(saveString)
         if obj then
             obj.setLock(true)
             obj.interactable = false
+        end
+    end
+
+    for k,v in pairs(allObjects) do
+        if v.getName() == 'Background' then
+            v.interactable = false
         end
     end
 
@@ -993,8 +1000,8 @@ function toggleLights(params)
     end
     if not lights then
         Lighting.ambient_type = 1
-        Lighting.ambient_intensity = 1.3
-        Lighting.light_intensity = 0.54
+        Lighting.ambient_intensity = 2.85
+        Lighting.light_intensity = 0.5
         Lighting.apply()
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
@@ -1447,12 +1454,29 @@ end
 
 function chatWhisper(player, color, message)
     updatePlayers()
-    if not message or string.len(message) == 0 or string.len(message) > 100 then
+
+    if not message or string.len(message) == 0 then
         return
     end
+    local playerColor = getPlayer(player)
+    if string.len(message) > 100 and playerColor ~= 'Black' then
+        player.print('Character limit exceeded. Please shorten your message.', {1,0,0})
+        return
+    end
+
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-    local playerColor = getPlayer(player)
+    local clock = getObjectFromGUID(CLOCK_GUID)
+
+    if clockControls and clockControls.getVar('allBlind') == true and playerColor ~= 'Black' then
+        player.print('You cannot whisper during the night.', {1,0,0})
+        return
+    end
+
+    if clock.getScale().x ~= 0 and playerColor ~= 'Black' then
+        player.print('You cannot whisper during nominations.', {1,0,0})
+    end
+
     local receiverColor = nil
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(color)) then

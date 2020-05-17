@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.1'
+VERSION = '1.8.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -1018,8 +1018,17 @@ function importLists(clickedObject, playerColor)
 end
 
 function refreshUI()
-    local buttonParam
-    local z
+    local buttonParam, z
+    local numSeated = 0
+
+
+    local players = Global.getTable('players')
+    for k,v in pairs(players) do
+        if v then
+            numSeated = numSeated + 1
+        end
+    end
+    numSeated = numSeated - 1
 
     self.clearButtons()
     self.clearInputs()
@@ -1099,6 +1108,18 @@ function refreshUI()
 
     buttonParam = {click_function = 'random', label = 'Random', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,
         position = {5.2,BUTTON_Y,8.2}, rotation = {0,0,0}, width = 1000, height = 400, font_size = 200, tooltip = 'Select random character tokens based on the player count.'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Players in Lobby: ' .. #Player.getPlayers() - 1, color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {6.35,BUTTON_Y,6.2}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Players Seated: ' .. numSeated, color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {6.35,BUTTON_Y,6.8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Characters Selected: ' .. #selected , color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {6.35,BUTTON_Y,7.4}, rotation = {0,0,0}, width = 0, height = 0, font_size = 150,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'start', label = 'Start', color = {1,1,1,1}, font_color = {0,0,0}, function_owner = self,

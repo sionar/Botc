@@ -664,17 +664,14 @@ function resizeTable()
                     obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
                 end
             end
-            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
-            if (not obj and not started) or (started and chars[COLORS_ALL[i]] ~= nil) then
+            obj = aliveTokens[COLORS_ALL[i]].object
+            if (not obj and not started) or (not obj and started and chars[COLORS_ALL[i]] ~= nil) then
                 objs = storageBag.getObjects()
                 for k,v in pairs(objs) do
                     if v.guid == ALIVE_TOKEN_GUIDS[COLORS_ALL[i]] then
                         obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]]})
                     end
                 end
-            end
-            if not obj then
-                obj = aliveTokens[COLORS_ALL[i]].object
             end
             if obj then
                 if storytellerMode then
@@ -1159,24 +1156,12 @@ function resetGame()
         elseif name == 'Shroud' then
             shroudBag.putObject(v)
         elseif description == 'Townsfolk' or description == 'Outsider' or description == 'Minion' or description == 'Demon' or description == 'Traveler' then
-            if mode == 'CU' then
-                v.destruct()
-            else
-                v.setColorTint({1,1,1})
-                v.setLock(false)
-                bags[description].putObject(v)
-            end
+            v.setColorTint({1,1,1})
+            v.setLock(false)
+            bags[description].putObject(v)
         elseif description == 'Reminder Token' then
-            if mode == 'CU' then
-                v.destruct()
-            else
-                v.setColorTint({1,1,1})
-                bags.Reminder.putObject(v)
-            end
-        end
-
-        if mode == 'CU' and (name == 'Custom: Townsfolk' or name == 'Custom: Outsiders' or name == 'Custom: Minions' or name == 'Custom: Demons' or name == 'Custom: Travelers' or name == 'Custom: Reminder Tokens') then
-            v.destruct()
+            v.setColorTint({1,1,1})
+            bags.Reminder.putObject(v)
         end
     end
 
@@ -1459,24 +1444,6 @@ function chatWhisper(player, color, message)
         return
     end
     local playerColor = getPlayer(player)
-    if string.len(message) > 100 and playerColor ~= 'Black' then
-        player.print('Character limit exceeded. Please shorten your message.', {1,0,0})
-        return
-    end
-
-    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-    local clock = getObjectFromGUID(CLOCK_GUID)
-
-    if clockControls and clockControls.getVar('allBlind') == true and playerColor ~= 'Black' then
-        player.print('You cannot whisper during the night.', {1,0,0})
-        return
-    end
-
-    if clock.getScale().x ~= 0 and playerColor ~= 'Black' then
-        player.print('You cannot whisper during nominations.', {1,0,0})
-    end
-
     local receiverColor = nil
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(color)) then
@@ -1487,6 +1454,25 @@ function chatWhisper(player, color, message)
 
     if string.match('black', string.lower(color)) then
         receiverColor = 'Black'
+    end
+
+    if string.len(message) > 100 and playerColor ~= 'Black' then
+        player.print('Character limit exceeded. Please shorten your message.', {1,0,0})
+        return
+    end
+
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    local clock = getObjectFromGUID(CLOCK_GUID)
+
+    if clockControls and clockControls.getVar('allBlind') == true and not (playerColor == 'Black' or receiverColor == 'Black') then
+        player.print('You cannot whisper during the night.', {1,0,0})
+        return
+    end
+
+    if clock.getScale().x ~= 0 and not (playerColor == 'Black' or receiverColor == 'Black') then
+        player.print('You cannot whisper during nominations.', {1,0,0})
+        return
     end
 
     if not playerColor or not players[receiverColor] or playerColor == receiverColor then
@@ -1514,7 +1500,9 @@ function chatWhisper(player, color, message)
         if not (whisperActive[playerColor][receiverColor]) then
             whisperActive[playerColor][receiverColor] = true
             Wait.time(|| setWhisperActiveFalse(playerColor, receiverColor), 5)
-            printToAll(COLORS_BBC[playerColor] .. playerColor .. ' [888888]has whispered to ' .. COLORS_BBC[receiverColor] .. receiverColor .. '[888888]. [' .. string.len(message) .. ' characters][-]' )
+            local messageLength = string.len(message) + math.random(-5, 5)
+            if messageLength < 2 then messageLength = 2 end
+            printToAll(COLORS_BBC[playerColor] .. playerColor .. ' [888888]has whispered to ' .. COLORS_BBC[receiverColor] .. receiverColor .. '[888888]. [' .. messageLength .. ' characters][-]' )
         end
     end
 end

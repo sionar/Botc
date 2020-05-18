@@ -160,19 +160,29 @@ end
 
 function setMode(state)
     local objs = getAllObjects()
+    local name
 
     if state == 1 then
         mode = 'TB'
+        name = 'Trouble Brewing'
         characters = TB_LIST
     elseif state == 2 then
         mode = 'BM'
+        name = 'Bad Moon Rising'
         characters = BM_LIST
     elseif state == 3 then
         mode = 'SV'
+        name = 'Sects & Violets'
         characters = SV_LIST
     elseif state == 4 then
         mode = 'CU'
+        name = 'Custom'
         characters = {}
+    end
+    if mode ~= 'CU' then
+        spawnSet(characters, name)
+    else
+        spawnSet(CU_LIST, name)
     end
     unused = {}
     for k,v in pairs(characters) do
@@ -183,13 +193,7 @@ function setMode(state)
 
     Global.setVar('mode', mode)
     for k,v in pairs(objs) do
-        if string.match(v.getName(), ': Townsfolk')
-        or string.match(v.getName(), ': Outsiders')
-        or string.match(v.getName(), ': Minions')
-        or string.match(v.getName(), ': Demons')
-        or string.match(v.getName(), ': Reminder Tokens')
-        or string.match(v.getName(), ': Travelers')
-        or string.match(v.getName(), ': Characters')
+        if string.match(v.getName(), ': Characters')
         or string.match(v.getName(), ': Night Sheet') then
             if v.getStateId() ~= state then
                 v.setState(state)
@@ -456,48 +460,7 @@ function import()
         Global.call('drawAllCharSheets')
     end
 
-    for k,v in pairs(objs) do
-        if string.match(v.getName(), ': Demons')
-        or string.match(v.getName(), ': Minions')
-        or string.match(v.getName(), ': Outsiders')
-        or string.match(v.getName(), ': Townsfolk')
-        or string.match(v.getName(), ': Travelers') then
-            storageBag.putObject(v)
-        end
-        if string.match(v.getName(), ': Reminder') then
-            reminderBagJSON = v.getJSON()
-            storageBag.putObject(v)
-        end
-    end
-
-    local chars = {
-        Townsfolk = {},
-        Outsider = {},
-        Minion = {},
-        Demon = {},
-        Traveler = {}
-    }
-
-    for k,v in pairs(characters) do
-        table.insert(chars[CHARACTERS[v].Type], v)
-    end
-
-    local reminderChars = {}
-    for k1,v1 in pairs(TYPES) do
-        for k2,v2 in pairs(characters) do
-            if CHARACTERS[v2].Type == v1 then
-                table.insert(reminderChars, v2)
-            end
-        end
-    end
-
-    spawnBag({Nickname = 'Custom: Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 101}, reminder = false})
-    spawnBag({Nickname = 'Custom: Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 101}, reminder = false})
-    spawnBag({Nickname = 'Custom: Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 101}, reminder = false})
-    spawnBag({Nickname = 'Custom: Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 101}, reminder = false})
-    spawnBag({Nickname = 'Custom: Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 101}, reminder = false})
-    spawnBag({Nickname = 'Custom: Reminder Tokens', Description = '', ColorDiffuse = {r = 241/255, g = 212/255, b = 162/255}, characters = reminderChars, position = {-10, 0.82, 101}, reminder = true})
-
+    spawnSet(characters, 'Custom')
     Wait.time(function () dealChars() end, 1)
 end
 

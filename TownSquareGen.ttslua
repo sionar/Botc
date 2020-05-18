@@ -9,22 +9,24 @@ VERSION = '1.2.0'
 START_POS = {21,1.2,145}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[AAAAAA]'}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 
 #include GUIDs.ttslua
 
-
 ------------------Variables
-nameList = {}
 colors = {}
 angles = {}
-numPlayers = 0
-tableSize = 5
+numPlayers = 10
+nameList = {}
+for i = 1, numPlayers do
+    table.insert(nameList, {color = COLORS_ALL[i], name = '', type = 'Normal'})
+end
 
 
 ------------------Functions()
 function onLoad()
     moveBoard()
-    renderSetup()
+    render()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
@@ -36,39 +38,22 @@ function moveBoard()
     end
 end
 
-function updateList(obj, color, input, stillEditing)
-    if not stillEditing then
-        nameList = {}
-        local entry
-        for s in input:gmatch("[^\r\n]+") do
-            entry = s
-            table.insert(nameList, entry)
-        end
-    end
-end
-
 function start(clickedObject, playerColor)
     local obj
-    local numPlayers, rad, radGrim
+    local rad, radGrim
     local posTable, posTableGrim
     local started = Global.getVar('started')
 
     if #nameList < 5 then
         Player[playerColor].print('Error: Not enough names in the list.', {1,0,0})
         return
-    elseif #nameList > 20 then
-        Player[playerColor].print('Error: Too many names in the list.', {1,0,0})
-        return
     end
-
     Global.setVar('storytellerMode', true)
-    tableSize = #nameList
     obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    obj.setVar('tableSize', tableSize)
+    obj.setVar('tableSize', numPlayers)
     obj.call('refreshUI')
     obj.call('callResize')
-
-    storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     numPlayers = #nameList
     rad = numPlayers * 0.6 + 6
     radGrim = numPlayers * 0.4 + 6
@@ -93,14 +78,23 @@ function start(clickedObject, playerColor)
     deleteOldText()
     for i = 1, numPlayers do
         obj = spawnObject({type = '3DText', position = posTable[colors[i]], rotation = {90,180,0}})
-        obj.setValue(nameList[i])
+        obj.setValue(nameList[i].name)
 
         if started then
             obj = spawnObject({type = '3DText', position = posTableGrim[colors[i]], rotation = {90,180,0}})
-            obj.setValue(nameList[i])
+            obj.setValue(nameList[i].name)
         end
     end
-    renderStart()
+    render()
+    Wait.time(function ()
+        for i = 1, numPlayers do
+            if nameList[i].type == 'Normal' then
+                setNormalToken(COLORS_ALL[i])
+            else
+                setTravelerToken(COLORS_ALL[i])
+            end
+        end
+    end, 2)
 end
 
 function generateGrimNames()
@@ -132,20 +126,154 @@ function radius(rad, angle, height)
     return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
 end
 
-function renderSetup()
+function setNumPlayers(clickedObject, playerColor, value, stillEditing)
+    local obj
+    if not stillEditing then
+        local num = tonumber(value)
+        if num < 5 then
+            numPlayers = 5
+        elseif num > 20 then
+            numPlayers = 20
+        else
+            numPlayers = num
+        end
+        local newNameList = {}
+        for i = 1, numPlayers do
+            if nameList[i] then
+                table.insert(newNameList, nameList[i])
+            else
+                table.insert(newNameList, {color = COLORS_ALL[i], name = '', type = 'Normal'})
+            end
+        end
+        nameList = newNameList
+        Global.setVar('storytellerMode', true)
+        obj = getObjectFromGUID(TABLE_SIZER_GUID)
+        obj.setVar('tableSize', numPlayers)
+        obj.call('refreshUI')
+        obj.call('callResize')
+        render()
+    end
+end
+
+function updateList(clickedObject, playerColor, value, stillEditing, i)
+    if not stillEditing then
+        nameList[i].name = value
+    end
+end
+
+for i = 1,20 do
+    _G['updateList' .. i] = function(clickedObject, playerColor, value, stillEditing)
+        updateList(clickedObject, playerColor, value, stillEditing, i)
+    end
+end
+
+function setNormal(clickedObject, playerColor, i)
+    nameList[i].type = 'Normal'
+    setNormalToken(COLORS_ALL[i])
+    render()
+end
+
+for i = 1,20 do
+    _G['setNormal' .. i] = function(clickedObject, playerColor)
+        setNormal(clickedObject, playerColor, i)
+    end
+end
+
+function setTraveler(clickedObject, playerColor, i)
+    nameList[i].type = 'Traveler'
+    setTravelerToken(COLORS_ALL[i])
+    render()
+end
+
+for i = 1,20 do
+    _G['setTraveler' .. i] = function(clickedObject, playerColor)
+        setTraveler(clickedObject, playerColor, i)
+    end
+end
+
+function setNormalToken(color)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    local aliveTokens = Global.getTable('aliveTokens')
+    local pos, objs
+    if aliveTokens[color].object.getDescription() == 'Traveler' then
+        pos = aliveTokens[color].object.getPosition()
+        travelerBag.putObject(aliveTokens[color].object)
+        objs = storageBag.getObjects()
+        for k,v in pairs(objs) do
+            if v.guid == ALIVE_TOKEN_GUIDS[color] then
+                obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[color], position = pos})
+            end
+        end
+    end
+end
+
+function setTravelerToken(color)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    local aliveTokens = Global.getTable('aliveTokens')
+    local pos, objs
+    if aliveTokens[color].object.getDescription() ~= 'Traveler' then
+        pos = aliveTokens[color].object.getPosition()
+        storageBag.putObject(aliveTokens[color].object)
+        objs = storageBag.getObjects()
+        obj = travelerBag.takeObject({position = pos})
+    end
+end
+
+function insertAbove(clickedObject, playerColor, i)
+    if numPlayers == 20 then
+        return
+    end
+    numPlayers = numPlayers + 1
+    table.insert(nameList, i, {color = COLORS_ALL[i], name = '', type = 'Normal'})
+    for j = 1, numPlayers do
+        nameList[j].color = COLORS_ALL[j]
+    end
+    Global.setVar('storytellerMode', true)
+    obj = getObjectFromGUID(TABLE_SIZER_GUID)
+    obj.setVar('tableSize', numPlayers)
+    obj.call('refreshUI')
+    obj.call('callResize')
+    render()
+end
+
+for i = 1,20 do
+    _G['insertAbove' .. i] = function(clickedObject, playerColor)
+        insertAbove(clickedObject, playerColor, i)
+    end
+end
+
+function removeRow(clickedObject, playerColor, i)
+    if numPlayers == 5 then
+        return
+    end
+    numPlayers = numPlayers - 1
+    table.remove(nameList, i)
+    for j = 1, numPlayers do
+        nameList[j].color = COLORS_ALL[j]
+    end
+    Global.setVar('storytellerMode', true)
+    obj = getObjectFromGUID(TABLE_SIZER_GUID)
+    obj.setVar('tableSize', numPlayers)
+    obj.call('refreshUI')
+    obj.call('callResize')
+    render()
+end
+
+for i = 1,20 do
+    _G['removeRow' .. i] = function(clickedObject, playerColor)
+        removeRow(clickedObject, playerColor, i)
+    end
+end
+
+function render()
     self.clearButtons()
     self.clearInputs()
-    self.createInput({
-        input_function = 'updateList',
-        function_owner = self,
-        label = 'Generate a Town Square for storytelling.\nEnter the name of each player, one name per line.',
-        width = 4000,
-        height = 6000,
-        font_size = 250,
-        color = {0.2,0.2,0.2},
-        font_color = {1,1,1},
-        alignment = 3,
-    })
+    local z = -6.5
+    local selectedColor = {0.3,0.3,0.6}
+    local unselectedColor = {0,0,0}
+    local normalColor, travelerColor
     self.createButton({
         click_function = 'nullFunc',
         function_owner = self,
@@ -158,49 +286,111 @@ function renderSetup()
         font_color = {1,1,1},
     })
 
+    for i = 1, numPlayers do
+        if nameList[i].type == 'Normal' then
+            normalColor = selectedColor
+            travelerColor = unselectedColor
+        else
+            normalColor = unselectedColor
+            travelerColor = selectedColor
+        end
+        self.createInput({
+            input_function = 'updateList' .. i,
+            function_owner = self,
+            label = 'Player ' .. i,
+            value = nameList[i].name or '',
+            width = 3000,
+            height = 300,
+            font_size = 250,
+            color = {0,0,0},
+            position = {-3, 0.2, z},
+            font_color = COLORS_RGB[COLORS_ALL[i]],
+            alignment = 3,
+        })
+        self.createButton({
+            click_function = 'setNormal' .. i,
+            function_owner = self,
+            label = 'Normal',
+            position = {2.5,0.2,z},
+            width = 1000,
+            height = 300,
+            font_size = 250,
+            color = normalColor,
+            font_color = {1,1,1},
+        })
+        self.createButton({
+            click_function = 'setTraveler' .. i,
+            function_owner = self,
+            label = 'Traveler',
+            position = {4.7,0.2,z},
+            width = 1000,
+            height = 300,
+            font_size = 250,
+            color = travelerColor,
+            font_color = {1,1,1},
+        })
+        self.createButton({
+            click_function = 'insertAbove' .. i,
+            function_owner = self,
+            label = '+',
+            position = {6.5,0.2,z},
+            width = 300,
+            height = 300,
+            font_size = 250,
+            color = {0.5,0.5,0.5},
+            font_color = {1,1,1},
+            tooltip = 'Insert new row above'
+        })
+        self.createButton({
+            click_function = 'removeRow' .. i,
+            function_owner = self,
+            label = '-',
+            position = {7.2,0.2,z},
+            width = 300,
+            height = 300,
+            font_size = 250,
+            color = {0.5,0.5,0.5},
+            font_color = {1,1,1},
+            tooltip = 'Remove row'
+        })
+
+        z = z + 0.7
+    end
+
+    self.createInput({
+        input_function = 'setNumPlayers',
+        function_owner = self,
+        position = {0, 0.2, 8.2},
+        width = 600,
+        height = 350,
+        font_size = 300,
+        tooltip = 'Number of Players',
+        validation = 2,
+        alignment = 3,
+        value = numPlayers
+    })
+
+    self.createButton({
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Number of Players',
+        position = {0,0.2,7.5},
+        width = 0,
+        height = 0,
+        font_size = 200,
+        color = {1,1,1,1},
+        font_color = {1,1,1},
+    })
+
     self.createButton({
         click_function = 'start',
         function_owner = self,
         label = 'Start',
-        position = {0,0.2,7.5},
+        position = {7,0.2,8},
         width = 1300,
         height = 500,
         font_size = 400,
         color = {1,1,1,1},
         font_color = {0,0,0},
     })
-end
-
-function renderStart()
-    self.clearButtons()
-    self.clearInputs()
-
-    self.createButton({
-        click_function = 'nullFunc',
-        function_owner = self,
-        label = 'Town Square',
-        position = {0,0.2,-7.5},
-        width = 0,
-        height = 0,
-        font_size = 400,
-        color = {1,1,1,1},
-        font_color = {1,1,1},
-    })
-
-    local z = -6
-    for i,v in ipairs(nameList) do
-        self.createButton({
-            click_function = 'nullFunc',
-            function_owner = self,
-            label = COLORS_BBC[COLORS_ALL[i]] .. v .. '[-]',
-            position = {0,0.2, z},
-            width = 0,
-            height = 0,
-            font_size = 200,
-            color = {1,1,1,1},
-            font_color = {1,1,1},
-        })
-        z = z + 0.65
-    end
-
 end

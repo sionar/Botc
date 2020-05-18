@@ -9,11 +9,11 @@ VERSION = '1.4.0'
 BUTTON_W = 500
 BUTTON_H = 400
 FONT_SIZE = 150
-
+#include GUIDs.ttslua
 
 ------------------Variables
 tableSize = 10
-
+backgroundDelete = false
 
 
 ------------------Functions
@@ -98,12 +98,16 @@ function deleteBackground(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
+    backgroundDeleted = true
     local allObjects = getAllObjects()
     for k,v in pairs(allObjects) do
         if v.getName() == 'Background' then
             v.destruct()
         end
+    end
+    local backgroundBox = getObjectFromGUID(BACKGROUND_BOX_GUID)
+    if backgroundBox then
+        backgroundBox.setScale({0.5,0.5,0.5})
     end
 end
 

@@ -1,4 +1,4 @@
-function bagJSON(params)
+function bagTable(params)
     local bag = {}
     local entry = {}
     bag.Name = 'Bag'
@@ -48,7 +48,7 @@ function bagJSON(params)
                 scaleZ = 1,
             }
             entry.Nickname = string.gsub(params.characters[i], '_', ' ')
-            entry.description = CHARACTERS[params.characters[i]].Type
+            entry.Description = CHARACTERS[params.characters[i]].Type
             entry.GMNotes = ''
             entry.ColorDiffuse = {r = 1, g = 1, b = 1}
             entry.Locked = false
@@ -98,7 +98,7 @@ function bagJSON(params)
                             scaleZ = 0.5,
                         }
                         entry.Nickname = string.gsub(name, '_', ' ')
-                        entry.description = 'Reminder Token'
+                        entry.Description = 'Reminder Token'
                         entry.GMNotes = ''
                         entry.ColorDiffuse = {r = 1, g = 1, b = 1}
                         entry.Locked = false
@@ -134,11 +134,11 @@ function bagJSON(params)
         end
     end
 
-    return JSON.encode(bag)
+    return bag
 end
 
 function spawnBag(params)
-    local bagJsonStr = bagJSON({
+    local bagTable = bagTable({
         Nickname = params.Nickname,
         Description = params.Description,
         ColorDiffuse = params.ColorDiffuse,
@@ -146,12 +146,12 @@ function spawnBag(params)
         position = params.position,
         reminder = params.reminder,
     })
-    spawnObjectJSON({json = bagJsonStr, position = params.position, rotation = {0,0,0}})
+    spawnObjectData({data = bagTable, position = params.position, rotation = {0,0,0}})
 end
 
 function spawnSet(characters, name)
     local objs = getAllObjects()
-    local reminderBagJSON
+    local reminderbagTable
 
     for k,v in pairs(objs) do
         if string.match(v.getName(), ': Demons')

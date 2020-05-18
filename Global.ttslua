@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.0'
+VERSION = '19.0.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -195,7 +195,7 @@ function onLoad(saveString)
     end
 
     for k,v in pairs(allObjects) do
-        if v.getName() == 'Background' then
+        if v.getName() == 'Background' or v.getName() == 'Skybox' then
             v.interactable = false
         end
     end
@@ -991,15 +991,19 @@ end
 function toggleLights(params)
     local switching = params.switching
     local obj
-
+    local backgroundBox = getObjectFromGUID(BACKGROUND_BOX_GUID)
     if switching then
         lights = not lights
     end
     if not lights then
         Lighting.ambient_type = 1
-        Lighting.ambient_intensity = 2.85
+        Lighting.ambient_intensity = 2.3
         Lighting.light_intensity = 0.5
         Lighting.apply()
+        local backgroundDeleted = getObjectFromGUID(TABLE_SIZER_GUID).getVar('backgroundDeleted')
+        if backgroundBox and not backgroundDeleted then
+            backgroundBox.setScale({1,1,1})
+        end
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
             if obj then
@@ -1009,9 +1013,12 @@ function toggleLights(params)
         end
     else
         Lighting.ambient_type = 1
-        Lighting.ambient_intensity = 1.5
+        Lighting.ambient_intensity = 0.4
         Lighting.light_intensity = 0
         Lighting.apply()
+        if backgroundBox then
+            backgroundBox.setScale({0.5,0.5,0.5})
+        end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
         if obj then
             obj.setPosition({0,40,0})
@@ -1443,6 +1450,7 @@ function chatWhisper(player, color, message)
     if not message or string.len(message) == 0 then
         return
     end
+    local message = trim(message)
     local playerColor = getPlayer(player)
     local receiverColor = nil
     for k,v in pairs(COLORS_ALL) do
@@ -1505,6 +1513,23 @@ function chatWhisper(player, color, message)
             printToAll(COLORS_BBC[playerColor] .. playerColor .. ' [888888]has whispered to ' .. COLORS_BBC[receiverColor] .. receiverColor .. '[888888]. [' .. messageLength .. ' characters][-]' )
         end
     end
+end
+
+function trim(str)
+   local idx = string.len(str)
+   while string.sub(str, idx, idx) == ' ' do
+       idx = idx - 1
+       if idx == 0 then return '' end
+   end
+   local str = string.sub(str, 1, idx)
+   local len = string.len(str)
+
+   idx = 1
+   while string.sub(str, idx, idx) == ' ' do
+       idx = idx + 1
+       if idx > len then return '' end
+   end
+   return string.sub(str, idx, len)
 end
 
 function setWhisperActiveFalse(playerColor, receiverColor)

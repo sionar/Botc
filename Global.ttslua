@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.1'
+VERSION = '19.0.3'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -434,6 +434,10 @@ function updatePlayers()
         end
         players[v] = playersEx[v]
     end
+    characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
+    if characterTool then
+        characterTool.call('refreshMenu')
+    end
     return players
 end
 
@@ -500,7 +504,7 @@ function handleLifeUI()
 
     for i=1, 20 do
         if aliveTokens[COLORS_ALL[i]].object ~= nil and (players[COLORS_ALL[i]] ~= nil or storytellerMode) then
-            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Grey' and #allPlayers > 1 then
+            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Black' and #allPlayers > 1 then
                 getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue(COLORS[i])
             end
             numPlayers = numPlayers + 1
@@ -1013,8 +1017,8 @@ function toggleLights(params)
         end
     else
         Lighting.ambient_type = 1
-        Lighting.ambient_intensity = 0.4
-        Lighting.light_intensity = 0
+        Lighting.ambient_intensity = 0.0
+        Lighting.light_intensity = 0.12
         Lighting.apply()
         if backgroundBox then
             backgroundBox.setScale({0.5,0.5,0.5})
@@ -1316,7 +1320,6 @@ function onPlayerConnect(player)
             player.team = 'Jokers'
         end
     end
-
     Wait.stop(timerID)
     timerID = Wait.time(function ()
         teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
@@ -1324,6 +1327,10 @@ function onPlayerConnect(player)
             teamTool.reload()
         end
     end, 60)
+    local characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
+    if characterTool then
+        characterTool.call('refreshMenu')
+    end
 end
 
 function onPlayerDisconnect(color)
@@ -1332,6 +1339,10 @@ function onPlayerDisconnect(color)
         Wait.time(function () obj.call('refreshUI') end, 0.1)
     else
         updatePlayers()
+    end
+    local characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
+    if characterTool then
+        characterTool.call('refreshMenu')
     end
 end
 

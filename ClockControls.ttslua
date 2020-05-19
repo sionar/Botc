@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.8.2'
+VERSION = '1.8.3'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -894,12 +894,24 @@ function refreshButtons()
     end
     self.createButton(params)
 
+    local tooltip, func
+    if mode == 'Clock' then
+        tooltip = 'Point the clock to '
+        func = 'pointTo'
+    elseif mode == 'Mute' then
+        tooltip = 'Mute '
+        func = 'mute'
+    elseif mode == 'Blind' then
+        tooltip = 'Blindfold player '
+        func = 'blindfold'
+    end
+
     local startingVal = 0.3 - #colors * 0.3
     for i, c in ipairs(colors) do
-        params = {click_function = 'pointTo'..c, function_owner = self, label = ' ',
+        params = {click_function = func .. c, function_owner = self, label = ' ',
         position = {startingVal + 0.6*(i-1), 1, -0.6}, scale = UI_SCALE,
         width = 500, height = 500, font_size = 400,
-        color = c, tooltip = 'Point the clock to '..c}
+        color = c, tooltip = tooltip .. c}
         if inTable(c, COLORS_EX) then
             params.color = COLORS_EX_HEX[c]
         end

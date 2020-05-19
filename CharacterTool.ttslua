@@ -23,6 +23,7 @@ DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/794260766603
 mode = 'TB'
 numPlayers = ''
 numTrav = 0
+menu = 'start'
 dist = {}
 characters = {}
 unused = {}
@@ -618,6 +619,7 @@ function numTravInput(obj, color, input, stillEditing)
 end
 
 function batchImportMenu()
+    menu = 'batchimport'
     self.clearButtons()
     self.clearInputs()
     self.createInput({
@@ -818,6 +820,7 @@ function saveLoadMenu()
     local buttonParam, inputParam
     local z_offset = 1.5
     local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+    menu = 'saveload'
 
     buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Scripts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
         position = {0,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
@@ -842,6 +845,8 @@ function saveLoadMenu()
 end
 
 function startMenu()
+    menu = 'start'
+
     buttonParam = {click_function = 'nullFunc', label = 'Choose an Edition', color = {0,0,0,1}, font_color = {1,1,1}, function_owner = self,
         position = {0,BUTTON_Y,-7}, rotation = {0,0,0}, width = 0, height = 0, font_size = 500}
     self.createButton(buttonParam)
@@ -864,6 +869,7 @@ function startMenu()
 end
 
 function loadImageMenu()
+    menu = 'loadimage'
     self.clearButtons()
     self.clearInputs()
     self.createInput({
@@ -980,7 +986,14 @@ function importLists(clickedObject, playerColor)
     Player[playerColor].print('The custom scripts from the other board have been migrated successfully.')
 end
 
+function refreshMenu()
+    if menu == 'main' then
+        refreshUI()
+    end
+end
+
 function refreshUI()
+    menu = 'main'
     local buttonParam, z
     local numSeated = 0
 

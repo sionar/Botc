@@ -394,10 +394,13 @@ function updatePlayers()
     local found
     local textObj
     local mainTable = getObjectFromGUID(TABLE_GUID)
+    local prevNumPlayers = numPlayers
+    local currNumPlayers = 0
 
     for k,v in pairs(COLORS) do
         if Player[v].seated then
             players[v] = Player[v]
+            currNumPlayers = currNumPlayers + 1
         else
             players[v] = nil
         end
@@ -416,6 +419,7 @@ function updatePlayers()
             for k1,v1 in pairs(allPlayers) do
                 if v1.steam_id == playersExIds[v] and v1.color == 'Grey' then
                     found = v1
+                    currNumPlayers = currNumPlayers + 1
                     break
                 end
             end
@@ -435,7 +439,7 @@ function updatePlayers()
         players[v] = playersEx[v]
     end
     characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
-    if characterTool then
+    if characterTool and prevNumPlayers != currNumPlayers then
         characterTool.call('refreshMenu')
     end
     return players
@@ -996,6 +1000,7 @@ function toggleLights(params)
     local switching = params.switching
     local obj
     local backgroundBox = getObjectFromGUID(BACKGROUND_BOX_GUID)
+    local clockLight = getObjectFromGUID(CLOCK_LIGHT_GUID)
     if switching then
         lights = not lights
     end
@@ -1015,13 +1020,16 @@ function toggleLights(params)
                 obj.call('powerOff')
             end
         end
+        if clockLight then
+            clockLight.call('powerOff')
+        end
     else
         Lighting.ambient_type = 1
         Lighting.ambient_intensity = 0.0
         Lighting.light_intensity = 0.12
         Lighting.apply()
         if backgroundBox then
-            backgroundBox.setScale({0.5,0.5,0.5})
+            backgroundBox.setScale({0.7,0.7,0.7})
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
         if obj then
@@ -1033,7 +1041,9 @@ function toggleLights(params)
             obj.setPosition({0,10,119})
             obj.call('powerOn')
         end
-
+        if clockLight then
+            clockLight.call('powerOn')
+        end
         for i = 1, tableSize do
             obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then

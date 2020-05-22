@@ -194,15 +194,15 @@ end
 function setNormalToken(color)
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
-    local aliveTokens = Global.getTable('aliveTokens')
+    local lifeTokens = Global.getTable('lifeTokens')
     local pos, objs
-    if aliveTokens[color].object.getDescription() == 'Traveler' then
-        pos = aliveTokens[color].object.getPosition()
-        travelerBag.putObject(aliveTokens[color].object)
+    if lifeTokens[color].object.getDescription() == 'Traveler' then
+        pos = lifeTokens[color].object.getPosition()
+        travelerBag.putObject(lifeTokens[color].object)
         objs = storageBag.getObjects()
         for k,v in pairs(objs) do
-            if v.guid == ALIVE_TOKEN_GUIDS[color] then
-                obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[color], position = pos})
+            if v.guid == LIFE_TOKEN_GUIDS[color] then
+                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color], position = pos})
             end
         end
     end
@@ -211,11 +211,11 @@ end
 function setTravelerToken(color)
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
-    local aliveTokens = Global.getTable('aliveTokens')
+    local lifeTokens = Global.getTable('lifeTokens')
     local pos, objs
-    if aliveTokens[color].object.getDescription() ~= 'Traveler' then
-        pos = aliveTokens[color].object.getPosition()
-        storageBag.putObject(aliveTokens[color].object)
+    if lifeTokens[color].object.getDescription() ~= 'Traveler' then
+        pos = lifeTokens[color].object.getPosition()
+        storageBag.putObject(lifeTokens[color].object)
         objs = storageBag.getObjects()
         obj = travelerBag.takeObject({position = pos})
     end

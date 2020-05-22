@@ -6,8 +6,8 @@ end
 
 function createFlipButtons()
     self.clearButtons()
-    self.createButton({click_function = 'flipAliveToDead', function_owner = self, position = {0,0.3,0}, rotation = {0,0,0}, width = 400, height = 400, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
-    self.createButton({click_function = 'flipDeadToAlive', function_owner = self, position = {0,-0.1,0}, rotation = {180,0,0}, width = 700, height = 700, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
+    self.createButton({click_function = 'flipAliveToDead', function_owner = self, position = {0,0.3,0}, rotation = {0,0,0}, width = 400, height = 400, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
+    self.createButton({click_function = 'flipDeadToAlive', function_owner = self, position = {0,-0.1,0}, rotation = {180,0,0}, width = 700, height = 700, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
 
 end
 

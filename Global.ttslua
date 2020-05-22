@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.3'
+VERSION = '19.0.4'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -46,7 +46,7 @@ currMostVotes = 0
 colors = {}
 chars = {}
 angle = {}
-aliveTokens = {}
+lifeTokens = {}
 canNominate = {}
 canBeNominated = {}
 living = {}
@@ -58,7 +58,7 @@ tokenTable = {}
 decalTable = {}
 
 for k,v in pairs(COLORS_ALL) do
-    aliveTokens[v] = {object = 0, vote = 0}
+    lifeTokens[v] = {object = 0, vote = 0}
     canNominate[v] = true
     canBeNominated[v] = true
     living[v] = true
@@ -169,7 +169,7 @@ function onLoad(saveString)
         end
     end
 
-    for k,v in pairs(ALIVE_BASE_GUIDS) do
+    for k,v in pairs(LIVING_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.setLock(true)
@@ -178,7 +178,7 @@ function onLoad(saveString)
     end
 
 
-    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+    for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.setLock(true)
@@ -317,14 +317,14 @@ function refreshObjects()
         end
     end
 
-    for k,v in pairs(ALIVE_BASE_GUIDS) do
+    for k,v in pairs(LIVING_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.reload()
         end
     end
 
-    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+    for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.reload()
@@ -344,14 +344,14 @@ function lockObjects()
         end
     end
 
-    for k,v in pairs(ALIVE_BASE_GUIDS) do
+    for k,v in pairs(LIVING_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.interactable = false
         end
     end
 
-    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+    for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             if storytellerMode then
@@ -385,7 +385,7 @@ end
 
 function updateTokenStatus()
     updatePlayers()
-    getAliveTokens()
+    getlifeTokens()
     handleLifeUI()
 end
 
@@ -454,18 +454,18 @@ function getPlayer(player)
     return nil
 end
 
-function getAliveTokens()
+function getlifeTokens()
     local base, pos
-    local aliveTokenFound, voteTokenFound, objectsFound
+    local lifeTokenFound, voteTokenFound, objectsFound
 
     for k,v in pairs(COLORS_ALL) do
-        base = getObjectFromGUID(ALIVE_BASE_GUIDS[v])
+        base = getObjectFromGUID(LIVING_BASE_GUIDS[v])
         if not base then
-            aliveTokens[v].vote = nil
-            aliveTokens[v].object = nil
+            lifeTokens[v].vote = nil
+            lifeTokens[v].object = nil
         else
             pos = base.getPosition()
-            aliveTokenFound = false
+            lifeTokenFound = false
             voteTokenFound = false
             objectsFound = Physics.cast({
                 origin       = pos,
@@ -476,19 +476,19 @@ function getAliveTokens()
             }) -- returns { {Vector point, Vector normal, float distance, Object hit_object}, {...}, ...}
 
             for i, hit in ipairs(objectsFound) do
-                if hit.hit_object.getName() == 'Alive Token' then
-                    aliveTokens[v].object = hit.hit_object
-                    aliveTokenFound = true
+                if hit.hit_object.getName() == 'Life Token' then
+                    lifeTokens[v].object = hit.hit_object
+                    lifeTokenFound = true
                 elseif hit.hit_object.getName() == 'Vote Token' then
-                    aliveTokens[v].vote = hit.hit_object
+                    lifeTokens[v].vote = hit.hit_object
                     voteTokenFound = true
                 end
             end
             if not voteTokenFound then
-                aliveTokens[v].vote = nil
+                lifeTokens[v].vote = nil
             end
-            if not aliveTokenFound then
-                aliveTokens[v].object = nil
+            if not lifeTokenFound then
+                lifeTokens[v].object = nil
             end
         end
     end
@@ -507,13 +507,13 @@ function handleLifeUI()
     local aliveTrav = 0
 
     for i=1, 20 do
-        if aliveTokens[COLORS_ALL[i]].object ~= nil and (players[COLORS_ALL[i]] ~= nil or storytellerMode) then
+        if lifeTokens[COLORS_ALL[i]].object ~= nil and (players[COLORS_ALL[i]] ~= nil or storytellerMode) then
             if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Black' and #allPlayers > 1 then
                 getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue(COLORS[i])
             end
             numPlayers = numPlayers + 1
-            if aliveTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
-                if aliveTokens[COLORS_ALL[i]].vote ~= nil then -- ..then if a vote token is present
+            if lifeTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
+                if lifeTokens[COLORS_ALL[i]].vote ~= nil then -- ..then if a vote token is present
                     UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'deadWithVote'..i)  -- counting skipped players to only make last images transparent
                     numberOfVotes = numberOfVotes + 1
                 else
@@ -523,11 +523,11 @@ function handleLifeUI()
                 UI.setAttribute('aliveImage'..i - numberOfSkipped, 'image', 'alive'..i) -- counting skipped players to only make last images transparent
                 numAlive = numAlive +1
                 numberOfVotes = numberOfVotes + 1
-                if aliveTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
+                if lifeTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
                     aliveTrav = aliveTrav + 1
                 end
             end
-            if aliveTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
+            if lifeTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
                 numTrav = numTrav + 1
             end
         else
@@ -658,9 +658,9 @@ function resizeTable()
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
 
-            obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
+            obj = getObjectFromGUID(LIVING_BASE_GUIDS[COLORS_ALL[i]])
             if not obj then
-                obj = storageBag.takeObject({guid = ALIVE_BASE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
+                obj = storageBag.takeObject({guid = LIVING_BASE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
             if obj then
                 obj.setLock(true)
@@ -672,12 +672,13 @@ function resizeTable()
                     obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
                 end
             end
-            obj = aliveTokens[COLORS_ALL[i]].object
+            obj = lifeTokens[COLORS_ALL[i]].object
             if (not obj and not started) or (not obj and started and chars[COLORS_ALL[i]] ~= nil) then
                 objs = storageBag.getObjects()
                 for k,v in pairs(objs) do
-                    if v.guid == ALIVE_TOKEN_GUIDS[COLORS_ALL[i]] then
-                        obj = storageBag.takeObject({guid = ALIVE_TOKEN_GUIDS[COLORS_ALL[i]]})
+                    if v.guid == LIFE_TOKEN_GUIDS[COLORS_ALL[i]] then
+                        obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[COLORS_ALL[i]]})
+                        lifeTokens[COLORS_ALL[i]].object = obj
                     end
                 end
             end
@@ -699,11 +700,11 @@ function resizeTable()
                     obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.35))
                 end
             end
-            if aliveTokens[COLORS_ALL[i]].vote ~= nil then
+            if lifeTokens[COLORS_ALL[i]].vote ~= nil then
                 if storytellerMode then
-                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1.43))
+                    lifeTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(radSt, angle[COLORS_ALL[i]], 1.43))
                 else
-                    aliveTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.43))
+                    lifeTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.43))
                 end
             end
 
@@ -756,18 +757,18 @@ function resizeTable()
             storageBag.putObject(obj)
         end
 
-        obj = getObjectFromGUID(ALIVE_BASE_GUIDS[COLORS_ALL[i]])
+        obj = getObjectFromGUID(LIVING_BASE_GUIDS[COLORS_ALL[i]])
         if obj then
             storageBag.putObject(obj)
         end
 
-        obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[COLORS_ALL[i]])
+        obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[COLORS_ALL[i]])
         if obj then
             storageBag.putObject(obj)
         end
 
-        if aliveTokens[COLORS_ALL[i]].vote ~= nil then
-            voteTokenBag.putObject(aliveTokens[COLORS_ALL[i]].vote)
+        if lifeTokens[COLORS_ALL[i]].vote ~= nil then
+            voteTokenBag.putObject(lifeTokens[COLORS_ALL[i]].vote)
         end
 
         if i <= 10 then
@@ -1068,12 +1069,12 @@ end
 
 function createFlipButtons()
     local obj
-    for k,v in pairs(ALIVE_TOKEN_GUIDS) do
+    for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj then
             obj.clearButtons()
-            obj.createButton({click_function = 'flipAliveToDead', function_owner = Global, position = {0,0.3,0}, rotation = {0,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
-            obj.createButton({click_function = 'flipDeadToAliveCheck', function_owner = Global, position = {0,-0.1,0}, rotation = {180,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Alive Token'})
+            obj.createButton({click_function = 'flipAliveToDead', function_owner = Global, position = {0,0.3,0}, rotation = {0,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
+            obj.createButton({click_function = 'flipDeadToAliveCheck', function_owner = Global, position = {0,-0.1,0}, rotation = {180,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
         end
     end
 end
@@ -1164,7 +1165,7 @@ function resetGame()
     for k,v in pairs(allObjs) do
         name = v.getName()
         description = v.getDescription()
-        if name == 'Alive Token' then
+        if name == 'Life Token' then
             if v.getDescription() == 'Traveler' then
                 v.setLock(false)
                 v.setRotation({0,0,0})
@@ -1930,7 +1931,7 @@ function checkSeatedPlayers()
             if obj then
                 obj.setValue('Grey')
             end
-            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[v])
             if obj then
                 storageBag.putObject(obj)
             end
@@ -1938,7 +1939,7 @@ function checkSeatedPlayers()
     end
     for k,v in pairs(COLORS_EX) do
         if chars[v] == nil then
-            obj = getObjectFromGUID(ALIVE_TOKEN_GUIDS[v])
+            obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[v])
             if obj then
                 storageBag.putObject(obj)
             end
@@ -2111,10 +2112,10 @@ end
 
 function checkLiving()
     for k,v in pairs(COLORS_ALL) do
-        if aliveTokens[v].object ~= nil then
-            if aliveTokens[v].object.is_face_down == true then -- if life token is face down...
+        if lifeTokens[v].object ~= nil then
+            if lifeTokens[v].object.is_face_down == true then -- if life token is face down...
                 living[v] = false
-                if aliveTokens[v].vote ~= nil then -- ..then if a vote token is present
+                if lifeTokens[v].vote ~= nil then -- ..then if a vote token is present
                     hasVote[v] = true
                 else
                     hasVote[v] = false
@@ -2149,7 +2150,7 @@ function showVoteButtons(params)
     checkLiving()
     updatePlayers()
     for k,v in pairs(COLORS_ALL) do
-        if aliveTokens[v].object ~= nil then
+        if lifeTokens[v].object ~= nil then
             votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
             votePanel.call('createButtons')
             voteButtonsOn[v] = true
@@ -2238,7 +2239,7 @@ function moveGuillotine(params)
             guillotine.setRotationSmooth({0,180,0})
         elseif numVotes > currMostVotes then
             currMostVotes = numVotes
-            pos = getObjectFromGUID(ALIVE_BASE_GUIDS[player]).getPosition()
+            pos = getObjectFromGUID(LIVING_BASE_GUIDS[player]).getPosition()
             pos[2] = 1.6
             guillotine.setPositionSmooth(pos)
             guillotine.setRotationSmooth({0, angle[player], 0})
@@ -2299,8 +2300,8 @@ function removeVoteTokens(params)
     local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     for k,v in pairs(colors) do
         if not (hasVote[v] or params.voteMode == 'exile') then
-            if aliveTokens[v].vote then
-                voteTokenBag.putObject(aliveTokens[v].vote)
+            if lifeTokens[v].vote then
+                voteTokenBag.putObject(lifeTokens[v].vote)
             end
         end
     end

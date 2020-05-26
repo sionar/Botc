@@ -531,8 +531,8 @@ function handleLifeUI()
                 numTrav = numTrav + 1
             end
         else
-            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Grey' and #allPlayers > 1 then
-                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue('Grey')
+            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Black' and #allPlayers > 1  then
+                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue('Black')
             end
             numberOfSkipped = numberOfSkipped +1
             UI.setAttribute('aliveImage'..21 - numberOfSkipped, 'image', 'empty') -- starting from 11 to work backwards through list of aliveImage
@@ -1140,14 +1140,36 @@ function resetGame()
         end
     end
 
-    local obj, name, description
+    local obj, objs, name, description
     history = {'[FFFFFF]Vote History:[-]'}
     mainTable.call('clearText')
     Global.setDecals({})
     started = false
     chars = {}
     refreshUI()
-    resizeTable()
+    objs = storageBag.getObjects()
+    for i = 1, tableSize do
+        if not lifeTokens[COLORS_ALL[i]].object or lifeTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
+            for k,v in pairs(objs) do
+                if v.guid == LIFE_TOKEN_GUIDS[COLORS_ALL[i]] then
+                    obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[COLORS_ALL[i]]})
+                    lifeTokens[COLORS_ALL[i]].object = obj
+                    if storytellerMode then
+                        obj.setLock(false)
+                    else
+                        obj.setLock(true)
+                    end
+                    obj.setScale({1.82,1,1.82})
+                    obj.setRotationSmooth({0,0,0})
+                    if storytellerMode then
+                        obj.setPositionSmooth(radius(tableSize * 0.6 + 6, angle[COLORS_ALL[i]], 1.35))
+                    else
+                        obj.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.35))
+                    end
+                end
+            end
+        end
+    end
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
         if obj then
@@ -1201,13 +1223,6 @@ function resetGame()
         guillotine.setPositionSmooth({-26, 1, 101})
         guillotine.setRotationSmooth({0,0,0})
     end
-
-    grabObjectFromBag('Custom: Townsfolk', storageBag, {10,0.82,101}, true)
-    grabObjectFromBag('Custom: Outsiders', storageBag, {6,0.82,101}, true)
-    grabObjectFromBag('Custom: Minions', storageBag, {2,0.82,101}, true)
-    grabObjectFromBag('Custom: Demons', storageBag, {-2,0.82,101}, true)
-    grabObjectFromBag('Custom: Travelers', storageBag, {-6,0.82,101}, true)
-    grabObjectFromBag('Custom: Reminder Tokens', storageBag, {-10,0.82,101}, true)
     grabObjectFromBag('Character Token Bag', storageBag, {0,1,113}, false)
     Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}, true) end, 0.1)
     nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
@@ -1929,7 +1944,7 @@ function checkSeatedPlayers()
         if chars[v] == nil then
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
-                obj.setValue('Grey')
+                obj.setValue('Black')
             end
             obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[v])
             if obj then

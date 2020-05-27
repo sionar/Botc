@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.5'
+VERSION = '19.0.6'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -18,7 +18,7 @@ COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange =
 COLORS_TYPE = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
-FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {0/255,0/255,128/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
+FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123/255,182/255,0.16}, Navy = {0/255,0/255,128/255,0.16}, Cyan = {73/255,213/255,253/255,0.16}, Mint = {137/255,195/255,129/255,0.16}, Lime = {184/255,241/255,97/255,0.16}, Peach = {241/255,212/255,162/255,0.16}, Coral = {226/255,154/255,138/255,0.16}, Maroon = {128/255,0,0,0.16}, Silver = {190/255,190/255,190/255,0.16},}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 
@@ -210,6 +210,7 @@ function onLoad(saveString)
 
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     hideCharSheets()
+    updateFakeZoneColliders()
     updatePlayers()
     refreshUI()
     showExtensionUI()
@@ -799,6 +800,7 @@ function resizeTable()
     if obj then
         obj.call('updateSettings')
     end
+    Wait.time(updateFakeZoneColliders, 1)
     showExtensionUI()
 
     if storytellerMode then
@@ -836,6 +838,17 @@ function createSnapPoints()
         table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = false})
     end
     self.setSnapPoints(snapTable)
+end
+
+function updateFakeZoneColliders()
+    local component, obj
+    for k,v in pairs(COLORS_EX) do
+        obj = getObjectFromGUID(ZONE_GUIDS[v])
+        if obj then
+            component = obj.getComponent("BoxCollider")
+            component.set("enabled", false)
+        end
+    end
 end
 
 function setTokenTable()

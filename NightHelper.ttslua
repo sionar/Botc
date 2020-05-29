@@ -217,6 +217,8 @@ function setNightOrder(night)
                     elseif v2.char == 'Jabberwocky' and night == 'other' then
                         table.insert(order, v2)
                         table.insert(order, {char = 'Jabberwocky_Kill', color = v2.color})
+                    elseif v2.char == 'Inquisitor' and night == 'other' then
+                        table.insert(order, {char = 'Inquisitor_Info', color = v2.color})
                     else
                         table.insert(order, v2)
                     end
@@ -612,11 +614,19 @@ end
 
 function charInput(obj, color, input, stillEditing)
     if not stillEditing then
+        local found = false
         for k,v in pairs(CHARACTERS) do
             if string.lower(k) == string.lower(input) and input ~= '' then
                 charAdd = k
+                found = true
                 break
             end
+        end
+        if found then
+            refreshUI()
+            return 1
+        end
+        for k,v in pairs(CHARACTERS) do
             if string.match(string.lower(k), string.lower(input)) and input ~= '' then
                 charAdd = k
                 break

@@ -514,11 +514,19 @@ end
 
 function charInput(obj, color, input, stillEditing)
     if not stillEditing then
+        local found = false
         for k,v in pairs(CHARACTERS) do
             if string.lower(k) == string.lower(input) and input ~= '' then
                 charAdd = k
+                found = true
                 break
             end
+        end
+        if found then
+            refreshUI()
+            return 1
+        end
+        for k,v in pairs(CHARACTERS) do
             if string.match(string.lower(k), string.lower(input)) and input ~= '' then
                 charAdd = k
                 break
@@ -706,6 +714,9 @@ function getKey(table, value)
         if string.lower(k) == string.lower(value) and value ~= '' then
             return k
         end
+    end
+    for k,v in pairs(table) do
+
         if string.match(string.lower(k), string.lower(value)) and value ~= '' then
             return k
         end

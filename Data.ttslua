@@ -220,7 +220,7 @@ CHARACTERS =
     Moonchild = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'When you learn that you died, choose 1 alive player: if good, they die tonight.'},
     Goon = {Type = 'Outsider', Ability = false, Prompt = 'Your alignment is now P1.', Description = 'Each night, the 1st player to choose you with their ability is drunk until dusk. You become their alignment.'},
     Lunatic = {Type = 'Outsider', Ability = false, Prompt = 'Choose who to kill.', Description = 'You think you are a Demon, but your abilities malfunction. The Demon knows who you are & who you attack.'},
-    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3', Description = ''},
+    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3 P4', Description = ''},
     Lunatic_InfoB = {Type = 'Outsider', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
     Lunatic_InfoC = {Type = 'Outsider', Ability = false, Prompt = 'P1 is a Lunatic. You are the P2.', Description = ''},
     Lunatic_InfoD = {Type = 'Outsider', Ability = false, Prompt = 'Tonight, the Lunatic targeted P1 P2 P3', Description = ''},

@@ -472,7 +472,7 @@ function checkValid(char)
         if dist[1] == 0 then
             return false
         end
-    elseif char == 'Vigormortis' then
+    elseif char == 'Vigormortis' or char == 'Ifrit' then
         if dist[2] == 0 then
             return false
         end

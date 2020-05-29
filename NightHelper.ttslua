@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.3.2'
+VERSION = '2.4.2'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -25,13 +25,15 @@ end
 LIVING_LAB_Z = -7.75
 NIGHT_LAB_Z = -7.75
 PREVIEW_LAB_Z = 2.35
-PREVIEW_MSG_Z = 3.7
+PREVIEW_MSG_Z = 3.2
 ADDCHAR_LAB_X = -4.95
 ADDCHAR_LAB_Z = 5.1
 ADD_BUT_X = -1.9
-INPUTS_X = {-6.6, -3.45, 0.3, 3.6, 6.9}
+INPUTS_X = {-6.6, -3.45, 1.6, 5.8}
 INPUTS_LAB_Z = 5.775
 INPUT_BUT_Z = 6.45
+PROMPTS_LAB_Z = {4.6, 5.8}
+PROMPTS_INP_Z = {5.25, 6.45}
 BOTTOM_BUT_X = {-5, -2.5, 0, 2.5, 5}
 BOTTOM_BUT_Z = 7.75
 
@@ -43,7 +45,7 @@ living = {}
 order = {}
 orderRef = nil
 minionColors = {}
-demonColor = nil
+demonColor = ''
 lastBlind = ''
 blindAuto = true
 checkPrompts = true
@@ -53,7 +55,7 @@ colorAdd = ''
 currentMsg = ''
 sendMsg = ''
 evilMsg = ''
-p1, p2, p3 = '', '', ''
+p1, p2, p3, p4 = '', '', '', ''
 dayNum = 0
 dayLog = {{}}
 nightLog = {{}}
@@ -171,7 +173,11 @@ function import(clickedObject, playerColor)
     for i = 1, #minionColors do
         minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
     end
-    evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+    if demonColor == '' then
+        evilMsg = 'Demon: , ' .. minionStr
+    else
+        evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+    end
     setNightOrder('first')
     setMsg()
 end
@@ -484,7 +490,11 @@ function remove(clickedObject, playerColor, i)
             for i = 1, #minionColors do
                 minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
             end
-            evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+            if demonColor == '' then
+                evilMsg = 'Demon: , ' .. minionStr
+            else
+                evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+            end
         end
     end
     setMsg()
@@ -509,12 +519,14 @@ function send(clickedObject, playerColor)
     clockControls.call('hideGrimoire')
 
     if order[1].char == 'Evil_Info' then
-        msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColor] .. demonColor .. ':[-] ' .. evilMsg
-        if players[demonColor] ~= nil then
-            players[demonColor].print(msg)
+        if demonColor ~= '' then
+            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColor] .. demonColor .. ':[-] ' .. evilMsg
+            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = msg})
+            if players[demonColor] ~= nil then
+                players[demonColor].print(msg)
+            end
+            printToColor(msg, 'Black', {1,1,1})
         end
-        printToColor(msg, 'Black', {1,1,1})
-        table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = msg})
         for i = 1, #minionColors do
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. ':[-] ' .. evilMsg
             table.insert(nightLog[#nightLog], {sender = 'Black', receiver = minionColors[i], message = msg})
@@ -545,7 +557,7 @@ function send(clickedObject, playerColor)
         return
     else
         if checkPrompts then
-            if string.match(sendMsg, 'P1') or string.match(sendMsg, 'P2') or string.match(sendMsg, 'P3') then
+            if string.match(sendMsg, 'P1') or string.match(sendMsg, 'P2') or string.match(sendMsg, 'P3') or string.match(sendMsg, 'P4') then
                 Player[playerColor].print('Error: Fill in the prompts before sending the message.', {1,0,0})
                 setMsg()
                 return
@@ -771,11 +783,51 @@ function p3Input(obj, color, input, stillEditing)
     end
 end
 
+function p4Input(obj, color, input, stillEditing)
+    if not stillEditing then
+        if input == '' then
+            p4 = ''
+            return
+        end
+        local textColor
+        local found = false
+        for k,v in pairs(COLORS) do
+            if string.match(string.lower(v), string.lower(input)) then
+                p4 = COLORS_BBC[v] .. v .. '[-]'
+                found = true
+                break
+            end
+        end
+        for k,v in pairs(CHARACTERS) do
+            if string.match(string.lower(k), string.lower(input)) then
+                if v.Type == 'Townsfolk' then
+                    textColor = COLORS_BBC['Blue']
+                elseif v.Type == 'Outsider' then
+                    textColor = COLORS_BBC['Teal']
+                elseif v.Type == 'Minion' then
+                    textColor = COLORS_BBC['Orange']
+                else
+                    textColor = COLORS_BBC['Red']
+                end
+                p4 = removeUnder(textColor .. k .. '[-]')
+                found = true
+                break
+            end
+        end
+        if not found then
+            p4 = input
+        end
+        editMsg()
+        return 1
+    end
+end
+
 function editMsg()
     local msg = currentMsg
     msg = string.gsub(msg, 'P1', p1)
     msg = string.gsub(msg, 'P2', p2)
     msg = string.gsub(msg, 'P3', p3)
+    msg = string.gsub(msg, 'P4', p4)
     sendMsg = removeUnder(msg)
     refreshUI()
 end
@@ -832,7 +884,11 @@ function addChar(clickedObject, playerColor)
         for i = 1, #minionColors do
             minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
         end
-        evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+        if demonColor == '' then
+            evilMsg = 'Demon: , ' .. minionStr
+        else
+            evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+        end
     end
 
     local chars = Global.getTable('chars')
@@ -897,7 +953,7 @@ function toggleBlind(clickedObject, playerColor)
 end
 
 function format(string)
-    local lineMax = 35
+    local lineMax = 50
     local result
     local lineLen = 0
     local output = ''
@@ -986,7 +1042,7 @@ function reset()
     living = {}
     order = {}
     orderRef = {}
-    demonColor = nil
+    demonColor = ''
     lastBlind = nil
     dayNum = 0
     nightLog = {{}}
@@ -1100,15 +1156,19 @@ function refreshUI()
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'nullFunc', label = 'Prompt 1', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
+        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_LAB_Z[1]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'nullFunc', label = 'Prompt 2', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
+        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_LAB_Z[1]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'nullFunc', label = 'Prompt 3', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[5],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
+        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_LAB_Z[2]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'nullFunc', label = 'Prompt 4', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_LAB_Z[2]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'addChar', label = '+', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
@@ -1123,15 +1183,19 @@ function refreshUI()
     self.createInput(inputParam)
 
     inputParam = {input_function = 'p1Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
+        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_INP_Z[1]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'p2Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
+        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_INP_Z[1]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
     self.createInput(inputParam)
 
     inputParam = {input_function = 'p3Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[5],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1500, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
+        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_INP_Z[2]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
+    self.createInput(inputParam)
+
+    inputParam = {input_function = 'p4Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_INP_Z[2]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p4, alignment = 3, validation = 1, tab = 2, label = 'P4'}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}

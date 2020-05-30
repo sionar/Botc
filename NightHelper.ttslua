@@ -1141,7 +1141,6 @@ function refreshUI()
         position = {COLUMN[7],BUTTON_Y,PREVIEW_MSG_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-
     buttonParam = {click_function = 'nullFunc', label = 'Add Character', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
         position = {ADDCHAR_LAB_X,BUTTON_Y,ADDCHAR_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE_LABEL,}
     self.createButton(buttonParam)

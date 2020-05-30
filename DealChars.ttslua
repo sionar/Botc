@@ -136,7 +136,7 @@ function dealToPlayers(clickedObject, playerColor)
     Global.setTable('chars', chars)
     Global.call('refreshUI')
     Global.call('checkSeatedPlayers')
-    Global.setVar('autoBluff', autoBluff)
+    Global.setVar('autoTint', autoTint)
     Global.setVar('started', true)
 
     local townSquareGen = getObjectFromGUID(TOWN_SQUARE_GUID)

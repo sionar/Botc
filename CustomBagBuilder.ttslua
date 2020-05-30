@@ -49,7 +49,7 @@ function bagTable(params)
             }
             entry.Nickname = string.gsub(params.characters[i], '_', ' ')
             entry.Description = CHARACTERS[params.characters[i]].Type
-            entry.GMNotes = ''
+            entry.GMNotes = 'Character Token'
             entry.ColorDiffuse = {r = 1, g = 1, b = 1}
             entry.Locked = false
             entry.Grid = false

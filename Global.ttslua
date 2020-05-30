@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.8'
+VERSION = '19.0.9'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -16,11 +16,12 @@ COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Co
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[AAAAAA]'}
 COLORS_TYPE = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
-COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
-COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123/255,182/255,0.16}, Navy = {0/255,0/255,128/255,0.16}, Cyan = {73/255,213/255,253/255,0.16}, Mint = {137/255,195/255,129/255,0.16}, Lime = {184/255,241/255,97/255,0.16}, Peach = {241/255,212/255,162/255,0.16}, Coral = {226/255,154/255,138/255,0.16}, Maroon = {128/255,0,0,0.16}, Silver = {190/255,190/255,190/255,0.16},}
+COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
+STORYTELLER_TABLE_DIST = 119
 
 #include GUIDs.ttslua
 
@@ -32,7 +33,7 @@ timerID = 0
 started = false
 lights = false
 flipTimerExpired = true
-autoBluff = false
+autoTint = true
 mode = 'TB'
 notes = ''
 history = {'[FFFFFF]Vote History:[-]'}
@@ -58,7 +59,7 @@ tokenTable = {}
 decalTable = {}
 
 for k,v in pairs(COLORS_ALL) do
-    lifeTokens[v] = {object = 0, vote = 0}
+    lifeTokens[v] = {object = nil, vote = nil}
     canNominate[v] = true
     canBeNominated[v] = true
     living[v] = true
@@ -125,6 +126,7 @@ function onLoad(saveString)
         colors = save['co']
         angle = save['an']
         lights = save ['l']
+        autoTint = save ['at']
     end
 
     local obj
@@ -235,6 +237,7 @@ function onSave()
     save['co'] = colors
     save['an'] = angle
     save['l'] = lights
+    save['at'] = autoTint
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -506,11 +509,16 @@ function handleLifeUI()
     local allPlayers = Player.getPlayers()
     local numTrav = 0
     local aliveTrav = 0
+    local zoneObj
 
     for i=1, 20 do
+        zoneObj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
         if lifeTokens[COLORS_ALL[i]].object ~= nil and (players[COLORS_ALL[i]] ~= nil or storytellerMode) then
-            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() == 'Black' and #allPlayers > 1 then
-                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue(COLORS[i])
+            if started and i <= 10 and zoneObj ~= nil then
+                zoneObj.setValue(COLORS_ALL[i])
+            end
+            if started and i > 10 and zoneObj ~= nil then
+                zoneObj.setColorTint(FAKE_ZONE_RGB[COLORS_ALL[i]])
             end
             numPlayers = numPlayers + 1
             if lifeTokens[COLORS_ALL[i]].object.is_face_down == true then -- if life token is face down...
@@ -532,8 +540,11 @@ function handleLifeUI()
                 numTrav = numTrav + 1
             end
         else
-            if started and i <= 10 and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]) ~= nil and getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).getValue() ~= 'Black' and #allPlayers > 1  then
-                getObjectFromGUID(ZONE_GUIDS[COLORS[i]]).setValue('Black')
+            if started and i <= 10 and zoneObj ~= nil and #allPlayers > 1 then
+                zoneObj.setValue('Black')
+            end
+            if started and i > 10 and zoneObj ~= nil and #allPlayers > 1 then
+                zoneObj.setColorTint({0.3,0.3,0.3,0.25})
             end
             numberOfSkipped = numberOfSkipped +1
             UI.setAttribute('aliveImage'..21 - numberOfSkipped, 'image', 'empty') -- starting from 11 to work backwards through list of aliveImage
@@ -674,12 +685,13 @@ function resizeTable()
                 end
             end
             obj = lifeTokens[COLORS_ALL[i]].object
-            if (not obj and not started) or (not obj and started and chars[COLORS_ALL[i]] ~= nil) then
+            if (not obj and not started) or (not obj and started and chars[COLORS_ALL[i]] ~= nil and CHARACTERS[chars[COLORS_ALL[i]]].Type ~= 'Traveler') then
                 objs = storageBag.getObjects()
                 for k,v in pairs(objs) do
                     if v.guid == LIFE_TOKEN_GUIDS[COLORS_ALL[i]] then
                         obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[COLORS_ALL[i]]})
                         lifeTokens[COLORS_ALL[i]].object = obj
+                        break
                     end
                 end
             end
@@ -691,9 +703,9 @@ function resizeTable()
                 end
                 obj.setScale({1.82,1,1.82})
                 if obj.is_face_down then
-                    obj.setRotationSmooth({0,0,180})
+                    obj.setRotation({0,0,180})
                 else
-                    obj.setRotationSmooth({0,0,0})
+                    obj.setRotation({0,0,0})
                 end
                 if storytellerMode then
                     obj.setPosition(radius(radSt, angle[COLORS_ALL[i]], 1.35))
@@ -823,9 +835,9 @@ function createSnapPoints()
 
     table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
     table.insert(snapTable, {position = {-26,0,101}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-4,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {0,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {4,1.12,119}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-4,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {0,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {4,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
 
     for i = 1,tableSize do
         if not storytellerMode then
@@ -834,7 +846,7 @@ function createSnapPoints()
             table.insert(snapTable, {position = radius(radTokens, angle[COLORS_ALL[i]], 1.16), rotation = {0, angle[COLORS_ALL[i]], 0}, rotation_snap = true})
         end
         pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
-        pos[3] = pos[3] + 119
+        pos[3] = pos[3] + STORYTELLER_TABLE_DIST
         table.insert(snapTable, {position = pos, rotation = {0,0,0}, rotation_snap = false})
     end
     self.setSnapPoints(snapTable)
@@ -860,7 +872,7 @@ function setTokenTable()
     if started then
         for k,v in pairs(colors) do
             posTable[v] = radius(rad, angle[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 119
+            posTable[v][3] = posTable[v][3] + STORYTELLER_TABLE_DIST
         end
         tokenTable = {}
         scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
@@ -906,7 +918,7 @@ function moveTokens()
     if started then
         for k,v in pairs(colors) do
             posTable[v] = radius(rad, angle[v], 1.0)
-            posTable[v][3] = posTable[v][3] + 119
+            posTable[v][3] = posTable[v][3] + STORYTELLER_TABLE_DIST
             if tokenTable[v] ~= nil then
                 for k1,v1 in pairs(tokenTable[v]) do
                     pos = v1.getPosition()
@@ -1052,7 +1064,7 @@ function toggleLights(params)
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
         if obj then
-            obj.setPosition({0,10,119})
+            obj.setPosition({0,10,STORYTELLER_TABLE_DIST})
             obj.call('powerOn')
         end
         if clockLight then
@@ -1082,8 +1094,8 @@ end
 
 function createFlipButtons()
     local obj
-    for k,v in pairs(LIFE_TOKEN_GUIDS) do
-        obj = getObjectFromGUID(v)
+    for k,v in pairs(lifeTokens) do
+        obj = v.object
         if obj then
             obj.clearButtons()
             obj.createButton({click_function = 'flipAliveToDead', function_owner = Global, position = {0,0.3,0}, rotation = {0,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
@@ -1243,6 +1255,7 @@ function resetGame()
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     clockControls.call('hideGrimoire')
     Wait.time(putVoteTokensInBag, 0.5)
+    Wait.time(createFlipButtons, 0.5)
 end
 
 function putVoteTokensInBag()
@@ -1383,6 +1396,26 @@ function onPlayerDisconnect(color)
     if characterTool then
         characterTool.call('refreshMenu')
     end
+end
+
+function onObjectDrop(playerColor, object)
+    if playerColor ~= 'Black' or object.getGMNotes() ~= 'Character Token' or not autoTint then
+        return
+    end
+    local pos
+    local rad = tableSize * 0.4 + 6
+    local posTable = {}
+    Wait.time(function ()
+        local objPos = object.getPosition()
+        for i = 1,tableSize do
+            pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
+            pos[3] = pos[3] + 119
+            if math.abs(objPos[1] - pos[1]) < 1 and math.abs(objPos[3] - pos[3]) < 1 then
+                object.setColorTint(COLORS_RGB[COLORS_ALL[i]])
+                return
+            end
+        end
+    end, 0.1)
 end
 
 ------------------Chat commands
@@ -1810,9 +1843,9 @@ function swapObjects(color1, color2)
 
     rad = tableSize * 0.4 + 6
     pos1 = radius(rad, angle[color1], 1.0)
-    pos1[3] = pos1[3] + 119
+    pos1[3] = pos1[3] + STORYTELLER_TABLE_DIST
     pos2 = radius(rad, angle[color2], 1.0)
-    pos2[3] = pos2[3] + 119
+    pos2[3] = pos2[3] + STORYTELLER_TABLE_DIST
 
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     if scriptZone then
@@ -1973,7 +2006,7 @@ function checkSeatedPlayers()
             end
             obj = getObjectFromGUID(ZONE_GUIDS[v])
             if obj then
-                obj.setColorTint({0.69,0.69,0.69,0.25})
+                obj.setColorTint({0.30,0.30,0.30,0.25})
             end
         end
     end
@@ -2471,10 +2504,6 @@ function sitUI(player, value, id)
             UI.setAttribute('sit' .. i .. color, 'text', 'Leave ' .. color)
             UI.setAttribute('sit' .. i .. color, 'textColor', '#FFFFFF')
         end
-        zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
-        if zoneObj then
-            zoneObj.setColorTint(FAKE_ZONE_RGB[color])
-        end
     else
         if player.steam_id == playersEx[color].steam_id then
             player.print('You are no longer sitting in ' .. color .. '.')
@@ -2489,7 +2518,7 @@ function sitUI(player, value, id)
             if started then
                 zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
                 if zoneObj then
-                    zoneObj.setColorTint({0.69,0.69,0.69,0.25})
+                    zoneObj.setColorTint({0.30,0.30,0.30,0.25})
                 end
             end
         else

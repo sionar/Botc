@@ -1,4 +1,8 @@
 ADMIN_ID = '76561197995280695'
+SPECIAL_COLORS = {
+    {id = '76561197995280695', color = {73/255,213/255,253/255}},
+    {id = '76561198043437629', color = {215/255,81/255,49/255}}
+}
 
 function gradient(str, color1, color2)
     local len = string.len(str)
@@ -28,18 +32,20 @@ function randomColor()
 end
 
 function checkAdmin(player, message)
-    if player.steam_id == ADMIN_ID then
-        color = getPlayer(player)
-        if not color then
-            color = 'Grey'
-        end
+    for k,v in pairs(SPECIAL_COLORS) do
+        if player.steam_id == v.id then
+            color = getPlayer(player)
+            if not color then
+                color = 'Grey'
+            end
 
-        name = player.steam_name
-        if playersExIds['Cyan'] == ADMIN_ID then
-            name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
+            name = player.steam_name
+            if playersExIds['Cyan'] == ADMIN_ID then
+                name = gradient('Cyanar', {73/255,213/255,253/255}, {1,1,1})
+            end
+            message = gradient(message, v.color, {1,1,1})
+            printToAll( COLORS_BBC[color] .. name .. ':[-] [i]' .. message .. '[/i]')
+            return false
         end
-        message = gradient(message, {73/255,213/255,253/255}, {1,1,1})
-        printToAll( COLORS_BBC[color] .. name .. ':[-] [i]' .. message .. '[/i]')
-        return false
     end
 end

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.9'
+VERSION = '19.0.10'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -1570,22 +1570,22 @@ function chatWhisper(player, color, message)
         return
     end
 
-    local msg = COLORS_BBC[playerColor] .. playerColor .. ' [888888]-> ' .. COLORS_BBC[receiverColor] .. receiverColor .. ':[-] [FF7EFF]' .. message .. '[-]'
-    player.print(msg)
-    players[receiverColor].print(msg)
+    local sendMsg = COLORS_BBC[playerColor] .. playerColor .. ' [888888]-> ' .. COLORS_BBC[receiverColor] .. receiverColor .. ':[-] [FF7EFF]' .. message .. '[-]'
+    player.print(sendMsg)
+    players[receiverColor].print(sendMsg)
     local allBlind = clockControls.getVar('allBlind')
     if allBlind then
         local nightLog = nightHelper.getTable('nightLog')
-        table.insert(nightLog[#nightLog], {sender = playerColor, receiver = receiverColor, message = msg})
+        table.insert(nightLog[#nightLog], {sender = playerColor, receiver = receiverColor, message = message})
         nightHelper.setTable('nightLog', nightLog)
     else
         local dayLog = nightHelper.getTable('dayLog')
-        table.insert(dayLog[#dayLog], {sender = playerColor, receiver = receiverColor, message = msg})
+        table.insert(dayLog[#dayLog], {sender = playerColor, receiver = receiverColor, message = message})
         nightHelper.setTable('dayLog', dayLog)
     end
 
     if not (playerColor == 'Black' or receiverColor == 'Black') then
-        Player['Black'].print(msg)
+        Player['Black'].print(sendMsg)
     end
     if (playerColor ~= 'Black' and receiverColor ~= 'Black') then
         if not (whisperActive[playerColor][receiverColor]) then
@@ -1777,6 +1777,7 @@ function chatSwap(seatColor1, seatColor2, player)
     end
 
     hideUI()
+    swapChatLogs(color1, color2)
     if players[color1] == nil then
         Wait.time(function () chatMove(players[color2].steam_name, color1, player, true) end, 0.1)
         return
@@ -1802,6 +1803,7 @@ function chatSwap(seatColor1, seatColor2, player)
 
     if started then
         swapObjects(color1, color2)
+        swapLifeTokens(color1, color2)
         chars[color1],chars[color2] = chars[color2], chars[color1]
 
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
@@ -1835,6 +1837,43 @@ function chatSwap(seatColor1, seatColor2, player)
     end
     Wait.time(refreshUI, 0.5)
 end
+
+function swapChatLogs(color1, color2)
+    local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    local dayLog = nightHelper.getTable('dayLog')
+    local nightLog = nightHelper.getTable('nightLog')
+    for k1,day in pairs(dayLog) do
+        for k2, entry in pairs(day) do
+            if entry.sender == color1 then
+                entry.sender = color2
+            elseif entry.sender == color2 then
+                entry.sender = color1
+            end
+            if entry.receiver == color1 then
+                entry.receiver = color2
+            elseif entry.receiver == color2 then
+                entry.receiver = color1
+            end
+        end
+    end
+    for k1,night in pairs(nightLog) do
+        for k2, entry in pairs(night) do
+            if entry.sender == color1 then
+                entry.sender = color2
+            elseif entry.sender == color2 then
+                entry.sender = color1
+            end
+            if entry.receiver == color1 then
+                entry.receiver = color2
+            elseif entry.receiver == color2 then
+                entry.receiver = color1
+            end
+        end
+    end
+    nightHelper.setTable('dayLog', dayLog)
+    nightHelper.setTable('nightLog', nightLog)
+end
+
 
 function swapObjects(color1, color2)
     local rad, pos1, pos2
@@ -1876,6 +1915,7 @@ end
 
 function showNightLogs(player)
     local color = getPlayer(player)
+    local msg
     if not color then
         return
     end
@@ -1886,7 +1926,8 @@ function showNightLogs(player)
         output = '[888888]-----Night ' .. i1 .. '-----[-]\n'
         for i2, entry in ipairs(night) do
             if (entry.sender == color or entry.receiver == color or color == 'Black') then
-                output = output .. entry.message .. '\n'
+                msg = COLORS_BBC[entry.sender] .. entry.sender .. ' [888888]-> ' .. COLORS_BBC[entry.receiver] .. entry.receiver .. ':[-] [FF7EFF]' .. entry.message .. '[-]'
+                output = output .. msg .. '\n'
             end
         end
         player.print(output)
@@ -1895,6 +1936,7 @@ end
 
 function showDayLogs(player)
     local color = getPlayer(player)
+    local msg
     if not color then
         return
     end
@@ -1906,7 +1948,8 @@ function showDayLogs(player)
         day = dayLog[i]
         for i2, entry in ipairs(day) do
             if (entry.sender == color or entry.receiver == color or color == 'Black') then
-                output = output .. entry.message .. '\n'
+                msg = COLORS_BBC[entry.sender] .. entry.sender .. ' [888888]-> ' .. COLORS_BBC[entry.receiver] .. entry.receiver .. ':[-] [FF7EFF]' .. entry.message .. '[-]'
+                output = output .. msg .. '\n'
             end
         end
         player.print(output)
@@ -1923,6 +1966,7 @@ function showAllLogs(player)
     local dayLog = nightHelper.getTable('dayLog')
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local allBlind = clockControls.getVar('allBlind')
+    local msg
     player.print('[89C381]Whisper Logs[-]')
     for i = 1, #nightLog do
         if i == #nightLog and not allBlind then
@@ -1932,7 +1976,8 @@ function showAllLogs(player)
         night = nightLog[i]
         for i2, entry in ipairs(night) do
             if (entry.sender == color or entry.receiver == color or color == 'Black') then
-                output = output .. entry.message .. '\n'
+                msg = COLORS_BBC[entry.sender] .. entry.sender .. ' [888888]-> ' .. COLORS_BBC[entry.receiver] .. entry.receiver .. ':[-] [FF7EFF]' .. entry.message .. '[-]'
+                output = output .. msg .. '\n'
             end
         end
         player.print(output)
@@ -1944,7 +1989,8 @@ function showAllLogs(player)
         day = dayLog[i+1]
         for i2, entry in ipairs(day) do
             if (entry.sender == color or entry.receiver == color or color == 'Black') then
-                output = output .. entry.message .. '\n'
+                msg = COLORS_BBC[entry.sender] .. entry.sender .. ' [888888]-> ' .. COLORS_BBC[entry.receiver] .. entry.receiver .. ':[-] [FF7EFF]' .. entry.message .. '[-]'
+                output = output .. msg .. '\n'
             end
         end
         player.print(output)

@@ -521,7 +521,7 @@ function send(clickedObject, playerColor)
     if order[1].char == 'Evil_Info' then
         if demonColor ~= '' then
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColor] .. demonColor .. ':[-] ' .. evilMsg
-            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = msg})
+            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = evilMsg})
             if players[demonColor] ~= nil then
                 players[demonColor].print(msg)
             end
@@ -529,7 +529,7 @@ function send(clickedObject, playerColor)
         end
         for i = 1, #minionColors do
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. ':[-] ' .. evilMsg
-            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = minionColors[i], message = msg})
+            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = minionColors[i], message = evilMsg})
             if players[minionColors[i]] ~= nil then
                 players[minionColors[i]].print(msg)
             end
@@ -564,12 +564,12 @@ function send(clickedObject, playerColor)
             end
         end
         sendColor = order[1].color
-        msg = COLORS_BBC['Black'] .. 'Black [888888]-> ' .. COLORS_BBC[sendColor] .. sendColor .. ': [-] ' .. sendMsg
+        msg = COLORS_BBC['Black'] .. 'Black [888888]-> ' .. COLORS_BBC[sendColor] .. sendColor .. ':[-] ' .. sendMsg
         if players[sendColor] ~= nil then
             players[sendColor].print(msg)
         end
         printToColor(msg, 'Black', {1,1,1})
-        table.insert(nightLog[#nightLog], {sender = 'Black', receiver = sendColor, message = msg})
+        table.insert(nightLog[#nightLog], {sender = 'Black', receiver = sendColor, message = sendMsg})
         if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
             if lastBlind == '' then
                 lastBlind = order[1].color

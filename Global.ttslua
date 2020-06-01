@@ -48,6 +48,7 @@ colors = {}
 chars = {}
 angle = {}
 lifeTokens = {}
+lifeTokenPos = {}
 canNominate = {}
 canBeNominated = {}
 living = {}
@@ -125,8 +126,9 @@ function onLoad(saveString)
         tableSize = save['t']
         colors = save['co']
         angle = save['an']
-        lights = save ['l']
-        autoTint = save ['at']
+        lights = save['l']
+        autoTint = save['at']
+        lifeTokenPos = save['lt']
     end
 
     local obj
@@ -238,6 +240,7 @@ function onSave()
     save['an'] = angle
     save['l'] = lights
     save['at'] = autoTint
+    save['lt'] = lifeTokenPos
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -684,6 +687,12 @@ function resizeTable()
                     obj.setRotation({0, angle[COLORS_ALL[i]], 0})
                 end
             end
+            if storytellerMode then
+                lifeTokenPos[COLORS_ALL[i]] = radius(radSt, angle[COLORS_ALL[i]], 1.35)
+            else
+                lifeTokenPos[COLORS_ALL[i]] = radius(55, angle[COLORS_ALL[i]], 1.35)
+            end
+
             obj = lifeTokens[COLORS_ALL[i]].object
             if (not obj and not started) or (not obj and started and chars[COLORS_ALL[i]] ~= nil and CHARACTERS[chars[COLORS_ALL[i]]].Type ~= 'Traveler') then
                 objs = storageBag.getObjects()
@@ -707,11 +716,7 @@ function resizeTable()
                 else
                     obj.setRotation({0,0,0})
                 end
-                if storytellerMode then
-                    obj.setPosition(radius(radSt, angle[COLORS_ALL[i]], 1.35))
-                else
-                    obj.setPosition(radius(55, angle[COLORS_ALL[i]], 1.35))
-                end
+                obj.setPosition(lifeTokenPos[COLORS_ALL[i]])
             end
             if lifeTokens[COLORS_ALL[i]].vote ~= nil then
                 if storytellerMode then
@@ -1778,6 +1783,7 @@ function chatSwap(seatColor1, seatColor2, player)
 
     hideUI()
     swapChatLogs(color1, color2)
+    swapLifeTokens(color1, color2)
     if players[color1] == nil then
         Wait.time(function () chatMove(players[color2].steam_name, color1, player, true) end, 0.1)
         return
@@ -1803,7 +1809,6 @@ function chatSwap(seatColor1, seatColor2, player)
 
     if started then
         swapObjects(color1, color2)
-        swapLifeTokens(color1, color2)
         chars[color1],chars[color2] = chars[color2], chars[color1]
 
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
@@ -1900,6 +1905,78 @@ function swapObjects(color1, color2)
                 if v.getDescription() ~= '' then
                     v.setColorTint(COLORS_RGB[color1])
                 end
+            end
+        end
+    end
+end
+
+function swapLifeTokens(color1, color2)
+    local lifeToken1 = lifeTokens[color1].object
+    local lifeToken2 = lifeTokens[color2].object
+    local type1, type2, obj
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    local objs = storageBag.getObjects()
+    if lifeToken1 == nil then
+        type1 = 'None'
+    elseif lifeToken1.getDescription() == 'Traveler' then
+        type1 = 'Traveler'
+    else
+        type1 = 'Normal'
+    end
+    if lifeToken2 == nil then
+        type2 = 'None'
+    elseif lifeToken2.getDescription() == 'Traveler' then
+        type2 = 'Traveler'
+    else
+        type2 = 'Normal'
+    end
+    if type1 == type2 then
+        return
+    elseif type1 == 'None' and type2 == 'Normal' then
+        storageBag.putObject(lifeToken2)
+        for k,v in pairs(objs) do
+            if v.guid == LIFE_TOKEN_GUIDS[color1] then
+                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color1]})
+                lifeTokens[color1].object = obj
+                obj.setPosition(lifeTokenPos[color1])
+                break
+            end
+        end
+    elseif type1 == 'Normal' and type2 == 'None' then
+        storageBag.putObject(lifeToken1)
+        for k,v in pairs(objs) do
+            if v.guid == LIFE_TOKEN_GUIDS[color2] then
+                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color2]})
+                lifeTokens[color2].object = obj
+                obj.setPosition(lifeTokenPos[color2])
+                break
+            end
+        end
+    elseif type1 == 'None' and type2 == 'Traveler' then
+        lifeToken2.setPositionSmooth(lifeTokenPos[color1])
+    elseif type1 == 'Traveler' and type2 == 'None' then
+        lifeToken1.setPositionSmooth(lifeTokenPos[color2])
+    elseif type1 == 'Normal' and type2 == 'Traveler' then
+        storageBag.putObject(lifeToken1)
+        lifeToken2.setPositionSmooth(lifeTokenPos[color1])
+        for k,v in pairs(objs) do
+            if v.guid == LIFE_TOKEN_GUIDS[color2] then
+                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color2]})
+                lifeTokens[color2].object = obj
+                obj.setPosition(lifeTokenPos[color2])
+                break
+            end
+        end
+    elseif type1 == 'Traveler' and type2 == 'Normal' then
+        storageBag.putObject(lifeToken2)
+        lifeToken1.setPositionSmooth(lifeTokenPos[color2])
+        for k,v in pairs(objs) do
+            if v.guid == LIFE_TOKEN_GUIDS[color1] then
+                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color1]})
+                lifeTokens[color1].object = obj
+                obj.setPosition(lifeTokenPos[color1])
+                break
             end
         end
     end

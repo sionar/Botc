@@ -23,15 +23,15 @@ startButtonLabel = 'Start Vote'
 
 ------------------Functions
 function onLoad()
+    TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
     moveBoard()
     Wait.time(makeVisible, 2, 1)
     refreshUI()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
-
 end
 
 function moveBoard()
-    self.setPositionSmooth({0,1.2,0})
+    self.setPositionSmooth({0,1.2,0 + TABLE_OFFSET})
     self.setRotationSmooth({0,180,0})
     self.setLock(true)
 end

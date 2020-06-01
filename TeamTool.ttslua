@@ -53,18 +53,8 @@ function onLoad(saveString)
     color = {1,1,1, 0}}
     self.createButton(params)
 
-    params = {click_function = 'defaultTeamToggle', function_owner = self,
-    label = 'Make [FF0000]Jokers\n[000000]Default Team', tooltip = 'Make Jokers the default team',
-    position = {0, 3.5, 7}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
-    width = 5700, height = 1300, font_size = 600, alignment = 3}
-    if jokersDefault then
-        params.label = 'Make [0000FF]None\n [000000]Default Team'
-        params.tooltip = 'Make None the default team'
-    end
-    self.createButton(params)
-
     params = {click_function = 'leaveTeam', function_owner = self,
-    label = 'Leave Team', tooltip = 'Leave Team',
+    label = 'Leave Team', tooltip = 'Leave Team', color = {0,0,0,0.5}, font_color = {1,1,1},
     position = {0, 3.5, 5}, rotation = {0, 180, 0}, scale = {0.5, 0.5, 0.5},
     width = 5700, height = 1300, font_size = 800, alignment = 3}
     self.createButton(params)
@@ -79,28 +69,24 @@ function onLoad(saveString)
     Wait.time(refreshUI, 1)
 end
 
-function defaultTeamToggle(clickedObject, playerColor)
-    if Player[playerColor].admin then
-        local allPlayers = Player.getPlayers()
-        if jokersDefault == false then
-            jokersDefault = true
-            self.editButton({index = 4, label = 'Make [0000FF]None\n [000000]Default Team', tooltip = 'Make None the default team'})
-            for k,v in pairs(allPlayers) do
-                if v.team == 'None' then
-                    v.team = 'Jokers'
-                end
-            end
-        else
-            jokersDefault = false
-            self.editButton({index = 4, label = 'Make [FF0000]Jokers\n [000000]Default Team', tooltip = 'Make Jokers the default team'})
-            for k,v in pairs(allPlayers) do
-                if v.team == 'Jokers' then
-                    v.team = 'None'
-                end
+function defaultTeamToggle()
+    local allPlayers = Player.getPlayers()
+    if jokersDefault == false then
+        jokersDefault = true
+        for k,v in pairs(allPlayers) do
+            if v.team == 'None' then
+                v.team = 'Jokers'
             end
         end
-        Global.setVar('jokersDefault', jokersDefault)
+    else
+        jokersDefault = false
+        for k,v in pairs(allPlayers) do
+            if v.team == 'Jokers' then
+                v.team = 'None'
+            end
+        end
     end
+    Global.setVar('jokersDefault', jokersDefault)
     Wait.time(refreshUI, 1)
 end
 

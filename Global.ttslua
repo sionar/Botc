@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.0.10'
+VERSION = '19.1.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -21,7 +21,8 @@ FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123
 COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
-STORYTELLER_TABLE_DIST = 119
+TABLE_OFFSET = -50
+STORYTELLER_TABLE_DIST = 129
 
 #include GUIDs.ttslua
 
@@ -586,7 +587,7 @@ end
 
 ------------------Table setup commands
 function radius(rad, angle, height)
-    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180) + TABLE_OFFSET}
 end
 
 function resizeTable()
@@ -762,7 +763,7 @@ function resizeTable()
         obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
         if obj then
             obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-1,0})
+            obj.setPositionSmooth({0,-1,0 + TABLE_OFFSET})
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
@@ -823,7 +824,7 @@ function resizeTable()
     if storytellerMode then
         obj = getObjectFromGUID(PLAYER_DIST_GUID)
         if obj then
-            obj.setPositionSmooth({0,1.25,0})
+            obj.setPositionSmooth({0,1.25,0 + TABLE_OFFSET})
             obj.setRotationSmooth({0,0,0})
             obj.setScale({2 + 0.2 *(tableSize-5), 1, 2 + 0.2 *(tableSize-5)})
         end
@@ -838,11 +839,11 @@ function createSnapPoints()
     rad = tableSize * 0.4 + 6
     radTokens = tableSize * 0.6 + 6
 
-    table.insert(snapTable, {position = {0,0,0}, rotation = {0,180,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-26,0,101}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-4,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {0,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {4,1.12,STORYTELLER_TABLE_DIST}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {0,0,0 + TABLE_OFFSET}, rotation = {0,180,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-26,0,111 + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {-4,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {0,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {4,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
 
     for i = 1,tableSize do
         if not storytellerMode then
@@ -1047,7 +1048,7 @@ function toggleLights(params)
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
             if obj then
-                obj.setPosition({0,-0.1,0})
+                obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
                 obj.call('powerOff')
             end
         end
@@ -1064,12 +1065,12 @@ function toggleLights(params)
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
         if obj then
-            obj.setPosition({0,40,0})
+            obj.setPosition({0,40,0 + TABLE_OFFSET})
             obj.call('powerOn')
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
         if obj then
-            obj.setPosition({0,10,STORYTELLER_TABLE_DIST})
+            obj.setPosition({0,10,STORYTELLER_TABLE_DIST + TABLE_OFFSET})
             obj.call('powerOn')
         end
         if clockLight then
@@ -1090,7 +1091,7 @@ function toggleLights(params)
         for i = tableSize+1, 20 do
             obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
             if obj then
-                obj.setPosition({0,-0.1,0})
+                obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
                 obj.call('powerOff')
             end
         end
@@ -1250,10 +1251,10 @@ function resetGame()
 
     local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
     if guillotine then
-        guillotine.setPositionSmooth({-26, 1, 101})
+        guillotine.setPositionSmooth({-26, 1, 111 + TABLE_OFFSET})
         guillotine.setRotationSmooth({0,0,0})
     end
-    grabObjectFromBag('Character Token Bag', storageBag, {0,1,113}, false)
+    grabObjectFromBag('Character Token Bag', storageBag, {0,1,123}, false)
     Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}, true) end, 0.1)
     nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     nightHelper.call('reset')
@@ -1276,6 +1277,8 @@ end
 function grabObjectFromBag(name, bag, position, locked)
     local bagObjects = bag.getObjects()
     local obj
+    local position = position
+    position[3] = position[3] + TABLE_OFFSET
     for k,v in pairs(bagObjects) do
         if v.name == name then
             obj = bag.takeObject({index = v.index, position = position, rotation = {0,0,0}})
@@ -1414,7 +1417,7 @@ function onObjectDrop(playerColor, object)
         local objPos = object.getPosition()
         for i = 1,tableSize do
             pos = radius(rad, angle[COLORS_ALL[i]], 1.0)
-            pos[3] = pos[3] + 119
+            pos[3] = pos[3] + STORYTELLER_TABLE_DIST
             if math.abs(objPos[1] - pos[1]) < 1 and math.abs(objPos[3] - pos[3]) < 1 then
                 object.setColorTint(COLORS_RGB[COLORS_ALL[i]])
                 return
@@ -2419,7 +2422,7 @@ function moveGuillotine(params)
 
     if numVotes >= math.ceil(numAlive/2) then
         if numVotes == currMostVotes then
-            guillotine.setPositionSmooth({0,2,0})
+            guillotine.setPositionSmooth({0,2,0 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,180,0})
         elseif numVotes > currMostVotes then
             currMostVotes = numVotes

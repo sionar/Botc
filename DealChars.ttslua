@@ -27,6 +27,8 @@ function onLoad(saveString)
         autoReminderTint = save['r']
     end
     refreshButtons()
+    TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+    STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
 end
 
 function onSave()
@@ -40,7 +42,7 @@ function onSave()
 end
 
 function radius(rad, angle, height)
-    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180) + TABLE_OFFSET}
 end
 
 function dealToPlayers(clickedObject, playerColor)
@@ -65,7 +67,7 @@ function dealToPlayers(clickedObject, playerColor)
 
     for k,v in pairs(colors) do
         posTable[v] = radius(rad, angle[v], 1.1)
-        posTable[v][3] = posTable[v][3] + 119
+        posTable[v][3] = posTable[v][3] + STORYTELLER_TABLE_DIST
     end
 
     for k,v in pairs(allObjs) do
@@ -117,7 +119,6 @@ function dealToPlayers(clickedObject, playerColor)
             end
         end
     end
-
     if autoBluff then
         for k,v in pairs(allObjs) do
             if string.match(v.getName(), ': Townsfolk') then
@@ -127,9 +128,9 @@ function dealToPlayers(clickedObject, playerColor)
         end
         if townsfolkBag then
             townsfolkBag.shuffle()
-            townsfolkBag.takeObject({position = {-4,2,119}, rotation = {0,0,0}})
-            townsfolkBag.takeObject({position = {0,2,119}, rotation = {0,0,0}})
-            townsfolkBag.takeObject({position = {4,2,119}, rotation = {0,0,0}})
+            townsfolkBag.takeObject({position = {-4,2,STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}})
+            townsfolkBag.takeObject({position = {0,2,STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}})
+            townsfolkBag.takeObject({position = {4,2,STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}})
         end
     end
 

@@ -8,6 +8,9 @@ Made by Sionar
 VERSION = '1.7.0'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+BUTTON_COLOR = {0,0,0}
+BUTTON_FONT_COLOR = {1,1,1}
+
 
 #include GUIDs.ttslua
 
@@ -202,7 +205,7 @@ function refreshButtons()
     self.clearButtons()
 
     local params
-    params = {click_function = 'toggleBluff', function_owner = self, position = {0, 0.4, -3.7}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400}
+    params = {click_function = 'toggleBluff', function_owner = self, position = {0, 0.4, -3.7}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
     if autoBluff then
         params.label = 'Autobluff\n[0000FF]ON'
         params.tooltip = 'Click to disable automatically grabbing three random bluffs for the Demon.'
@@ -213,7 +216,7 @@ function refreshButtons()
     self.createButton(params)
 
 
-    params = {click_function = 'toggleTint', function_owner = self, position = {-1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 300}
+    params = {click_function = 'toggleTint', function_owner = self, position = {-1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 300, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
     if autoTint then
         params.label = 'Autotint\nCharacters\n[0000FF]ON'
         params.tooltip = 'Click to disable auto-tinting of the Character Tokens.'
@@ -225,7 +228,7 @@ function refreshButtons()
 
 
 
-    params = {click_function = 'toggleReminderTint', function_owner = self, position = {1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 300}
+    params = {click_function = 'toggleReminderTint', function_owner = self, position = {1.1, 0.4, -2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 300, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
     if autoReminderTint then
         params.label = 'Autotint\nReminders\n[0000FF]ON'
         params.tooltip = 'Click to disable automatically tinting the reminder tokens'
@@ -236,6 +239,6 @@ function refreshButtons()
     self.createButton(params)
 
     params = {click_function = 'dealToPlayers', function_owner = self, label = 'Deal', tooltip = 'This button will deal the characters in the order inside the bag.\n[aaaaaa](The first character will go to White, then Brown, ... if those players are seated.',
-    position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 800}
+    position = {0, 0.4, 2.5}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 800, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
     self.createButton(params)
 end

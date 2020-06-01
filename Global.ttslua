@@ -7,10 +7,12 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.1.0'
+VERSION = '19.1.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
+TABLE_OFFSET = -50
+STORYTELLER_TABLE_DIST = 129
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -21,8 +23,6 @@ FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123
 COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
-TABLE_OFFSET = -50
-STORYTELLER_TABLE_DIST = 129
 
 #include GUIDs.ttslua
 

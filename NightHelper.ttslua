@@ -17,6 +17,8 @@ FONT_SIZE = 225
 FONT_SIZE_LABEL = 360
 BUTTON_SIZE = 270
 BUTTON_Y = 0.1
+BUTTON_COLOR = {0,0,0}
+BUTTON_FONT_COLOR = {1,1,1}
 COLUMN = {-6, -4, -3.35, -2.70, -2.05, -1.5, 3.6, 6.3}
 ROW = {}
 for i = 1,40 do
@@ -62,6 +64,7 @@ nightLog = {{}}
 
 ------------------Load/save
 function onLoad(saveString)
+    TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
     moveBoard()
     if not (saveString == '') then
         local save = JSON.decode(saveString)
@@ -389,7 +392,7 @@ function placeShroud(i)
     local color = living[i].color
     local rad = tableSize * 0.4 + 6
     local pos = radius(rad, angle[color], 1.25)
-    pos['z'] = pos['z'] + 119
+    pos['z'] = pos['z'] + 129 + TABLE_OFFSET
     local found = nil
     local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
     local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
@@ -1169,7 +1172,7 @@ function refreshUI()
         position = {INPUTS_X[4],BUTTON_Y,PROMPTS_LAB_Z[2]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'addChar', label = '+', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
+    buttonParam = {click_function = 'addChar', label = '+', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
     self.createButton(buttonParam)
 
     inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
@@ -1196,24 +1199,24 @@ function refreshUI()
         position = {INPUTS_X[4],BUTTON_Y,PROMPTS_INP_Z[2]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p4, alignment = 3, validation = 1, tab = 2, label = 'P4'}
     self.createInput(inputParam)
 
-    buttonParam = {click_function = 'import', label = 'Start', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
+    buttonParam = {click_function = 'import', label = 'Start', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
+    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
+    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Check if prompts have been filled in'}
+    buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Check if prompts have been filled in'}
     if not checkPrompts then
-        buttonParam.label = 'Check\nPrompts\nOFF'
+        buttonParam.label = 'Check\nPrompts\n[FF0000]OFF[-]'
     end
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\nON', color = {1,1,1,1}, font_color = stringColorToRGB('Black'), function_owner = self, position = {BOTTOM_BUT_X[5],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
+    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[5],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
     if not blindAuto then
-        buttonParam.label = 'Auto\nBlindfold\nOFF'
+        buttonParam.label = 'Auto\nBlindfold\n[FF0000]OFF[-]'
     end
     self.createButton(buttonParam)
 end

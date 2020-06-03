@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.4.4'
+VERSION = '2.4.5'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -48,7 +48,7 @@ order = {}
 orderRef = nil
 minionColors = {}
 demonColor = ''
-lastBlind = ''
+unblind = {}
 blindAuto = true
 checkPrompts = true
 message = ''
@@ -72,7 +72,7 @@ function onLoad(saveString)
         order = save['o']
         orderRef = save['r']
         demonColor = save['d']
-        lastBlind = save['lb']
+        -- unblind = save['u']
         checkPrompts = save['c']
         blindAuto = save['b']
         dayNum = save['day']
@@ -89,7 +89,7 @@ function onSave()
     save['o'] = order
     save['r'] = orderRef
     save['d'] = demonColor
-    save['lb'] = lastBlind
+    save['u'] = unblind
     save['c'] = checkPrompts
     save['b'] = blindAuto
     save['day'] = dayNum
@@ -188,12 +188,12 @@ function setNightOrder(night)
     order = {}
     local players = Global.call('updatePlayers')
     if blindAuto then
-        if lastBlind ~= '' then
-            if players[lastBlind] ~= nil then
-                players[lastBlind].blindfolded = true
+        for k,v in pairs(unblind) do
+            if players[v] ~= nil then
+                players[v].blindfolded = true
             end
-            lastBlind = ''
         end
+        unblind = {}
     end
     if night == 'first' then
         table.insert(order, {char = 'Evil_Info', color = 'White'})
@@ -539,14 +539,12 @@ function send(clickedObject, playerColor)
         end
     elseif order[1].char == 'Next_Night' then
         if blindAuto then
-            if lastBlind ~= '' then
-                if players[lastBlind] ~= nil then
-                    if allBlind then
-                        players[lastBlind].blindfolded = true
-                    end
+            for k,v in pairs(unblind) do
+                if players[v] ~= nil then
+                    players[v].blindfolded = true
                 end
-                lastBlind = ''
             end
+            unblind = {}
         end
         setNightOrder('other')
         setMsg()
@@ -573,19 +571,15 @@ function send(clickedObject, playerColor)
         printToColor(msg, 'Black', {1,1,1})
         table.insert(nightLog[#nightLog], {sender = 'Black', receiver = sendColor, message = sendMsg})
         if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
-            if lastBlind == '' then
-                lastBlind = order[1].color
-                if players[lastBlind] ~= nil then
-                    players[lastBlind].blindfolded = false
+            for k,v in pairs(unblind) do
+                if players[v] ~= nil then
+                    players[v].blindfolded = true
                 end
-            else
-                if players[lastBlind] ~= nil then
-                    players[lastBlind].blindfolded = true
-                end
-                lastBlind = order[1].color
-                if players[lastBlind] ~= nil then
-                    players[lastBlind].blindfolded = false
-                end
+            end
+            unblind = {}
+            table.insert(unblind, order[1].color)
+            if players[unblind[1]] ~= nil then
+                players[unblind[1]].blindfolded = false
             end
         end
     end
@@ -1045,7 +1039,7 @@ function reset()
     order = {}
     orderRef = {}
     demonColor = ''
-    lastBlind = nil
+    blind = {}
     dayNum = 0
     nightLog = {{}}
     dayLog = {{}}

@@ -470,11 +470,17 @@ end
 function toggleBlindfold(color)
     local players = Global.call('updatePlayers')
     local player = players[color]
+    local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     if player == nil then
         return
     end
 
     if player.blindfolded == true then
+        if nightHelper ~= nil then
+            local unblind = nightHelper.getTable('unblind')
+            table.insert(unblind, color)
+            nightHelper.setTable('unblind', unblind)
+        end
         player.blindfolded = false
     else
         player.blindfolded = true

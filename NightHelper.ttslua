@@ -397,6 +397,9 @@ function placeShroud(i)
     local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
     local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
     local vPos
+    if shroudBag == nil then
+        return
+    end
 
     for k,v in pairs(zoneObjs) do
         if v.getName() == 'Shroud' then
@@ -518,7 +521,9 @@ function send(clickedObject, playerColor)
     local sendColor, msg
     local players = Global.call('updatePlayers')
     local allBlind = clockControls.getVar('allBlind')
-    clockControls.call('hideGrimoire')
+    if clockControls ~= nil then
+        clockControls.call('hideGrimoire')
+    end
 
     if order[1].char == 'Evil_Info' then
         if demonColor ~= '' then

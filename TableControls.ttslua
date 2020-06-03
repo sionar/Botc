@@ -109,7 +109,7 @@ function deleteBackground(clickedObject, playerColor)
         end
     end
     local backgroundBox = getObjectFromGUID(BACKGROUND_BOX_GUID)
-    if backgroundBox then
+    if backgroundBox ~= nil then
         backgroundBox.setScale({0.5,0.5,0.5})
     end
 end

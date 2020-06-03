@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.1.2'
+VERSION = '19.1.3'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
@@ -136,30 +136,30 @@ function onLoad(saveString)
     local obj
     local allObjects = getAllObjects()
     obj = getObjectFromGUID(TABLE_GUID)
-    if obj then
+    if obj ~= nil then
         obj.interactable = false
         obj.setInvisibleTo({})
     end
 
     obj = getObjectFromGUID(STORYTELLER_TABLE_GUID)
-    if obj then
+    if obj ~= nil then
         obj.interactable = false
         obj.setInvisibleTo({})
     end
 
     obj = getObjectFromGUID(ROOM_GUID)
-    if obj then
+    if obj ~= nil then
         obj.interactable = false
     end
 
     obj = getObjectFromGUID(STORAGE_BAG_GUID)
-    if obj then
+    if obj ~= nil then
         obj.interactable = false
     end
 
     for k,v in pairs(NIGHT_LIGHT_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             if DEBUG then
                 obj.setScale({1,1,1})
             else
@@ -170,14 +170,14 @@ function onLoad(saveString)
 
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.interactable = false
         end
     end
 
     for k,v in pairs(LIFE_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.setLock(true)
             obj.interactable = false
         end
@@ -186,7 +186,7 @@ function onLoad(saveString)
 
     for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.setLock(true)
             obj.interactable = false
         end
@@ -194,7 +194,7 @@ function onLoad(saveString)
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.setLock(true)
             obj.interactable = false
         end
@@ -284,7 +284,7 @@ function hideCharSheets()
         elseif mode == 'CU' then
             obj = getObjectFromGUID(CHAR_SHEET_GUIDS_CU[v])
         end
-        if obj then
+        if obj ~= nil then
             setVisibleTo(obj, v)
         end
     end
@@ -303,39 +303,39 @@ end
 function refreshObjects()
     local obj
     obj = getObjectFromGUID(TEAM_TOOL_GUID)
-    if obj then
+    if obj ~= nil then
         obj.reload()
     end
 
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    if obj then
+    if obj ~= nil then
         obj.reload()
     end
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.reload()
         end
     end
 
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.reload()
         end
     end
 
     for k,v in pairs(LIFE_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.reload()
         end
     end
 
     for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.reload()
         end
     end
@@ -348,21 +348,21 @@ function lockObjects()
 
     for k,v in pairs(VOTEHAND_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.interactable = false
         end
     end
 
     for k,v in pairs(LIFE_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.interactable = false
         end
     end
 
     for k,v in pairs(LIFE_TOKEN_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             if storytellerMode then
                 obj.setLock(false)
                 obj.interactable = true
@@ -377,7 +377,7 @@ function lockObjects()
 
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         obj = getObjectFromGUID(v)
-        if obj then
+        if obj ~= nil then
             obj.interactable = false
         end
     end
@@ -448,7 +448,7 @@ function updatePlayers()
         players[v] = playersEx[v]
     end
     characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
-    if characterTool and prevNumPlayers != currNumPlayers then
+    if characterTool ~= nil and prevNumPlayers != currNumPlayers then
         characterTool.call('refreshMenu')
     end
     return players
@@ -469,7 +469,7 @@ function getlifeTokens()
 
     for k,v in pairs(COLORS_ALL) do
         base = getObjectFromGUID(LIFE_BASE_GUIDS[v])
-        if not base then
+        if base == nil then
             lifeTokens[v].vote = nil
             lifeTokens[v].object = nil
         else
@@ -634,11 +634,11 @@ function resizeTable()
     for i = 1, 20 do
     	if i <= tableSize then
             obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
-            if not obj then
+            if obj == nil then
                 obj = storageBag.takeObject({guid = ZONE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
 
-            if obj then
+            if obj ~= nil then
                 obj.setLock(true)
                 obj.setScale({zoneSize,10,13})
                 obj.setPositionSmooth(radius(71.5,angle[COLORS_ALL[i]], 1))
@@ -646,7 +646,7 @@ function resizeTable()
             end
 
             obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
-            if obj then
+            if obj ~= nil then
                 obj.setLock(true)
                 obj.setScale({1.64,1,1.64})
                 obj.setPositionSmooth(radius(72.5,angle[COLORS_ALL[i]], 1))
@@ -655,10 +655,10 @@ function resizeTable()
             end
 
             obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
-            if not obj then
+            if obj ~= nil then
                 obj = storageBag.takeObject({guid = VOTE_PANEL_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
-            if obj then
+            if obj ~= nil then
                 obj.setLock(true)
                 obj.interactable = false
                 obj.setPositionSmooth(radius(61, angle[COLORS_ALL[i]], 0.8))
@@ -666,20 +666,20 @@ function resizeTable()
             end
 
             obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
-            if not obj then
+            if obj == nil then
                 obj = storageBag.takeObject({guid = VOTEHAND_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
-            if obj then
+            if obj ~= nil then
                 obj.setLock(true)
                 obj.setPositionSmooth(radius(75, angle[COLORS_ALL[i]], -5))
                 obj.setRotationSmooth({0, angle[COLORS_ALL[i]], 0})
             end
 
             obj = getObjectFromGUID(LIFE_BASE_GUIDS[COLORS_ALL[i]])
-            if not obj then
+            if obj == nil then
                 obj = storageBag.takeObject({guid = LIFE_BASE_GUIDS[COLORS_ALL[i]], rotation = {0, angle[COLORS_ALL[i]], 0}})
             end
-            if obj then
+            if obj ~= nil then
                 obj.setLock(true)
                 if storytellerMode then
                     obj.setPosition(radius(radSt, angle[COLORS_ALL[i]], 1))
@@ -706,7 +706,7 @@ function resizeTable()
                     end
                 end
             end
-            if obj then
+            if obj ~= nil then
                 if storytellerMode then
                     obj.setLock(false)
                 else
@@ -734,16 +734,16 @@ function resizeTable()
 
             if i > 10 then
                 obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
-                if not obj then
+                if obj == nil then
                     obj = storageBag.takeObject({guid = AVATAR_LIGHT_GUIDS[COLORS_ALL[i]]})
                 end
-                if obj then
+                if obj ~= nil then
                     obj.setPositionSmooth(radius(81, angle[COLORS_ALL[i]], 6))
                 end
 
                 if avatarGuids[COLORS_ALL[i]] then
                     obj = getObjectFromGUID(avatarGuids[COLORS_ALL[i]])
-                    if obj then
+                    if obj ~= nil then
                         obj.setPositionSmooth(radius(84, angle[COLORS_ALL[i]], 6))
                         obj.setRotationSmooth({180, angle[COLORS_ALL[i]], 180})
                     end
@@ -757,33 +757,33 @@ function resizeTable()
 
     for i = tableSize+1, 20 do
         obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(charSheetGuids[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             obj.setScale({0.01,0.01,0.01})
             obj.setPositionSmooth({0,-1,0 + TABLE_OFFSET})
         end
 
         obj = getObjectFromGUID(VOTE_PANEL_GUIDS[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(LIFE_BASE_GUIDS[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             storageBag.putObject(obj)
         end
 
         obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[COLORS_ALL[i]])
-        if obj then
+        if obj ~= nil then
             storageBag.putObject(obj)
         end
 
@@ -804,7 +804,7 @@ function resizeTable()
                 sitUI(players[COLORS_ALL[i]], _, 'sit'..tableSize..COLORS_ALL[i])
             end
             obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[COLORS_ALL[i]])
-            if obj then
+            if obj ~= nil then
                 storageBag.putObject(obj)
             end
         end
@@ -816,7 +816,7 @@ function resizeTable()
     toggleLights({switching = false})
     UI.setAttribute('colorSelection','active',false)
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    if obj then
+    if obj ~= nil then
         obj.call('updateSettings')
     end
     Wait.time(updateFakeZoneColliders, 1)
@@ -824,7 +824,7 @@ function resizeTable()
 
     if storytellerMode then
         obj = getObjectFromGUID(PLAYER_DIST_GUID)
-        if obj then
+        if obj ~= nil then
             obj.setPositionSmooth({0,1.25,0 + TABLE_OFFSET})
             obj.setRotationSmooth({0,0,0})
             obj.setScale({2 + 0.2 *(tableSize-5), 1, 2 + 0.2 *(tableSize-5)})
@@ -863,7 +863,7 @@ function updateFakeZoneColliders()
     local component, obj
     for k,v in pairs(COLORS_EX) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        if obj then
+        if obj ~= nil then
             component = obj.getComponent("BoxCollider")
             component.set("enabled", false)
         end
@@ -883,9 +883,8 @@ function setTokenTable()
         end
         tokenTable = {}
         scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-        if scriptZone then
+        if scriptZone ~= nil then
             objs = scriptZone.getObjects()
-
             for k,v in pairs(colors) do
                 tokenTable[v] = {}
                 for k1, v1 in pairs(objs) do
@@ -1048,12 +1047,12 @@ function toggleLights(params)
         end
         for k,v in pairs(NIGHT_LIGHT_GUIDS) do
             obj = getObjectFromGUID(v)
-            if obj then
+            if obj ~= nil then
                 obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
                 obj.call('powerOff')
             end
         end
-        if clockLight then
+        if clockLight ~= nil then
             clockLight.call('powerOff')
         end
     else
@@ -1065,12 +1064,12 @@ function toggleLights(params)
             backgroundBox.setScale({0.7,0.7,0.7})
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Table)
-        if obj then
+        if obj ~= nil then
             obj.setPosition({0,40,0 + TABLE_OFFSET})
             obj.call('powerOn')
         end
         obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS.Black)
-        if obj then
+        if obj ~= nil then
             obj.setPosition({0,10,STORYTELLER_TABLE_DIST + TABLE_OFFSET})
             obj.call('powerOn')
         end
@@ -1079,7 +1078,7 @@ function toggleLights(params)
         end
         for i = 1, tableSize do
             obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
-            if obj then
+            if obj ~= nil then
                 obj.setPosition(radius(73.5,angle[COLORS_ALL[i]], 5))
                 if customSet then
                     obj.call('powerOff')
@@ -1091,7 +1090,7 @@ function toggleLights(params)
 
         for i = tableSize+1, 20 do
             obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[COLORS_ALL[i]])
-            if obj then
+            if obj ~= nil then
                 obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
                 obj.call('powerOff')
             end
@@ -1103,7 +1102,7 @@ function createFlipButtons()
     local obj
     for k,v in pairs(lifeTokens) do
         obj = v.object
-        if obj then
+        if obj ~= nil then
             obj.clearButtons()
             obj.createButton({click_function = 'flipAliveToDead', function_owner = Global, position = {0,0.3,0}, rotation = {0,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
             obj.createButton({click_function = 'flipDeadToAliveCheck', function_owner = Global, position = {0,-0.1,0}, rotation = {180,0,0}, width = 800, height = 800, color = {0,0,0,0}, tooltip = 'Flip Life Token'})
@@ -1119,7 +1118,7 @@ function flipAliveToDead(clickedObject, playerColor)
         pos['y'] = 1.36
         clickedObject.setPositionSmooth(pos)
         clickedObject.setRotationSmooth({180,0,0})
-        voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
+        local voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
     end
 end
 
@@ -1204,14 +1203,14 @@ function resetGame()
     end
     for k,v in pairs(COLORS) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        if obj then
+        if obj ~= nil then
             obj.setValue(v)
         end
     end
 
     for k,v in pairs(COLORS_EX) do
         obj = getObjectFromGUID(ZONE_GUIDS[v])
-        if obj then
+        if obj ~= nil then
             obj.setColorTint(FAKE_ZONE_RGB[v])
         end
     end
@@ -1242,7 +1241,7 @@ function resetGame()
     end
 
     local dealBag = getObjectFromGUID(DEAL_BAG_GUID)
-    if dealBag then
+    if dealBag ~= nil then
         local bagObjs = dealBag.getObjects()
         for k1, v1 in pairs(bagObjs) do
             takeObj = dealBag.takeObject()
@@ -1251,7 +1250,7 @@ function resetGame()
     end
 
     local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
-    if guillotine then
+    if guillotine ~= nil then
         guillotine.setPositionSmooth({-26, 1, 111 + TABLE_OFFSET})
         guillotine.setRotationSmooth({0,0,0})
     end
@@ -1364,7 +1363,7 @@ function onPlayerChangeColor(color)
         Player[color].changeColor('Grey')
     else
         local obj = getObjectFromGUID(TEAM_TOOL_GUID)
-        if obj then
+        if obj ~= nil then
             Wait.time(function () obj.call('refreshUI') end, 0.1)
         else
             updatePlayers()
@@ -1375,7 +1374,7 @@ end
 function onPlayerConnect(player)
     local teamTool, jokersDefault
     teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    if teamTool then
+    if teamTool ~= nil then
         jokersDefault = teamTool.getVar('jokersDefault')
         if jokersDefault then
             player.team = 'Jokers'
@@ -1384,25 +1383,25 @@ function onPlayerConnect(player)
     Wait.stop(timerID)
     timerID = Wait.time(function ()
         teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-        if teamTool then
+        if teamTool ~= nil then
             teamTool.reload()
         end
     end, 60)
     local characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
-    if characterTool then
+    if characterTool ~= nil then
         characterTool.call('refreshMenu')
     end
 end
 
 function onPlayerDisconnect(color)
     local obj = getObjectFromGUID(TEAM_TOOL_GUID)
-    if obj then
+    if obj ~= nil then
         Wait.time(function () obj.call('refreshUI') end, 0.1)
     else
         updatePlayers()
     end
     local characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
-    if characterTool then
+    if characterTool ~= nil then
         characterTool.call('refreshMenu')
     end
 end
@@ -1565,7 +1564,7 @@ function chatWhisper(player, color, message)
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
     local clock = getObjectFromGUID(CLOCK_GUID)
 
-    if clockControls and clockControls.getVar('allBlind') == true and not (playerColor == 'Black' or receiverColor == 'Black') then
+    if clockControls ~= nil and clockControls.getVar('allBlind') == true and not (playerColor == 'Black' or receiverColor == 'Black') then
         player.print('You cannot whisper during the night.', {1,0,0})
         return
     end
@@ -1695,7 +1694,7 @@ function chatMove(playerName, seatColor, player, swap)
 
         chars[colorFound], chars[playerColor] = chars[playerColor], chars[colorFound]
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
-        if obj then
+        if obj ~= nil then
             obj.call('swapColors', {color1 = playerColor, color2 = colorFound})
         end
     end
@@ -1816,7 +1815,7 @@ function chatSwap(seatColor1, seatColor2, player)
         chars[color1],chars[color2] = chars[color2], chars[color1]
 
         obj = getObjectFromGUID(NIGHT_HELPER_GUID)
-        if obj then
+        if obj ~= nil then
             obj.call('swapColors', {color1 = color1, color2 = color2})
         end
     end
@@ -1849,6 +1848,9 @@ end
 
 function swapChatLogs(color1, color2)
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    if nightHelper == nil then
+        return
+    end
     local dayLog = nightHelper.getTable('dayLog')
     local nightLog = nightHelper.getTable('nightLog')
     for k1,day in pairs(dayLog) do
@@ -1896,7 +1898,7 @@ function swapObjects(color1, color2)
     pos2[3] = pos2[3] + STORYTELLER_TABLE_DIST
 
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if scriptZone then
+    if scriptZone ~= nil then
         objs = scriptZone.getObjects()
         for k,v in pairs(objs) do
             if math.abs(pos1[1] - v.getPosition()[1]) < margin and math.abs(pos1[3] - v.getPosition()[3]) < margin then
@@ -1988,7 +1990,7 @@ end
 
 function chatLook(objectGUID, player)
     local obj = getObjectFromGUID(objectGUID)
-    if obj then
+    if obj ~= nil then
         local pos = obj.getPosition()
         player.lookAt({position = pos, pitch = 90, yaw = 180, distance = 5})
     end
@@ -2001,6 +2003,9 @@ function showNightLogs(player)
         return
     end
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    if nightHelper == nil then
+        return
+    end
     local nightLog = nightHelper.getTable('nightLog')
     player.print('Night Log')
     for i1, night in ipairs(nightLog) do
@@ -2022,6 +2027,9 @@ function showDayLogs(player)
         return
     end
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
+    if nightHelper == nil then
+        return
+    end
     local dayLog = nightHelper.getTable('dayLog')
     player.print('Day Log')
     for i = 2, #dayLog do
@@ -2046,6 +2054,9 @@ function showAllLogs(player)
     local nightLog = nightHelper.getTable('nightLog')
     local dayLog = nightHelper.getTable('dayLog')
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if nightHelper == nil or clockControls == nil then
+        return
+    end
     local allBlind = clockControls.getVar('allBlind')
     local msg
     player.print('[89C381]Whisper Logs[-]')
@@ -2116,11 +2127,11 @@ function checkSeatedPlayers()
     for k,v in pairs(COLORS) do
         if chars[v] == nil then
             obj = getObjectFromGUID(ZONE_GUIDS[v])
-            if obj then
+            if obj ~= nil then
                 obj.setValue('Black')
             end
             obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[v])
-            if obj then
+            if obj ~= nil then
                 storageBag.putObject(obj)
             end
         end
@@ -2128,11 +2139,11 @@ function checkSeatedPlayers()
     for k,v in pairs(COLORS_EX) do
         if chars[v] == nil then
             obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[v])
-            if obj then
+            if obj ~= nil then
                 storageBag.putObject(obj)
             end
             obj = getObjectFromGUID(ZONE_GUIDS[v])
-            if obj then
+            if obj ~= nil then
                 obj.setColorTint({0.30,0.30,0.30,0.25})
             end
         end
@@ -2177,6 +2188,9 @@ function nominate(params)
     local nominator = params.nominator
     local params = {}
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if clockControls == nil then
+        return
+    end
     if canNominate[nominator] == false then
         return
     end
@@ -2225,6 +2239,9 @@ function nominated(params)
     local player = params.player
     local target = params.target
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if clockControls == nil then
+        return
+    end
     local buttonParams = {}
     local rotating = clockControls.getVar('rotating')
     local nominateResult
@@ -2278,6 +2295,9 @@ end
 function resetCurrentNominations()
     local buttonParams = {}
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if clockControls == nil then
+        return
+    end
 
     if currentNominator ~= '' and canNominate[currentNominator] == true then
         buttonParams.index = 2
@@ -2320,7 +2340,7 @@ function hideVoteButtons()
     local votePanel
     for k,v in pairs(VOTE_PANEL_GUIDS) do
         votePanel = getObjectFromGUID(v)
-        if votePanel then
+        if votePanel ~= nil then
             votePanel.clearButtons()
         end
     end
@@ -2340,7 +2360,9 @@ function showVoteButtons(params)
     for k,v in pairs(COLORS_ALL) do
         if lifeTokens[v].object ~= nil then
             votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-            votePanel.call('createButtons')
+            if votePanel ~= nil then
+                votePanel.call('createButtons')
+            end
             voteButtonsOn[v] = true
             canNominate[v] = true
             canBeNominated[v] = true
@@ -2417,7 +2439,7 @@ function moveGuillotine(params)
         return
     end
 
-    if not guillotine then
+    if guillotine == nil then
         return
     end
 
@@ -2499,7 +2521,7 @@ function hideVotehands()
     local handObj
     for k,v in pairs(colors) do
         handObj = getObjectFromGUID(VOTEHAND_GUIDS[v])
-        if handObj then
+        if handObj ~= nil then
             handObj.setScale(VOTEHAND_HIDE_SCALE)
             handObj.setPosition(radius(75, angle[v], -5))
         end
@@ -2644,7 +2666,7 @@ function sitUI(player, value, id)
             deleteAvatar(color)
             if started then
                 zoneObj = getObjectFromGUID(ZONE_GUIDS[color])
-                if zoneObj then
+                if zoneObj ~= nil then
                     zoneObj.setColorTint({0.30,0.30,0.30,0.25})
                 end
             end
@@ -2653,7 +2675,7 @@ function sitUI(player, value, id)
         end
     end
     obj = getObjectFromGUID(TEAM_TOOL_GUID)
-    if obj then
+    if obj ~= nil then
         Wait.time(function () obj.call('refreshUI') end, 0.1)
     end
 end
@@ -2670,7 +2692,7 @@ function generateAvatar(color)
     local obj
     if avatarGuids[color] then
         obj = getObjectFromGUID(avatarGuids[color])
-        if obj then
+        if obj ~= nil then
             obj.destruct()
         end
     end
@@ -2690,7 +2712,7 @@ function generateAvatar(color)
         }
         avatar.setCustomObject(customParam)
         light = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
-        if light then
+        if light ~= nil then
             light.call('powerOn')
         end
     end, 0.5)
@@ -2716,12 +2738,12 @@ end
 function deleteAvatar(color)
     if avatarGuids[color] then
         obj = getObjectFromGUID(avatarGuids[color])
-        if obj then
+        if obj ~= nil then
             obj.destruct()
         end
         avatarGuids[color] = nil
         light = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
-        if light then
+        if light ~= nil then
             light.call('powerOff')
         end
     end
@@ -2764,6 +2786,9 @@ function nominateUI(player, value, id)
         return
     end
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if clockControls == nil then
+        return
+    end
     local rotating = clockControls.getVar('rotating')
     if rotating then
         return
@@ -2777,11 +2802,13 @@ end
 function nominatedUI(player, value, id)
     local found = getPlayer(player)
     local target = UI.getAttribute(id, 'text')
-
     if not found then
         return
     end
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    if clockControls == nil then
+        return
+    end
     local rotating = clockControls.getVar('rotating')
     if rotating then
         return
@@ -2804,7 +2831,7 @@ function joinTeamUI(player, value, id)
         return
     end
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    if teamTool then
+    if teamTool ~= nil then
         local params = {color = found, team = id}
         teamTool.call('joinTeamUI', params)
     end
@@ -2814,7 +2841,6 @@ function leaveTeamUI(player, value, id)
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
     local jokersDefault = teamTool.getVar('jokersDefault')
     local defaultTeam
-
     if jokersDefault then
         defaultTeam = 'Jokers'
     else
@@ -2823,7 +2849,7 @@ function leaveTeamUI(player, value, id)
 
     if player.team ~= defaultTeam then
         player.team = defaultTeam
-        if teamTool then
+        if teamTool ~= nil then
             teamTool.call('refreshUI')
         end
     end

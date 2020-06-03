@@ -51,9 +51,11 @@ function start(clickedObject, playerColor)
     end
     Global.setVar('storytellerMode', true)
     obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    obj.setVar('tableSize', numPlayers)
-    obj.call('refreshUI')
-    obj.call('callResize')
+    if obj ~= nil then
+        obj.setVar('tableSize', numPlayers)
+        obj.call('refreshUI')
+        obj.call('callResize')
+    end
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     numPlayers = #nameList
     rad = numPlayers * 0.6 + 6
@@ -232,10 +234,12 @@ function insertAbove(clickedObject, playerColor, i)
         nameList[j].color = COLORS_ALL[j]
     end
     Global.setVar('storytellerMode', true)
-    obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    obj.setVar('tableSize', numPlayers)
-    obj.call('refreshUI')
-    obj.call('callResize')
+    local obj = getObjectFromGUID(TABLE_SIZER_GUID)
+    if obj ~= nil then
+        obj.setVar('tableSize', numPlayers)
+        obj.call('refreshUI')
+        obj.call('callResize')
+    end
     render()
 end
 
@@ -255,10 +259,12 @@ function removeRow(clickedObject, playerColor, i)
         nameList[j].color = COLORS_ALL[j]
     end
     Global.setVar('storytellerMode', true)
-    obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    obj.setVar('tableSize', numPlayers)
-    obj.call('refreshUI')
-    obj.call('callResize')
+    local obj = getObjectFromGUID(TABLE_SIZER_GUID)
+    if obj ~= nil then
+        obj.setVar('tableSize', numPlayers)
+        obj.call('refreshUI')
+        obj.call('callResize')
+    end
     render()
 end
 

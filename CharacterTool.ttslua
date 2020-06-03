@@ -953,7 +953,7 @@ function webReqCB(req)
             params = {image = customImageUrl, thickness = 0.2, merge_distance = 25, stackable = false}
             for k,v in pairs(CHAR_SHEET_GUIDS_CU) do
                 obj = getObjectFromGUID(v)
-                if obj then
+                if obj ~= nil then
                     obj.setColorTint({1,1,1})
                     obj.setCustomObject(params)
                     obj.reload()

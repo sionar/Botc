@@ -207,7 +207,7 @@ function toggleClock(vm)
         if vm == 'execution' then
             guillotine.setPositionSmooth({0,2,0 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,0,0})
-            guillotine.setInvisibleTo({})
+            -- guillotine.setInvisibleTo({})
         end
     end
 end
@@ -585,34 +585,34 @@ function toggleHiddenZones(clickedObject, playerColor)
     end
 end
 
-function onObjectDrop(color, object)
-    local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if scriptingZone then
-        if inZone(object, scriptingZone) and not grimShow then
-            object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
-        else
-            Wait.time(function() object.setInvisibleTo({}) end, 0.2)
-        end
-    end
-end
+-- function onObjectDrop(color, object)
+--     local scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+--     if scriptingZone ~= nil then
+--         if inZone(object, scriptingZone) and not grimShow then
+--             object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+--         else
+--             Wait.time(function() object.setInvisibleTo({}) end, 0.2)
+--         end
+--     end
+-- end
 
-function onObjectEnterScriptingZone(zone, object)
-    if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= STORYTELLER_TABLE_GUID and object.getName() ~= 'Waitlist Tool' and object.getName() ~= 'BotC Bingo' then
-        if not grimShow then
-            Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
-        end
-    end
-end
+-- function onObjectEnterScriptingZone(zone, object)
+--     if zone.getGUID() == SCRIPTING_ZONE_GUID and object.getGUID() ~= STORYTELLER_TABLE_GUID and object.getName() ~= 'Waitlist Tool' and object.getName() ~= 'BotC Bingo' then
+--         if not grimShow then
+--             Wait.time(function () object.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'}) end, 0.1)
+--         end
+--     end
+-- end
 
 function onObjectLeaveScriptingZone(zone, object)
-    if object.getGUID() == STORYTELLER_TABLE_GUID  then
-        return
-    end
-
-    if object.getName() == 'Vote Token' then
-        Wait.time(function () object.setInvisibleTo({}) end, 0.5)
-    end
-
+--     if object.getGUID() == STORYTELLER_TABLE_GUID  then
+--         return
+--     end
+--
+--     if object.getName() == 'Vote Token' then
+--         Wait.time(function () object.setInvisibleTo({}) end, 0.5)
+--     end
+--
     if zone.getGUID() == SCRIPTING_ZONE_GUID then
         local pos = object.getPosition()
         if pos[2] < 0 then
@@ -625,16 +625,16 @@ function showGrimoire()
     local zoneObj, scriptZone, objs
     grimShow = true
     zoneObj = getObjectFromGUID(BLACK_ZONE.guid)
-    if zoneObj then
+    if zoneObj ~= nil then
         zoneObj.setScale({0,0,0})
     end
     scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if scriptZone then
-        objs = scriptZone.getObjects()
-        for k,v in pairs(objs) do
-            v.setInvisibleTo({})
-        end
-    end
+    -- if scriptZone ~= nil then
+    --     objs = scriptZone.getObjects()
+    --     for k,v in pairs(objs) do
+    --         v.setInvisibleTo({})
+    --     end
+    -- end
     self.editButton({
         index          = 5,
         label          = 'Hide\nGrimoire',
@@ -646,18 +646,18 @@ function hideGrimoire()
     local zoneObj, scriptZone, objs
     grimShow = false
     zoneObj = getObjectFromGUID(BLACK_ZONE.guid)
-    if zoneObj then
+    if zoneObj ~= nil then
         zoneObj.setScale(BLACK_ZONE.scale)
     end
-    scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
-    if scriptZone then
-        objs = scriptZone.getObjects()
-        for k,v in pairs(objs) do
-            if v.getGUID() ~= STORYTELLER_TABLE_GUID then
-                v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
-            end
-        end
-    end
+    -- scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    -- if scriptZone ~= nil then
+    --     objs = scriptZone.getObjects()
+    --     for k,v in pairs(objs) do
+    --         if v.getGUID() ~= STORYTELLER_TABLE_GUID then
+    --             v.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+    --         end
+    --     end
+    -- end
     self.editButton({
         index          = 5,
         label          = 'Show\nGrimoire',
@@ -769,7 +769,9 @@ function callDefaultTeamToggle(clickedObject, playerColor)
         return
     end
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    teamTool.call('defaultTeamToggle')
+    if teamTool ~= nil then
+        teamTool.call('defaultTeamToggle')
+    end
     local jokersDefault = Global.getVar('jokersDefault')
     if jokersDefault then
         self.editButton({index = 9, label = 'Default Team\n[0000FF]Jokers[-]', tooltip = 'Make None the default team'})

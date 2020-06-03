@@ -138,13 +138,11 @@ function onLoad(saveString)
     obj = getObjectFromGUID(TABLE_GUID)
     if obj ~= nil then
         obj.interactable = false
-        obj.setInvisibleTo({})
     end
 
     obj = getObjectFromGUID(STORYTELLER_TABLE_GUID)
     if obj ~= nil then
         obj.interactable = false
-        obj.setInvisibleTo({})
     end
 
     obj = getObjectFromGUID(ROOM_GUID)
@@ -215,7 +213,6 @@ function onLoad(saveString)
     createFlipButtons()
 
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-    hideCharSheets()
     updateFakeZoneColliders()
     updatePlayers()
     refreshUI()
@@ -269,35 +266,6 @@ function editNotebookTab(tabIndex, charList, title)
 
     tab.body = text
     Notes.editNotebookTab(tab)
-end
-
-function hideCharSheets()
-    local obj
-
-    for k,v in pairs(COLORS) do
-        if mode == 'TB' then
-            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_TB[v])
-        elseif mode == 'BM' then
-            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_BM[v])
-        elseif mode == 'SV' then
-            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_SV[v])
-        elseif mode == 'CU' then
-            obj = getObjectFromGUID(CHAR_SHEET_GUIDS_CU[v])
-        end
-        if obj ~= nil then
-            setVisibleTo(obj, v)
-        end
-    end
-end
-
-function setVisibleTo(object, color)
-    local tab = {}
-    for k,v in pairs(COLORS) do
-        if v ~= color then
-            table.insert(tab,v)
-        end
-    end
-    object.setInvisibleTo(tab)
 end
 
 function refreshObjects()

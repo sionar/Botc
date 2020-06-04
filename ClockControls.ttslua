@@ -588,7 +588,9 @@ function onObjectLeaveScriptingZone(zone, object)
     if zone.getGUID() == SCRIPTING_ZONE_GUID then
         local pos = object.getPosition()
         if pos[2] < 0 then
-            object.setPosition({pos[1], 2.5, pos[3]})
+            object.setPosition({pos[1], 1.3, pos[3]})
+            object.setLock(true)
+            Wait.time(function() object.setLock(false) end, 0.75)
         end
     end
 end

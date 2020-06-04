@@ -198,7 +198,6 @@ function setMode(state)
         end
     end
     Global.call('showExtensionUI')
-    Wait.time(function () Global.call('hideCharSheets') end, 0.1)
     refreshUI()
 end
 

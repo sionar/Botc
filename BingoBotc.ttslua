@@ -7,7 +7,7 @@ Made by Sionar
 ------------------Constants
 VERSION = '1.4.6'
 NAME = 'BotC Bingo'
-START_POS = {-50,1.15,35}
+START_POS = {-50,1.15,46}
 START_ROT = {0,180,0}
 X_POS = {}
 Z_POS = {}

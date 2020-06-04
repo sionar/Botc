@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.0'
+VERSION = '1.9.1'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -733,8 +733,10 @@ function callDefaultTeamToggle(clickedObject, playerColor)
     end
     local jokersDefault = Global.getVar('jokersDefault')
     if jokersDefault then
+        Player['Black'].print('The default team is now Jokers.')
         self.editButton({index = 9, label = 'Default Team\n[0000FF]Jokers[-]', tooltip = 'Make None the default team'})
     else
+        Player['Black'].print('The default team is now None.')
         self.editButton({index = 9, label = 'Default Team\n[FF0000]None[-]', tooltip = 'Make Jokers the default team'})
     end
 end

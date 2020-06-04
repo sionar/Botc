@@ -6,7 +6,7 @@ Made by Sionar
 
 ------------------Constants
 VERSION = '1.2.6'
-START_POS = {50,1.15,35}
+START_POS = {50,1.15,46}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25

@@ -7,10 +7,10 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.1.4'
+VERSION = '19.1.5'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.'
-HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + characters.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 TABLE_OFFSET = -50
 STORYTELLER_TABLE_DIST = 129
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
@@ -43,6 +43,7 @@ currentNominator = ''
 currentNominated = ''
 numAlive = 0
 numPlayers = 0
+numTrav = 0
 currVotes = 0
 currPlayers = 0
 currMostVotes = 0
@@ -408,7 +409,7 @@ function updatePlayers()
         players[v] = playersEx[v]
     end
     characterTool = getObjectFromGUID(CHARACTER_TOOL_GUID)
-    if characterTool ~= nil and prevNumPlayers != currNumPlayers and not storytellerMode then
+    if characterTool ~= nil and prevNumPlayers ~= currNumPlayers and not storytellerMode then
         characterTool.call('refreshMenu')
     end
     return players
@@ -472,7 +473,7 @@ function handleLifeUI()
     local playerDist
     local allObjects = getAllObjects()
     local allPlayers = Player.getPlayers()
-    local numTrav = 0
+    local currentNumTrav = 0
     local aliveTrav = 0
     local zoneObj
 
@@ -502,7 +503,7 @@ function handleLifeUI()
                 end
             end
             if lifeTokens[COLORS_ALL[i]].object.getDescription() == 'Traveler' then
-                numTrav = numTrav + 1
+                currentNumTrav = currentNumTrav + 1
             end
         else
             if started and i <= 10 and zoneObj ~= nil and #allPlayers > 1 then
@@ -516,10 +517,10 @@ function handleLifeUI()
         end
     end
     votesNeeded = math.ceil(numAlive/2)
-    if currPlayers ~= numAlive or currVotes ~= numberOfVotes then
+    if currPlayers ~= numAlive or currVotes ~= numberOfVotes or numTrav ~= currentNumTrav then
         for k,v in pairs(allObjects) do
             if v.getName() == 'Player Distribution Chart' then
-                v.call('updatePlayerDist', {num = numPlayers - numTrav})
+                v.call('updatePlayerDist', {num = numPlayers - currentNumTrav})
                 v.call('updateAlive', {numP = numPlayers, living = numAlive, nonTrav = numAlive - aliveTrav, withVotes = numberOfVotes, needed = votesNeeded})
             end
         end
@@ -534,6 +535,7 @@ function handleLifeUI()
 
     currPlayers = numAlive
     currVotes = numberOfVotes
+    numTrav = currentNumTrav
 end
 
 function inTable(input, table)
@@ -1464,6 +1466,11 @@ function onChat(message, player)
             chatSwap(capitalize(args[2]), capitalize(args[3]), player)
             return false
         end
+    elseif command == '.t' then
+        if player.color == 'Black' or player.admin or player.steam_id == ADMIN_ID or DEBUG then
+            chatToggleTraveler(capitalize(args[2]), player)
+            return false
+        end
     elseif command == 'debug' and DEBUG then
         return false
     elseif command == 'look' and DEBUG then
@@ -1942,6 +1949,49 @@ function swapLifeTokens(color1, color2)
             end
         end
     end
+end
+
+function chatToggleTraveler(seatColor, player)
+    local color = false
+    local obj, pos
+    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    local locked = true
+    if storytellerMode then
+        locked = false
+    end
+    if travelerBag == nil or storageBag == nil then
+        return
+    end
+    if not seatColor then
+        return
+    end
+    for k,v in pairs(COLORS_ALL) do
+        if string.match(string.lower(v), string.lower(seatColor)) then
+            color = v
+            break
+        end
+    end
+    if not color then
+        player.print('Error: The first color you entered is not a color.', {1,0,0})
+        return
+    end
+    obj = lifeTokens[color].object
+    pos = lifeTokenPos[color]
+    if obj == nil then
+        obj = travelerBag.takeObject({position = pos, rotation = {0,0,0}})
+        player.print(COLORS_BBC[color] .. color .. '[-] has been set as a traveler.')
+    elseif obj.getGMNotes() == 'Traveler' then
+        travelerBag.putObject(obj)
+        obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color], position = pos, rotation = {0,0,0}})
+        player.print(COLORS_BBC[color] .. color .. '[-] has been set as a non-traveler.')
+    else
+        storageBag.putObject(obj)
+        obj = travelerBag.takeObject({position = pos, rotation = {0,0,0}})
+        player.print(COLORS_BBC[color] .. color .. '[-] has been set as a traveler.')
+    end
+    lifeTokens[color].object = obj
+    obj.setLock(locked)
 end
 
 function chatLook(objectGUID, player)

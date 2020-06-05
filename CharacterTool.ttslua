@@ -295,9 +295,13 @@ function random(clickedObject, playerColor)
         adjustOutsiders(v)
     end
 
+    for k,v in pairs(lockedChars['Townsfolk']) do
+        adjustOutsiders(v)
+    end
+
     count = 1
     for i = 1, dist[4] do
-        while not checkValid(unusedChars.Demon[i]) do
+        while not checkValid(unusedChars.Demon[i], #lockedChars['Outsider']) do
             i = i + 1
             if i > #unusedChars.Demon then
                 Player['Black'].print('Error: Invalid setup.', {1,0,0})
@@ -316,7 +320,7 @@ function random(clickedObject, playerColor)
     end
 
     for i = 1, dist[3] do
-        while not checkValid(unusedChars.Minion[count]) do
+        while not checkValid(unusedChars.Minion[count], #lockedChars['Outsider']) do
             i = i + 1
             if i > #unusedChars.Minion then
                 Player['Black'].print('Error: Invalid setup.', {1,0,0})
@@ -462,13 +466,13 @@ end
 
 
 
-function checkValid(char)
+function checkValid(char, numLockedOutsiders)
     if char == 'Fang_Gu' or char == 'Godfather' or chat == 'Balloonist' then
         if dist[1] == 0 then
             return false
         end
-    elseif char == 'Vigormortis' or char == 'Ifrit' then
-        if dist[2] == 0 then
+    elseif char == 'Vigormortis' then
+        if numLockedOutsiders > 0 and dist[2] <= 0 then
             return false
         end
     elseif char == 'Baron' or char == 'Conspirator' then

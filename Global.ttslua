@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.1.7'
+VERSION = '19.1.9'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -986,6 +986,42 @@ function shufflePlayers()
     end
 end
 
+function pruneSeats()
+    local numPlayers = getNumPlayers()
+    if numPlayers < 5 then
+        return
+    end
+    local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)
+    local found = 0
+    local i = 1
+    local switch = {}
+    while found < numPlayers do
+        if players[COLORS_ALL[i]] ~= nil then
+            found = found + 1
+            switch[COLORS_ALL[i]] = found
+        end
+        i = i + 1
+        if i > 20 then
+            Player['Black'].print('Error: Prune seats failed.')
+            return
+        end
+    end
+    for k,v in pairs(switch) do
+        if v <= 10 then
+            players[k].changeColor(COLORS_ALL[v])
+        else
+            players[k].changeColor('Grey')
+            sitUI(playerFound, _, 'sit'..tableSize..COLORS_ALL[v])
+        end
+    end
+    tableSize = numPlayers
+    if tableControls ~= nil then
+        tableControls.setVar('tableSize', tableSize)
+        tableControls.call('refreshUI')
+    end
+    Wait.time(function() resizeTable() end, 2)
+end
+
 function toggleLights(params)
     local switching = params.switching
     local obj
@@ -1471,8 +1507,6 @@ function onChat(message, player)
             chatToggleTraveler(capitalize(args[2]), player)
             return false
         end
-    elseif command == 'debug' and DEBUG then
-        return false
     elseif command == 'look' and DEBUG then
         chatLook(args[2], player)
         return false

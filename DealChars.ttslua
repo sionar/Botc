@@ -129,7 +129,7 @@ function dealToPlayers(clickedObject, playerColor)
                 break
             end
         end
-        if townsfolkBag ~= nil then
+        if townsfolkBag ~= nil and townsfolkBag.getQuantity() >= 3 then
             townsfolkBag.shuffle()
             townsfolkBag.takeObject({position = {-4,2,STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}})
             townsfolkBag.takeObject({position = {0,2,STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}})

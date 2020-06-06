@@ -90,6 +90,13 @@ function callShufflePlayers(clickedObject, playerColor)
     Global.call('shufflePlayers')
 end
 
+function callPruneSeats(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    Global.call('pruneSeats')
+end
+
 function callToggleLights(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
@@ -132,33 +139,37 @@ function refreshUI()
     local buttonParam, inputParam
 
     buttonParam = {click_function = 'nullFunc', function_owner = self, label = 'Table Size', color = {0,0,0,1}, font_color = stringColorToRGB('White'), color = stringColorToRGB('Black'),
-            position = {0,0.2,-1.4}, width = 0, height = 0, font_size = FONT_SIZE}
+            position = {0,0.2,-1.2}, width = 0, height = 0, font_size = FONT_SIZE}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'decTableSize', function_owner = self, label = '-', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-1.05,0.2,-0.9}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Remove a seat.'}
+            position = {-1.05,0.2,-0.8}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Remove a seat.'}
     self.createButton(buttonParam)
 
-    inputParam = {input_function = 'setTableSize', function_owner = self, position = {0, 0.2, -0.9}, width = 600, height = 300, font_size = 260, tooltip = 'Table Size', validation = 2, alignment = 3, value = tableSize, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR}
+    inputParam = {input_function = 'setTableSize', function_owner = self, position = {0, 0.2, -0.8}, width = 600, height = 300, font_size = 260, tooltip = 'Table Size', validation = 2, alignment = 3, value = tableSize, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'incTableSize', function_owner = self, label = '+', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {1.05,0.2,-0.9}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Add a seat.'}
+            position = {1.05,0.2,-0.8}, width = 300, height = 300, font_size = FONT_SIZE, tooltip = 'Add a seat.'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callShufflePlayers', function_owner = self, label = 'Shuffle\nSeats', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-0.85,0.2,0}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Shuffle seats (Before the game starts).'}
+            position = {-1.6,0.2,0}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Shuffle seats (Before the game starts).'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'callPruneSeats', function_owner = self, label = 'Prune\nSeats', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
+            position = {0,0.2,0}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Get rid of empty seats and shrink the table (Before the game starts).'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callToggleLights', function_owner = self, label = 'Toggle\nLights', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {0.85,0.2,0}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
+            position = {1.6,0.2,0}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'deleteBackground', function_owner = self, label = 'Delete\nBackground', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-0.85,0.2,1}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Delete the background objects'}
+            position = {-0.85,0.2,0.9}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Delete the background objects'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callReset', function_owner = self, label = 'Reset\nTable', font_color = stringColorToRGB('White'), color = stringColorToRGB('Red'),
-            position = {0.85,0.2,1}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Reset the game.'}
+            position = {0.85,0.2,0.9}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Reset the game.'}
     self.createButton(buttonParam)
 end

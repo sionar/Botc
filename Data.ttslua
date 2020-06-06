@@ -50,6 +50,7 @@ FIRST =
     'Dreamer',
     'Seamstress',
     'Balloonist',
+    'General',
     'Recordkeeper',
     'Herald',
     'Friar',
@@ -90,6 +91,7 @@ OTHER =
     'Innkeeper',
     'Courtier',
     'Reveler',
+    'Acrobat',
     'Gambler',
     'Snake_Charmer',
     'Monk',
@@ -142,6 +144,7 @@ OTHER =
     'Oracle',
     'Juggler',
     'Balloonist',
+    'General',
     'Recordkeeper',
     'Knight',
     'Cardinal',
@@ -164,7 +167,7 @@ CU_LIST = {
     'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune_Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet_Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief',
     'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea_Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils_Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop',
     'Clockmaker', 'Dreamer', 'Snake_Charmer', 'Mathematician', 'Flowergirl', 'Town_Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil_Twin', 'Witch', 'Cerenovus', 'Pit_Hag', 'Fang_Gu', 'Vigormortis', 'No_Dashii', 'Vortox', 'Butcher', 'Bone_Collector', 'Harlot', 'Barista', 'Deviant',
-    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow',
+    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General',
     'Majesty', 'Prince', 'Princess', 'Queen', 'Knight', 'Cardinal', 'Rook', 'Scribe', 'Herald', 'Chamberlain', 'Cup_Bearer', 'Friar', 'Food_Taster', 'Pretender', 'Pawn', 'Emissary', 'Concubine', 'Charlatan', 'Conspirator', 'Scoundrel', 'Usurper', 'Ysbaddaden', 'Draco', 'Jabberwocky', 'Morgana',
     'Astrologist', 'Cartographer', 'Censor', 'Child', 'Counterfeiter', 'Cultist', 'Cursebearer', 'Fanatic', 'Hastur', 'Lobotomizer', 'Mother', 'Politician', 'Pomme_de_Terror', 'Rakshasa', 'Recordkeeper', 'Reveler', 'Schizophrenic', 'Turncoat', 'Xolotl'
 }
@@ -220,7 +223,7 @@ CHARACTERS =
     Moonchild = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'When you learn that you died, choose 1 alive player: if good, they die tonight.'},
     Goon = {Type = 'Outsider', Ability = false, Prompt = 'Your alignment is now P1.', Description = 'Each night, the 1st player to choose you with their ability is drunk until dusk. You become their alignment.'},
     Lunatic = {Type = 'Outsider', Ability = false, Prompt = 'Choose who to kill.', Description = 'You think you are a Demon, but your abilities malfunction. The Demon knows who you are & who you attack.'},
-    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3 P4', Description = ''},
+    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3 P4.', Description = ''},
     Lunatic_InfoB = {Type = 'Outsider', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
     Lunatic_InfoC = {Type = 'Outsider', Ability = false, Prompt = 'P1 is a Lunatic. You are the P2.', Description = ''},
     Lunatic_InfoD = {Type = 'Outsider', Ability = false, Prompt = 'Tonight, the Lunatic targeted P1 P2 P3', Description = ''},
@@ -280,6 +283,8 @@ CHARACTERS =
     Goblin = {Type = 'Minion', Ability = false, Prompt = '', Description = 'If you publicly claim to be the Goblin when nominated & are executed that day, your team wins.'},
     Leviathan = {Type = 'Demon', Ability = false, Prompt = '', Description = 'If more than 1 good player is executed, you win. All players know you are in play. After day 5, evil wins.'},
     Widow = {Type = 'Minion', Ability = false, Prompt = 'Here is the grimoire. Choose a player to poison.', Description = 'On your 1st night, look at the Grimoire & choose a player: they are poisoned. 1 good player knows a Widow is in play.'},
+    Acrobat = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'Each night*, if either good living neighbor is drunk or poisoned, you die.'},
+    General = {Type = 'Townsfolk', Ability = false, Prompt = 'The current team that is winning: P1.', Description = 'Each night, you learn which alignment the Storyteller believes is winning: good, evil, or neither.'},
     Astrologist = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = 'Each day, visit the Storyteller with a number between 0 & 5 to receive a clue.'},
     Censor = {Type = 'Townsfolk', Ability = false, Prompt = 'The censored word is P1.', Description = 'You & evils start knowing a word: minions who say it lose. If you are "mad" about being the Censor or say it, you lose this ability.'},
     Recordkeeper = {Type = 'Townsfolk', Ability = false, Prompt = 'You learn that the P1 is not in play.', Description = 'Each night, you learn a character not in play.'},
@@ -329,6 +334,7 @@ CHARACTERS =
 
 DECAL_URLS =
 {
+    Acrobat = 'http://cloud-3.steamusercontent.com/ugc/1057730374545997309/BBB98400221B85ABE36B9CCA11DA866C6E593614/',
     Amnesiac = 'http://cloud-3.steamusercontent.com/ugc/1025073792546109831/BEE3C1CB287F03096DE54CFB8B7F5F129DA060A6/',
     Apprentice = 'http://cloud-3.steamusercontent.com/ugc/913575713674448162/48ABB3342C8ED7A1D60185C2960B5A6867755B10/',
     Artist = 'http://cloud-3.steamusercontent.com/ugc/913575713674453549/907AC5B8B144F692D8A83294A5CF53B178227440/',
@@ -362,6 +368,7 @@ DECAL_URLS =
     Fool = 'http://cloud-3.steamusercontent.com/ugc/789742488131093870/B15FB2E84F497A9DD6E02652E90EF26755B13F56/',
     Fortune_Teller = 'http://cloud-3.steamusercontent.com/ugc/913575713674400475/78C48895E26F7737E7557BDEC97651EF5AB0158F/',
     Gambler = 'http://cloud-3.steamusercontent.com/ugc/793119489772261054/5F1F931D8949CA2325DDD64E179DF10A6DA6203A/',
+    General = 'http://cloud-3.steamusercontent.com/ugc/1057730374545997638/C235A8259D107A49A72B126AB9A3A657CB98068E/',
     Godfather = 'http://cloud-3.steamusercontent.com/ugc/787490775085629334/AC6E847B255E2DBCD0F76F802DB89BC25811B7D7/',
     Goblin = 'http://cloud-3.steamusercontent.com/ugc/1025073792546113420/65776AE6A25193955AF4B21B107A8F4BBAB8944A/',
     Goon = 'http://cloud-3.steamusercontent.com/ugc/779613284202424081/E6217446A4C242CC2DA189C587E3E6F653CED262/',

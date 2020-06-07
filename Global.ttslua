@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.1.9'
+VERSION = '19.1.10'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -1916,26 +1916,34 @@ end
 function swapLifeTokens(color1, color2)
     local lifeToken1 = lifeTokens[color1].object
     local lifeToken2 = lifeTokens[color2].object
-    local type1, type2, obj
+    local voteToken1 = lifeTokens[color1].vote
+    local voteToken2 = lifeTokens[color2].vote
+    local type1, type2, obj, pos
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     local objs = storageBag.getObjects()
+    local rot1, rot2 = nil, nil
     if lifeToken1 == nil then
         type1 = 'None'
     elseif lifeToken1.getDescription() == 'Traveler' then
         type1 = 'Traveler'
+        rot1 = lifeToken1.getRotation()
     else
         type1 = 'Normal'
+        rot1 = lifeToken1.getRotation()
     end
     if lifeToken2 == nil then
         type2 = 'None'
     elseif lifeToken2.getDescription() == 'Traveler' then
         type2 = 'Traveler'
+        rot2 = lifeToken2.getRotation()
     else
         type2 = 'Normal'
+        rot2 = lifeToken2.getRotation()
     end
-    if type1 == type2 then
-        return
+    if type1 == 'Normal' and type2 == 'Normal' then
+        lifeToken1.setRotationSmooth(rot2)
+        lifeToken2.setRotationSmooth(rot1)
     elseif type1 == 'None' and type2 == 'Normal' then
         storageBag.putObject(lifeToken2)
         for k,v in pairs(objs) do
@@ -1943,6 +1951,7 @@ function swapLifeTokens(color1, color2)
                 obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color1]})
                 lifeTokens[color1].object = obj
                 obj.setPosition(lifeTokenPos[color1])
+                obj.setRotation(rot2)
                 break
             end
         end
@@ -1953,6 +1962,7 @@ function swapLifeTokens(color1, color2)
                 obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color2]})
                 lifeTokens[color2].object = obj
                 obj.setPosition(lifeTokenPos[color2])
+                obj.setRotation(rot1)
                 break
             end
         end
@@ -1968,6 +1978,7 @@ function swapLifeTokens(color1, color2)
                 obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color2]})
                 lifeTokens[color2].object = obj
                 obj.setPosition(lifeTokenPos[color2])
+                obj.setRotation(rot1)
                 break
             end
         end
@@ -1979,10 +1990,22 @@ function swapLifeTokens(color1, color2)
                 obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color1]})
                 lifeTokens[color1].object = obj
                 obj.setPosition(lifeTokenPos[color1])
+                obj.setRotation(rot2)
                 break
             end
         end
     end
+
+    if voteToken1 ~= nil and voteToken2 == nil then
+        pos = lifeTokenPos[color2]
+        pos[2] = 1.5
+        voteToken1.setPositionSmooth(pos)
+    elseif voteToken2 ~= nil and voteToken1 == nil then
+        pos = lifeTokenPos[color1]
+        pos[2] = 1.5
+        voteToken2.setPositionSmooth(pos)
+    end
+    Wait.time(createFlipButtons, 1)
 end
 
 function chatToggleTraveler(seatColor, player)
@@ -2026,6 +2049,7 @@ function chatToggleTraveler(seatColor, player)
     end
     lifeTokens[color].object = obj
     obj.setLock(locked)
+    Wait.time(createFlipButtons,1)
 end
 
 function chatLook(objectGUID, player)

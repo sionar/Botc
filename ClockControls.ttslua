@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.1'
+VERSION = '1.9.2'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -51,7 +51,6 @@ function onLoad(saveString)
     local purpleHand = getObjectFromGUID(PURPLE_HAND_GUID)
     local redHand = getObjectFromGUID(RED_HAND_GUID)
     local blueHand = getObjectFromGUID(BLUE_HAND_GUID)
-    self.interactable = false
     clock.interactable = false
     purpleHand.interactable = false
     redHand.interactable = false

@@ -17,7 +17,7 @@ function bagTable(params)
     bag.Description = params.Description or ''
     bag.GMNotes = ''
     bag.ColorDiffuse = params.ColorDiffuse
-    bag.Locked = true
+    bag.Locked = false
     bag.Grid = true
     bag.Snap = true
     bag.IgnoreFoW = false

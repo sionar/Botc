@@ -459,7 +459,7 @@ function import()
     end
 
     spawnSet(characters, 'Custom')
-    Wait.time(dealChars, 2)
+    Wait.time(dealChars, 1)
 end
 
 function checkValid(char, numLockedOutsiders)

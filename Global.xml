@@ -4,58 +4,59 @@
     <Image class="aliveImages" width="20" height="20"/>
     <Image class="aliveImages" width="20" height="20"/>
     <Button class="tp50" fontSize="22" colors="#66666680|#666666FF|#66666680|#66666680" textColor="White"/>
-	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor = "White"/>
-    <Button class="sitButton" onClick = "sitUI" fontSize = "15" textColor = "#FFFFFF" fontStyle = "Bold" />
+	<Button class="colorSelect" fontSize="15" fontStyle="Bold" onClick="nominatedUI" textColor="White"/>
+    <Button class="sitButton" onClick="sitUI" fontSize="15" textColor="#FFFFFF" fontStyle="Bold" />
     <Option class="cuDecal" active="true"/>
-    <Dropdown class="decalDropdown" dropdownHeight = "500"
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-        itemBackgroundColors = "#000000EE|#000000|#00000080|#00000080"
-        textColor="#FF0000" onValueChanged = "decalUI"
-        scrollbarColors = "#000000DD|#FFFFFFEE|#000000EE|#000000EE"
-        checkColor = "#FF0000"
-        arrowColor = "#FFFFFF"
+    <Dropdown class="decalDropdown" dropdownHeight="500"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        itemBackgroundColors="#000000EE|#000000|#00000080|#00000080"
+        textColor="#FF0000" onValueChanged="decalUI"
+        scrollbarColors="#000000DD|#FFFFFFEE|#000000EE|#000000EE"
+        checkColor="#FF0000"
+        arrowColor="#FFFFFF"
         />
     <TableLayout class="whisperTableLayout"
-        height = "100"
-        width = "250"
-        rectAlignment = "LowerCenter"
-        offsetXY = "125 7"
-        visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+        height="100"
+        width="250"
+        rectAlignment="LowerCenter"
+        offsetXY="125 7"
+        visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
         />
     <TableLayout class="blackWhisperTableLayout"
-        height = "100"
-        width = "250"
-        rectAlignment = "LowerCenter"
-        offsetXY = "0 7"
-        visibility = "Black"
+        height="100"
+        width="250"
+        rectAlignment="LowerCenter"
+        offsetXY="0 7"
+        visibility="Black"
         />
     <Dropdown
-        class = "whisperDropdown"
+        class="whisperDropdown"
         onValueChanged="whisperColorUI"
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-        itemBackgroundColors = "#000000EE|#000000FF|#00000080|#00000080"
-        scrollbarColors = "#000000EE|#000000FF|#00000080|#00000080"
-        textColor = "#FF0000"
-        checkColor = "#FF0000"
-        arrowColor = "#FFFFFF"
-        dropdownHeight = "500"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        itemBackgroundColors="#000000EE|#000000FF|#00000080|#00000080"
+        scrollbarColors="#000000EE|#000000FF|#00000080|#00000080"
+        textColor="#FF0000"
+        checkColor="#FF0000"
+        arrowColor="#FFFFFF"
+        dropdownHeight="500"
         />
     <Button
-        class = "sendMessageButton"
-        onClick = "sendWhisperUI"
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-        textColor = "#FFFFFF"
-        text = "Send"
-        fontSize = "15"
+        class="sendMessageButton"
+        onClick="sendWhisperUI"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        textColor="#FFFFFF"
+        text="Send"
+        fontSize="15"
         />
     <InputField
-        class = "whisperInput"
-        onEndEdit = "whisperInputUI"
-        placeholder = "Whisper to a player."
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-        textColor = "#FFFFFF"
-        lineType = "MultiLineNewLine"
+        class="whisperInput"
+        onEndEdit="whisperInputUI"
+        placeholder="Whisper to a player."
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        textColor="#FFFFFF"
+        lineType="MultiLineNewLine"
         />
+    <Cell dontUseTableCellBackground="true"/>
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -95,10 +96,10 @@
 </Panel>
 
 <Panel id="aliveDisplay"
-    rectAlignment = "UpperRight"
-    offsetXY = "-300 -10"
-    width = "30"
-    height = "680">
+    rectAlignment="UpperRight"
+    offsetXY="-300 -10"
+    width="30"
+    height="680">
     <VerticalLayout>
         <Panel class="alivePanels"></Panel>
         <Panel class="alivePanels"><Image class="aliveImages" id="AliveImage1" image="empty" ></Image></Panel>
@@ -137,220 +138,212 @@
    <Text class="outline" id="playerPink" color="#F36FCD" fontSize="28"></Text>
 </VerticalLayout>
 
-<HorizontalLayout
-	id = "nomMenu"
-	height = "65"
-	width = "425"
-	rectAlignment = "UpperCenter"
-	offsetXY = "0 -75"
-	childAlignment = "MiddleCenter"
-	spacing = "5"
-	visibility = "Grey"
-    active = "false"
+<VerticalLayout
+	id="nomMenu"
+	height="130"
+	width="250"
+	rectAlignment="UpperCenter"
+	offsetXY="0 -75"
+	childAlignment="MiddleCenter"
+	spacing="5"
+	visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    active="false"
 	>
-    <Button
-        id="greyNominated"
-		onClick = "nominatedDropdown"
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-        textColor = "#FF0000"
-		fontStyle = "Bold"
-		text = "Select color&#xA;to nominate"
-        fontSize = "18"
-    ></Button>
 	<Button
-		class = "tp50"
-		id = "greyVote"
-		onClick = "voteUI"
-		text = "Vote"
-		textColor = "#FFFFFF"
-		fontSize = "40"
+		class="tp50"
+		id="greyVote"
+		onClick="voteUI"
+		text="Vote"
+		textColor="#FFFFFF"
+		fontSize="40"
 	></Button>
 	<Button
-		class = "tp50"
-		id = "greyNominate"
-		onClick = "nominateUI"
-		text = "Become&#xA;Nominator"
-        colors = "#66666680|#666666FF|#66666680|#66666680"
-		textColor = "#0000FF"
-		fontSize = "20"
+		class="tp50"
+		id="greyNominate"
+		onClick="nominateUI"
+		text="Nominate"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+		textColor="#FFFFFF"
+		fontSize="40"
 	></Button>
-</HorizontalLayout>
+</VerticalLayout>
 
 <TableLayout
-	id = "colorSelection"
-	cellSpacing = "2.5"
-	height = "200"
-    width = "425"
-    rectAlignment = "UpperCenter"
-    visibility = "Grey"
-    offsetXY = "0 -150"
-    active = "false"
+	id="colorSelection"
+	cellSpacing="2.5"
+	height="200"
+    width="425"
+    rectAlignment="UpperCenter"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
+    offsetXY="0 -213"
+    active="false"
 	>
 	<Row>
-		<Cell>
+		<Cell class="selectCell" id="selectWhite">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectWhite"
-				text = "White"
-				colors = "#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
+				class="colorSelect"
+                id="colorSelectWhite"
+				text="White"
+				colors="#FFFFFF80|#FFFFFFFF|#C8C8C880|#C8C8C840"
+
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell class="selectCell" id="selectBrown">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectBrown"
-				text = "Brown"
-				colors = "#703A1680|#703A16FF|#703A1680|#703A1680"
+				class="colorSelect"
+                id="colorSelectBrown"
+				text="Brown"
+				colors="#703A1680|#703A16FF|#703A1680|#703A1680"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell class="selectCell" id="selectRed">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectRed"
-				text = "Red"
-				colors = "#DA191780|#DA1917FF|#DA191780|#DA191780"
+				class="colorSelect"
+                id="colorSelectRed"
+				text="Red"
+				colors="#DA191780|#DA1917FF|#DA191780|#DA191780"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell class="selectCell" id="selectOrange">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectOrange"
-				text = "Orange"
-				colors = "#F3631C80|#F3631CFF|#F3631C80|#F3631C80"
+				class="colorSelect"
+                id="colorSelectOrange"
+				text="Orange"
+				colors="#F3631C80|#F3631CFF|#F3631C80|#F3631C80"
 			></Button>
 		</Cell>
-		<Cell>
+		<Cell class="selectCell" id="selectYellow">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectYellow"
-				text = "Yellow"
-				colors = "#E6E42B80|#E6E42BFF|#E6E42B80|#E6E42B80"
+				class="colorSelect"
+                id="colorSelectYellow"
+				text="Yellow"
+				colors="#E6E42B80|#E6E42BFF|#E6E42B80|#E6E42B80"
 			></Button>
 		</Cell>
 	</Row>
     <Row>
-        <Cell>
+        <Cell class="selectCell" id="selectGreen">
             <Button
-                class = "colorSelect"
-                id = "colorSelectGreen"
-                text = "Green"
-                colors = "#30B22A80|#30B22AFF|#30B22A80|#30B22A80"
+                class="colorSelect"
+                id="colorSelectGreen"
+                text="Green"
+                colors="#30B22A80|#30B22AFF|#30B22A80|#30B22A80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell class ="selectCell" id="selectTeal">
             <Button
-                class = "colorSelect"
-                id = "colorSelectTeal"
-                text = "Teal"
-                colors = "#20B09A80|#20B09AFF|#20B09A80|#20B09A80"
+                class="colorSelect"
+                id="colorSelectTeal"
+                text="Teal"
+                colors="#20B09A80|#20B09AFF|#20B09A80|#20B09A80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell class ="selectCell" id="selectBlue">
             <Button
-                class = "colorSelect"
-                id = "colorSelectBlue"
-                text = "Blue"
-                colors = "#1E87FF80|#1E87FFFF|#1E87FF80|#1E87FF80"
+                class="colorSelect"
+                id="colorSelectBlue"
+                text="Blue"
+                colors="#1E87FF80|#1E87FFFF|#1E87FF80|#1E87FF80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell class="selectCell" id="selectPurple">
             <Button
-                class = "colorSelect"
-                id = "colorSelectPurple"
-                text = "Purple"
-                colors = "#9F1FEF80|#9F1FEFFF|#9F1FEF80|#9F1FEF80"
+                class="colorSelect"
+                id="colorSelectPurple"
+                text="Purple"
+                colors="#9F1FEF80|#9F1FEFFF|#9F1FEF80|#9F1FEF80"
             ></Button>
         </Cell>
-        <Cell>
+        <Cell class="selectCell" id="selectPink">
             <Button
-                class = "colorSelect"
-                id = "colorSelectPink"
-                text = "Pink"
-                colors = "#F46FCD80|#F46FCDFF|#F46FCD80|#F46FCD80"
+                class="colorSelect"
+                id="colorSelectPink"
+                text="Pink"
+                colors="#F46FCD80|#F46FCDFF|#F46FCD80|#F46FCD80"
             ></Button>
         </Cell>
     </Row>
     <Row>
-        <Cell id = "selectMagenta">
+        <Cell class= "selectCell" id="selectMagenta" active="false">
             <Button
-                class = "colorSelect"
-                id = "colorSelectMagenta"
-                text = "Magenta"
-                colors = "#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
+                class="colorSelect"
+                id="colorSelectMagenta"
+                text="Magenta"
+                colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
             ></Button>
         </Cell>
-        <Cell id = "selectLavender">
+        <Cell class= "selectCell" id="selectLavender" active="false">
             <Button
-                class = "colorSelect"
-                id = "colorSelectLavender"
-                text = "Lavender"
-                colors = "#967BB680|#967BB6FF|#967BB680|#967BB680"
+                class="colorSelect"
+                id="colorSelectLavender"
+                text="Lavender"
+                colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
             ></Button>
         </Cell>
-        <Cell id = "selectNavy">
+        <Cell class= "selectCell" id="selectNavy" active="false">
             <Button
-                class = "colorSelect"
-                id = "colorSelectNavy"
-                text = "Navy"
-                colors = "#00008080|#000080FF|#00008080|#00008080"
+                class="colorSelect"
+                id="colorSelectNavy"
+                text="Navy"
+                colors="#00008080|#000080FF|#00008080|#00008080"
             ></Button>
         </Cell>
-        <Cell id = "selectCyan">
+        <Cell class= "selectCell" id="selectCyan" active="false">
             <Button
-                class = "colorSelect"
-                id = "colorSelectCyan"
-                text = "Cyan"
-                colors = "#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
+                class="colorSelect"
+                id="colorSelectCyan"
+                text="Cyan"
+                colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
             ></Button>
         </Cell>
-        <Cell id = "selectMint">
+        <Cell class= "selectCell" id="selectMint" active="false">
             <Button
-                class = "colorSelect"
-                id = "colorSelectMint"
-                text = "Mint"
-                colors = "#89C38180|#89C381FF|#89C38180|#89C38180"
+                class="colorSelect"
+                id="colorSelectMint"
+                text="Mint"
+                colors="#89C38180|#89C381FF|#89C38180|#89C38180"
             ></Button>
         </Cell>
     </Row>
 	<Row>
-		<Cell id = "selectLime">
+		<Cell class= "selectCell" id="selectLime" active="false">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectLime"
-				text = "Lime"
-				colors = "#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
+				class="colorSelect"
+                id="colorSelectLime"
+				text="Lime"
+				colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
 			></Button>
 		</Cell>
-		<Cell id = "selectPeach">
+		<Cell class= "selectCell" id="selectPeach" active="false">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectPeach"
-				text = "Peach"
-				colors = "#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
+				class="colorSelect"
+                id="colorSelectPeach"
+				text="Peach"
+				colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
 			></Button>
 		</Cell>
-		<Cell id = "selectCoral">
+		<Cell class= "selectCell" id="selectCoral" active="false">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectCoral"
-				text = "Coral"
-				colors = "#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
+				class="colorSelect"
+                id="colorSelectCoral"
+				text="Coral"
+				colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
 			></Button>
 		</Cell>
-		<Cell id = "selectMaroon">
+		<Cell class= "selectCell" id="selectMaroon" active="false">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectMaroon"
-				text = "Maroon"
-				colors = "#80000080|#800000FF|#80000080|#80000080"
+				class="colorSelect"
+                id="colorSelectMaroon"
+				text="Maroon"
+				colors="#80000080|#800000FF|#80000080|#80000080"
 			></Button>
 		</Cell>
-		<Cell id = "selectSilver">
+		<Cell class= "selectCell" id="selectSilver" active="false">
 			<Button
-				class = "colorSelect"
-                id = "colorSelectSilver"
-				text = "Silver"
-				colors = "#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
+				class="colorSelect"
+                id="colorSelectSilver"
+				text="Silver"
+				colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
 			></Button>
 		</Cell>
 	</Row>
@@ -361,31 +354,31 @@
     id="decalText"
     color="#FFFFFF"
     fontSize="20"
-    height = "138"
-	width = "150"
-    rectAlignment = "LowerCenter"
-    offsetXY = "-325 0"
-    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    height="138"
+	width="150"
+    rectAlignment="LowerCenter"
+    offsetXY="-325 0"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
     >
     Place Decal
 </Text>
 
 <VerticalLayout
-    id = "placeDecalTB"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-	spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
-    active = "true"
+    id="placeDecalTB"
+	height="120"
+	width="150"
+	rectAlignment="LowerCenter"
+	offsetXY="-325 7"
+	childAlignment="MiddleCenter"
+	spacing="5"
+	visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    active="true"
     >
     <Text class="outline" id="decalFiller1" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decalTB"
-        class = "decalDropdown"
+        id="decalTB"
+        class="decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Washerwoman</Option>
@@ -419,21 +412,21 @@
 </VerticalLayout>
 
 <VerticalLayout
-    id = "placeDecalBM"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-    spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
-    active = "false"
+    id="placeDecalBM"
+	height="120"
+	width="150"
+	rectAlignment="LowerCenter"
+	offsetXY="-325 7"
+	childAlignment="MiddleCenter"
+    spacing="5"
+	visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    active="false"
     >
     <Text class="outline" id="decalFiller2" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decalBM"
-        class = "decalDropdown"
+        id="decalBM"
+        class="decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Grandmother</Option>
@@ -470,21 +463,21 @@
 </VerticalLayout>
 
 <VerticalLayout
-    id = "placeDecalSV"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-	spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
-    active = "false"
+    id="placeDecalSV"
+	height="120"
+	width="150"
+	rectAlignment="LowerCenter"
+	offsetXY="-325 7"
+	childAlignment="MiddleCenter"
+	spacing="5"
+	visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    active="false"
     >
     <Text class="outline" id="decalFiller3" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decalSV"
-        class = "decalDropdown"
+        id="decalSV"
+        class="decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Clockmaker</Option>
@@ -521,21 +514,21 @@
 </VerticalLayout>
 
 <VerticalLayout
-    id = "placeDecalCU"
-	height = "120"
-	width = "150"
-	rectAlignment = "LowerCenter"
-	offsetXY = "-325 7"
-	childAlignment = "MiddleCenter"
-    spacing = "5"
-	visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
-    active = "false"
+    id="placeDecalCU"
+	height="120"
+	width="150"
+	rectAlignment="LowerCenter"
+	offsetXY="-325 7"
+	childAlignment="MiddleCenter"
+    spacing="5"
+	visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+    active="false"
     >
     <Text class="outline" id="decalFiller4" color="#FFFFFF" fontSize="20"></Text>
 
     <Dropdown
-        id = "decalCU"
-        class = "decalDropdown"
+        id="decalCU"
+        class="decalDropdown"
         >
         <Option selected="true">None</Option>
         <Option>Apprentice</Option>
@@ -629,227 +622,227 @@
 </VerticalLayout>
 
 <TableLayout
-	id = "sitTable11"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
+	id="sitTable11"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
+    columnWidths="90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit11Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit11Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 </TableLayout>
 
 <TableLayout
-	id = "sitTable12"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
+	id="sitTable12"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
+    columnWidths="90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit12Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit12Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit12Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit12Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 </TableLayout>
 
 <TableLayout
-	id = "sitTable13"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
+	id="sitTable13"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
+    columnWidths="90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit13Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit13Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit13Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit13Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit13Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit13Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 </TableLayout>
 
 <TableLayout
-	id = "sitTable14"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
-    columnWidths = "90 90 90 90 90"
+	id="sitTable14"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
+    columnWidths="90 90 90 90 90"
 	>
     <Row></Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit14Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit14Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit14Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit14Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit14Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit14Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit14Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit14Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 </TableLayout>
 <TableLayout
-	id = "sitTable15"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable15"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit15Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit15Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit15Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit15Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit15Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit15Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit15Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit15Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit15Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit15Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -858,72 +851,72 @@
 </TableLayout>
 
 <TableLayout
-	id = "sitTable16"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable16"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit16Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
+                id="sit16Lime"
+                class="sitButton"
+                text="Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit16Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit16Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit16Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit16Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit16Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit16Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit16Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit16Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit16Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit16Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -932,80 +925,80 @@
 </TableLayout>
 
 <TableLayout
-	id = "sitTable17"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable17"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit17Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
+                id="sit17Lime"
+                class="sitButton"
+                text="Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit17Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
+                id="sit17Peach"
+                class="sitButton"
+                text="Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit17Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit17Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit17Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit17Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit17Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit17Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit17Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit17Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit17Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit17Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -1014,88 +1007,88 @@
 </TableLayout>
 
 <TableLayout
-	id = "sitTable18"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable18"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit18Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
+                id="sit18Lime"
+                class="sitButton"
+                text="Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit18Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
+                id="sit18Peach"
+                class="sitButton"
+                text="Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit18Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
+                id="sit18Coral"
+                class="sitButton"
+                text="Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
                 >
             </Button>
         </Cell>
-        <Cell active = "false"></Cell>
-        <Cell active = "false"></Cell>
+        <Cell active="false"></Cell>
+        <Cell active="false"></Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit18Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit18Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit18Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit18Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit18Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit18Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit18Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit18Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit18Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit18Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -1104,96 +1097,96 @@
 </TableLayout>
 
 <TableLayout
-	id = "sitTable19"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable19"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit19Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
+                id="sit19Lime"
+                class="sitButton"
+                text="Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit19Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
+                id="sit19Peach"
+                class="sitButton"
+                text="Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit19Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
+                id="sit19Coral"
+                class="sitButton"
+                text="Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit19Maroon"
-                class = "sitButton"
-                text = "Sit in Maroon"
+                id="sit19Maroon"
+                class="sitButton"
+                text="Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
                 >
             </Button>
         </Cell>
-        <Cell active = "false" ></Cell>
+        <Cell active="false" ></Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit19Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit19Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit19Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit19Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit19Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit19Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit19Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit19Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit19Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit19Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -1202,104 +1195,104 @@
 </TableLayout>
 
 <TableLayout
-	id = "sitTable20"
-	cellSpacing = "0"
-	height = "100"
-    width = "450"
-    rectAlignment = "LowerRight"
-    visibility = "Grey"
-    offsetXY = "-100 7"
-    active = "false"
+	id="sitTable20"
+	cellSpacing="0"
+	height="100"
+    width="450"
+    rectAlignment="LowerRight"
+    visibility="Grey"
+    offsetXY="-100 7"
+    active="false"
 	>
     <Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit20Lime"
-                class = "sitButton"
-                text = "Sit in Lime"
+                id="sit20Lime"
+                class="sitButton"
+                text="Sit in Lime"
                 colors="#B8F16180|#B8F161FF|#B8F16180|#B8F16180"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit20Peach"
-                class = "sitButton"
-                text = "Sit in Peach"
+                id="sit20Peach"
+                class="sitButton"
+                text="Sit in Peach"
                 colors="#F1D4A280|#F1D4A2FF|#F1D4A280|#F1D4A280"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit20Coral"
-                class = "sitButton"
-                text = "Sit in Coral"
+                id="sit20Coral"
+                class="sitButton"
+                text="Sit in Coral"
                 colors="#E29A8A80|#E29A8AFF|#E29A8A80|#E29A8A80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit20Maroon"
-                class = "sitButton"
-                text = "Sit in Maroon"
+                id="sit20Maroon"
+                class="sitButton"
+                text="Sit in Maroon"
                 colors="#80000080|#800000FF|#80000080|#80000080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-                id = "sit20Silver"
-                class = "sitButton"
-                text = "Sit in Silver"
+                id="sit20Silver"
+                class="sitButton"
+                text="Sit in Silver"
                 colors="#BEBEBE80|#BEBEBEFF|#BEBEBE80|#BEBEBE80"
                 >
             </Button>
         </Cell>
     </Row>
 	<Row>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit20Magenta"
-                class = "sitButton"
-        		text = "Sit in Magenta"
+        		id="sit20Magenta"
+                class="sitButton"
+        		text="Sit in Magenta"
                 colors="#FF007F80|#FF007FFF|#FF007F80|#FF007F80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit20Lavender"
-        		class = "sitButton"
-        		text = "Sit in Lavender"
+        		id="sit20Lavender"
+        		class="sitButton"
+        		text="Sit in Lavender"
                 colors="#967BB680|#967BB6FF|#967BB680|#967BB680"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit20Navy"
-        		class = "sitButton"
-        		text = "Sit in Navy"
+        		id="sit20Navy"
+        		class="sitButton"
+        		text="Sit in Navy"
                 colors="#00008080|#000080FF|#00008080|#00008080"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit20Cyan"
-        		class = "sitButton"
-        		text = "Sit in Cyan"
+        		id="sit20Cyan"
+        		class="sitButton"
+        		text="Sit in Cyan"
                 colors="#49D5FD80|#49D5FDFF|#49D5FD80|#49D5FD80"
                 >
             </Button>
         </Cell>
-        <Cell dontUseTableCellBackground = "true">
+        <Cell dontUseTableCellBackground="true">
             <Button
-        		id = "sit20Mint"
-        		class = "sitButton"
-        		text = "Sit in Mint"
+        		id="sit20Mint"
+        		class="sitButton"
+        		text="Sit in Mint"
                 colors="#89C38180|#89C381FF|#89C38180|#89C38180"
                 >
             </Button>
@@ -1308,70 +1301,70 @@
 </TableLayout>
 
 <HorizontalLayout
-	id = "teamMenu"
-	height = "37.5"
-	width = "150"
-	offsetXY = "325 58"
-	rectAlignment = "LowerCenter"
-	childAlignment = "MiddleCenter"
-	spacing = "0"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+	id="teamMenu"
+	height="37.5"
+	width="150"
+	offsetXY="325 58"
+	rectAlignment="LowerCenter"
+	childAlignment="MiddleCenter"
+	spacing="0"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
 	>
 	<Image
-		id = "Clubs"
-		image = "Club"
-		tooltip = "Join the Clubs team to talk privately"
-		tooltipPosition = "Above"
-		onClick = "joinTeamUI"
+		id="Clubs"
+		image="Club"
+		tooltip="Join the Clubs team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
 	></Image>
 		<Image
-		id = "Spades"
-		image = "Spade"
-		tooltip = "Join the Spades team to talk privately"
-		tooltipPosition = "Above"
-		onClick = "joinTeamUI"
+		id="Spades"
+		image="Spade"
+		tooltip="Join the Spades team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
 	></Image>
 		<Image
-		id = "Diamonds"
-		image = "Diamond"
-		tooltip = "Join the Diamonds team to talk privately"
-		tooltipPosition = "Above"
-		onClick = "joinTeamUI"
+		id="Diamonds"
+		image="Diamond"
+		tooltip="Join the Diamonds team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
 	></Image>
 		<Image
-		id = "Hearts"
-		image = "Heart"
-		tooltip = "Join the Hearts team to talk privately"
-		tooltipPosition = "Above"
-		onClick = "joinTeamUI"
+		id="Hearts"
+		image="Heart"
+		tooltip="Join the Hearts team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
 	></Image>
 </HorizontalLayout>
 
 <Button
-    height = "50"
-    width = "150"
-    id = "leaveTeam"
-    onClick = "leaveTeamUI"
-    text = "Leave Team"
-    colors = "#66666680|#666666FF|#66666680|#66666680"
-    textColor = "#FFFFFF"
-	rectAlignment = "LowerCenter"
-    fontSize = "15"
-    offsetXY = "325 7"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    height="50"
+    width="150"
+    id="leaveTeam"
+    onClick="leaveTeamUI"
+    text="Leave Team"
+    colors="#66666680|#666666FF|#66666680|#66666680"
+    textColor="#FFFFFF"
+	rectAlignment="LowerCenter"
+    fontSize="15"
+    offsetXY="325 7"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
 ></Button>
 
 <TableLayout
-    id = "whisperUI5"
-    class = "whisperTableLayout"
+    id="whisperUI5"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -1383,16 +1376,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -1400,754 +1393,16 @@
 </TableLayout>
 
 <TableLayout
-    id = "whisperUI6"
-    class = "whisperTableLayout"
+    id="whisperUI6"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI7"
-    class = "whisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI8"
-    class = "whisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI9"
-    class = "whisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI10"
-    class = "whisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI11"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI12"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI13"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI14"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI15"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI16"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            <Option>Lime</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI17"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            <Option>Lime</Option>
-            <Option>Peach</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI18"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            <Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI19"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            <Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            <Option>Maroon</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "whisperUI20"
-    class = "whisperTableLayout"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
-            <Option>Teal</Option>
-            <Option>Blue</Option>
-            <Option>Purple</Option>
-            <Option>Pink</Option>
-            <Option>Magenta</Option>
-            <Option>Lavender</Option>
-            <Option>Navy</Option>
-            <Option>Cyan</Option>
-            <Option>Mint</Option>
-            <Option>Lime</Option>
-            <Option>Peach</Option>
-            <Option>Coral</Option>
-            <Option>Maroon</Option>
-            <Option>Silver</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "blackWhisperUI5"
-    class="blackWhisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
-                >
-            <Option selected="true">Select a Color</Option>
-            <Option>Black</Option>
-            <Option>White</Option>
-            <Option>Brown</Option>
-            <Option>Red</Option>
-            <Option>Orange</Option>
-            <Option>Yellow</Option>
-            </Dropdown>
-        </Cell>
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Button class = "sendMessageButton"></Button>
-        </Cell>
-    </Row>
-    <Row preferredHeight = "70">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
-            >
-            <InputField class="whisperInput"></InputField>
-        </Cell>
-    </Row>
-</TableLayout>
-
-<TableLayout
-    id = "blackWhisperUI6"
-    class="blackWhisperTableLayout"
-    >
-    <Row preferredHeight = "30">
-        <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
-            >
-            <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2160,16 +1415,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2177,16 +1432,16 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI7"
-    class="blackWhisperTableLayout"
+    id="whisperUI7"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2200,16 +1455,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2217,16 +1472,16 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI8"
-    class="blackWhisperTableLayout"
+    id="whisperUI8"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2241,16 +1496,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2258,16 +1513,16 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI9"
-    class="blackWhisperTableLayout"
+    id="whisperUI9"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2283,16 +1538,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2300,16 +1555,16 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI10"
-    class="blackWhisperTableLayout"
+    id="whisperUI10"
+    class="whisperTableLayout"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2326,16 +1581,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2343,16 +1598,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI11"
-    class="blackWhisperTableLayout"
+    id="whisperUI11"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2370,16 +1626,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2387,16 +1643,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI12"
-    class="blackWhisperTableLayout"
+    id="whisperUI12"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2415,16 +1672,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2432,16 +1689,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI13"
-    class="blackWhisperTableLayout"
+    id="whisperUI13"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2461,16 +1719,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2478,16 +1736,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI14"
-    class="blackWhisperTableLayout"
+    id="whisperUI14"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2508,16 +1767,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2525,16 +1784,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI15"
-    class="blackWhisperTableLayout"
+    id="whisperUI15"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2556,16 +1816,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2573,16 +1833,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI16"
-    class="blackWhisperTableLayout"
+    id="whisperUI16"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2605,16 +1866,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2622,16 +1883,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI17"
-    class="blackWhisperTableLayout"
+    id="whisperUI17"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2655,16 +1917,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2672,16 +1934,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI18"
-    class="blackWhisperTableLayout"
+    id="whisperUI18"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2706,16 +1969,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2723,16 +1986,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI19"
-    class="blackWhisperTableLayout"
+    id="whisperUI19"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2758,16 +2022,16 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2775,16 +2039,17 @@
 </TableLayout>
 
 <TableLayout
-    id = "blackWhisperUI20"
-    class="blackWhisperTableLayout"
+    id="whisperUI20"
+    class="whisperTableLayout"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
     >
-    <Row preferredHeight = "30">
+    <Row preferredHeight="30">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
             <Dropdown
-                class = "whisperDropdown"
+                class="whisperDropdown"
                 >
             <Option selected="true">Select a Color</Option>
             <Option>Black</Option>
@@ -2811,16 +2076,744 @@
             </Dropdown>
         </Cell>
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "1"
+            dontUseTableCellBackground="true"
+            columnSpan="1"
             >
-            <Button class = "sendMessageButton"></Button>
+            <Button class="sendMessageButton"></Button>
         </Cell>
     </Row>
-    <Row preferredHeight = "70">
+    <Row preferredHeight="70">
         <Cell
-            dontUseTableCellBackground = "true"
-            columnSpan = "2"
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI5"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI6"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI7"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI8"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI9"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI10"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI11"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI12"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI13"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI14"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI15"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI16"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            <Option>Lime</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI17"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            <Option>Lime</Option>
+            <Option>Peach</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI18"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            <Option>Lime</Option>
+            <Option>Peach</Option>
+            <Option>Coral</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI19"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            <Option>Lime</Option>
+            <Option>Peach</Option>
+            <Option>Coral</Option>
+            <Option>Maroon</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
+    id="blackWhisperUI20"
+    class="blackWhisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            <Option>White</Option>
+            <Option>Brown</Option>
+            <Option>Red</Option>
+            <Option>Orange</Option>
+            <Option>Yellow</Option>
+            <Option>Green</Option>
+            <Option>Teal</Option>
+            <Option>Blue</Option>
+            <Option>Purple</Option>
+            <Option>Pink</Option>
+            <Option>Magenta</Option>
+            <Option>Lavender</Option>
+            <Option>Navy</Option>
+            <Option>Cyan</Option>
+            <Option>Mint</Option>
+            <Option>Lime</Option>
+            <Option>Peach</Option>
+            <Option>Coral</Option>
+            <Option>Maroon</Option>
+            <Option>Silver</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
             >
             <InputField class="whisperInput"></InputField>
         </Cell>
@@ -2828,31 +2821,31 @@
 </TableLayout>
 
 <InputField
-    id = "tableTextUI"
-    onEndEdit = "setTableTextUI"
-    placeholder = "Set a message on the table."
-    lineType = "MultiLineNewLine"
-    colors = "#66666680|#666666FF|#66666680|#66666680"
-    textColor = "#FFFFFF"
-    visibility = "White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
-    height = "100"
-    width = "250"
-    rectAlignment = "LowerCenter"
+    id="tableTextUI"
+    onEndEdit="setTableTextUI"
+    placeholder="Set a message on the table."
+    lineType="MultiLineNewLine"
+    colors="#66666680|#666666FF|#66666680|#66666680"
+    textColor="#FFFFFF"
+    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    height="100"
+    width="250"
+    rectAlignment="LowerCenter"
     offsetXY="-125 7"
-    characterLimit = "500"
+    characterLimit="500"
     >
 </InputField>
 
 <Button
-    id = "toggleUIButton"
-    onClick = "toggleUI"
-    text = "Toggle UI"
-    height = "63"
-    width = "63"
-    rectAlignment = "LowerRight"
-    offsetXY = "-9 70"
-    colors = "#66666680|#666666FF|#66666680|#66666680"
-    textColor = "#FFFFFF"
-    visibility = "White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
+    id="toggleUIButton"
+    onClick="toggleUI"
+    text="Toggle UI"
+    height="63"
+    width="63"
+    rectAlignment="LowerRight"
+    offsetXY="-9 70"
+    colors="#66666680|#666666FF|#66666680|#66666680"
+    textColor="#FFFFFF"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
     >
 </Button>

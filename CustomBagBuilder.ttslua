@@ -185,10 +185,10 @@ function spawnSet(characters, name)
         end
     end
 
-    spawnBag({Nickname = name .. ': Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 111 + TABLE_OFFSET}, reminder = false})
-    spawnBag({Nickname = name .. ': Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 111 + TABLE_OFFSET}, reminder = false})
-    spawnBag({Nickname = name .. ': Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 111 + TABLE_OFFSET}, reminder = false})
-    spawnBag({Nickname = name .. ': Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 111 + TABLE_OFFSET}, reminder = false})
-    spawnBag({Nickname = name .. ': Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 111 + TABLE_OFFSET}, reminder = false})
-    spawnBag({Nickname = name .. ': Reminder Tokens', Description = '', ColorDiffuse = {r = 241/255, g = 212/255, b = 162/255}, characters = reminderChars, position = {-10, 0.82, 111 + TABLE_OFFSET}, reminder = true})
+    spawnBag({Nickname = name .. ': Townsfolk', Description = '', ColorDiffuse = {r = 36/255, g = 35/255, b = 250/255}, characters = chars.Townsfolk, position = {10, 0.82, 111.5 + TABLE_OFFSET}, reminder = false})
+    spawnBag({Nickname = name .. ': Outsiders', Description = '', ColorDiffuse = {r = 33/255, g = 177/255, b = 155/255}, characters = chars.Outsider, position = {6, 0.82, 111.5 + TABLE_OFFSET}, reminder = false})
+    spawnBag({Nickname = name .. ': Minions', Description = '', ColorDiffuse = {r = 244/255, g = 100/255, b = 29/255}, characters = chars.Minion, position = {2, 0.82, 111.5 + TABLE_OFFSET}, reminder = false})
+    spawnBag({Nickname = name .. ': Demons', Description = '', ColorDiffuse = {r = 219/255, g = 26/255, b = 24/255}, characters = chars.Demon, position = {-2, 0.82, 111.5 + TABLE_OFFSET}, reminder = false})
+    spawnBag({Nickname = name .. ': Travelers', Description = '', ColorDiffuse = {r = 0/255, g = 213/255, b = 47/255}, characters = chars.Traveler, position = {-6, 0.82, 111.5 + TABLE_OFFSET}, reminder = false})
+    spawnBag({Nickname = name .. ': Reminder Tokens', Description = '', ColorDiffuse = {r = 241/255, g = 212/255, b = 162/255}, characters = reminderChars, position = {-10, 0.82, 111.5 + TABLE_OFFSET}, reminder = true})
 end

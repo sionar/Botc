@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.2.0'
+VERSION = '19.3.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -23,6 +23,7 @@ FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123
 COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
+BG_POS = {188, 141, -395}
 
 #include GUIDs.ttslua
 
@@ -61,7 +62,7 @@ voteLock = {}
 voteButtonsOn = {}
 tokenTable = {}
 decalTable = {}
-bgPos = nil
+
 
 for k,v in pairs(COLORS_ALL) do
     lifeTokens[v] = {object = nil, vote = nil}
@@ -205,8 +206,6 @@ function onLoad(saveString)
         end
     end
 
-    bgPos = getObjectFromGUID(BG_OBJ_GUID).getPosition()
-
     if not started then
         notes = START_MESSAGE
         setNotes(notes)
@@ -221,7 +220,7 @@ function onLoad(saveString)
     refreshUI()
     showExtensionUI()
     Wait.time(refreshObjects,5)
-    Wait.time(refreshBackground,2)
+    Wait.time(refreshBackground,3)
     Wait.time(refreshNotes,1,-1)
     Wait.time(updateTokenStatus,2,-1)
 end
@@ -314,8 +313,8 @@ function refreshBackground()
     local obj = getObjectFromGUID(BG_OBJ_GUID)
     if obj ~= nil then
         obj.setLock(false)
-        Wait.frames(function() obj.setLock(true) end, 5)
-        Wait.frames(function() obj.setPosition(bgPos) end, 2)
+        Wait.time(function() obj.setLock(true) end, 0.5)
+        Wait.time(function() obj.setPosition(BG_POS) end, 2)
     end
 end
 
@@ -600,10 +599,8 @@ function resizeTable()
 
     if tableSize > 10 and tableSize < 15 then
         UI.setAttribute('sitTable', 'width', 100*(tableSize-10))
-        UI.setAttribute('colorSelection', 'height', 150)
     else
         UI.setAttribute('sitTable', 'width', 500)
-        UI.setAttribute('colorSelection', 'height', 200)
     end
     for i = 1, 20 do
     	if i <= tableSize then
@@ -698,7 +695,7 @@ function resizeTable()
                     lifeTokens[COLORS_ALL[i]].vote.setPositionSmooth(radius(55, angle[COLORS_ALL[i]], 1.43))
                 end
             end
-
+            UI.setAttribute('select'..COLORS_ALL[i],'active','true')
             if i <= 10 then
                 Player[COLORS_ALL[i]].setHandTransform({position = radius(82,angle[COLORS_ALL[i]], 1), rotation = {0, angle[COLORS_ALL[i]] + 180, 0}, scale = {14,5,6.5}})
             end
@@ -719,8 +716,9 @@ function resizeTable()
                         obj.setRotationSmooth({180, angle[COLORS_ALL[i]], 180})
                     end
                 end
-                UI.setAttribute('select'..COLORS_ALL[i],'active','true')
+
             end
+
         else
             break
     	end
@@ -761,7 +759,8 @@ function resizeTable()
         if lifeTokens[COLORS_ALL[i]].vote ~= nil then
             voteTokenBag.putObject(lifeTokens[COLORS_ALL[i]].vote)
         end
-
+        UI.setAttribute('cell'..COLORS_ALL[i],'active','false')
+        UI.setAttribute('select'..COLORS_ALL[i],'active','false')
         if i <= 10 then
             Player[COLORS_ALL[i]].setHandTransform({position = {0,1000,0}, scale = {0,0,0}})
             if Player[COLORS_ALL[i]].seated then
@@ -769,8 +768,6 @@ function resizeTable()
             end
         end
         if i > 10 then
-            UI.setAttribute('cell'..COLORS_ALL[i],'active','false')
-            UI.setAttribute('select'..COLORS_ALL[i],'active','false')
             if players[COLORS_ALL[i]] ~= nil then
                 sitUI(players[COLORS_ALL[i]], _, 'sit'..tableSize..COLORS_ALL[i])
             end
@@ -2849,11 +2846,15 @@ function nominatedDropdown(player, value, id)
     if not found or found ~= currentNominator then
         return
     end
+    if not inTable(found, COLORS) then
+        found = 'Grey'
+    end
 
 	if (colorTable) then --colorSelection is visible
 		UI.setAttribute('colorSelection','active','false')
 		colorTable = false
 	else --colorSelection is NOT visible
+		UI.setAttribute('colorSelection','visibility',found)
 		UI.setAttribute('colorSelection','active','true')
 		colorTable = true
 	end
@@ -2876,6 +2877,7 @@ function nominateUI(player, value, id)
     local callParams = {}
     callParams.nominator = found
     nominate(callParams)
+    nominatedDropdown(player, value, id)
 end
 
 function nominatedUI(player, value, id)
@@ -2893,7 +2895,7 @@ function nominatedUI(player, value, id)
         return
     end
     updatePlayers()
-    if players[target] == nil or found ~= currentNominator then
+    if found ~= currentNominator then
         return
     end
     local callParams = {}

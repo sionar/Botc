@@ -5,10 +5,10 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.0'
+VERSION = '1.4.1'
 BUTTON_W = 500
 BUTTON_H = 400
-FONT_SIZE = 150
+FONT_SIZE = 120
 #include GUIDs.ttslua
 BUTTON_COLOR = {0,0,0}
 BUTTON_FONT_COLOR = {1,1,1}
@@ -166,10 +166,14 @@ function refreshUI()
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'deleteBackground', function_owner = self, label = 'Delete\nBackground', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-0.85,0.2,0.9}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Delete the background objects'}
+            position = {-1.6,0.2,0.9}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Delete the background objects (Cannot be restored).'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'refreshBackground', function_owner = Global, label = 'Refresh\nBackground', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
+            position = {0,0.2,0.9}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Refresh the Background (If it looks glitchy).'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callReset', function_owner = self, label = 'Reset\nTable', font_color = stringColorToRGB('White'), color = stringColorToRGB('Red'),
-            position = {0.85,0.2,0.9}, width = 800, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Reset the game.'}
+            position = {1.6,0.2,0.9}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Reset the game.'}
     self.createButton(buttonParam)
 end

@@ -60,8 +60,11 @@ end
 
 function moveBoard()
     local modName = Global.getVar('MOD_NAME')
+    local TABLE_OFFSET, STORYTELLER_TABLE_DIST
     if modName == 'Blood on the Clocktower' then
-        self.setPositionSmooth({0,1.2,97})
+        TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+        STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
+        self.setPositionSmooth({0,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 7})
         self.setRotationSmooth({0,0,0})
         self.setLock(true)
     end

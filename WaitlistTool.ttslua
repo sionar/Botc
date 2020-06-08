@@ -6,7 +6,6 @@ Made by Sionar
 
 ------------------Constants
 VERSION = '1.2.6'
-START_POS = {50,1.15,46}
 COLOR_TABLE = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Teal', 'Brown'}
 ROW_S = -1
 ROW_W = 0.25
@@ -73,9 +72,10 @@ end
 
 function moveBoard()
     local global_name = Global.getVar('MOD_NAME')
-    print(global_name)
+    local TABLE_OFFSET
     if global_name == 'Blood on the Clocktower' then
-        self.setPositionSmooth(START_POS)
+        TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+        self.setPositionSmooth({50,1.15, TABLE_OFFSET + 85})
         self.setRotationSmooth({0,180,0})
         self.setLock(true)
     end

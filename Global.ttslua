@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.3.0'
+VERSION = '19.3.2'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -313,8 +313,8 @@ function refreshBackground()
     local obj = getObjectFromGUID(BG_OBJ_GUID)
     if obj ~= nil then
         obj.setLock(false)
-        Wait.time(function() obj.setLock(true) end, 0.5)
-        Wait.time(function() obj.setPosition(BG_POS) end, 2)
+        Wait.frames(function() obj.setPosition(BG_POS) end, 2)
+        Wait.frames(function() obj.setLock(true) end, 5)
     end
 end
 
@@ -2830,6 +2830,9 @@ function voteUI(player, value, id)
     if not found then
         return
     end
+    if lifeTokens[found].object == nil then
+        return
+    end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local scale = clock.getScale()
     if scale.x == 0 then
@@ -2865,6 +2868,9 @@ function nominateUI(player, value, id)
     if not found then
         return
     end
+    if lifeTokens[found].object == nil then
+        return
+    end
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     if clockControls == nil then
         return
@@ -2884,6 +2890,9 @@ function nominatedUI(player, value, id)
     local found = getPlayer(player)
     local target = UI.getAttribute(id, 'text')
     if not found then
+        return
+    end
+    if lifeTokens[target].object == nil then
         return
     end
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)

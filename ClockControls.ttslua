@@ -618,7 +618,6 @@ function hideGrimoire()
     if zoneObj ~= nil then
         zoneObj.setScale(BLACK_ZONE.scale)
     end
-    scriptZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
     self.editButton({
         index          = 5,
         label          = 'Show\nGrimoire',

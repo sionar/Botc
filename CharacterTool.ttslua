@@ -64,7 +64,7 @@ function moveBoard()
     if modName == 'Blood on the Clocktower' then
         TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
         STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
-        self.setPositionSmooth({0,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 7})
+        self.setPositionSmooth({0,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 8})
         self.setRotationSmooth({0,0,0})
         self.setLock(true)
     end
@@ -343,7 +343,7 @@ function random(clickedObject, playerColor)
     local townIdx = 1
     while dist[1] > 0 do
         currentChar = unusedChars.Townsfolk[townIdx]
-        if currentChar == 'Balloonist' and dist[1] == 1 then
+        if currentChar == 'Balloonist' or currentChar == 'Chieftain' and dist[1] == 1 then
             townIdx = townIdx + 1
             currentChar = unusedChars.Townsfolk[townIdx]
         end
@@ -467,7 +467,7 @@ function import()
 end
 
 function checkValid(char, numLockedOutsiders)
-    if char == 'Fang_Gu' or char == 'Godfather' or chat == 'Balloonist' then
+    if char == 'Fang_Gu' or char == 'Godfather' or char == 'Balloonist' or char == 'Chieftain' or char == 'Eclipse' then
         if dist[1] == 0 then
             return false
         end
@@ -484,7 +484,7 @@ function checkValid(char, numLockedOutsiders)
 end
 
 function adjustOutsiders(char)
-    if char == 'Fang_Gu' or char == 'Godfather' or char == 'Balloonist' then
+    if char == 'Fang_Gu' or char == 'Godfather' or char == 'Balloonist' or char == 'Chieftain' or char == 'Eclipse' then
         dist[2] = dist[2] + 1
         dist[1] = dist[1] - 1
 	elseif char == 'Vigormortis' then

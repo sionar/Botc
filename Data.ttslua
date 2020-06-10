@@ -117,6 +117,7 @@ OTHER =
     'Witch',
     'Cerenovus',
     'Madness',
+    'Sane',
     'Pit_Hag',
     'Assassin',
     'Counterfeiter',
@@ -124,6 +125,7 @@ OTHER =
     'Spy',
     'Exorcist',
     'Lunatic',
+    'Lunatic_InfoD',
     'Imp',
     'Pukka',
     'Zombuul',
@@ -214,7 +216,7 @@ CHARACTERS =
     is = {Type = 'Townsfolk', Ability = false, Prompt = '', Description = ''},
     has_not = {Type = 'Demon', Ability = false, Prompt = '', Description = ''},
     is_not = {Type = 'Demon', Ability = false, Prompt = '', Description = ''},
-    Demon_Info = {Type = 'Demon', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
+    Demon_Info = {Type = 'Demon', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3', Description = ''},
     Washerwoman = {Type = 'Townsfolk', Ability = false, Prompt = 'Either P1 or P2 is a P3.', Description = 'You start knowing that 1 of 2 players is a particular Townsfolk.'},
     Librarian = {Type = 'Townsfolk', Ability = false, Prompt = 'Either P1 or P2 is a P3.', Description = 'You start knowing that 1 of 2 players is a particular Outsider. (Or that zero are in play)'},
     Investigator = {Type = 'Townsfolk', Ability = false, Prompt = 'Either P1 or P2 is a P3.', Description = 'You start knowing that 1 of 2 players is a particular Minion.'},
@@ -257,7 +259,7 @@ CHARACTERS =
     Moonchild = {Type = 'Outsider', Ability = false, Prompt = '', Description = 'When you learn that you died, choose 1 alive player: if good, they die tonight.'},
     Goon = {Type = 'Outsider', Ability = false, Prompt = 'Your alignment is now P1.', Description = 'Each night, the 1st player to choose you with their ability is drunk until dusk. You become their alignment.'},
     Lunatic = {Type = 'Outsider', Ability = false, Prompt = 'Choose who to kill.', Description = 'You think you are a Demon, but your abilities malfunction. The Demon knows who you are & who you attack.'},
-    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3 P4.', Description = ''},
+    Lunatic_InfoA = {Type = 'Outsider', Ability = false, Prompt = 'Demon: P1, Minions: P2 P3 P4', Description = ''},
     Lunatic_InfoB = {Type = 'Outsider', Ability = false, Prompt = 'Three characters not in the game: P1, P2, P3.', Description = ''},
     Lunatic_InfoC = {Type = 'Outsider', Ability = false, Prompt = 'P1 is a Lunatic. You are the P2.', Description = ''},
     Lunatic_InfoD = {Type = 'Outsider', Ability = false, Prompt = 'Tonight, the Lunatic targeted P1 P2 P3', Description = ''},
@@ -290,6 +292,7 @@ CHARACTERS =
     Witch = {Type = 'Minion', Ability = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player: if they nominate tomorrow, they die. If just 3 players live, you lose this ability.'},
     Cerenovus = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night, choose a player & a good character: they are "mad" they are this character tomorrow, or might be executed.'},
     Madness = {Type = 'Status', Ability = false, Prompt = 'You are "mad" about being a P1.', Description = ''},
+    Sane = {Type = 'Status', Ability = false, Prompt = 'You are no longer "mad".', Description = ''},
     Pit_Hag = {Type = 'Minion', Ability = false, Prompt = 'Choose a player and a character.', Description = 'Each night*, choose a player & a character they become (if not-in-play). If a Demon is made, deaths tonight are arbitrary.'},
     Fang_Gu = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. The 1st Outsider chosen becomes an evil Fang Gu & you die instead. [+1 Outsider]'},
     Vigormortis = {Type = 'Demon', Ability = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose a player: they die. Minions you kill keep their ability & poison 1 Townsfolk neighbor. [-1 Outsider].'},
@@ -892,6 +895,7 @@ REMINDER_TOKENS = {
     },
     Reveler = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013248468/FFCB7761F9C3D2F9C82CF64FAF48272D5171A9A3/'},
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/1192838843107006330/496A867F251738C23DD436B70863EE347CB4E549/'},
     },
     Wicked = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013193326/B6F11917A6FCA9D5553A139514DF00A51D8B43C6/'},
@@ -915,6 +919,7 @@ REMINDER_TOKENS = {
     },
     Secondhand = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013194508/6107BC75ACADC1E59A535FD3994065FF4860AF0D/'},
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013186414/4B3197F4EF562A1342B3A5B72A36ACE011AD902F/'},
     },
     Retrogradus = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013187676/BE3EEE0E0B08EF9D0A2D44BC6BCD41911B3C42D9/'},
@@ -934,6 +939,7 @@ REMINDER_TOKENS = {
     Wendigo = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013187676/BE3EEE0E0B08EF9D0A2D44BC6BCD41911B3C42D9/'},
         {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013195523/CB1601DA5D14B47DFFA60C81BA7B29F1FD30A346/'},
+        {num = 3, url = 'http://cloud-3.steamusercontent.com/ugc/1057730731013186414/4B3197F4EF562A1342B3A5B72A36ACE011AD902F/'},
     },
     Cartographer = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/788618668507704877/9E4601F873EBD5BE12058C3D44494B61C3F465FB/'},

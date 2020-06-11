@@ -139,6 +139,7 @@ function toggleClock(vm)
     local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
     local started = Global.getVar('started')
     local tableSize = Global.getVar('tableSize')
+    local lifeTokens = Global.getTable('lifeTokens')
 
     if clock.getScale().x ~= 0 then --if clock is CURRENTLY up
         purpleHand.setScale({0, 1, 0})
@@ -188,14 +189,8 @@ function toggleClock(vm)
         clock.setScale({28, 1, 28})
         clock.setPosition({0, 1, 0 + TABLE_OFFSET})
 
-        if tableSize <= 10 then
-            UI.setAttribute('nomMenu', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
-        else
-            UI.setAttribute('nomMenu', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        end
         UI.setAttribute('nomMenu', 'active', 'true')
         UI.setAttribute('colorSelection', 'active', 'false')
-
         if votingMode == 'execution' or votingMode == 'Clock' then
             self.editButton({index = 0, label = 'Hide Clock', color = {1, 0, 0}})
         end

@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.4'
+VERSION = '1.9.5'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -612,6 +612,7 @@ function hideGrimoire()
     zoneObj = getObjectFromGUID(BLACK_ZONE.guid)
     if zoneObj ~= nil then
         zoneObj.setScale(BLACK_ZONE.scale)
+        zoneObj.reload()
     end
     self.editButton({
         index          = 5,

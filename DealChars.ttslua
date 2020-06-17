@@ -39,7 +39,6 @@ function onSave()
     save['b'] = autoBluff
     save['t'] = autoTint
     save['r'] = autoReminderTint
-
     local saveString = JSON.encode(save)
     return saveString
 end

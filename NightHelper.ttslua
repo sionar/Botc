@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.5.0'
+VERSION = '2.6.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -408,30 +408,11 @@ function alive(clickedObject, playerColor, i)
                 table.insert(order, orderPos + 1, {color = entry.color, char = 'Ravenkeeper2'})
             end
         end
-    else
-        if order ~= nil then
-            for k,v in pairs(order) do
-                if v.char == entry.char then
-                    table.remove(order, k)
-                    break
-                end
-            end
-            if entry.char == 'Lunatic' then
-                for i = #order,1,-1 do
-                    if string.match(order[i].char, 'Lunatic') then
-                        table.remove(order, i)
-                    end
-                end
-            elseif entry.char == 'Godfather' then
-                for i = #order,1,-1 do
-                    if string.match(order[i].char, 'Godfather') then
-                        table.remove(order, i)
-                    end
-                end
-            end
-        end
+    elseif not living[i].alive then
+        removeCharFromOrder(living[i].char, living[i].color)
+    elseif living[i].alive then
+        addCharToOrder(living[i].char, living[i].color)
     end
-
     placeShroud(i)
     setMsg()
 end
@@ -563,6 +544,7 @@ function remove(clickedObject, playerColor, i)
             end
         end
     end
+    removeCharFromOrder(entry.char, entry.color)
     setMsg()
 end
 
@@ -899,14 +881,11 @@ function addChar(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
+    local pos, colorIndex
     if colorAdd == '' or charAdd == '' then
         broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
         return
     end
-    local pos, colorIndex
-    local orderPos, orderIndex
-    local found
 
     if #living == 0 then
         pos = 1
@@ -923,11 +902,6 @@ function addChar(clickedObject, playerColor)
         end
     end
     table.insert(living, pos, {color = colorAdd, char = charAdd, used = false, alive = true, sober = true, sane = true})
-    if charAdd == 'Ravenkeeper' or charAdd == 'Sage' or charAdd == 'Barber' then
-        refreshUI()
-        return
-    end
-
     if CHARACTERS[charAdd].Type == 'Demon' or CHARACTERS[charAdd].Type == 'Minion' then
         if CHARACTERS[charAdd].Type == 'Demon' then
             demonColor = colorAdd
@@ -953,14 +927,24 @@ function addChar(clickedObject, playerColor)
             evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
         end
     end
+    if charAdd == 'Ravenkeeper' or charAdd == 'Sage' or charAdd == 'Barber' then
+        refreshUI()
+        return
+    end
+    addCharToOrder(charAdd, colorAdd)
+end
+
+function addCharToOrder(char, color)
+    local orderPos, orderIndex
+    local found
 
     local chars = Global.getTable('chars')
-    chars[colorAdd] = charAdd
+    chars[color] = char
     Global.setTable('chars', chars)
-    Global.call('setCharText', colorAdd)
+    Global.call('setCharText', color)
 
     if orderRef ~= nil then
-        orderIndex = getKey(orderRef, charAdd)
+        orderIndex = getKey(orderRef, char)
         if orderIndex == nil then
             refreshUI()
             return
@@ -974,17 +958,37 @@ function addChar(clickedObject, playerColor)
         if orderPos == nil then
             orderPos = #order + 1
         end
-        table.insert(order, orderPos, {color = colorAdd, char = charAdd})
-        if charAdd == 'Lunatic' then
-            table.insert(order, 1, {char = 'Lunatic_InfoA', color = colorAdd})
-            table.insert(order, 2, {char = 'Lunatic_InfoB', color = colorAdd})
+        table.insert(order, orderPos, {char = char, color = color})
+        if char == 'Lunatic' then
+            table.insert(order, 1, {char = 'Lunatic_InfoA', color = color})
+            table.insert(order, 2, {char = 'Lunatic_InfoB', color = color})
             table.insert(order, 3, {char = 'Lunatic_InfoC', color = demonColor})
+            table.insert(order, orderPos+4, {char = 'Lunatic_InfoD', color = demonColor})
             setMsg()
-        elseif charAdd == 'Godfather' then
-            table.insert(order, 1, {char = 'Godfather_Info', color = colorAdd})
+        elseif char == 'Godfather' then
+            table.insert(order, 1, {char = 'Godfather_Info', color = color})
+        elseif CHARACTERS[char].Response == true then
+            table.insert(order, orderPos+1, {char = char .. '2', color = color})
         end
     end
     setMsg()
+end
+
+function removeCharFromOrder(char, color)
+    if order ~= nil then
+        for i = #order,1,-1 do
+            if string.match(order[i].char, char) and order[i].color == color then
+                table.remove(order, i)
+            end
+        end
+        if char == 'Lunatic' then
+            for i = #order,1,-1 do
+                if string.match(order[i].char, 'Lunatic') then
+                    table.remove(order, i)
+                end
+            end
+        end
+    end
 end
 
 function toggleCheck(clickedObject, playerColor)

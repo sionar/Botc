@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.4.6'
+VERSION = '2.5.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
@@ -237,6 +237,9 @@ function setNightOrder(night)
                         table.insert(order, {char = 'Bogman_Info', color = v2.color})
                     elseif v2.char == 'Inquisitor' and night == 'other' then
                         table.insert(order, {char = 'Inquisitor_Info', color = v2.color})
+                    elseif CHARACTERS[v2.char].Response == true then
+                        table.insert(order, v2)
+                        table.insert(order, {char = v2.char .. '2', color = v2.color})
                     else
                         table.insert(order, v2)
                     end
@@ -278,6 +281,9 @@ function setMsg()
     local currentChar = order[1].char
     if currentChar == 'Evil_Info' then
         currentMsg = evilMsg
+    elseif currentChar == 'Demon_Info' then
+        setDemonBluffs()
+        return
     elseif currentChar == 'Next_Night' then
         currentMsg = ''
     else
@@ -285,6 +291,46 @@ function setMsg()
     end
     sendMsg = removeUnder(currentMsg)
     refreshUI()
+end
+
+function setDemonBluffs()
+    local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
+    local pos, gmNotes
+    local bluffs = {nil,nil,nil}
+    local formattedBluffs = {'P1', 'P2', 'P3'}
+    local textColor
+    for k,v in pairs(zoneObjs) do
+        pos = v.getPosition()
+        gmNotes = v.getGMNotes()
+        if gmNotes == 'Character Token' and math.abs(pos[1] - 4) < 1 and math.abs(pos[3] - 129) < 1 then
+            bluffs[1] = addUnder(v.getName())
+        elseif gmNotes == 'Character Token' and math.abs(pos[1] - 0) < 1 and math.abs(pos[3] - 129) < 1 then
+            bluffs[2] = addUnder(v.getName())
+        elseif gmNotes == 'Character Token' and math.abs(pos[1] + 4) < 1 and math.abs(pos[3] - 129) < 1 then
+            bluffs[3] = addUnder(v.getName())
+        end
+    end
+    for i,v in pairs(bluffs) do
+        if v ~= nil then
+            if CHARACTERS[v].Type == 'Townsfolk' then
+                textColor = COLORS_BBC['Blue']
+            elseif CHARACTERS[v].Type == 'Outsider' then
+                textColor = COLORS_BBC['Teal']
+            elseif CHARACTERS[v].Type == 'Minion' then
+                textColor = COLORS_BBC['Orange']
+            elseif CHARACTERS[v].Type == 'Demon' then
+                textColor = COLORS_BBC['Red']
+            elseif CHARACTERS[v].Type == 'Traveler' then
+                textColor = COLORS_BBC['Green']
+            end
+            formattedBluffs[i] = removeUnder(textColor .. v .. '[-]')
+        end
+    end
+    currentMsg = CHARACTERS['Demon_Info'].Prompt
+    p1 = formattedBluffs[1]
+    p2 = formattedBluffs[2]
+    p3 = formattedBluffs[3]
+    editMsg()
 end
 
 function getKey(table, value)
@@ -357,6 +403,9 @@ function alive(clickedObject, playerColor, i)
                 entry.color = demonColor
             end
             table.insert(order, orderPos, {color = entry.color, char = entry.char})
+            if entry.char == 'Ravenkeeper' then
+                table.insert(order, orderPos + 1, {color = entry.color, char = 'Ravenkeeper2'})
+            end
         end
     else
         if order ~= nil then
@@ -1234,4 +1283,8 @@ end
 
 function removeUnder(input)
     return string.gsub(input, '_', ' ')
+end
+
+function addUnder(input)
+    return string.gsub(input, ' ', '_')
 end

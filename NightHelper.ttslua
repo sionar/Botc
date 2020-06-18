@@ -61,6 +61,7 @@ dayNum = 0
 dayLog = {{}}
 nightLog = {{}}
 
+
 ------------------Load/save
 function onLoad(saveString)
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')

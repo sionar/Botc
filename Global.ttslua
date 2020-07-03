@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.6.0'
+VERSION = '19.7.0'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -32,6 +32,7 @@ BG_POS = {188, 141, -395}
 tableSize = 10
 storytellerMode = false
 jokersDefault = false
+whispersOn = true
 timerID = 0
 started = false
 lights = false
@@ -1551,6 +1552,7 @@ function chatWhisper(player, color, message)
     if not message or string.len(message) == 0 then
         return
     end
+
     local message = trim(message)
     local playerColor = getPlayer(player)
     local receiverColor = nil
@@ -1581,6 +1583,11 @@ function chatWhisper(player, color, message)
 
     if clock.getScale().x ~= 0 and not (playerColor == 'Black' or receiverColor == 'Black') then
         player.print('You cannot whisper during nominations.', {1,0,0})
+        return
+    end
+
+    if not whispersOn and playerColor ~= 'Black' and receiverColor ~= 'Black' then
+        player.print('Whispers are disabled. You can only communicate with the Storyteller.', {1,0,0})
         return
     end
 
@@ -2282,7 +2289,7 @@ function nominate(params)
         params.color = {0,0,1}
         params.font_color = {1,1,1}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
-        clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = nominator})
+        clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = nominator})
         UI.setAttribute('colorSelection','active','false')
         colorTable = false
     elseif currentNominator == nominator then
@@ -2291,15 +2298,15 @@ function nominate(params)
         params.color = {1,1,1}
         params.font_color = {0,0,1}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
-        clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = 'None'})
+        clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = 'None'})
         if currentNominated ~= '' then
             params.index = 0
             params.color = {1,1,1}
             params.font_color = {1,0,0}
             getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(params)
             currentNominated = ''
-            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
-            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
         end
         UI.setAttribute('colorSelection','active','false')
         colorTable = false
@@ -2342,16 +2349,16 @@ function nominated(params)
             buttonParams.color = {1,0,0}
             buttonParams.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
-            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = target})
-            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = target})
         elseif currentNominated == target then
             currentNominated = ''
             buttonParams.index = 0
             buttonParams.color = {1,1,1}
             buttonParams.font_color = {1,0,0}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
-            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
-            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
+            clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
         else
             buttonParams.index = 0
             buttonParams.color = {1,1,1}
@@ -2361,8 +2368,8 @@ function nominated(params)
             buttonParams.color = {1,0,0}
             buttonParams.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
-            clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = target})
-            clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
+            clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = target})
         end
     else
         players[player].print('You have already nominated today.', {1,0,0})
@@ -2390,9 +2397,9 @@ function resetCurrentNominations()
     end
     currentNominator = ''
     currentNominated = ''
-    clockControls.call('pointHand', {handGUID = BLUE_HAND_GUID, color = 'None'})
-    clockControls.call('pointHand', {handGUID = RED_HAND_GUID, color = 'None'})
-    clockControls.call('pointHand', {handGUID = PURPLE_HAND_GUID, color = 'None'})
+    clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = 'None'})
+    clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
+    clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
 end
 
 function checkLiving()
@@ -2633,7 +2640,13 @@ function showExtensionUI()
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('sitTable'..tableSize, 'active', 'true')
     end
-    UI.setAttribute('whisperUI'..tableSize, 'active', 'true')
+    if whispersOn then
+        UI.setAttribute('whisperUI'..tableSize, 'active', 'true')
+        UI.setAttribute('whisperUI0', 'active', 'false')
+    else
+        UI.setAttribute('whisperUI'..tableSize, 'active', 'false')
+        UI.setAttribute('whisperUI0', 'active', 'true')
+    end
     UI.setAttribute('blackWhisperUI'..tableSize, 'active', 'true')
     setUIVisibility()
 end
@@ -2663,6 +2676,18 @@ function enableDecals()
     decalsEnabled = true
     UI.setAttribute('placeDecal' .. mode, 'active', 'true')
     UI.setAttribute('decalText', 'active', 'false')
+end
+
+function disableWhispers()
+    whispersOn = false
+    UI.setAttribute('whisperUI'.. tableSize, 'active', 'false')
+    UI.setAttribute('whisperUI'.. 0, 'active', 'true')
+end
+
+function enableWhispers()
+    whispersOn = true
+    UI.setAttribute('whisperUI'.. tableSize, 'active', 'true')
+    UI.setAttribute('whisperUI'.. 0, 'active', 'false')
 end
 
 function setTableTextUI(player, value, id)
@@ -2704,8 +2729,8 @@ end
 
 function sitUI(player, value, id)
     local textObj, obj, zoneObj
-    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    local seatLock = clockControls.getVar('seatLock')
+    local gameSettings = getObjectFromGUID(GAME_SETTINGS_GUID)
+    local seatLock = gameSettings.getVar('seatLock')
     local mainTable = getObjectFromGUID(TABLE_GUID)
     local color = string.sub(id, 6, #id)
     updatePlayers()
@@ -3035,7 +3060,11 @@ function setUIVisibility()
     UI.setAttribute('teamMenu', 'visibility', visStr)
     UI.setAttribute('leaveTeam', 'visibility', visStr)
     UI.setAttribute('leaveTeam', 'textColor', '#FFFFFF')
-    UI.setAttribute('whisperUI'..tableSize, 'visibility', visStr)
+    if whispersOn then
+        UI.setAttribute('whisperUI'..tableSize, 'visibility', visStr)
+    else
+        UI.setAttribute('whisperUI0', 'visibility', visStr)
+    end
     UI.setAttribute('blackWhisperUI'..tableSize, 'visibility', blackStr)
     UI.setAttribute('nomMenu', 'visibility', visStr)
     UI.setAttribute('aliveDisplay', 'visibility', visStr)

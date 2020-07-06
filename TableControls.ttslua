@@ -170,11 +170,11 @@ function refreshUI()
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callClockStyle1', function_owner = self, label = 'Clock Style 1', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-0.8,0.2,-0.4}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Add a seat.'}
+            position = {-0.8,0.2,-0.4}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the clock style to style 1.'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callClockStyle2', function_owner = self, label = 'Clock Style 2', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {0.8,0.2,-0.4}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Add a seat.'}
+            position = {0.8,0.2,-0.4}, width = 750, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set the clock style to style 2.'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callShufflePlayers', function_owner = self, label = 'Shuffle\nSeats', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,

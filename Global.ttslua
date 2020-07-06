@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.7.0'
+VERSION = '19.7.1'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -1469,17 +1469,18 @@ function onChat(message, player)
         return false
     elseif command == 'r' then
         updatePlayers()
-        local char, charOut
+        local char, charOut, formattedChar
         for k,v in pairs(players) do
             if v.steam_id == player.steam_id then
                 char = chars[k]
+                formattedChar = removeUnder(char)
                 if char == nil then
                     player.print('You do not have a character.')
                     return false
                 else
                     charOut = string.gsub(char, ' ', '_')
-                    player.print('Your character is ' .. char .. '!')
-                    player.print(char .. ' - ' .. CHARACTERS[charOut].Description)
+                    player.print('Your character is ' .. formattedChar .. '!')
+                    player.print(formattedChar .. ' - ' .. CHARACTERS[charOut].Description)
                     return false
                 end
             end
@@ -1536,6 +1537,13 @@ function onChat(message, player)
             return false
         end
     end
+end
+
+function removeUnder(input)
+    if input == nil then
+        return
+    end
+    return string.gsub(input, '_', ' ')
 end
 
 function capitalize(str)
@@ -2178,7 +2186,7 @@ function refreshUI()
     for k, v in pairs(COLORS) do
         UI.setAttribute('player' .. v, 'visibility', v)
         if chars[v] then
-            UI.setValue('player' .. v, 'Your character is ' .. chars[v] .. '!')
+            UI.setValue('player' .. v, 'Your character is ' .. removeUnder(chars[v]) .. '!')
         else
             UI.setValue('player' .. v, '')
         end
@@ -2188,7 +2196,14 @@ end
 function setCharText(color)
     if inTable(color, COLORS) then
         UI.setAttribute('player' .. color, 'visibility', color)
-        UI.setValue('player' .. color, 'Your character is ' .. chars[color] .. '!')
+        UI.setValue('player' .. color, 'Your character is ' .. removeUnder(chars[color]) .. '!')
+    end
+end
+
+function removeCharText(color)
+    if inTable(color, COLORS) then
+        UI.setAttribute('player' .. color, 'visibility', color)
+        UI.setValue('player' .. color, '')
     end
 end
 

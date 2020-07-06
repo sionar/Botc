@@ -528,19 +528,32 @@ function remove(clickedObject, playerColor, i)
     end
 
     local entry = living[i]
+    local num = 0
+    for k,v in pairs(living) do
+        if v.color == entry.color then
+            num = num + 1
+        end
+    end
     table.remove(living, i)
 
-    for k,v in pairs(minionColors) do
-        if v == entry.color then
-            table.remove(minionColors,k)
-            local minionStr = 'Minions:'
-            for i = 1, #minionColors do
-                minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
-            end
-            if demonColor == '' then
-                evilMsg = 'Demon: , ' .. minionStr
-            else
-                evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+    if num <= 1 then
+        local chars = Global.getTable('chars')
+        chars[entry.color] = nil
+        Global.setTable('chars', chars)
+        Global.call('removeCharText', entry.color)
+
+        for k,v in pairs(minionColors) do
+            if v == entry.color then
+                table.remove(minionColors,k)
+                local minionStr = 'Minions:'
+                for i = 1, #minionColors do
+                    minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
+                end
+                if demonColor == '' then
+                    evilMsg = 'Demon: , ' .. minionStr
+                else
+                    evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+                end
             end
         end
     end
@@ -672,9 +685,10 @@ end
 function charInput(obj, color, input, stillEditing)
     if not stillEditing then
         local found = false
+        local formattedInput = addUnder(input)
         for k,v in pairs(CHARACTERS) do
-            if string.lower(k) == string.lower(input) and input ~= '' then
-                charAdd = k
+            if string.lower(k) == string.lower(formattedInput) and formattedInput ~= '' then
+                charAdd = removeUnder(k)
                 found = true
                 break
             end
@@ -684,8 +698,8 @@ function charInput(obj, color, input, stillEditing)
             return 1
         end
         for k,v in pairs(CHARACTERS) do
-            if string.match(string.lower(k), string.lower(input)) and input ~= '' then
-                charAdd = k
+            if string.match(string.lower(k), string.lower(formattedInput)) and formattedInput ~= '' then
+                charAdd = removeUnder(k)
                 break
             end
         end
@@ -886,7 +900,7 @@ function addChar(clickedObject, playerColor)
         broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
         return
     end
-
+    local char = addUnder(charAdd)
     if #living == 0 then
         pos = 1
     else
@@ -901,11 +915,11 @@ function addChar(clickedObject, playerColor)
             pos = #living + 1
         end
     end
-    table.insert(living, pos, {color = colorAdd, char = charAdd, used = false, alive = true, sober = true, sane = true})
-    if CHARACTERS[charAdd].Type == 'Demon' or CHARACTERS[charAdd].Type == 'Minion' then
-        if CHARACTERS[charAdd].Type == 'Demon' then
+    table.insert(living, pos, {color = colorAdd, char = char, used = false, alive = true, sober = true, sane = true})
+    if CHARACTERS[char].Type == 'Demon' or CHARACTERS[char].Type == 'Minion' then
+        if CHARACTERS[char].Type == 'Demon' then
             demonColor = colorAdd
-        elseif CHARACTERS[charAdd].Type == 'Minion' then
+        elseif CHARACTERS[char].Type == 'Minion' then
             found = false
             for k,v in pairs(minionColors) do
                 if v == colorAdd then
@@ -927,11 +941,11 @@ function addChar(clickedObject, playerColor)
             evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
         end
     end
-    if charAdd == 'Ravenkeeper' or charAdd == 'Sage' or charAdd == 'Barber' then
+    if char == 'Ravenkeeper' or char == 'Sage' or char == 'Barber' then
         refreshUI()
         return
     end
-    addCharToOrder(charAdd, colorAdd)
+    addCharToOrder(char, colorAdd)
 end
 
 function addCharToOrder(char, color)
@@ -939,9 +953,11 @@ function addCharToOrder(char, color)
     local found
 
     local chars = Global.getTable('chars')
-    chars[color] = char
-    Global.setTable('chars', chars)
-    Global.call('setCharText', color)
+    if chars[color] == nil then
+        chars[color] = char
+        Global.setTable('chars', chars)
+        Global.call('setCharText', color)
+    end
 
     if orderRef ~= nil then
         orderIndex = getKey(orderRef, char)

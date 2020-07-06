@@ -1358,6 +1358,39 @@
 ></Button>
 
 <TableLayout
+    id="whisperUI0"
+    class="whisperTableLayout"
+    >
+    <Row preferredHeight="30">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Dropdown
+                class="whisperDropdown"
+                >
+            <Option selected="true">Select a Color</Option>
+            <Option>Black</Option>
+            </Dropdown>
+        </Cell>
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="1"
+            >
+            <Button class="sendMessageButton"></Button>
+        </Cell>
+    </Row>
+    <Row preferredHeight="70">
+        <Cell
+            dontUseTableCellBackground="true"
+            columnSpan="2"
+            >
+            <InputField class="whisperInput"></InputField>
+        </Cell>
+    </Row>
+</TableLayout>
+
+<TableLayout
     id="whisperUI5"
     class="whisperTableLayout"
     >

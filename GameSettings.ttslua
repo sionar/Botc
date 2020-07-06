@@ -1,0 +1,241 @@
+--[[
+Table Controls
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.0'
+BUTTON_Z_OFFSET = 0.25
+#include GUIDs.ttslua
+
+
+------------------Variables
+seatLock = false
+tableText = true
+decalUI = true
+
+
+------------------Functions
+function onLoad()
+    refreshUI()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function toggleSeatLock(clickedObject, playerColor)
+    if playerColor == 'Black' then
+        if seatLock == false then
+            seatLock = true
+            self.editButton({
+                index          = 1,
+                label          = 'Grey Seats [DA1917]OFF[-]',
+                tooltip        = 'Allow people to sit in the grey seats.',
+            })
+            printToColor('Extension seats are locked.', playerColor, {1,1,1})
+        else
+            seatLock = false
+            self.editButton({
+                index          = 1,
+                label          = 'Grey Seats [1E87FF]ON[-]',
+                tooltip        = 'Prevent people from sitting in the grey seats.',
+            })
+            printToColor('Extension seats are unlocked.', playerColor, {1,1,1})
+        end
+    end
+end
+
+function toggleTableText(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    tableText = not tableText
+    if tableText == false then
+        Global.call('disableTableText')
+        self.editButton({index = 2, label = 'Table Text [DA1917]OFF[-]', tooltip = 'Click this to enable the Table Text UI for all players.'})
+        printToColor('The Table text UI is disabled.', playerColor, {1,1,1})
+    else
+        Global.call('enableTableText')
+        self.editButton({index = 2, label = 'Table Text [1E87FF]ON[-]', tooltip = 'Click this to disable the Table Text UI for all players.'})
+        printToColor('The Table text UI is enabled.', playerColor, {1,1,1})
+    end
+end
+
+function toggleDecals(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    decalUI = not decalUI
+    if decalUI == false then
+        Global.call('disableDecals')
+        self.editButton({index = 3, label = 'Decal UI [DA1917]OFF[-]', tooltip = 'Click this to enable the Decal UI for all players.'})
+        printToColor('The decal UI is disabled.', playerColor, {1,1,1})
+    else
+        Global.call('enableDecals')
+        self.editButton({index = 8, label = 'Decal UI [1E87FF]ON[-]', tooltip = 'Click this to disable the Decal UI for all players.'})
+        printToColor('The decal UI is enabled.', playerColor, {1,1,1})
+    end
+end
+
+function toggleWhispers(clickedObjet, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    local whispersOn = Global.getVar('whispersOn')
+    if whispersOn == true then
+        Global.call('disableWhispers')
+        self.editButton({index = 4, label = 'Whispers [DA1917]OFF[-]', tooltip = 'Click this to enable whispering for all players.'})
+        printToColor('Whispers are disabled.', playerColor, {1,1,1})
+    else
+        Global.call('enableWhispers')
+        self.editButton({index = 4, label = 'Whispers [1E87FF]ON[-]', tooltip = 'Click this to disable whispering for all players.'})
+        printToColor('Whispers are enabled.', playerColor, {1,1,1})
+    end
+end
+
+function callDefaultTeamToggle(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
+    if teamTool ~= nil then
+        teamTool.call('defaultTeamToggle')
+    end
+    local jokersDefault = Global.getVar('jokersDefault')
+    if jokersDefault then
+        Player['Black'].print('The default team is now Jokers.')
+        self.editButton({index = 5, label = 'Default Team [1E87FF]Jokers[-]', tooltip = 'Make None the default team'})
+    else
+        Player['Black'].print('The default team is now None.')
+        self.editButton({index = 5, label = 'Default Team [DA1917]None[-]', tooltip = 'Make Jokers the default team'})
+    end
+end
+
+function refreshUI()
+    self.clearButtons()
+
+    local params
+    params = {
+        click_function = 'nullFunc',
+        function_owner = self,
+        label = 'Game Settings',
+        color = {0,0,0,1},
+        font_color = stringColorToRGB('White'),
+        position = {0,0.2,-1.6 + BUTTON_Z_OFFSET},
+        width = 0,
+        height = 0,
+        font_size = 120
+    }
+    self.createButton(params)
+
+    params = {
+        click_function = 'toggleSeatLock',
+        function_owner = self,
+        position = {0,0.2,-1 + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = 300,
+        scale = {0.5,0.5,0.5},
+    }
+    if seatLock then
+        params.label = 'Grey Seats [DA1917]OFF[-]'
+        params.tooltip = 'Allow people to sit in the grey seats.'
+    else
+        params.label = 'Grey Seats [1E87FF]ON[-]'
+        params.tooltip = 'Prevent people from sitting in the grey seats.'
+    end
+    self.createButton(params)
+
+    params = {
+        click_function = 'toggleTableText',
+        function_owner = self,
+        position = {0,0.2,-0.5 + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = 300,
+        scale = {0.5,0.5,0.5},
+    }
+    if tableText then
+            params.label = 'Table Text [1E87FF]ON[-]'
+            params.tooltip = 'Click this to disable the Table Text UI for all players.'
+        else
+            params.label = 'Table Text [DA1917]OFF[-]'
+            params.tooltip = 'Click this to enable the Table Text UI for all players.'
+        end
+    self.createButton(params)
+
+    params = {
+        click_function = 'toggleDecals',
+        function_owner = self,
+        position = {0,0.2,0 + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = 300,
+        scale = {0.5,0.5,0.5},
+    }
+    if decalUI then
+        params.label = 'Decal UI [1E87FF]ON[-]'
+        params.tooltip = 'Click this to disable the Decal UI for all players.'
+    else
+        params.label = 'Decal UI [DA1917]OFF[-]'
+        params.tooltip = 'Click this to enable the Decal UI for all players.'
+    end
+    self.createButton(params)
+
+    params = {
+        click_function = 'toggleWhispers',
+        function_owner = self,
+        position = {0,0.2,0.5 + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        label = 'Whispers [1E87FF]ON[-]',
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = 300,
+        scale = {0.5,0.5,0.5},
+        tooltip = 'Players can whisper.'
+    }
+    local whispersOn = Global.getVar('whispersOn')
+    if whispersOn then
+        params.label = 'Whispers [1E87FF]ON[-]'
+        params.tooltip = 'Click this to disable whispering for all players.'
+    else
+        params.label = 'Whispers [DA1917]OFF[-]'
+        params.tooltip = 'Click this to enable whispering for all players.'
+    end
+    self.createButton(params)
+
+    params = {
+        click_function = 'callDefaultTeamToggle',
+        function_owner = self,
+        position = {0,0.2,1 + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = 250,
+        scale = {0.5,0.5,0.5},
+    }
+    local jokersDefault = Global.getVar('jokersDefault')
+    if jokersDefault then
+        params.label = 'Default Team [1E87FF]Jokers[-]'
+        params.tooltip = 'Make None the default team'
+    else
+        params.label = 'Default Team [DA1917]None[-]'
+        params.tooltip = 'Make Jokers the default team'
+    end
+    self.createButton(params)
+end

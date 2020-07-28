@@ -4,6 +4,7 @@ Blood on the Clocktower script for Tabletop Simulator. This is a social deductio
 Since Tabletop Simulator only supports 10 seated players, extra fake seats are added into the game to fully support 20 players.
 
 ![Preview 1](https://steamuserimages-a.akamaihd.net/ugc/1030707316751255910/975C4EF83A792F7ADA96B41D0093BF8C7F36ACC2/)
+![Preview 2](https://steamuserimages-a.akamaihd.net/ugc/779613613824548496/EB8A944F4688C2DEFC01897BF1F06B6280463F8E/)
 
 **Features:**
 * The characters are dealt out to the storyteller zone and are auto-tinted to the players' colors. The reminder tokens are also automatically dealt out on top of the character tokens.

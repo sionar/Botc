@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 BUTTON_Z_OFFSET = 0.25
 #include GUIDs.ttslua
 
@@ -95,6 +95,23 @@ function toggleWhispers(clickedObjet, playerColor)
     end
 end
 
+function toggleWhisperLength(clickedObjet, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    local whisperLengthOn = Global.getVar('whisperLengthOn')
+    if whisperLengthOn then
+        Global.call('disableWhisperLength')
+        self.editButton({index = 5, label = 'Whispers Length [DA1917]OFF[-]', tooltip = 'Click this to show the length of whisper messages.'})
+        printToColor('Whisper length is disabled.', playerColor, {1,1,1})
+    else
+        Global.call('enableWhisperLength')
+        self.editButton({index = 5, label = 'Whisper Length [1E87FF]ON[-]', tooltip = 'Click this to hide the length of whisper messages.'})
+        printToColor('Whisper length is enabled.', playerColor, {1,1,1})
+    end
+end
+
 function callDefaultTeamToggle(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
@@ -106,24 +123,28 @@ function callDefaultTeamToggle(clickedObject, playerColor)
     local jokersDefault = Global.getVar('jokersDefault')
     if jokersDefault then
         Player['Black'].print('The default team is now Jokers.')
-        self.editButton({index = 5, label = 'Default Team [1E87FF]Jokers[-]', tooltip = 'Make None the default team'})
+        self.editButton({index = 6, label = 'Default Team [1E87FF]Jokers[-]', tooltip = 'Make None the default team'})
     else
         Player['Black'].print('The default team is now None.')
-        self.editButton({index = 5, label = 'Default Team [DA1917]None[-]', tooltip = 'Make Jokers the default team'})
+        self.editButton({index = 6, label = 'Default Team [DA1917]None[-]', tooltip = 'Make Jokers the default team'})
     end
 end
 
 function refreshUI()
     self.clearButtons()
-
+    local num = 0
+    local z_inc = 0.5
+    local z_start = -1.2
+    local font_size = 250
     local params
+
     params = {
         click_function = 'nullFunc',
         function_owner = self,
         label = 'Game Settings',
         color = {0,0,0,1},
         font_color = stringColorToRGB('White'),
-        position = {0,0.2,-1.6 + BUTTON_Z_OFFSET},
+        position = {0,0.2,-1.8 + BUTTON_Z_OFFSET},
         width = 0,
         height = 0,
         font_size = 120
@@ -133,13 +154,13 @@ function refreshUI()
     params = {
         click_function = 'toggleSeatLock',
         function_owner = self,
-        position = {0,0.2,-1 + BUTTON_Z_OFFSET},
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
         rotation = {0,0,0},
         width = 2500,
         height = 400,
         color = {0,0,0},
         font_color = {1,1,1},
-        font_size = 300,
+        font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
     if seatLock then
@@ -150,17 +171,18 @@ function refreshUI()
         params.tooltip = 'Prevent people from sitting in the grey seats.'
     end
     self.createButton(params)
+    num = num + 1
 
     params = {
         click_function = 'toggleTableText',
         function_owner = self,
-        position = {0,0.2,-0.5 + BUTTON_Z_OFFSET},
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
         rotation = {0,0,0},
         width = 2500,
         height = 400,
         color = {0,0,0},
         font_color = {1,1,1},
-        font_size = 300,
+        font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
     if tableText then
@@ -171,17 +193,18 @@ function refreshUI()
             params.tooltip = 'Click this to enable the Table Text UI for all players.'
         end
     self.createButton(params)
+    num = num + 1
 
     params = {
         click_function = 'toggleDecals',
         function_owner = self,
-        position = {0,0.2,0 + BUTTON_Z_OFFSET},
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
         rotation = {0,0,0},
         width = 2500,
         height = 400,
         color = {0,0,0},
         font_color = {1,1,1},
-        font_size = 300,
+        font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
     if decalUI then
@@ -192,20 +215,20 @@ function refreshUI()
         params.tooltip = 'Click this to enable the Decal UI for all players.'
     end
     self.createButton(params)
+    num = num + 1
 
     params = {
         click_function = 'toggleWhispers',
         function_owner = self,
-        position = {0,0.2,0.5 + BUTTON_Z_OFFSET},
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
         rotation = {0,0,0},
         width = 2500,
         height = 400,
         label = 'Whispers [1E87FF]ON[-]',
         color = {0,0,0},
         font_color = {1,1,1},
-        font_size = 300,
+        font_size = font_size,
         scale = {0.5,0.5,0.5},
-        tooltip = 'Players can whisper.'
     }
     local whispersOn = Global.getVar('whispersOn')
     if whispersOn then
@@ -216,11 +239,36 @@ function refreshUI()
         params.tooltip = 'Click this to enable whispering for all players.'
     end
     self.createButton(params)
+    num = num + 1
+
+    params = {
+        click_function = 'toggleWhisperLength',
+        function_owner = self,
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        label = 'Whispers [1E87FF]ON[-]',
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = font_size,
+        scale = {0.5,0.5,0.5},
+    }
+    local whisperLengthOn = Global.getVar('whisperLengthOn')
+    if whisperLengthOn then
+        params.label = 'Whisper Length [1E87FF]ON[-]'
+        params.tooltip = 'Click this to hide the length of whisper messages.'
+    else
+        params.label = 'Whispers Length [DA1917]OFF[-]'
+        params.tooltip = 'Click this to show the length of whisper messages.'
+    end
+    self.createButton(params)
+    num = num + 1
 
     params = {
         click_function = 'callDefaultTeamToggle',
         function_owner = self,
-        position = {0,0.2,1 + BUTTON_Z_OFFSET},
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
         rotation = {0,0,0},
         width = 2500,
         height = 400,
@@ -238,4 +286,5 @@ function refreshUI()
         params.tooltip = 'Make Jokers the default team'
     end
     self.createButton(params)
+    num = num + 1
 end

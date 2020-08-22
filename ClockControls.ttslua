@@ -728,6 +728,7 @@ function refreshButtons()
         params.label = 'Blindfold All'
         params.click_function = 'blindfoldAll'
         params.color = {40/255, 47/255, 85/255}
+        params.font_color = BUTTON_FONT_COLOR
     elseif mode == 'Mute' and allMuted then
         params.label = 'Unmute All'
         params.click_function = 'muteAll'
@@ -785,11 +786,11 @@ function refreshButtons()
     elseif mode == 'Blind' then
         params.label = 'Blindfold Mode'
         params.color = {0,0,0}
-        params.font_color = {1,1,1}
+        params.font_color = BUTTON_FONT_COLOR
     elseif mode == 'Mute' then
         params.label = 'Mute Mode'
-        params.color = {1,0,0}
-        params.font_color = {0,0,0}
+        params.color = {244/255, 100/255, 29/255}
+        params.font_color = BUTTON_FONT_COLOR
     end
     self.createButton(params)
 

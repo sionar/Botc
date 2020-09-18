@@ -13,7 +13,7 @@ COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blu
 COLORS_EX_HEX = {Magenta = {255/255, 0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0,0,128/255}, Cyan = {73/255, 213/255,253/255}, Mint = {137/255, 195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255, 212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255, 190/255,190/255}}
 BLACK_ZONE = {guid = 'cf55c7', scale = {67, 11, 70}}
 CLOCK_HAND_SCALE = {
-    {hour = {2, 1, 2}, minute = {2.5, 1, 2.5}, second = {3, 1, 3}},
+    {hour = {1.5, 1, 1.5}, minute = {2.5, 1, 2.5}, second = {3, 1, 3}},
     {hour = {5, 1, 5}, minute = {7.4, 1, 7.4}, second = {7.5, 1, 7.5}}
 }
 CLOCK_IMAGE_URLS = {

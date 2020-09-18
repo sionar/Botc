@@ -1,0 +1,23 @@
+LABELS = {}
+
+LABELS['EN-US'] = {
+    VOTING_BUTTONS = {
+        vote = 'Vote',
+        become_nom = 'Become\nNominator',
+        nominate = 'Nominate\n'
+    },
+
+    CLOCK_CONTROLS = {
+        show_grim = 'Show\nGrimoire',
+        hide_grim = 'Hide\nGrimoire',
+        exile_clock = 'Exile\nMode',
+        exile_hide = 'Hide\nClock',
+        clock_mode = 'Clock Mode',
+        mute_mode = 'Mute Mode',
+        blind_mode = 'Blindfold Mode',
+        show_clock = 'Show Clock',
+        hide_clock = 'Hide Clock',
+    
+    }
+
+}

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.0'
+VERSION = '1.9.1'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -28,8 +28,12 @@ lock = {}
 found = {}
 saveLoadPage = 1
 saveFile = {}
+saveCategoryName = {}
 for i = 1,100 do
     saveFile[i] = {name = 'Save' .. i, charList = {}, imageUrl = ''}
+end
+for i = 1,10 do
+    saveCategoryName[i] = 'Page ' .. i
 end
 
 batchList = {}
@@ -44,6 +48,7 @@ function onLoad(saveString)
         local save = JSON.decode(saveString)
         characters = save['c']
         saveFile = save['s']
+        saveCategoryName = save['sc']
         saveLoadPage = save['p']
     end
     moveBoard()
@@ -56,6 +61,7 @@ function onSave()
     local save = {}
     save['c'] = characters
     save['s'] = saveFile
+    save['sc'] = saveCategoryName
     save['p'] = saveLoadPage
     local saveString = JSON.encode(save)
     return saveString
@@ -65,6 +71,17 @@ function moveBoard()
     local modName = Global.getVar('MOD_NAME')
     local TABLE_OFFSET, STORYTELLER_TABLE_DIST
     if modName == 'Blood on the Clocktower' then
+        local allObjects = getAllObjects()
+        local count = 0
+        for k,v in pairs(allObjects) do
+            if v.getName() == 'Character Tool' then
+                count = count + 1
+            end
+        end
+        if count > 1 then
+            return
+        end
+
         TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
         STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
         self.setPositionSmooth({0,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 8})
@@ -834,44 +851,6 @@ for k = 1,100 do
     end
 end
 
-function saveLoadMenu()
-    self.clearButtons()
-    self.clearInputs()
-    local buttonParam, inputParam
-    local z_offset = 1.5
-    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
-    menu = 'saveload'
-
-    buttonParam = {click_function = 'nullFunc', label = "Save or Load Custom Scripts", color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {0,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
-    self.createButton(buttonParam)
-
-    for i = 1, 10 do
-        inputParam = {input_function = 'setSaveName' .. ((saveLoadPage - 1) * 10 + i), font_color = stringColorToRGB(colors[i]), function_owner = self, color = {0.3,0.3,0.3}, function_owner = self,
-            position = {-2.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 5000, height = 450, font_size = 320, value = saveFile[(saveLoadPage - 1) * 10 + i].name, alignment = 3, validation = 1, tab = 2}
-        self.createInput(inputParam)
-
-        buttonParam = {click_function = 'save' .. ((saveLoadPage - 1) * 10 + i), label = "Save", color = {1,0.6,0.6}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {4.2,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Save custom script to slot ' .. ((saveLoadPage - 1) * 10 + i)}
-        self.createButton(buttonParam)
-
-        buttonParam = {click_function = 'load' .. ((saveLoadPage - 1) * 10 + i), label = "Load", color = {0.6,0.6,1}, font_color = stringColorToRGB('White'), function_owner = self,
-            position = {6.5,BUTTON_Y,-7 + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Load custom script from slot ' .. ((saveLoadPage - 1) * 10 + i)}
-        self.createButton(buttonParam)
-    end
-
-    buttonParam = {click_function = 'slPageFirst', function_owner = self, label = 'First Page', position = {-7,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
-    self.createButton(buttonParam)
-    buttonParam = {click_function = 'slPagePrev', function_owner = self, label = 'Prev Page', position = {-3.5,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
-    self.createButton(buttonParam)
-    buttonParam = {click_function = 'refreshUI', function_owner = self, label = 'Cancel', position = {0,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
-    self.createButton(buttonParam)
-    buttonParam = {click_function = 'slPageNext', function_owner = self, label = 'Next Page', position = {3.5,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
-    self.createButton(buttonParam)
-    buttonParam = {click_function = 'slPageLast', function_owner = self, label = 'Last Page', position = {7,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
-    self.createButton(buttonParam)
-end
-
 function slPageFirst(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
@@ -908,6 +887,63 @@ function slPageLast(clickedObject, playerColor)
     end
     saveLoadPage = 10
     saveLoadMenu()
+end
+
+function setCategoryName(obj, color, input, stillEditing, index)
+    if not stillEditing then
+        saveCategoryName[index] = input
+        saveLoadMenu()
+        return 1
+    end
+end
+
+for k = 1,10 do
+    _G['setCategoryName' .. k] = function(obj, col, input, editing)
+        setCategoryName(obj, col, input, editing, k)
+    end
+end
+
+function saveLoadMenu()
+    self.clearButtons()
+    self.clearInputs()
+    local buttonParam, inputParam
+    local z_offset = 1.3
+    local z_start = -5
+    local colors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+    menu = 'saveload'
+
+    buttonParam = {click_function = 'nullFunc', label = 'Custom Scripts', color = BUTT_B_COLOR, font_color = stringColorToRGB('White'), function_owner = self,
+        position = {0,BUTTON_Y,-8}, rotation = {0,0,0}, width = 0, height = 0, font_size = 400}
+    self.createButton(buttonParam)
+
+    inputParam = {input_function = 'setCategoryName' .. saveLoadPage, font_color = stringColorToRGB('White'), function_owner = self, color = {0.3,0.3,0.3}, function_owner = self,
+        position = {0,BUTTON_Y,-6.5}, rotation = {0,0,0}, width = 5000, height = 450, font_size = 320, value = saveCategoryName[saveLoadPage], alignment = 3, tab = 2}
+    self.createInput(inputParam)
+
+    for i = 1, 10 do
+        inputParam = {input_function = 'setSaveName' .. ((saveLoadPage - 1) * 10 + i), font_color = stringColorToRGB(colors[i]), function_owner = self, color = {0.3,0.3,0.3}, function_owner = self,
+            position = {-2.5,BUTTON_Y,z_start + z_offset * (i-1)}, rotation = {0,0,0}, width = 5000, height = 360, font_size = 320, value = saveFile[(saveLoadPage - 1) * 10 + i].name, alignment = 3, validation = 1, tab = 2}
+        self.createInput(inputParam)
+
+        buttonParam = {click_function = 'save' .. ((saveLoadPage - 1) * 10 + i), label = "Save", color = {1,0.6,0.6}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {4.2,BUTTON_Y,z_start + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Save custom script to slot ' .. ((saveLoadPage - 1) * 10 + i)}
+        self.createButton(buttonParam)
+
+        buttonParam = {click_function = 'load' .. ((saveLoadPage - 1) * 10 + i), label = "Load", color = {0.6,0.6,1}, font_color = stringColorToRGB('White'), function_owner = self,
+            position = {6.5,BUTTON_Y,z_start + z_offset * (i-1)}, rotation = {0,0,0}, width = 1000, height = 500, font_size = 320, tooltip = 'Load custom script from slot ' .. ((saveLoadPage - 1) * 10 + i)}
+        self.createButton(buttonParam)
+    end
+
+    buttonParam = {click_function = 'slPageFirst', function_owner = self, label = 'First Page', position = {-7,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
+    self.createButton(buttonParam)
+    buttonParam = {click_function = 'slPagePrev', function_owner = self, label = 'Prev Page', position = {-3.5,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
+    self.createButton(buttonParam)
+    buttonParam = {click_function = 'refreshUI', function_owner = self, label = 'Cancel', position = {0,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
+    self.createButton(buttonParam)
+    buttonParam = {click_function = 'slPageNext', function_owner = self, label = 'Next Page', position = {3.5,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
+    self.createButton(buttonParam)
+    buttonParam = {click_function = 'slPageLast', function_owner = self, label = 'Last Page', position = {7,BUTTON_Y,8}, width = 1600, height = 500, font_size = 300, color = {1,1,1,1}, font_color = {0,0,0}}
+    self.createButton(buttonParam)
 end
 
 function startMenu()
@@ -1049,6 +1085,7 @@ function importLists(clickedObject, playerColor)
     end
 
     saveFile = otherBoard.getTable('saveFile')
+    saveCategoryName = otherBoard.getTable('saveCategoryName') or {}
     Player[playerColor].print('The custom scripts from the other board have been migrated successfully.')
 end
 

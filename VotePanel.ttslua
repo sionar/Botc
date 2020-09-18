@@ -1,3 +1,4 @@
+#include Localization.ttslua
 --[[
 Vote Panel
 Made by Sionar
@@ -5,21 +6,28 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
-
+VERSION = '1.2.0'
 
 ------------------Functions
+function onLoad()
+    LANGUAGE = Global.getVar('LANGUAGE')
+    if not LABELS[LANGUAGE] then
+        LANGUAGE = 'EN-US'
+    end
+end
+
+
 function createButtons()
     local params = {}
     local color = self.getDescription()
 
-    params = {click_function = 'nominated', function_owner = self, label = 'Nominate\n'..color, position = {-3, 0.6, 0}, color = {1, 1, 1}, font_color = {1,0,0}, width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable being nominated'}
+    params = {click_function = 'nominated', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.nominate .. color, position = {-3, 0.6, 0}, color = {1, 1, 1}, font_color = {1,0,0}, width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable being nominated'}
     self.createButton(params)
 
-    params = {click_function = 'vote', function_owner = self, label = 'Vote', position = {0, 0.6, 0}, color = {1, 1, 1}, width = 1000, height = 500, font_size = 400}
+    params = {click_function = 'vote', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.vote, position = {0, 0.6, 0}, color = {1, 1, 1}, width = 1000, height = 500, font_size = 400}
     self.createButton(params)
 
-    params = {click_function = 'nominate', function_owner = self, label = 'Become\nNominator', position = {3, 0.6, 0}, color = {1, 1, 1}, font_color = {0,0,1},  width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable allowing nomination'}
+    params = {click_function = 'nominate', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.become_nom, position = {3, 0.6, 0}, color = {1, 1, 1}, font_color = {0,0,1},  width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable allowing nomination'}
     self.createButton(params)
 end
 

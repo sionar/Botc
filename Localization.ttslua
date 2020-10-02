@@ -1,10 +1,10 @@
 LABELS = {}
 
-LABELS['EN-US'] = {
+LABELS['ENG'] = {
     VOTING_BUTTONS = {
         vote = 'Vote',
         become_nom = 'Become\nNominator',
-        nominate = 'Nominate\n'
+        nominate = 'Nominate\n',
     },
 
     CLOCK_CONTROLS = {
@@ -17,7 +17,26 @@ LABELS['EN-US'] = {
         blind_mode = 'Blindfold Mode',
         show_clock = 'Show Clock',
         hide_clock = 'Hide Clock',
-    
+        mute_all = 'Mute All',
+        unmute_all = 'Unmute All',
+        blind_all = 'Blindfold All',
+        unblind_all = 'Unblindfold All',
+    },
+
+    GAME_SETTINGS = {
+        game_settings = 'Game Settings',
+        seats_on = 'Grey Seats [1E87FF]ON[-]',
+        seats_off = 'Grey Seats [DA1917]OFF[-]',
+        text_on = 'Table Text [1E87FF]ON[-]',
+        text_off = 'Table Text [DA1917]OFF[-]',
+        decal_on = 'Decal UI [1E87FF]ON[-]',
+        decal_off = 'Decal UI [DA1917]OFF[-]',
+        whisp_on = 'Whispers [1E87FF]ON[-]',
+        whisp_off = 'Whispers [DA1917]OFF[-]',
+        length_on = 'Whisper Length [1E87FF]ON[-]',
+        length_off = 'Whisper Length [DA1917]OFF[-]',
+        def_jokers = 'Default Team [1E87FF]Jokers[-]',
+        def_jokers = 'Default Team [DA1917]None[-]',
     }
 
 }

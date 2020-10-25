@@ -67,7 +67,7 @@ function onLoad(saveString)
         allBlind = save['ab']
         handRotation = save['h']
         colors = save['c']
-        -- clockStyle = save['cs']
+        clockStyle = save['cs']
     end
     local clock = getObjectFromGUID(CLOCK_GUID)
     local secondHand = getObjectFromGUID(SECOND_HAND_GUID)

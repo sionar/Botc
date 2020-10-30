@@ -40,6 +40,7 @@ BUTTON_FONT_COLOR = {1,1,1}
 ------------------Variables
 pointedPlayer = 'None'
 mode = 'Clock'
+clockOn = false
 rotating = false
 rotationRate = 24
 degreesRotated = 0
@@ -65,6 +66,7 @@ function onLoad(saveString)
         seatLock = save['s']
         allMuted = save['am']
         allBlind = save['ab']
+        clockOn = save['co']
         handRotation = save['h']
         colors = save['c']
         clockStyle = save['cs']
@@ -90,8 +92,9 @@ end
 function onSave()
     local save = {}
     save['s'] = seatLock
-    save['ab'] = allBlind
     save['am'] = allMuted
+    save['ab'] = allBlind
+    save['co'] = clockOn
     save['h'] = handRotation
     save['c'] = colors
     save['cs'] = clockStyle
@@ -164,7 +167,8 @@ function toggleClock(vm)
     local tableSize = Global.getVar('tableSize')
     local lifeTokens = Global.getTable('lifeTokens')
 
-    if clock.getScale().x ~= 0 then --if clock is CURRENTLY up
+    if clockOn then --if clock is CURRENTLY up
+        clockOn = false
         secondHand.setScale({0, 1, 0})
         secondHand.setPosition({0,-20, 0 + TABLE_OFFSET})
         minuteHand.setScale({0, 1, 0})
@@ -199,6 +203,7 @@ function toggleClock(vm)
         end
         Global.setVar('currMostVotes', 0)
     else -- if clock is CURRENTLY down
+        clockOn = true
         Global.call('showVoteButtons', {voteMode = vm})
         Global.call('resetVotes', {voteMode = vm})
         teamTool.call('removeAllFromTeams')

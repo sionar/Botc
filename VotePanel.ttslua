@@ -1,4 +1,5 @@
 #include Localization.ttslua
+#include GUIDs.ttslua
 --[[
 Vote Panel
 Made by Sionar
@@ -15,7 +16,6 @@ function onLoad()
         LANGUAGE = 'EN-US'
     end
 end
-
 
 function createButtons()
     local params = {}

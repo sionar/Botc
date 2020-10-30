@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.8.5'
+VERSION = '19.8.6'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -275,7 +275,7 @@ function editNotebookTab(tabIndex, charList, title)
 end
 
 function refreshObjects()
-    local obj
+    local obj, clock
     obj = getObjectFromGUID(TEAM_TOOL_GUID)
     if obj ~= nil then
         obj.reload()
@@ -309,6 +309,14 @@ function refreshObjects()
         end
     end
 
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local clockOn = clockControls.getVar('clockOn')
+    if not clockOn == 0 then
+        return
+    end
+    if clockOn then
+        Wait.time(function () showVoteButtons({voteMode = 'execution'}) end, 1)
+    end
     Wait.time(lockObjects, 2)
 end
 
@@ -726,8 +734,8 @@ function resizeTable()
             break
     	end
     end
-
     for i = tableSize+1, 20 do
+        voted[COLORS_ALL[i]] = false
         obj = getObjectFromGUID(ZONE_GUIDS[COLORS_ALL[i]])
         if obj ~= nil then
             storageBag.putObject(obj)
@@ -746,6 +754,7 @@ function resizeTable()
 
         obj = getObjectFromGUID(VOTEHAND_GUIDS[COLORS_ALL[i]])
         if obj ~= nil then
+            obj.setScale(VOTEHAND_HIDE_SCALE)
             storageBag.putObject(obj)
         end
 
@@ -1143,7 +1152,7 @@ function flipDeadToAlive(clickedObject)
     local pos = clickedObject.getPosition()
     local objectsFound = Physics.cast({origin = pos, direction = {0, 1, 0}, type = 2, max_distance = 3, debug = false})
     local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
-    pos['y'] = 1.15
+    pos['y'] = 1.35
     clickedObject.setPositionSmooth(pos)
     clickedObject.setRotationSmooth({0,0,0})
     for i, hit in ipairs(objectsFound) do
@@ -1583,15 +1592,15 @@ function chatWhisper(player, color, message)
     end
 
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local clockOn = clockControls.getVar('clockOn')
     local nightHelper = getObjectFromGUID(NIGHT_HELPER_GUID)
-    local clock = getObjectFromGUID(CLOCK_GUID)
 
     if clockControls ~= nil and clockControls.getVar('allBlind') == true and not (playerColor == 'Black' or receiverColor == 'Black') then
         player.print('You cannot whisper during the night.', {1,0,0})
         return
     end
 
-    if clock.getScale().x ~= 0 and not (playerColor == 'Black' or receiverColor == 'Black') then
+    if clockOn and not (playerColor == 'Black' or receiverColor == 'Black') then
         player.print('You cannot whisper during nominations.', {1,0,0})
         return
     end
@@ -2472,7 +2481,6 @@ function showVoteButtons(params)
             canNominate[v] = true
             canBeNominated[v] = true
             voted[v] = false
-
             if voteMode == 'execution' then
                 if not living[v] then
                     buttonParams.color = {0,0,0}
@@ -2888,12 +2896,11 @@ function voteUI(player, value, id)
     if lifeTokens[found].object == nil then
         return
     end
-    local clock = getObjectFromGUID(CLOCK_GUID)
-    local scale = clock.getScale()
-    if scale.x == 0 then
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local clockOn = clockControls.getVar('clockOn')
+    if not clockOn then
         return
     end
-
     local callParams = {}
     callParams.voter = found
     vote(callParams)

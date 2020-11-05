@@ -7,11 +7,11 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '19.8.8'
+VERSION = '19.8.9'
 LANGUAGE = 'ENG'
 DEBUG = false
-START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
-HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
+START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
+HELP_MESSAGE = '[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]v[-] : Show the version number.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
 TABLE_OFFSET = 0
 STORYTELLER_TABLE_DIST = 129
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
@@ -1552,11 +1552,15 @@ function onChat(message, player)
             chatToggleTraveler(capitalize(args[2]), player)
             return false
         end
+    elseif command == '.u' then
+        if player.color == 'Black' or player.admin or player.steam_id == ADMIN_ID or DEBUG then
+            chatSetTeam(args[2], args[3], player)
+            return false
+        end
     elseif command == 'look' and DEBUG then
         chatLook(args[2], player)
         return false
     end
-
 
     if checkAdmin(player, message) == false then
         return false
@@ -2069,6 +2073,40 @@ function swapLifeTokens(color1, color2)
         voteToken2.setPositionSmooth(pos)
     end
     Wait.time(createFlipButtons, 1)
+end
+
+function chatSetTeam(playerName, team, player)
+    local allPlayers = Player.getPlayers()
+    local foundPlayer = nil
+    local foundTeam = nil
+    local teams = {'None', 'Jokers', 'Clubs', 'Spades', 'Diamonds', 'Hearts'}
+    for k,v in pairs(allPlayers) do
+        if string.match(string.lower(v.steam_name), string.lower(playerName)) then
+            foundPlayer = v
+        end
+    end
+    if not foundPlayer then
+        player.print('Error: Player not found.', {1,0,0})
+        return
+    end
+    for k,v in pairs(teams) do
+        if string.match(string.lower(v), string.lower(team)) then
+            foundTeam = v
+        end
+    end
+    if not foundTeam then
+        player.print('Error: Team not found.', {1,0,0})
+        return
+    end
+    if foundTeam == 'None' or foundTeam == 'Jokers' then
+        if jokersDefault then
+            foundTeam = 'Jokers'
+        else
+            foundTeam = 'None'
+        end
+    end
+
+    foundPlayer.team = foundTeam
 end
 
 function chatToggleTraveler(seatColor, player)

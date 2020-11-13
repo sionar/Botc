@@ -54,8 +54,8 @@ currVotes = 0
 currPlayers = 0
 currMostVotes = 0
 colors = {}
-usedColors = {'White', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-removedColors = {'Brown'}
+usedColors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+removedColors = {}
 chars = {}
 angle = {}
 lifeTokens = {}
@@ -386,7 +386,7 @@ end
 
 function updateTokenStatus()
     updatePlayers()
-    getlifeTokens()
+    getLifeTokens()
     handleLifeUI()
 end
 
@@ -455,7 +455,7 @@ function getPlayer(player)
     return nil
 end
 
-function getlifeTokens()
+function getLifeTokens()
     local base, pos
     local lifeTokenFound, voteTokenFound, objectsFound
 
@@ -604,6 +604,7 @@ function resizeTable()
     local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     local radSt = tableSize * 0.6 + 6
     local fontSize
+    local idx
 
     if mode == 'TB' then
         charSheetGuids = CHAR_SHEET_GUIDS_TB
@@ -618,16 +619,14 @@ function resizeTable()
     updatePlayers()
     colors = {}
     unusedColors = {}
+    for i = 1, 20 do
+        unusedColors[COLORS_ALL[i]] = true
+    end
     angle = {}
     for i = 1, tableSize do
         table.insert(colors, usedColors[i])
+        unusedColors[usedColors[i]] = false
         angle[usedColors[i]] = (180 + 360 / tableSize * (i-1)) % 360
-    end
-    for k,v in pairs(removedColors) do
-        table.insert(unusedColors, v)
-    end
-    for i = tableSize + 1 + #removedColors, 20 do
-        table.insert(unusedColors, COLORS_ALL[i])
     end
     zoneSize = 2 * 71.5 * math.sin(math.pi / tableSize) * 0.67
     if zoneSize > 40 then
@@ -751,58 +750,61 @@ function resizeTable()
             end
         end
     end
-    for k,color in pairs(unusedColors) do
-        voted[color] = false
-        obj = getObjectFromGUID(ZONE_GUIDS[color])
-        if obj ~= nil then
-            storageBag.putObject(obj)
-        end
-
-        obj = getObjectFromGUID(charSheetGuids[color])
-        if obj ~= nil then
-            obj.setScale({0.01,0.01,0.01})
-            obj.setPositionSmooth({0,-1,0 + TABLE_OFFSET})
-        end
-
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[color])
-        if obj ~= nil then
-            storageBag.putObject(obj)
-        end
-
-        obj = getObjectFromGUID(VOTEHAND_GUIDS[color])
-        if obj ~= nil then
-            obj.setScale(VOTEHAND_HIDE_SCALE)
-            storageBag.putObject(obj)
-        end
-
-        obj = getObjectFromGUID(LIFE_BASE_GUIDS[color])
-        if obj ~= nil then
-            storageBag.putObject(obj)
-        end
-
-        obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[color])
-        if obj ~= nil then
-            storageBag.putObject(obj)
-        end
-
-        if lifeTokens[color].vote ~= nil then
-            voteTokenBag.putObject(lifeTokens[color].vote)
-        end
-        UI.setAttribute('cell'..color,'active','false')
-        UI.setAttribute('select'..color,'active','false')
-        if COLORS_TYPE[color] == true then
-            Player[color].setHandTransform({position = {0,1000,0}, scale = {0,0,0}})
-            if Player[color].seated then
-                Player[color].changeColor('Grey')
-            end
-        end
-        if COLORS_TYPE[color] == false then
-            if players[color] ~= nil then
-                sitUI(players[color], _, 'sit'..tableSize..color)
-            end
-            obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
+    for k,color in pairs(COLORS_ALL) do
+        if unusedColors[color] == true then
+            voted[color] = false
+            obj = getObjectFromGUID(ZONE_GUIDS[color])
             if obj ~= nil then
                 storageBag.putObject(obj)
+            end
+
+            obj = getObjectFromGUID(charSheetGuids[color])
+            if obj ~= nil then
+                obj.setScale({0.01,0.01,0.01})
+                obj.setPositionSmooth({0,-1,0 + TABLE_OFFSET})
+            end
+
+            obj = getObjectFromGUID(VOTE_PANEL_GUIDS[color])
+            if obj ~= nil then
+                storageBag.putObject(obj)
+            end
+
+            obj = getObjectFromGUID(VOTEHAND_GUIDS[color])
+            if obj ~= nil then
+                obj.setScale(VOTEHAND_HIDE_SCALE)
+                storageBag.putObject(obj)
+            end
+
+            obj = getObjectFromGUID(LIFE_BASE_GUIDS[color])
+            if obj ~= nil then
+                storageBag.putObject(obj)
+            end
+
+            obj = getObjectFromGUID(LIFE_TOKEN_GUIDS[color])
+            if obj ~= nil then
+                storageBag.putObject(obj)
+            end
+
+            if lifeTokens[color].vote ~= nil then
+                voteTokenBag.putObject(lifeTokens[color].vote)
+            end
+            UI.setAttribute('cell'..color,'active','false')
+            UI.setAttribute('select'..color,'active','false')
+            if COLORS_TYPE[color] == true then
+                Player[color].setHandTransform({position = {0,1000,0}, scale = {0,0,0}})
+                if Player[color].seated then
+                    Player[color].changeColor('Grey')
+                end
+            end
+            if COLORS_TYPE[color] == false then
+                if players[color] ~= nil then
+                    idx = getSeatIdx(color)
+                    sitUI(players[color], _, 'sit'..tableSize..idx)
+                end
+                obj = getObjectFromGUID(AVATAR_LIGHT_GUIDS[color])
+                if obj ~= nil then
+                    storageBag.putObject(obj)
+                end
             end
         end
     end
@@ -991,6 +993,7 @@ function shufflePlayers()
     local colorTab = {}
     local playerTab = {}
     local allPlayers
+    local idx
     for k,v in pairs(COLORS) do
         if players[v] ~= nil then
             table.insert(colorTab, v)
@@ -1002,7 +1005,8 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            sitUI(players[v], _, 'sit'..tableSize..v)
+            idx = getSeatIdx(v)
+            sitUI(players[v], _, 'sit'..tableSize..idx)
         end
     end
     if playerTab == nil then
@@ -1017,7 +1021,8 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    sitUI(v1, _, 'sit'..tableSize..v)
+                    idx = getSeatIdx(v)
+                    sitUI(v1, _, 'sit'..tableSize..idx)
                 end
                 break
             end
@@ -1033,6 +1038,7 @@ function pruneSeats()
     local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)
     local found = 0
     local i = 1
+    local idx
     local switch = {}
     while found < numPlayers do
         if players[COLORS_ALL[i]] ~= nil then
@@ -1050,7 +1056,8 @@ function pruneSeats()
             players[k].changeColor(COLORS_ALL[v])
         else
             players[k].changeColor('Grey')
-            sitUI(players[k], _, 'sit'..tableSize..COLORS_ALL[v])
+            idx = getSeatIdx(COLORS_ALL[v])
+            sitUI(players[k], _, 'sit'..tableSize..idx)
         end
     end
     tableSize = numPlayers
@@ -1704,6 +1711,7 @@ function chatMove(playerName, seatColor, player, swap)
     local playerColor = nil
     local colorFound = false
     local playerList = Player.getPlayers()
+    local idx
 
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
@@ -1751,7 +1759,8 @@ function chatMove(playerName, seatColor, player, swap)
 
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            sitUI(playerFound, _, 'sit'..tableSize..k)
+            idx = getSeatIdx(k)
+            sitUI(playerFound, _, 'sit'..tableSize..idx)
         end
     end
     playerFound.changeColor('Grey')
@@ -1771,7 +1780,8 @@ function chatMove(playerName, seatColor, player, swap)
         playerFound.changeColor(colorFound)
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
-        sitUI(playerFound, _, 'sit'..tableSize..colorFound)
+        idx = getSeatIdx(colorFound)
+        sitUI(playerFound, _, 'sit'..tableSize..idx)
     end
     player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     refreshUI()
@@ -1783,6 +1793,7 @@ function chatRemove(seatColor, player)
     end
 
     local colorFound = false
+    local idx
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
             colorFound = v
@@ -1804,7 +1815,8 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            sitUI(players[colorFound], _, 'sit'..tableSize..colorFound)
+            idx = getSeatIdx(colorFound)
+            sitUI(players[colorFound], _, 'sit'..tableSize..idx)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1814,7 +1826,7 @@ end
 function chatSwap(seatColor1, seatColor2, player)
     local color1, color2
     local player1id, player2id
-    local obj
+    local obj, idx
 
     if not seatColor1 or not seatColor2 then
         return
@@ -1869,13 +1881,15 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        sitUI(players[color1], _, 'sit'..tableSize..color1)
+        idx = getSeatIdx(color1)
+        sitUI(players[color1], _, 'sit'..tableSize..idx)
     end
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        sitUI(players[color2], _, 'sit'..tableSize..color2)
+        idx = getSeatIdx(color2)
+        sitUI(players[color2], _, 'sit'..tableSize..idx)
     end
 
     if started then
@@ -1894,7 +1908,8 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 Wait.time(function() v.changeColor(color1) end, 0.1)
             elseif inTable(color1, COLORS_EX) then
-                Wait.time(function() sitUI(v, _, 'sit'..tableSize..color1) end, 0,1)
+                idx = getSeatIdx(color1)
+                Wait.time(function() sitUI(v, _, 'sit'..tableSize..idx) end, 0,1)
             end
             break
         end
@@ -1906,7 +1921,8 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 Wait.time(function () v.changeColor(color2) end, 0.1)
             elseif inTable(color2, COLORS_EX) then
-                Wait.time(function () sitUI(v, _, 'sit'..tableSize..color2) end, 0.1)
+                idx = getSeatIdx(color2)
+                Wait.time(function () sitUI(v, _, 'sit'..tableSize..idx) end, 0.1)
             end
             break
         end
@@ -2706,6 +2722,12 @@ end
 
 ------------------Grey UI
 function showExtensionUI()
+    local greySeats = {}
+    for k,color in pairs(colors) do
+        if COLORS_TYPE[color] == false then
+            table.insert(greySeats, color)
+        end
+    end
     UI.setAttribute('placeDecalTB', 'active', 'false')
     UI.setAttribute('placeDecalBM', 'active', 'false')
     UI.setAttribute('placeDecalSV', 'active', 'false')
@@ -2721,7 +2743,7 @@ function showExtensionUI()
     for i = 11,20 do
         UI.setAttribute('sitTable'..i, 'active', 'false')
     end
-    if tableSize <= 10 then
+    if #greySeats == 0 then
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink')
@@ -2729,17 +2751,33 @@ function showExtensionUI()
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        UI.setAttribute('sitTable'..tableSize, 'active', 'true')
+        updateSitUI()
+        UI.setAttribute('sitTable'.. 10 + #greySeats, 'active', 'true')
     end
     if whispersOn then
-        UI.setAttribute('whisperUI'..tableSize, 'active', 'true')
+        UI.setAttribute('whisperUI'..tableSize + #removedColors, 'active', 'true')
         UI.setAttribute('whisperUI0', 'active', 'false')
     else
-        UI.setAttribute('whisperUI'..tableSize, 'active', 'false')
+        UI.setAttribute('whisperUI'..tableSize + #removedColors, 'active', 'false')
         UI.setAttribute('whisperUI0', 'active', 'true')
     end
-    UI.setAttribute('blackWhisperUI'..tableSize, 'active', 'true')
+    UI.setAttribute('blackWhisperUI'..tableSize + #removedColors, 'active', 'true')
     setUIVisibility()
+end
+
+function updateSitUI()
+    local greyColors = {}
+    local id = tableSize + #removedColors - 1
+    for k,color in pairs(colors) do
+        if COLORS_TYPE[color] == false then
+            table.insert(greyColors, color)
+        end
+    end
+    for i,color in ipairs(greyColors) do
+        UI.setAttribute('sit'.. id .. i, 'text', 'Sit in ' .. color)
+        UI.setAttribute('sit'.. id .. i, 'colors', COLORS_UI[color])
+        UI.setAttribute('sit'.. id .. i, 'color', '#FFFFFF')
+    end
 end
 
 function disableTableText()
@@ -2831,7 +2869,10 @@ function sitUI(player, value, id)
     local gameSettings = getObjectFromGUID(GAME_SETTINGS_GUID)
     local seatLock = gameSettings.getVar('seatLock')
     local mainTable = getObjectFromGUID(TABLE_GUID)
-    local color = string.sub(id, 6, #id)
+    local idx = tonumber(string.sub(id, 6, #id))
+    local count = 0
+    local color = getSeatColor(idx)
+
     updatePlayers()
     if playersEx[color] == nil then
         for k,v in pairs(playersEx) do
@@ -2851,15 +2892,15 @@ function sitUI(player, value, id)
         generateAvatar(color)
         printToAll(COLORS_BBC[color] .. player.steam_name .. ' is color ' .. color .. '.[-]')
         for i = 11,20 do
-            UI.setAttribute('sit' .. i .. color, 'text', 'Leave ' .. color)
-            UI.setAttribute('sit' .. i .. color, 'textColor', '#FFFFFF')
+            UI.setAttribute('sit' .. i .. idx, 'text', 'Leave ' .. color)
+            UI.setAttribute('sit' .. i .. idx, 'textColor', '#FFFFFF')
         end
     else
         if player.steam_id == playersEx[color].steam_id then
             player.print('You are no longer sitting in ' .. color .. '.')
             for i = 11,20 do
-                UI.setAttribute('sit' .. i .. color, 'text', 'Sit in ' .. color)
-                UI.setAttribute('sit' .. i .. color, 'textColor', '#FFFFFF')
+                UI.setAttribute('sit' .. i .. idx, 'text', 'Sit in ' .. color)
+                UI.setAttribute('sit' .. i .. idx, 'textColor', '#FFFFFF')
             end
             playersEx[color] = nil
             playersExIds[color] = nil
@@ -2879,6 +2920,32 @@ function sitUI(player, value, id)
     if obj ~= nil then
         Wait.time(function () obj.call('refreshUI') end, 0.1)
     end
+end
+
+function getSeatColor(idx)
+    local count = 0
+    for k,v in pairs(colors) do
+        if COLORS_TYPE[v] == false then
+            count = count + 1
+        end
+        if count == idx then
+            return v
+        end
+    end
+    return nil
+end
+
+function getSeatIdx(color)
+    local idx = 0
+    for k,v in pairs(colors) do
+        if COLORS_TYPE[v] == false then
+            idx = idx + 1
+        end
+        if color == v then
+            return idx
+        end
+    end
+    return nil
 end
 
 function generateAvatar(color)
@@ -3132,8 +3199,15 @@ function toggleUI(player, value, id)
 end
 
 function setUIVisibility()
+    local greySeats = {}
+    for k,color in pairs(colors) do
+        if COLORS_TYPE[color] == false then
+            table.insert(greySeats, color)
+        end
+    end
     local visStr = ''
     local blackStr = 'None'
+
     if uiVisibility['Black'] then
         blackStr = 'Black'
     end
@@ -3145,7 +3219,7 @@ function setUIVisibility()
     end
 
     visStr = string.sub(visStr, 1, #visStr-1)
-    if tableSize > 10 then
+    if #greySeats > 0 then
         visStr = visStr .. '|Grey'
     end
 

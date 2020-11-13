@@ -32,7 +32,6 @@ BG_POS = {188, 141, -395}
 
 ------------------Variables
 tableSize = 10
-maxPlayers = 20
 storytellerMode = false
 jokersDefault = false
 whispersOn = true
@@ -137,8 +136,8 @@ function onLoad(saveString)
         customList = save['cl']
         tableSize = save['t']
         colors = save['co']
-        -- maxPlayers = save['mp']
-        -- usedColors = save['ac']
+        usedColors = save['ac']
+        removedColors = save['rc']
         angle = save['an']
         lights = save['l']
         autoTint = save['at']
@@ -247,9 +246,9 @@ function onSave()
     save['i'] = imageLoaded
     save['cl'] = customList
     save['t'] = tableSize
-    save['mp'] = maxPlayers
     save['co'] = colors
     save['ac'] = usedColors
+    save['rc'] = removedColors
     save['an'] = angle
     save['l'] = lights
     save['at'] = autoTint
@@ -1041,19 +1040,16 @@ function pruneSeats()
     local idx
     local switch = {}
     while found < numPlayers do
-        if players[COLORS_ALL[i]] ~= nil then
+        if players[colors[i]] ~= nil then
             found = found + 1
-            switch[COLORS_ALL[i]] = found
+            switch[colors[i]] = found
         end
         i = i + 1
-        if i > 20 then
-            Player['Black'].print('Error: Prune seats failed.')
-            return
-        end
     end
+    log(switch)
     for k,v in pairs(switch) do
-        if v <= 10 then
-            players[k].changeColor(COLORS_ALL[v])
+        if COLORS_TYPE[colors[v]] == true then
+            players[k].changeColor(colors[v])
         else
             players[k].changeColor('Grey')
             idx = getSeatIdx(COLORS_ALL[v])
@@ -2751,7 +2747,7 @@ function showExtensionUI()
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        updateSitUI()
+        Wait.time(function() updateSitUI() end, 1)
         UI.setAttribute('sitTable'.. 10 + #greySeats, 'active', 'true')
     end
     if whispersOn then

@@ -9,14 +9,15 @@ VERSION = '1.5.0'
 BUTTON_W = 500
 BUTTON_H = 400
 FONT_SIZE = 120
-#include GUIDs.ttslua
 BUTTON_COLOR = {0,0,0}
 BUTTON_FONT_COLOR = {1,1,1}
+#include GUIDs.ttslua
 
 
 ------------------Variables
 tableSize = 10
 backgroundDelete = false
+maxSeats = 20
 
 
 ------------------Functions
@@ -24,6 +25,17 @@ function onLoad(saveString)
     tableSize = Global.getVar('tableSize')
     refreshUI()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+    if not (saveString == '') then
+        local save = JSON.decode(saveString)
+        maxSeats = save['m']
+    end
+end
+
+function onSave()
+    local save = {}
+    save['m'] = maxSeats
+    local saveString = JSON.encode(save)
+    return saveString
 end
 
 function decTableSize(clickedObject, playerColor)
@@ -45,8 +57,8 @@ function incTableSize(clickedObject, playerColor)
     end
 
     tableSize = tableSize + 1
-    if tableSize > 20 then
-        tableSize = 20
+    if tableSize > maxSeats then
+        tableSize = maxSeats
     end
     callResize()
     refreshUI()
@@ -65,8 +77,8 @@ function setTableSize(clickedObject, playerColor, value, stillEditing)
         end
         if tableSize < 5 then
             tableSize = 5
-        elseif tableSize > 20 then
-            tableSize = 20
+        elseif tableSize > maxSeats then
+            tableSize = maxSeats
         end
         callResize()
         refreshUI()
@@ -148,6 +160,21 @@ function callClockStyle2(clickedObject, playerColor)
     end
 end
 
+function modifySeats(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local toolbag = getObjectFromGUID(TOOL_BAG_GUID)
+    if toolbag == nil then
+        return
+    end
+    for k,v in pairs(toolbag.getObjects()) do
+        if v.name == 'Seat Tool' then
+            toolbag.takeObject({index = v.index})
+        end
+    end
+end
+
 ------------------User Interface
 function refreshUI()
     self.clearButtons()
@@ -185,16 +212,16 @@ function refreshUI()
             position = {0,0.2,0.4}, width = 550, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Get rid of empty seats and shrink the table (Before the game starts).'}
     self.createButton(buttonParam)
 
+    buttonParam = {click_function = 'modifySeats', function_owner = self, label = 'Modify\nSeats', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
+            position = {1.2,0.2,0.4}, width = 550, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Set which seats are in the game.'}
+    self.createButton(buttonParam)
+
     buttonParam = {click_function = 'callToggleLights', function_owner = self, label = 'Toggle\nLights', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {1.2,0.2,0.4}, width = 550, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
+            position = {-1.2,0.2,1.2}, width = 550, height = BUTTON_H, font_size = FONT_SIZE, tooltip = 'Turn on/off the lights.'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'deleteBackground', function_owner = self, label = 'Delete\nBackground', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {-1.2,0.2,1.2}, width = 550, height = BUTTON_H, font_size = FONT_SIZE - 40, tooltip = 'Delete the background objects (Cannot be restored).'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'refreshBackground', function_owner = Global, label = 'Refresh\nBackground', color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,
-            position = {0,0.2,1.2}, width = 550, height = BUTTON_H, font_size = FONT_SIZE - 40, tooltip = 'Refresh the Background (If it looks glitchy).'}
+            position = {0,0.2,1.2}, width = 550, height = BUTTON_H, font_size = FONT_SIZE - 40, tooltip = 'Delete the background objects (Cannot be restored).'}
     self.createButton(buttonParam)
 
     buttonParam = {click_function = 'callReset', function_owner = self, label = 'Reset\nTable', font_color = stringColorToRGB('White'), color = stringColorToRGB('Red'),

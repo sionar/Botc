@@ -1,0 +1,165 @@
+--[[
+Seat Tool
+Made by Sionar
+--]]
+
+
+------------------Constants
+VERSION = '1.0.0'
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+ORDER = {White = 1, Brown = 2, Red = 3, Orange = 4, Yellow = 5, Green = 6, Teal = 7, Blue = 8, Purple = 9, Pink = 10, Magenta = 11, Lavender = 12, Navy = 13, Cyan = 14, Mint = 15, Lime = 16, Peach = 17, Coral = 18, Maroon = 19, Silver = 20}
+COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+Z_START = -6
+Z_INC = 0.6
+TOOL_BAG_GUID = '232b20'
+#include GUIDs.ttslua
+
+
+------------------Variables
+usedColors = {}
+removedColors = {}
+
+
+------------------Functions
+function onLoad()
+    TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+    STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
+    usedColors = Global.getTable('usedColors')
+    removedColors = Global.getTable('removedColors')
+    moveBoard()
+    refreshUI()
+    self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function moveBoard()
+    self.setPositionSmooth({-22,1.2,8 + TABLE_OFFSET + STORYTELLER_TABLE_DIST})
+    self.setRotationSmooth({0,0,0})
+    self.setLock(true)
+end
+
+function destroySelf(clickedObject, playerColor)
+    local storageBag = getObjectFromGUID(TOOL_BAG_GUID)
+    if Player[playerColor].admin or playerColor == 'Black' then
+        storageBag.putObject(self)
+    end
+end
+
+function used(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local color = usedColors[i]
+    local found = false
+    table.remove(usedColors, i)
+    if #removedColors == 0 then
+        table.insert(removedColors, color)
+    else
+        for i,v in ipairs(removedColors) do
+            if ORDER[v] > ORDER[color] then
+                table.insert(removedColors, i, color)
+                found = true
+                break
+            end
+        end
+        if not found then
+            table.insert(removedColors, color)
+        end
+    end
+    refreshUI()
+end
+
+for i = 1,20 do
+    _G['used'..i] = function(clickedObject, playerColor)
+        used(clickedObject, playerColor, i)
+    end
+end
+
+function removed(clickedObject, playerColor, i)
+    if playerColor ~= 'Black' then
+        return
+    end
+    local color = removedColors[i]
+    local found = false
+    table.remove(removedColors, i)
+    if #usedColors == 0 then
+        table.insert(removedColors, color)
+    else
+        for i,v in ipairs(usedColors) do
+            if ORDER[v] > ORDER[color] then
+                table.insert(usedColors, i, color)
+                found = true
+                break
+            end
+        end
+        if not found then
+            table.insert(usedColors, color)
+        end
+    end
+    refreshUI()
+end
+
+for i = 1,20 do
+    _G['removed'..i] = function(clickedObject, playerColor)
+        removed(clickedObject, playerColor, i)
+    end
+end
+
+function reset(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    usedColors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+    removedColors = {}
+    refreshUI()
+end
+
+function apply(clickedObject, playerColor)
+    local tableSize = Global.getVar('tableSize')
+    local numColors = #usedColors
+    local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)
+    Global.setTable('usedColors', usedColors)
+    Global.setTable('removedColors', removedColors)
+    tableControls.setVar('maxSeats', numColors)
+    if tableSize > numColors then
+        Global.setVar('tableSize', numColors)
+        tableControls.setVar('tableSize', numColors)
+        tableControls.call('refreshUI')
+    end
+    Global.call('resizeTable')
+end
+
+function refreshUI()
+    self.clearButtons()
+    local z
+
+    params = {click_function = 'destroySelf', function_owner = self, label = '☒', position = {8,0.1,-8}, scale = {1.5, 1.5, 1.5}, width = 600, height = 600, font_size = 400, font_color = {1,0.4,0.4}, color = {0,0,0,0.6}}
+    self.createButton(params)
+
+    params = {click_function = 'null', function_owner = self, label = 'Seat Tool', position = {0,0.1,-8}, width = 0, height = 0, font_size = 400, font_color = {1,1,1}, color = {0,0,0,0.6}}
+    self.createButton(params)
+
+    params = {click_function = 'null', function_owner = self, label = 'Available Colors', position = {-4,0.1,-7}, width = 0, height = 0, font_size = 300, font_color = {1,1,1}, color = {0,0,0,0.6}}
+    self.createButton(params)
+
+    params = {click_function = 'null', function_owner = self, label = 'Removed Colors', position = {4,0.1,-7}, width = 0, height = 0, font_size = 300, font_color = {1,1,1}, color = {0,0,0,0.6}}
+    self.createButton(params)
+
+    params = {click_function = 'reset', function_owner = self, label = 'Reset', position = {-2.5,0.1,8}, width = 800, height = 400, font_size = 300, scale = {2,2,2}, font_color = {1,1,1}, color = {0,0,0,0.6}, tooltip = 'Reset to default settings.'}
+    self.createButton(params)
+
+    params = {click_function = 'apply', function_owner = self, label = 'Apply', position = {2.5,0.1,8}, width = 800, height = 400, font_size = 300, scale = {2,2,2}, font_color = {1,1,1}, color = {0,0,0,0.6}, tooltip = 'Apply the changes to the seats.'}
+    self.createButton(params)
+
+    z = Z_START
+    for i,v in ipairs(usedColors) do
+        params = {click_function = 'used'..i, function_owner = self, label = v, position = {-4,0.1,z}, width = 800, height = 130, font_size = 100, scale = {2,2,2}, font_color = COLORS_RGB[v], color = {0,0,0}, tooltip = 'Remove the ' .. v .. ' seat.'}
+        self.createButton(params)
+        z = z + Z_INC
+    end
+    z = Z_START
+    for i,v in ipairs(removedColors) do
+        params = {click_function = 'removed'..i, function_owner = self, label = v, position = {4,0.1,z}, width = 800, height = 130, font_size = 100, scale = {2,2,2}, font_color = COLORS_RGB[v], color = {0,0,0}, tooltip = 'Add the ' .. v .. ' seat.'}
+        self.createButton(params)
+        z = z + Z_INC
+    end
+end

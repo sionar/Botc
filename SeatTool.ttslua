@@ -114,6 +114,15 @@ function reset(clickedObject, playerColor)
 end
 
 function apply(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+
+    if #usedColors < 5 then
+        Player['Black'].print('Error: You need at least 5 seats enabled.', {1,0,0})
+        return
+    end
+
     local tableSize = Global.getVar('tableSize')
     local numColors = #usedColors
     local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)

@@ -2747,8 +2747,7 @@ function showExtensionUI()
         UI.setAttribute('placeDecal'.. mode, 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('decalText', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
-        Wait.time(function() updateSitUI() end, 1)
-        UI.setAttribute('sitTable'.. 10 + #greySeats, 'active', 'true')
+        updateSitUI()
     end
     if whispersOn then
         UI.setAttribute('whisperUI'..tableSize + #removedColors, 'active', 'true')
@@ -2763,17 +2762,19 @@ end
 
 function updateSitUI()
     local greyColors = {}
-    local id = tableSize + #removedColors - 1
     for k,color in pairs(colors) do
         if COLORS_TYPE[color] == false then
             table.insert(greyColors, color)
         end
     end
+    local id = #greyColors + 10
+    local delayFrames = 300
+    local time = 3
     for i,color in ipairs(greyColors) do
-        UI.setAttribute('sit'.. id .. i, 'text', 'Sit in ' .. color)
-        UI.setAttribute('sit'.. id .. i, 'colors', COLORS_UI[color])
-        UI.setAttribute('sit'.. id .. i, 'color', '#FFFFFF')
+        UI.setAttributes('sit' .. id .. i, {text = 'Sit in ' .. color, colors = COLORS_UI[color], color = "#FFFFFF"})
+        time = time + 1
     end
+    UI.setAttribute('sitTable'.. id, 'active', 'true')
 end
 
 function disableTableText()

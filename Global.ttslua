@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.0.0'
+VERSION = '20.0.1'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -54,6 +54,13 @@ currPlayers = 0
 currMostVotes = 0
 colors = {}
 usedColors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+unusedColors = {}
+for i = 1,10 do
+    unusedColors[COLORS_ALL[i]] = false
+end
+for i = 11,20 do
+    unusedColors[COLORS_ALL[i]] = true
+end
 removedColors = {}
 chars = {}
 angle = {}
@@ -137,6 +144,7 @@ function onLoad(saveString)
         tableSize = save['t']
         colors = save['co']
         usedColors = save['ac']
+        unusedColors = save['uc']
         removedColors = save['rc']
         angle = save['an']
         lights = save['l']
@@ -248,6 +256,7 @@ function onSave()
     save['t'] = tableSize
     save['co'] = colors
     save['ac'] = usedColors
+    save['uc'] = unusedColors
     save['rc'] = removedColors
     save['an'] = angle
     save['l'] = lights
@@ -1123,12 +1132,13 @@ function toggleLights(params)
                 end
             end
         end
-
-        for k,color in pairs(unusedColors) do
-            obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[color])
-            if obj ~= nil then
-                obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
-                obj.call('powerOff')
+        for color,unused in pairs(unusedColors) do
+            if unused == true then
+                obj = getObjectFromGUID(NIGHT_LIGHT_GUIDS[color])
+                if obj ~= nil then
+                    obj.setPosition({0,-0.1,0 + TABLE_OFFSET})
+                    obj.call('powerOff')
+                end
             end
         end
     end
@@ -1453,10 +1463,10 @@ function onObjectDrop(playerColor, object)
     Wait.time(function ()
         local objPos = object.getPosition()
         for k,v in pairs(colors) do
-            pos = radius(rad, angle[color], 1.0)
+            pos = radius(rad, angle[v], 1.0)
             pos[3] = pos[3] + STORYTELLER_TABLE_DIST
             if math.abs(objPos[1] - pos[1]) < 1 and math.abs(objPos[3] - pos[3]) < 1 then
-                object.setColorTint(COLORS_RGB[color])
+                object.setColorTint(COLORS_RGB[v])
                 return
             end
         end

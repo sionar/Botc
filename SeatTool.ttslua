@@ -32,7 +32,7 @@ function onLoad()
 end
 
 function moveBoard()
-    self.setPositionSmooth({-22,1.2,8 + TABLE_OFFSET + STORYTELLER_TABLE_DIST})
+    self.setPositionSmooth({-21,1.2,26 + TABLE_OFFSET + STORYTELLER_TABLE_DIST})
     self.setRotationSmooth({0,0,0})
     self.setLock(true)
 end

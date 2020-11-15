@@ -94,21 +94,24 @@ function moveText(params)
         fontSize = 270
     end
 
-    for k,color in pairs(colors) do
+    for k,color in pairs(colors) do     --table text for used colors
         self.editButton({index = INDEX[color], position = radius(TEXT_RAD, angle[color], 1.1), rotation = {0, angle[color], 0}})
     end
 
-    for k,color in pairs(unusedColors) do
-        self.editButton({index = INDEX[color], position = {0,0,0}})
+    for color,unused in pairs(unusedColors) do      --table text for unused colors
+        if unused then
+            self.editButton({index = INDEX[color], position = {0,0,0}})
+        end
     end
 
-    for k,color in pairs(colors) do
-        if COLORS_TYPE[color] == false then
+    for color, unused in pairs(colors) do     --name text for used colors
+        if unused == false and COLORS_TYPE[color] == false then
             self.editButton({index = INDEX[color] + 10, position = radius(NAME_RAD, angle[color], 2), rotation = {0, angle[color] + 180, 0}})
         end
     end
-    for k,color in pairs(unusedColors) do
-        if COLORS_TYPE[color] == false then
+
+    for color,unused in pairs(unusedColors) do      --name text for unused colors
+        if unused == true and COLORS_TYPE[color] == false then
             self.editButton({index = INDEX[color] + 10, position = {0,0,0}})
         end
     end

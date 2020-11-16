@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.0.2'
+VERSION = '20.0.3'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -23,6 +23,7 @@ COLORS_BBC_ROLE_TYPE = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = 
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 FAKE_ZONE_RGB = {Magenta = {255/255,0/255,127/255,0.16}, Lavender = {150/255,123/255,182/255,0.16}, Navy = {0/255,0/255,128/255,0.16}, Cyan = {73/255,213/255,253/255,0.16}, Mint = {137/255,195/255,129/255,0.16}, Lime = {184/255,241/255,97/255,0.16}, Peach = {241/255,212/255,162/255,0.16}, Coral = {226/255,154/255,138/255,0.16}, Maroon = {128/255,0,0,0.16}, Silver = {190/255,190/255,190/255,0.16},}
 COLORS_UI = {Magenta = "#FF007F40|#FF007FFF|#FF007F80|#FF007F80", Lavender = "#967BB640|#967BB6FF|#967BB680|#967BB680", Navy = "#00008040|#000080FF|#00008080|#00008080", Cyan = "#49D5FD40|#49D5FDFF|#49D5FD80|#49D5FD80", Mint = "#89C38140|#89C381FF|#89C38180|#89C38180", Lime = "#B8F16140|#B8F161FF|#B8F16180|#B8F16180", Peach = "#F1D4A240|#F1D4A2FF|#F1D4A280|#F1D4A280", Coral = "#E29A8A40|#E29A8AFF|#E29A8A80|#E29A8A80", Maroon = "#80000040|#800000FF|#80000080|#80000080", Silver = "#BEBEBE40|#BEBEBEFF|#BEBEBE80|#BEBEBE80"}
+COLORS_ORDER = {White = 1, Brown = 2, Red = 3, Orange = 4, Yellow = 5, Green = 6, Teal = 7, Blue = 8, Purple = 9, Pink = 10, Magenta = 11, Lavender = 12, Navy = 13, Cyan = 14, Mint = 15, Lime = 16, Peach = 17, Coral = 18, Maroon = 19, Silver = 20}
 VOTEHAND_SHOW_SCALE = {3,1,3}
 VOTEHAND_HIDE_SCALE = {0.01,0.01,0.01}
 BG_POS = {188, 141, -395}
@@ -1044,32 +1045,49 @@ function pruneSeats()
         return
     end
     local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)
+    local seatTool = getObjectFromGUID(SEAT_TOOL_GUID)
     local found = 0
     local i = 1
     local idx
     local switch = {}
-    while found < numPlayers do
-        if players[colors[i]] ~= nil then
-            found = found + 1
-            switch[colors[i]] = found
-        end
-        i = i + 1
+    local lastIndex = 0
+    local color
+    usedColors = {}
+    unusedColors = {}
+    removedColors = {}
+    for i = 1, 20 do
+        unusedColors[COLORS_ALL[i]] = true
     end
-    log(switch)
-    for k,v in pairs(switch) do
-        if COLORS_TYPE[colors[v]] == true then
-            players[k].changeColor(colors[v])
+    for k,v in pairs(colors) do
+        if players[v] ~= nil then
+            table.insert(usedColors, v)
+            unusedColors[v] = false
+            last = COLORS_ORDER[v]
+        end
+    end
+    for i = 1,20 do
+        color = COLORS_ALL[i]
+        if COLORS_ORDER[color] <= last then
+            if players[color] == nil then
+                table.insert(removedColors, color)
+            end
         else
-            players[k].changeColor('Grey')
-            idx = getSeatIdx(COLORS_ALL[v])
-            sitUI(players[k], _, 'sit'..tableSize..idx)
+            table.insert(usedColors, color)
         end
     end
+
     tableSize = numPlayers
     if tableControls ~= nil then
         tableControls.setVar('tableSize', tableSize)
         tableControls.call('refreshUI')
+        tableControls.setVar('maxSeats', #usedColors)
     end
+    if seatTool ~= nil then
+        seatTool.setTable('usedColors', usedColors)
+        seatTool.setTable('removedColors', removedColors)
+        seatTool.call('render')
+    end
+
     Wait.time(function() resizeTable() end, 1.5)
 end
 

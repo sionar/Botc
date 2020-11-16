@@ -5,9 +5,9 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
-ORDER = {White = 1, Brown = 2, Red = 3, Orange = 4, Yellow = 5, Green = 6, Teal = 7, Blue = 8, Purple = 9, Pink = 10, Magenta = 11, Lavender = 12, Navy = 13, Cyan = 14, Mint = 15, Lime = 16, Peach = 17, Coral = 18, Maroon = 19, Silver = 20}
+COLORS_ORDER = {White = 1, Brown = 2, Red = 3, Orange = 4, Yellow = 5, Green = 6, Teal = 7, Blue = 8, Purple = 9, Pink = 10, Magenta = 11, Lavender = 12, Navy = 13, Cyan = 14, Mint = 15, Lime = 16, Peach = 17, Coral = 18, Maroon = 19, Silver = 20}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 Z_START = -6
 Z_INC = 0.6
@@ -27,7 +27,7 @@ function onLoad()
     usedColors = Global.getTable('usedColors')
     removedColors = Global.getTable('removedColors')
     moveBoard()
-    refreshUI()
+    render()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
@@ -55,7 +55,7 @@ function used(clickedObject, playerColor, i)
         table.insert(removedColors, color)
     else
         for i,v in ipairs(removedColors) do
-            if ORDER[v] > ORDER[color] then
+            if COLORS_ORDER[v] > COLORS_ORDER[color] then
                 table.insert(removedColors, i, color)
                 found = true
                 break
@@ -65,7 +65,7 @@ function used(clickedObject, playerColor, i)
             table.insert(removedColors, color)
         end
     end
-    refreshUI()
+    render()
 end
 
 for i = 1,20 do
@@ -85,7 +85,7 @@ function removed(clickedObject, playerColor, i)
         table.insert(removedColors, color)
     else
         for i,v in ipairs(usedColors) do
-            if ORDER[v] > ORDER[color] then
+            if COLORS_ORDER[v] > COLORS_ORDER[color] then
                 table.insert(usedColors, i, color)
                 found = true
                 break
@@ -95,7 +95,7 @@ function removed(clickedObject, playerColor, i)
             table.insert(usedColors, color)
         end
     end
-    refreshUI()
+    render()
 end
 
 for i = 1,20 do
@@ -110,7 +110,7 @@ function reset(clickedObject, playerColor)
     end
     usedColors = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
     removedColors = {}
-    refreshUI()
+    render()
 end
 
 function apply(clickedObject, playerColor)
@@ -128,16 +128,20 @@ function apply(clickedObject, playerColor)
     local tableControls = getObjectFromGUID(TABLE_SIZER_GUID)
     Global.setTable('usedColors', usedColors)
     Global.setTable('removedColors', removedColors)
-    tableControls.setVar('maxSeats', numColors)
+    Global.call('setTokenTable')
+    Global.call('setDecalTable')
+    Global.setVar('tableSize', tableSize)
+    Global.call('resizeTable')
+    Global.call('moveTokens')
+    Global.call('moveDecals')
     if tableSize > numColors then
         Global.setVar('tableSize', numColors)
         tableControls.setVar('tableSize', numColors)
-        tableControls.call('refreshUI')
+        tableControls.call('render')
     end
-    Global.call('resizeTable')
 end
 
-function refreshUI()
+function render()
     self.clearButtons()
     local z
 

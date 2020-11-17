@@ -104,7 +104,7 @@ function moveText(params)
         end
     end
 
-    for color, unused in pairs(colors) do     --name text for used colors
+    for color, unused in pairs(unusedColors) do     --name text for used colors
         if unused == false and COLORS_TYPE[color] == false then
             self.editButton({index = INDEX[color] + 10, position = radius(NAME_RAD, angle[color], 2), rotation = {0, angle[color] + 180, 0}})
         end

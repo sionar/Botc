@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.0.5'
+VERSION = '20.0.6'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -1006,7 +1006,6 @@ function shufflePlayers()
     local colorTab = {}
     local playerTab = {}
     local allPlayers
-    local idx
     local numGreySeats = getNumGreySeats()
     for k,v in pairs(COLORS) do
         if players[v] ~= nil then
@@ -1019,8 +1018,7 @@ function shufflePlayers()
         if players[v] ~= nil then
             table.insert(colorTab, v)
             table.insert(playerTab, players[v].steam_id)
-            idx = getSeatIdx(v)
-            sitUI(players[v], _, 'sit' .. numGreySeats + 10 .. idx)
+            unsitGreyColor(players[v], color)
         end
     end
     if playerTab == nil then
@@ -1035,8 +1033,7 @@ function shufflePlayers()
                 if inTable(v, COLORS) then
                     v1.changeColor(v)
                 else
-                    idx = getSeatIdx(v)
-                    sitUI(v1, _, 'sit' .. numGreySeats + 10 .. idx)
+                    sitGreyColor(v1, v)
                 end
                 break
             end
@@ -1740,7 +1737,6 @@ function chatMove(playerName, seatColor, player, swap)
     local playerColor = nil
     local colorFound = false
     local playerList = Player.getPlayers()
-    local idx
     local numGreySeats = getNumGreySeats()
 
     for k,v in pairs(COLORS_ALL) do
@@ -1786,15 +1782,12 @@ function chatMove(playerName, seatColor, player, swap)
             playerColor = v
         end
     end
-
     for k,v in pairs(playersExIds) do
         if playerFound.steam_id == v then
-            idx = getSeatIdx(k)
-            sitUI(playerFound, _, 'sit'.. numGreySeats + 10 .. idx)
+            unsitGreyColor(playerFound, k)
         end
     end
     playerFound.changeColor('Grey')
-
     if started and playerColor ~= nil and swap then
         rad = tableSize * 0.4 + 6
         swapObjects(playerColor, colorFound)
@@ -1811,7 +1804,7 @@ function chatMove(playerName, seatColor, player, swap)
     elseif inTable(colorFound, COLORS_EX) and players[colorFound] == nil then
         playerFound.changeColor('Grey')
         idx = getSeatIdx(colorFound)
-        sitUI(playerFound, _, 'sit'.. numGreySeats + 10 .. idx)
+        sitGreyColor(playerFound, colorFound)
     end
     player.print(playerFound.steam_name .. ' has been moved to ' .. colorFound .. '.')
     refreshUI()
@@ -1823,7 +1816,6 @@ function chatRemove(seatColor, player)
     end
 
     local colorFound = false
-    local idx, numGreySeats
     for k,v in pairs(COLORS_ALL) do
         if string.match(string.lower(v), string.lower(seatColor)) then
             colorFound = v
@@ -1845,9 +1837,7 @@ function chatRemove(seatColor, player)
         if inTable(colorFound, COLORS) or colorFound == 'Black' then
             players[colorFound].changeColor('Grey')
         else
-            idx = getSeatIdx(colorFound)
-            numGreySeats = getNumGreySeats()
-            sitUI(players[colorFound], _, 'sit'.. 10 + numGreySeats ..idx)
+            unsitGreyColor(players[colorFound], colorFound)
         end
     else
         player.print('Error: Could not remove player: seat is empty.', {1,0,0})
@@ -1857,8 +1847,7 @@ end
 function chatSwap(seatColor1, seatColor2, player)
     local color1, color2
     local player1id, player2id
-    local obj, idx
-    local numGreySeats = getNumGreySeats()
+    local obj
 
     if not seatColor1 or not seatColor2 then
         return
@@ -1913,15 +1902,13 @@ function chatSwap(seatColor1, seatColor2, player)
     if inTable(color1, COLORS) then
         players[color1].changeColor('Grey')
     else
-        idx = getSeatIdx(color1)
-        sitUI(players[color1], _, 'sit' .. numGreySeats + 10 .. idx)
+        unsitGreyColor(players[color1], color1)
     end
 
     if inTable(color2, COLORS) then
         players[color2].changeColor('Grey')
     else
-        idx = getSeatIdx(color2)
-        sitUI(players[color2], _, 'sit' .. numGreySeats + 10 .. idx)
+        unsitGreyColor(players[color2], color2)
     end
 
     if started then
@@ -1940,8 +1927,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color1, COLORS) then
                 Wait.time(function() v.changeColor(color1) end, 0.1)
             elseif inTable(color1, COLORS_EX) then
-                idx = getSeatIdx(color1)
-                Wait.time(function() sitUI(v, _, 'sit' .. numGreySeats + 10 .. idx) end, 0,1)
+                Wait.time(function() sitGreyColor(v, color1) end, 0,1)
             end
             break
         end
@@ -1953,8 +1939,7 @@ function chatSwap(seatColor1, seatColor2, player)
             if inTable(color2, COLORS) then
                 Wait.time(function () v.changeColor(color2) end, 0.1)
             elseif inTable(color2, COLORS_EX) then
-                idx = getSeatIdx(color2)
-                Wait.time(function () sitUI(v, _, 'sit' .. numGreySeats + 10 .. idx) end, 0.1)
+                Wait.time(function() sitGreyColor(v, color2) end, 0,1)
             end
             break
         end
@@ -2426,7 +2411,7 @@ function nominate(params)
     if currentNominator == '' then
         currentNominator = nominator
         params.index = 2
-        params.color = {0,0,1}
+        params.color = {58/255, 150/255, 255/255}
         params.font_color = {1,1,1}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
         clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = nominator})
@@ -2436,13 +2421,13 @@ function nominate(params)
         currentNominator = ''
         params.index = 2
         params.color = {53/255,52/255,60/255}
-        params.font_color = {0,0,1}
+        params.font_color = {58/255, 150/255, 255/255}
         getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
         clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = 'None'})
         if currentNominated ~= '' then
             params.index = 0
             params.color = {53/255,52/255,60/255}
-            params.font_color = {1,0,0}
+            params.font_color = {218/255, 25/255, 24/255}
             getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(params)
             currentNominated = ''
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
@@ -2486,7 +2471,7 @@ function nominated(params)
         if currentNominated == '' then
             currentNominated = target
             buttonParams.index = 0
-            buttonParams.color = {1,0,0}
+            buttonParams.color = {218/255, 25/255, 24/255}
             buttonParams.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
@@ -2495,17 +2480,17 @@ function nominated(params)
             currentNominated = ''
             buttonParams.index = 0
             buttonParams.color = {53/255,52/255,60/255}
-            buttonParams.font_color = {1,0,0}
+            buttonParams.font_color = {218/255, 25/255, 24/255}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
             clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
         else
             buttonParams.index = 0
             buttonParams.color = {53/255,52/255,60/255}
-            buttonParams.font_color = {1,0,0}
+            buttonParams.font_color = {218/255, 25/255, 24/255}
             getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
             currentNominated = target
-            buttonParams.color = {1,0,0}
+            buttonParams.color = {218/255, 25/255, 24/255}
             buttonParams.font_color = {1,1,1}
             getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
@@ -2526,13 +2511,13 @@ function resetCurrentNominations()
     if currentNominator ~= '' and canNominate[currentNominator] == true then
         buttonParams.index = 2
         buttonParams.color = {53/255,52/255,60/255}
-        buttonParams.font_color = {0,0,1}
+        buttonParams.font_color = {58/255, 150/255, 255/255}
         getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominator]).editButton(buttonParams)
     end
     if currentNominated ~= '' and canBeNominated[currentNominated] == true then
         buttonParams.index = 0
         buttonParams.color = {53/255,52/255,60/255}
-        buttonParams.font_color = {1,0,0}
+        buttonParams.font_color = {218/255, 25/255, 24/255}
         getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
     end
     currentNominator = ''

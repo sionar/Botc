@@ -272,7 +272,7 @@ CHARACTERS =
     Sailor = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player: either you or they are drunk until dusk. You can not die.'},
     Chambermaid = {Type = 'Townsfolk', Ability = false, Response = true, Prompt = 'Choose two alive players to check.', Description = 'Each night, choose 2 alive players (not yourself): you learn how many woke tonight due to their ability.'},
     Chambermaid2 = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'P1 of those players woke up tonight.', Description = ''},
-    Exorcist = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose a player (not the same as last night).', Description = 'Each night*, choose a player (not the same as last night): the Demon, if chosen, learns who you are & does not act tonight.'},
+    Exorcist = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose a player (not the same as last night.)', Description = 'Each night*, choose a player (not the same as last night): the Demon, if chosen, learns who you are & does not act tonight.'},
     Innkeeper = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose two players to keep alive.', Description = 'Each night*, choose 2 players: they cannot die tonight, but 1 is drunk until dusk.'},
     Gambler = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose a player and their character.', Description = 'Each night*, choose a player & guess their character: if you guess wrong, you die.'},
     Gossip = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = '', Description = 'Each day, you may make a public statement. Tonight, if it was true, a player dies.'},

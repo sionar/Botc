@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.0.6'
+VERSION = '20.1.0'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]' .. VERSION .. '[-]\n\n[89C381]Player chat commands:[-]\n[967BB6]c[-] : See the list of chat commands.\n[967BB6]h[-] : Show the vote history.\n[967BB6]r[-] : Show your character.\n[967BB6]l[-] : Show all the logs.[-]\n[967BB6]n[-] : Show the night logs.[-]\n[967BB6]d[-] : Show the day logs.[-]\n[967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]\n[967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]\n\n[89C381]Storyteller chat commands:[-]\n[967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.\n[967BB6].u[-] [B8F161]player[-] [FF007F]team[-] : Move a player to a team.\n[967BB6].b[-] [E29A8A]color[-] : Move a color to Grey.\n[967BB6].s[-] [E29A8A]color[-] [E29A8A]color[-]: Swap two colors + chars.\n[967BB6].t[-] [E29A8A]color[-]: Make color traveler/non-traveler.'
@@ -186,11 +186,9 @@ function onLoad(saveString)
         end
     end
 
-    for k,v in pairs(VOTE_PANEL_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj ~= nil then
-            obj.interactable = false
-        end
+    obj = getObjectFromGUID(VOTE_PANEL_GUID)
+    if obj ~= nil then
+        obj.interactable = false
     end
 
     for k,v in pairs(LIFE_BASE_GUIDS) do
@@ -305,13 +303,6 @@ function refreshObjects()
         end
     end
 
-    for k,v in pairs(VOTE_PANEL_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj ~= nil then
-            obj.reload()
-        end
-    end
-
     for k,v in pairs(LIFE_BASE_GUIDS) do
         obj = getObjectFromGUID(v)
         if obj ~= nil then
@@ -327,12 +318,11 @@ function refreshObjects()
     end
 
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    local clockOn = clockControls.getVar('clockOn')
-    if not clockOn == 0 then
-        return
-    end
-    if clockOn then
-        Wait.time(function () showVoteButtons({voteMode = 'execution'}) end, 1)
+    if clockControls ~= nil then
+        local clockOn = clockControls.getVar('clockOn')
+        if clockOn then
+            Wait.time(function () showVoteButtons({voteMode = 'execution'}) end, 2)
+        end
     end
     Wait.time(lockObjects, 2)
 end
@@ -375,13 +365,6 @@ function lockObjects()
     end
 
     createFlipButtons()
-
-    for k,v in pairs(VOTE_PANEL_GUIDS) do
-        obj = getObjectFromGUID(v)
-        if obj ~= nil then
-            obj.interactable = false
-        end
-    end
 end
 
 function resetNotes()
@@ -614,6 +597,7 @@ function resizeTable()
     local zoneSize
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
+    local votePanel = getObjectFromGUID(VOTE_PANEL_GUID)
     local radSt = tableSize * 0.6 + 6
     local fontSize
     local idx
@@ -670,16 +654,6 @@ function resizeTable()
             obj.setPositionSmooth(radius(72.5,angle[color], 1))
             obj.setRotationSmooth({0, angle[color], 0})
             obj.interactable = true
-        end
-        obj = getObjectFromGUID(VOTE_PANEL_GUIDS[color])
-        if obj == nil then
-            obj = storageBag.takeObject({guid = VOTE_PANEL_GUIDS[color], rotation = {0, angle[color], 0}})
-        end
-        if obj ~= nil then
-            obj.setLock(true)
-            obj.interactable = false
-            obj.setPositionSmooth(radius(61, angle[color], 0.8))
-            obj.setRotationSmooth({0, angle[color], 0})
         end
         obj = getObjectFromGUID(VOTEHAND_GUIDS[color])
         if obj == nil then
@@ -777,11 +751,6 @@ function resizeTable()
                 obj.setPositionSmooth({0,-1,0 + TABLE_OFFSET})
             end
 
-            obj = getObjectFromGUID(VOTE_PANEL_GUIDS[color])
-            if obj ~= nil then
-                storageBag.putObject(obj)
-            end
-
             obj = getObjectFromGUID(VOTEHAND_GUIDS[color])
             if obj ~= nil then
                 obj.setScale(VOTEHAND_HIDE_SCALE)
@@ -827,8 +796,13 @@ function resizeTable()
     toggleLights({switching = false})
     UI.setAttribute('colorSelection','active',false)
     obj = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    local clockOn
     if obj ~= nil then
         obj.call('updateSettings')
+        clockOn = obj.getVar('clockOn')
+        if clockOn then
+            votePanel.call('createButtons')
+        end
     end
     Wait.time(updateFakeZoneColliders, 1)
     showExtensionUI()
@@ -2364,23 +2338,30 @@ end
 function vote(params)
     local voter = params.voter
     local handObj = getObjectFromGUID(VOTEHAND_GUIDS[voter])
+    local index
+    for k,color in pairs(colors) do
+        if color == voter then
+            index = k
+            break
+        end
+    end
     if not voteLock[voter] then
         if voted[voter] then
             voted[voter] = false
-            params.index = 1
+            params.index = (index - 1) * 3 + 1
             params.color = {53/255,52/255,60/255}
             params.font_color = {1,1,1}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(params)
             if handObj then
                 handObj.setScale(VOTEHAND_HIDE_SCALE)
                 handObj.setPosition(radius(75, angle[voter], -5))
             end
         else
             voted[voter] = true
-            params.index = 1
+            params.index = (index - 1) * 3 + 1
             params.color = {236/255,229/255,44/255}
             params.font_color = {1,1,1}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[voter]).editButton(params)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(params)
             if handObj then
                 handObj.setScale(VOTEHAND_SHOW_SCALE)
                 handObj.setPositionSmooth(radius(45, angle[voter], 5))
@@ -2396,6 +2377,7 @@ end
 function nominate(params)
     local nominator = params.nominator
     local params = {}
+    local nominatorIndex, nominatedIndex
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     if clockControls == nil then
         return
@@ -2407,28 +2389,40 @@ function nominate(params)
     if rotating then
         return
     end
+    for k,color in pairs(colors) do
+        if color == nominator then
+            nominatorIndex = k
+            break
+        end
+    end
 
     if currentNominator == '' then
         currentNominator = nominator
-        params.index = 2
+        params.index = (nominatorIndex - 1) * 3 + 2
         params.color = {58/255, 150/255, 255/255}
         params.font_color = {1,1,1}
-        getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(params)
         clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = nominator})
         UI.setAttribute('colorSelection','active','false')
         colorTable = false
     elseif currentNominator == nominator then
         currentNominator = ''
-        params.index = 2
+        params.index = (nominatorIndex - 1) * 3 + 2
         params.color = {53/255,52/255,60/255}
         params.font_color = {58/255, 150/255, 255/255}
-        getObjectFromGUID(VOTE_PANEL_GUIDS[nominator]).editButton(params)
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(params)
         clockControls.call('pointHand', {handGUID = HOUR_HAND_GUID, color = 'None'})
         if currentNominated ~= '' then
-            params.index = 0
+            for k,color in pairs(colors) do
+                if color == currentNominated then
+                    nominatedIndex = k
+                    break
+                end
+            end
+            params.index = (nominatedIndex - 1) * 3 + 0
             params.color = {53/255,52/255,60/255}
             params.font_color = {218/255, 25/255, 24/255}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(params)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(params)
             currentNominated = ''
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
             clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
@@ -2447,6 +2441,7 @@ end
 function nominated(params)
     local player = params.player
     local target = params.target
+    local index
     local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     if clockControls == nil then
         return
@@ -2456,6 +2451,12 @@ function nominated(params)
     local nominateResult
     if rotating then
         return
+    end
+    for k,color in pairs(colors) do
+        if color == target then
+            index = k
+            break
+        end
     end
 
     if currentNominator ~= '' and currentNominator ~= player and player ~= 'Black' then
@@ -2470,34 +2471,32 @@ function nominated(params)
     if (player == currentNominator or player == 'Black') and canBeNominated[target] then
         if currentNominated == '' then
             currentNominated = target
-            buttonParams.index = 0
+            buttonParams.index = (index - 1) * 3 + 0
             buttonParams.color = {218/255, 25/255, 24/255}
             buttonParams.font_color = {1,1,1}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
             clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = target})
         elseif currentNominated == target then
             currentNominated = ''
-            buttonParams.index = 0
+            buttonParams.index = (index - 1) * 3 + 0
             buttonParams.color = {53/255,52/255,60/255}
             buttonParams.font_color = {218/255, 25/255, 24/255}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = 'None'})
             clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = 'None'})
         else
-            buttonParams.index = 0
+            buttonParams.index = (index - 1) * 3 + 0
             buttonParams.color = {53/255,52/255,60/255}
             buttonParams.font_color = {218/255, 25/255, 24/255}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
             currentNominated = target
             buttonParams.color = {218/255, 25/255, 24/255}
             buttonParams.font_color = {1,1,1}
-            getObjectFromGUID(VOTE_PANEL_GUIDS[target]).editButton(buttonParams)
+            getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
             clockControls.call('pointHand', {handGUID = MINUTE_HAND_GUID, color = target})
             clockControls.call('pointHand', {handGUID = SECOND_HAND_GUID, color = target})
         end
-    else
-        players[player].print('You have already nominated today.', {1,0,0})
     end
 end
 
@@ -2507,18 +2506,34 @@ function resetCurrentNominations()
     if clockControls == nil then
         return
     end
+    local nominatorIndex, nominatedIndex
 
     if currentNominator ~= '' and canNominate[currentNominator] == true then
-        buttonParams.index = 2
+        print(currentNominator)
+        for k,color in pairs(colors) do
+            if color == currentNominator then
+                index = k
+                break
+            end
+        end
+
+        buttonParams.index = (index - 1) * 3 + 2
         buttonParams.color = {53/255,52/255,60/255}
         buttonParams.font_color = {58/255, 150/255, 255/255}
-        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominator]).editButton(buttonParams)
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
     end
     if currentNominated ~= '' and canBeNominated[currentNominated] == true then
-        buttonParams.index = 0
+        print(currentNominated)
+        for k,color in pairs(colors) do
+            if color == currentNominated then
+                index = k
+                break
+            end
+        end
+        buttonParams.index = (index - 1) * 3 + 0
         buttonParams.color = {53/255,52/255,60/255}
         buttonParams.font_color = {218/255, 25/255, 24/255}
-        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
     end
     currentNominator = ''
     currentNominated = ''
@@ -2546,12 +2561,9 @@ function checkLiving()
 end
 
 function hideVoteButtons()
-    local votePanel
-    for k,v in pairs(VOTE_PANEL_GUIDS) do
-        votePanel = getObjectFromGUID(v)
-        if votePanel ~= nil then
-            votePanel.clearButtons()
-        end
+    local votePanel = getObjectFromGUID(VOTE_PANEL_GUID)
+    if votePanel ~= nil then
+        votePanel.clearButtons()
     end
     for k,v in pairs(COLORS_ALL) do
         voteButtonsOn[v] = false
@@ -2560,7 +2572,6 @@ end
 
 function showVoteButtons(params)
     local voteMode = params.voteMode
-    local votePanel
     local buttonParams = {}
     currentNominator = ''
     currentNominated = ''
@@ -2568,32 +2579,22 @@ function showVoteButtons(params)
     updatePlayers()
     for k,v in pairs(COLORS_ALL) do
         if lifeTokens[v].object ~= nil then
-            votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-            if votePanel ~= nil then
-                votePanel.call('createButtons')
-            end
             voteButtonsOn[v] = true
-            canNominate[v] = true
             canBeNominated[v] = true
             voted[v] = false
-            if voteMode == 'execution' then
-                if not living[v] then
-                    buttonParams.color = {0,0,0}
-                    buttonParams.font_color = {0,0,0}
-                    buttonParams.index = 2
-                    getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
-                    canNominate[v] = false
-                end
-                if not hasVote[v] then
-                    buttonParams.color = {0,0,0}
-                    buttonParams.font_color = {0,0,0}
-                    buttonParams.index = 1
-                    getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
-                end
+            if living[v] then
+                canNominate[v] = true
+            else
+                canNominate[v] = false
             end
         else
+            canNominate[v] = false
             voteButtonsOn[v] = false
         end
+    end
+    local votePanel = getObjectFromGUID(VOTE_PANEL_GUID)
+    if votePanel ~= nil then
+        votePanel.call('createButtons')
     end
 end
 
@@ -2668,16 +2669,30 @@ end
 function updateNominations()
     canNominate[currentNominator] = false
     canBeNominated[currentNominated] = false
+    local nominatorIndex, nominatedIndex
     local buttonParams = {}
     buttonParams.color = {0,0,0}
     buttonParams.font_color = {0,0,0}
-    buttonParams.index = 2
+
     if currentNominator ~= '' then
-        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominator]).editButton(buttonParams)
+        for k,color in pairs(colors) do
+            if color == currentNominator then
+                nominatorIndex = k
+                break
+            end
+        end
+        buttonParams.index = (nominatorIndex - 1) * 3 + 2
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
     end
-    buttonParams.index = 0
     if currentNominated ~= '' then
-        getObjectFromGUID(VOTE_PANEL_GUIDS[currentNominated]).editButton(buttonParams)
+        for k,color in pairs(colors) do
+            if color == currentNominated then
+                nominatedIndex = k
+                break
+            end
+        end
+        buttonParams.index = (nominatedIndex - 1) * 3 + 0
+        getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
     end
     currentNominator = ''
     currentNominated = ''
@@ -2696,14 +2711,14 @@ function resetVotes(params)
             if hasVote[v] or params.voteMode == 'exile' then
                 buttonParams.color = {53/255,52/255,60/255}
                 buttonParams.font_color = {1,1,1}
-                buttonParams.index = 1
-                getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                buttonParams.index = (k-1) * 3 + 1
+                getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
                 voteLock[v] = false
             else
                 buttonParams.color = {0,0,0}
                 buttonParams.font_color = {0,0,0}
-                buttonParams.index = 1
-                getObjectFromGUID(VOTE_PANEL_GUIDS[v]).editButton(buttonParams)
+                buttonParams.index = (k-1) * 3 + 1
+                getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
                 voteLock[v] = true
             end
         else

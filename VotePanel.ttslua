@@ -7,7 +7,11 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.1'
+VERSION = '2.0.0'
+DISTANCE = 3
+RADIUS = 40
+COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
+
 
 ------------------Functions
 function onLoad()
@@ -18,21 +22,72 @@ function onLoad()
 end
 
 function createButtons()
+    self.clearButtons()
     local params = {}
-    local color = self.getDescription()
+    local colors = Global.getTable('colors')
+    local angle = Global.getTable('angle')
+    local lifeTokens = Global.getTable('lifeTokens')
+    local canNominate = Global.getTable('canNominate')
+    local canBeNominated = Global.getTable('canBeNominated')
+    local hasVote = Global.getTable('hasVote')
+    local voted = Global.getTable('voted')
+    local currentNominator = Global.getVar('currentNominator')
+    local currentNominated = Global.getVar('currentNominated')
+    local scale
+    for k,color in pairs(colors) do
+        if lifeTokens[color].object == nil then
+            scale = {0,0,0}
+        else
+            scale = {1,1,1}
+        end
+        params = {click_function = 'nominated' .. color, function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.nominate .. color, position = radiusNominated(RADIUS, -1 * angle[color], 1), rotation = {0, angle[color], 0}, color = {53/255,52/255,60/255}, font_color = {218/255, 25/255, 24/255}, width = 1000, height = 500, font_size = 200, scale = scale, tooltip = 'Right click to enable/disable being nominated'}
+        if not canBeNominated[color] then
+            params.color = {0,0,0}
+            params.font_color = {0,0,0}
+        end
+        if currentNominated == color then
+            params.color = {218/255, 25/255, 24/255}
+            params.font_color = {1,1,1}
+        end
+        self.createButton(params)
 
-    params = {click_function = 'nominated', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.nominate .. color, position = {-3, 0.6, 0}, color = {53/255,52/255,60/255}, font_color = {218/255, 25/255, 24/255}, width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable being nominated'}
-    self.createButton(params)
+        params = {click_function = 'vote' .. color, function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.vote, position = radius(RADIUS, -1 * angle[color], 1), color = {53/255,52/255,60/255}, rotation = {0, angle[color], 0}, font_color = {1,1,1}, width = 1000, height = 500, font_size = 400, scale = scale}
+        if not hasVote[color] then
+            params.color = {0,0,0}
+            params.font_color = {0,0,0}
+        end
+        if voted[color] then
+            params.color = {53/255,52/255,60/255}
+            params.font_color = {1,1,1}
+        end
+        self.createButton(params)
 
-    params = {click_function = 'vote', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.vote, position = {0, 0.6, 0}, color = {53/255,52/255,60/255}, font_color = {1,1,1}, width = 1000, height = 500, font_size = 400}
-    self.createButton(params)
-
-    params = {click_function = 'nominate', function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.become_nom, position = {3, 0.6, 0}, color = {53/255,52/255,60/255}, font_color = {58/255, 150/255, 255/255},  width = 1000, height = 500, font_size = 200, tooltip = 'Right click to enable/disable allowing nomination'}
-    self.createButton(params)
+        params = {click_function = 'nominate' .. color, function_owner = self, label = LABELS[LANGUAGE].VOTING_BUTTONS.become_nom, position = radiusNominate(RADIUS, -1 * angle[color], 1), rotation = {0, angle[color], 0}, color = {53/255,52/255,60/255}, font_color = {58/255, 150/255, 255/255},  width = 1000, height = 500, font_size = 200, scale = scale, tooltip = 'Right click to enable/disable allowing nomination'}
+        if not canNominate[color] then
+            params.color = {0,0,0}
+            params.font_color = {0,0,0}
+        end
+        if currentNominator == color then
+            params.color = {58/255, 150/255, 255/255}
+            params.font_color = {1,1,1}
+        end
+        self.createButton(params)
+    end
 end
 
-function vote(clickedButton, playerColor)
-    local color = self.getDescription()
+function radius(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180)}
+end
+
+function radiusNominate(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180) - DISTANCE * math.cos(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180) + DISTANCE * math.sin(angle*math.pi/180)}
+end
+
+function radiusNominated(rad, angle, height)
+    return {rad*math.sin(angle*math.pi/180) + DISTANCE * math.cos(angle*math.pi/180), height, rad*math.cos(angle*math.pi/180) - DISTANCE * math.sin(angle*math.pi/180)}
+end
+
+function vote(clickedObject, playerColor, color)
     local callParams = {}
     if playerColor == color or playerColor == 'Black' then
         callParams.voter = color
@@ -40,9 +95,14 @@ function vote(clickedButton, playerColor)
     end
 end
 
-function nominate(clickedButton, playerColor, rightClick)
+for k,color in pairs(COLORS_ALL) do
+    _G['vote' .. color] = function(clickedObject, playerColor)
+        vote(clickedObject, playerColor, color)
+    end
+end
+
+function nominate(clickedButton, playerColor, rightClick, color)
     if not rightClick then
-        local color = self.getDescription()
         local callParams = {}
         if playerColor == color or playerColor == 'Black' then
             callParams.nominator = color
@@ -50,59 +110,84 @@ function nominate(clickedButton, playerColor, rightClick)
         end
     else
         if playerColor == 'Black' then
-            toggleDisableNominate()
+            toggleDisableNominate(color)
         end
     end
 end
 
-function nominated(clickedButton, playerColor, rightClick)
+for k,color in pairs(COLORS_ALL) do
+    _G['nominate' .. color] = function(clickedObject, playerColor, rightClick)
+        nominate(clickedObject, playerColor, rightClick, color)
+    end
+end
+
+function nominated(clickedButton, playerColor, rightClick, color)
     if not rightClick then
-        local color = self.getDescription()
         local callParams = {}
         callParams.player = playerColor
         callParams.target = color
         Global.call('nominated', callParams)
     else
         if playerColor == 'Black' then
-            toggleDisableNominated()
+            toggleDisableNominated(color)
         end
     end
 end
 
-function toggleDisableNominate()
+for k,color in pairs(COLORS_ALL) do
+    _G['nominated' .. color] = function(clickedObject, playerColor, rightClick)
+        nominated(clickedObject, playerColor, rightClick, color)
+    end
+end
+
+function toggleDisableNominate(color)
     local canNominate = Global.getTable('canNominate')
-    local color = self.getDescription()
+    local colors = Global.getTable('colors')
+    local index
+    for k,v in pairs(colors) do
+        if v == color then
+            index = k
+            break
+        end
+    end
     local buttonParams = {}
     if canNominate[color] == true then
         canNominate[color] = false
-        buttonParams.index = 2
+        buttonParams.index = (index - 1) * 3 + 2
         buttonParams.color = {0,0,0}
         buttonParams.font_color = {0,0,0}
     else
         canNominate[color] = true
-        buttonParams.index = 2
+        buttonParams.index = (index - 1) * 3 + 2
         buttonParams.color = {53/255,52/255,60/255}
-        buttonParams.font_color = {0,0,0}
+        buttonParams.font_color = {58/255, 150/255, 255/255}
     end
     self.editButton(buttonParams)
     Global.setTable('canNominate', canNominate)
     Global.call('resetCurrentNominations')
 end
 
-function toggleDisableNominated()
+function toggleDisableNominated(color)
     local canBeNominated = Global.getTable('canBeNominated')
-    local color = self.getDescription()
+    local colors = Global.getTable('colors')
+    local index
+    for k,v in pairs(colors) do
+        if v == color then
+            index = k
+            break
+        end
+    end
     local buttonParams = {}
     if canBeNominated[color] == true then
         canBeNominated[color] = false
-        buttonParams.index = 0
+        buttonParams.index = (index - 1) * 3 + 0
         buttonParams.color = {0,0,0}
         buttonParams.font_color = {0,0,0}
     else
         canBeNominated[color] = true
-        buttonParams.index = 0
+        buttonParams.index = (index - 1) * 3 + 0
         buttonParams.color = {53/255,52/255,60/255}
-        buttonParams.font_color = {0,0,0}
+        buttonParams.font_color = {218/255, 25/255, 24/255}
     end
     self.editButton(buttonParams)
     Global.setTable('canBeNominated', canBeNominated)

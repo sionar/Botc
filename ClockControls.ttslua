@@ -332,14 +332,6 @@ for k,v in pairs(COLORS_ALL) do
             return
         end
 
-        local votePanel = getObjectFromGUID(VOTE_PANEL_GUIDS[v])
-        if votePanel then
-            local buttons = votePanel.getButtons()
-            if buttons == nil then
-                return
-            end
-        end
-
         local clock = getObjectFromGUID(CLOCK_GUID)
         if clock.getScale().x == 0 then
             return

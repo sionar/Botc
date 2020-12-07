@@ -57,6 +57,7 @@ handRotation = {}
 colors = {}
 clockStyle = 1
 tableSize = 10
+muted = {}
 
 
 ------------------Functions
@@ -87,6 +88,7 @@ function onLoad(saveString)
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
     refreshButtons()
     hideGrimoire()
+    generateMuteTable()
 end
 
 function onSave()
@@ -106,6 +108,11 @@ function onPlayerConnect(player)
     if allBlind then
         player.blindfolded = true
     end
+    muted[player.steam_id] = false
+end
+
+function onPlayerDisconnect(player)
+    muted[player.steam_id] = false
 end
 
 function onFixedUpdate()
@@ -130,6 +137,14 @@ function onFixedUpdate()
         toggleClockMovement(_, 'Black')
         Global.call('updateVoteResults', {voteMode = votingMode})
         pointedPlayer = 'None'
+    end
+end
+
+function generateMuteTable()
+    for k,v in pairs(Player.getPlayers()) do
+        if muted[v.steam_id] == nil then
+            muted[v.steam_id] = false
+        end
     end
 end
 
@@ -206,7 +221,7 @@ function toggleClock(vm)
         clockOn = true
         Global.call('showVoteButtons', {voteMode = vm})
         Global.call('resetVotes', {voteMode = vm})
-        teamTool.call('removeAllFromTeams')
+        teamTool.call('removeAll')
         votingMode = vm
         secondHand.setScale(CLOCK_HAND_SCALE[clockStyle].second)
         secondHand.setPosition({0, 1.4, 0 + TABLE_OFFSET})
@@ -566,6 +581,7 @@ for k,v in pairs(COLORS_ALL) do
         local player = players[v]
         if player ~= nil then
             player.mute()
+            muted[player.steam_id] = not muted[player.steam_id]
         end
     end
 end
@@ -582,9 +598,19 @@ function muteAll(clickedObject, playerColor)
         self.editButton({index = 0, label = 'Mute All', color = {40/255, 47/255, 85/255}})
     end
 
-    for k, v in pairs(allPlayers) do
-        if v.color ~= 'Black' then
-            v.mute()
+    if allMuted then
+        for k, v in pairs(allPlayers) do
+            if v.color ~= 'Black' and not muted[v.steam_id] then
+                v.mute()
+                muted[v.steam_id] = true
+            end
+        end
+    else
+        for k, v in pairs(allPlayers) do
+            if v.color ~= 'Black' and muted[v.steam_id] then
+                v.mute()
+                muted[v.steam_id] = false
+            end
         end
     end
 end

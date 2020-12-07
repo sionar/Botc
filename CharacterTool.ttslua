@@ -476,9 +476,9 @@ function import()
     local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local reminderBagJSON
 
-    Global.setVar('customSet', true)
     Global.setTable('customList', characters)
     if not imageLoaded then
+        Global.setVar('customSet', true)
         Global.call('drawAllCharSheets')
     end
 

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.1.2'
+VERSION = '20.1.3'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -272,7 +272,7 @@ function onLoad(saveString)
 
     Turns.order = {'Black', 'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
     updateFakeZoneColliders()
-    updatePlayers()
+    updateTokenStatus()
     refreshUI()
     showExtensionUI()
     Wait.time(refreshObjects,5)
@@ -461,13 +461,6 @@ function updatePlayers()
                 playersExIds[v] = nil
                 playersEx[v] = nil
                 mainTable.call('setName', {color = v, name = ''})
-                for i = 11, 20 do
-                    if playersEx[v] == nil then
-                        UI.setAttributes('sit' .. i .. v, {text = 'Sit in ' .. v, color = '#FFFFFF'})
-                    else
-                        UI.setAttributes('sit' .. i .. v, {text = 'Leave ' .. v, color = '#FFFFFF'})
-                    end
-                end
                 deleteAvatar(v)
             else
                 playersEx[v] = found
@@ -479,6 +472,7 @@ function updatePlayers()
     if characterTool ~= nil and prevNumPlayers ~= currNumPlayers and not storytellerMode then
         characterTool.call('refreshMenu')
     end
+    updateSitUI()
     return players
 end
 
@@ -1257,6 +1251,7 @@ function resetGame()
     mainTable.call('clearText')
     Global.setDecals({})
     started = false
+    customSet = false
     chars = {}
     refreshUI()
     objs = storageBag.getObjects()
@@ -1475,7 +1470,7 @@ function onPlayerConnect(player)
     end
 end
 
-function onPlayerDisconnect(color)
+function onPlayerDisconnect(player)
     local obj = getObjectFromGUID(TEAM_TOOL_GUID)
     if obj ~= nil then
         Wait.time(function () obj.call('refreshUI') end, 0.1)

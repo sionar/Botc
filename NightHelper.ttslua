@@ -72,7 +72,7 @@ function onLoad(saveString)
         order = save['o']
         orderRef = save['r']
         demonColor = save['d']
-        -- unblind = save['u']
+        unblind = save['u']
         checkPrompts = save['c']
         blindAuto = save['b']
         dayNum = save['day']
@@ -190,6 +190,7 @@ end
 function setNightOrder(night)
     order = {}
     local players = Global.call('updatePlayers')
+    local mode = Global.getVar('mode')
     if blindAuto then
         for k,v in pairs(unblind) do
             if players[v] ~= nil then
@@ -201,9 +202,9 @@ function setNightOrder(night)
     if night == 'first' then
         table.insert(order, {char = 'Evil_Info', color = 'White'})
         table.insert(order, {char = 'Demon_Info', color = demonColor})
-        orderRef = FIRST
+        orderRef = FIRST[mode]
     else
-        orderRef = OTHER
+        orderRef = OTHER[mode]
     end
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do

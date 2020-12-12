@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.1.3'
+VERSION = '20.1.4'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -43,7 +43,7 @@ HELP_MESSAGE =
 [967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]
 [967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]
 
-[89C381]Storyteller chat commands:
+[89C381]Storyteller chat commands:[-]
 [967BB6]n[-] : Show the night logs.
 [967BB6]d[-] : Show the day logs.
 [967BB6].m[-] [B8F161]player[-] [E29A8A]color[-] : Move a player to a color.
@@ -1527,6 +1527,7 @@ function onChat(message, player)
             end
             receiverStrLen = string.len(receiverColor)
             msg = string.sub(message, len + receiverStrLen + 3)
+
         elseif colorFound and string.len(command) > 3 then
             receiverColor = colorFound
             command = '.w'

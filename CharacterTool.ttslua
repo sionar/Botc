@@ -12,6 +12,7 @@ BUTTON_Y = 0.1
 Z_START = -7
 Z_INC = 0.44
 DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/794260766603642376/C9EF974279D8B421F1784592C5C7D444AD283EFE/'
+DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/794252892468431180/25B1B2642FF953D85BC96ABA6B1D842239739720/'
 
 #include GUIDs.ttslua
 
@@ -38,8 +39,8 @@ end
 
 batchList = {}
 imageLoaded = false
-imageValid = false
 customImageUrl = ''
+customNightSheetUrl = ''
 
 
 ------------------Functions
@@ -810,6 +811,7 @@ function save(clickedObject, playerColor, index)
     saveFile[index].charList = characters
     if imageLoaded then
         saveFile[index].imageUrl = customImageUrl
+        saveFile[index].nightSheetUrl = customNightSheetUrl
     else
         saveFile[index].imageUrl = ''
     end
@@ -823,12 +825,19 @@ function load(clickedObject, playerColor, index)
     if saveFile[index].imageUrl == '' then
         imageLoaded = false
         customImageUrl = DEFAULT_CUSTOM_IMAGE_URL
+
     else
         imageLoaded = true
         customImageUrl = saveFile[index].imageUrl
+        customNightSheetUrl = saveFile[index].nightSheetUrl
+    end
+    if saveFile[index].nightSheetUrl == '' or saveFile[index].nightSheetUrl == nil then
+        customNightSheetUrl = DEFAULT_NIGHT_SHEET_URL
+    else
+        customNightSheetUrl = saveFile[index].nightSheetUrl
     end
     loadImage()
-
+    updateNightSheet()
     Player[playerColor].print('Character list [1E87FF]' .. saveFile[index].name .. ' [-]loaded.')
     unused = {}
     selected = {}
@@ -974,17 +983,6 @@ function loadImageMenu()
     menu = 'loadimage'
     self.clearButtons()
     self.clearInputs()
-    self.createInput({
-        input_function = 'updateImageUrl',
-        function_owner = self,
-        label = 'Type in a url for the image of your custom script. PDF files are not accepted.',
-        width = 5000,
-        height = 800,
-        font_size = 200,
-        color = {0.2,0.2,0.2},
-        font_color = {1,1,1},
-        alignment = 3,
-    })
     self.createButton({
         click_function = 'nullFunc',
         function_owner = self,
@@ -996,12 +994,47 @@ function loadImageMenu()
         color = {1,1,1,1},
         font_color = {1,1,1},
     })
-
+    self.createInput({
+        input_function = 'updateImageUrl',
+        function_owner = self,
+        label = 'Type in a url for the image of your custom script. PDF files are not accepted.',
+        width = 4000,
+        height = 800,
+        font_size = 200,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        position = {-2, BUTTON_Y, -1},
+        alignment = 3,
+    })
     self.createButton({
         click_function = 'loadImage',
         function_owner = self,
         label = 'Load\nImage',
-        position = {-3,BUTTON_Y,7.5},
+        position = {4, BUTTON_Y, -1},
+        width = 1600,
+        height = 800,
+        font_size = 300,
+        color = {1,1,1,1},
+        font_color = {0,0,0},
+    })
+
+    self.createInput({
+        input_function = 'updateNightSheetUrl',
+        function_owner = self,
+        label = 'Type in a url for the night sheet of your custom script. Only PDF files are accepted.',
+        width = 4000,
+        height = 800,
+        font_size = 200,
+        color = {0.2,0.2,0.2},
+        font_color = {1,1,1},
+        position = {-2, BUTTON_Y, 1},
+        alignment = 3,
+    })
+    self.createButton({
+        click_function = 'loadNightSheet',
+        function_owner = self,
+        label = 'Load\nNight Sheet',
+        position = {4, BUTTON_Y, 1},
         width = 1600,
         height = 800,
         font_size = 300,
@@ -1013,7 +1046,7 @@ function loadImageMenu()
         click_function = 'refreshUI',
         function_owner = self,
         label = 'Cancel',
-        position = {3,BUTTON_Y,7.5},
+        position = {0,BUTTON_Y,7.5},
         width = 1600,
         height = 800,
         font_size = 300,
@@ -1033,12 +1066,10 @@ function loadImage(clickedObject,playerColor)
         Player[playerColor].print('Error: No URL found.', {1,0,0})
         return
     end
-    imageValid = false
-    WebRequest.get(customImageUrl, webReqCB)
-    refreshUI()
+    WebRequest.get(customImageUrl, webReqImageCB)
 end
 
-function webReqCB(req)
+function webReqImageCB(req)
     local params, obj
 
     if req.is_done and not req.is_error then
@@ -1061,11 +1092,64 @@ function webReqCB(req)
             end
             Global.setVar('imageLoaded', imageLoaded)
         else
-            Player['Black'].print('Error: Invalid URL. Make sure the image type is jpg or png.', {1,0,0})
+            Player['Black'].print('Error: Invalid image URL. Make sure the image type is jpg or png.', {1,0,0})
         end
     else
-        Player['Black'].print('Error: Invalid URL. Make sure the image type is jpg or png.', {1,0,0})
+        Player['Black'].print('Error: Invalid image URL. Make sure the image type is jpg or png.', {1,0,0})
     end
+end
+
+function updateNightSheetUrl(obj, color, input, stillEditing)
+    if not stillEditing then
+        customNightSheetUrl = input
+    end
+end
+
+function loadNightSheet(clickedObject,playerColor)
+    if customNightSheetUrl == '' then
+        Player[playerColor].print('Error: No URL found.', {1,0,0})
+        return
+    end
+    WebRequest.get(customNightSheetUrl, webReqNightSheetCB)
+end
+
+function webReqNightSheetCB(req)
+    local params, obj
+    if req.is_done and not req.is_error then
+        local response = req.text
+        local format = string.sub(response,1,12)
+        if string.match(format, 'PDF') then
+            updateNightSheet()
+        else
+            customNightSheetUrl = ''
+            Player['Black'].print('Error: Invalid night sheet URL. Make sure the file type is pdf.', {1,0,0})
+        end
+    else
+        Player['Black'].print('Error: Invalid night sheet URL. Make sure the file type is pdf.', {1,0,0})
+    end
+end
+
+function updateNightSheet()
+    local nightSheet = nil
+    local allObjs = getAllObjects()
+    for k,v in pairs(allObjs) do
+        if v.getGMNotes() == 'Night Sheet' then
+            nightSheet = v
+        end
+    end
+    if nightSheet == nil then
+        return
+    end
+    local sheetJsonString = nightSheet.getJSON()
+    local sheetJson = JSON.decode(sheetJsonString)
+    sheetJson.CustomPDF.PDFUrl = customNightSheetUrl
+    sheetJsonString = JSON.encode(sheetJson)
+    nightSheet.destruct()
+    spawnObjectJSON({json = sheetJsonString, callback_function = function(obj) updateNightSheetCB(obj) end})
+end
+
+function updateNightSheetCB(obj)
+    obj.Book.setPage(1, false)
 end
 
 function importLists(clickedObject, playerColor)

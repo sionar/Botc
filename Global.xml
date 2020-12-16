@@ -20,7 +20,7 @@
         width="250"
         rectAlignment="LowerCenter"
         offsetXY="125 7"
-        visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+        visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
         />
     <TableLayout class="blackWhisperTableLayout"
         height="100"
@@ -1311,7 +1311,7 @@
 	rectAlignment="LowerCenter"
 	childAlignment="MiddleCenter"
 	spacing="0"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
 	>
 	<Image
 		id="Clubs"
@@ -1354,7 +1354,7 @@
 	rectAlignment="LowerCenter"
     fontSize="15"
     offsetXY="325 7"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
 ></Button>
 
 <TableLayout
@@ -1636,7 +1636,7 @@
 <TableLayout
     id="whisperUI11"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1681,7 +1681,7 @@
 <TableLayout
     id="whisperUI12"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1727,7 +1727,7 @@
 <TableLayout
     id="whisperUI13"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1774,7 +1774,7 @@
 <TableLayout
     id="whisperUI14"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1822,7 +1822,7 @@
 <TableLayout
     id="whisperUI15"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1871,7 +1871,7 @@
 <TableLayout
     id="whisperUI16"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1921,7 +1921,7 @@
 <TableLayout
     id="whisperUI17"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -1972,7 +1972,7 @@
 <TableLayout
     id="whisperUI18"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -2024,7 +2024,7 @@
 <TableLayout
     id="whisperUI19"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -2077,7 +2077,7 @@
 <TableLayout
     id="whisperUI20"
     class="whisperTableLayout"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink|Grey"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey"
     >
     <Row preferredHeight="30">
         <Cell
@@ -2863,7 +2863,7 @@
     lineType="MultiLineNewLine"
     colors="#66666680|#666666FF|#66666680|#66666680"
     textColor="#FFFFFF"
-    visibility="White|Brown|Red|Orange|Green|Teal|Blue|Purple|Pink"
+    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
     height="100"
     width="250"
     rectAlignment="LowerCenter"

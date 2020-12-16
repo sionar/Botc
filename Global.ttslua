@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.2.0'
+VERSION = '20.2.1'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -3318,7 +3318,6 @@ function setUIVisibility()
     if #greySeats > 0 then
         visStr = visStr .. '|Grey'
     end
-
     UI.setAttribute('placeDecalTB', 'visibility', visStr)
     UI.setAttribute('placeDecalBM', 'visibility', visStr)
     UI.setAttribute('placeDecalSV', 'visibility', visStr)

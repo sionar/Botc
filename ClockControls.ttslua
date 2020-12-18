@@ -58,6 +58,7 @@ colors = {}
 clockStyle = 1
 tableSize = 10
 muted = {}
+votesNeeded = 0
 
 
 ------------------Functions
@@ -215,6 +216,7 @@ function toggleClock(vm)
         if vm == 'execution' then
             guillotine.setPositionSmooth({-26,1,111 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,0,0})
+            guillotine.setLock(false)
         end
         Global.setVar('currMostVotes', 0)
     else -- if clock is CURRENTLY down
@@ -223,6 +225,7 @@ function toggleClock(vm)
         Global.call('resetVotes', {voteMode = vm})
         teamTool.call('removeAll')
         votingMode = vm
+        votesNeeded = 0
         secondHand.setScale(CLOCK_HAND_SCALE[clockStyle].second)
         secondHand.setPosition({0, 1.4, 0 + TABLE_OFFSET})
         minuteHand.setScale(CLOCK_HAND_SCALE[clockStyle].minute)
@@ -247,6 +250,7 @@ function toggleClock(vm)
         if vm == 'execution' then
             guillotine.setPositionSmooth({0,2,0 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,180,0})
+            guillotine.setLock(true)
         end
     end
 end
@@ -267,7 +271,7 @@ function toggleClockMovement(clickedObject, playerColor)
         return
     end
 
-    local actionStr, numAlive, numPlayers, votesNeeded
+    local actionStr, numAlive, numPlayers, minVotes
     local players
 
     if votingMode == 'execution' then
@@ -283,7 +287,10 @@ function toggleClockMovement(clickedObject, playerColor)
         numAlive = Global.getVar('numAlive')
         numPlayers = Global.getVar('numPlayers')
         if votingMode == 'execution' then
-            votesNeeded = math.ceil(numAlive/2)
+            minVotes = math.ceil(numAlive/2)
+            if minVotes > votesNeeded then
+                votesNeeded = minVotes
+            end
         else
             votesNeeded = math.ceil(numPlayers/2)
         end

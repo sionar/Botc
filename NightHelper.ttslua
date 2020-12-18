@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.6.4'
+VERSION = '2.7.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Grey'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[888888]', Prompt = '[93EB6A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255}, Grey = {136/255, 136/255, 136/255}}
@@ -139,7 +139,7 @@ function import(clickedObject, playerColor)
     living = {}
     minionColors = {}
     for k,v in pairs(chars) do
-        playerChar = string.gsub(v, ' ', '_')
+        playerChar = v
         entry = {color = k, char = playerChar, used = false, alive = true, sober = true, sane = true}
         table.insert(living, entry)
         if CHARACTERS[playerChar].Type == 'Minion' then
@@ -200,8 +200,8 @@ function setNightOrder(night)
         unblind = {}
     end
     if night == 'first' then
-        table.insert(order, {char = 'Evil_Info', color = 'White'})
-        table.insert(order, {char = 'Demon_Info', color = demonColor})
+        table.insert(order, {char = 'Evil Info', color = 'White'})
+        table.insert(order, {char = 'Demon Info', color = demonColor})
         orderRef = FIRST[mode]
     else
         orderRef = OTHER[mode]
@@ -211,34 +211,34 @@ function setNightOrder(night)
             if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' and v2.char ~= 'Cartographer' then
                 if v2.alive and (CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and v2.used == false)) then
                     if v2.char == 'Lunatic' and night == 'first' then
-                        table.insert(order, 1, {char = 'Lunatic_InfoA', color = v2.color})
-                        table.insert(order, 2, {char = 'Lunatic_InfoB', color = v2.color})
-                        table.insert(order, 3, {char = 'Lunatic_InfoC', color = demonColor})
+                        table.insert(order, 1, {char = 'Lunatic InfoA', color = v2.color})
+                        table.insert(order, 2, {char = 'Lunatic InfoB', color = v2.color})
+                        table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColor})
                         table.insert(order, v2)
                     elseif v2.char == 'Lunatic' and night == 'other' then
                         table.insert(order, v2)
-                        table.insert(order, {char = 'Lunatic_InfoD', color = demonColor})
+                        table.insert(order, {char = 'Lunatic InfoD', color = demonColor})
                     elseif v2.char == 'Godfather' and night == 'first' then
-                        table.insert(order, {char = 'Godfather_Info', color = v2.color})
+                        table.insert(order, {char = 'Godfather Info', color = v2.color})
                     elseif v2.char == 'Rakshasa' and night == 'other' then
                         table.insert(order, v2)
-                        table.insert(order, {char = 'Rakshasa_Kill', color = v2.color})
+                        table.insert(order, {char = 'Rakshasa Kill', color = v2.color})
                     elseif v2.char == 'Ysbaddaden' and night == 'other' then
                         table.insert(order, v2)
-                        table.insert(order, {char = 'Ysbaddaden_Kill', color = v2.color})
+                        table.insert(order, {char = 'Ysbaddaden Kill', color = v2.color})
                     elseif v2.char == 'Jabberwocky' and night == 'other' then
                         table.insert(order, v2)
-                        table.insert(order, {char = 'Jabberwocky_Kill', color = v2.color})
+                        table.insert(order, {char = 'Jabberwocky Kill', color = v2.color})
                     elseif v2.char == 'Chieftain' and night == 'first' then
-                        table.insert(order, {char = 'Chieftain_Info', color = v2.color})
+                        table.insert(order, {char = 'Chieftain Info', color = v2.color})
                     elseif v2.char == 'Trapper' and night == 'first' then
-                        table.insert(order, {char = 'Trapper_Info', color = v2.color})
+                        table.insert(order, {char = 'Trapper Info', color = v2.color})
                     elseif v2.char == 'Ambusher' and night == 'first' then
-                        table.insert(order, {char = 'Ambusher_Info', color = v2.color})
+                        table.insert(order, {char = 'Ambusher Info', color = v2.color})
                     elseif v2.char == 'Bogman' and night == 'first' then
-                        table.insert(order, {char = 'Bogman_Info', color = v2.color})
+                        table.insert(order, {char = 'Bogman Info', color = v2.color})
                     elseif v2.char == 'Inquisitor' and night == 'other' then
-                        table.insert(order, {char = 'Inquisitor_Info', color = v2.color})
+                        table.insert(order, {char = 'Inquisitor Info', color = v2.color})
                     elseif CHARACTERS[v2.char].Response == true then
                         table.insert(order, v2)
                         table.insert(order, {char = v2.char .. '2', color = v2.color})
@@ -256,7 +256,7 @@ function setNightOrder(night)
         end
     end
 
-    table.insert(order, {char = 'Next_Night', color = 'White'})
+    table.insert(order, {char = 'Next Night', color = 'White'})
     sortOrder()
     setMsg()
 end
@@ -281,17 +281,17 @@ function setMsg()
         return
     end
     local currentChar = order[1].char
-    if currentChar == 'Evil_Info' then
+    if currentChar == 'Evil Info' then
         currentMsg = evilMsg
-    elseif currentChar == 'Demon_Info' then
+    elseif currentChar == 'Demon Info' then
         setDemonBluffs()
         return
-    elseif currentChar == 'Next_Night' then
+    elseif currentChar == 'Next Night' then
         currentMsg = ''
     else
         currentMsg = CHARACTERS[currentChar].Prompt
     end
-    sendMsg = removeUnder(currentMsg)
+    sendMsg = currentMsg
     refreshUI()
 end
 
@@ -305,11 +305,11 @@ function setDemonBluffs()
         pos = v.getPosition()
         gmNotes = v.getGMNotes()
         if gmNotes == 'Character Token' and math.abs(pos[1] - 4) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[1] = addUnder(v.getName())
+            bluffs[1] = v.getName()
         elseif gmNotes == 'Character Token' and math.abs(pos[1] - 0) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[2] = addUnder(v.getName())
+            bluffs[2] = v.getName()
         elseif gmNotes == 'Character Token' and math.abs(pos[1] + 4) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[3] = addUnder(v.getName())
+            bluffs[3] = v.getName()
         end
     end
     for i,v in pairs(bluffs) do
@@ -325,10 +325,10 @@ function setDemonBluffs()
             elseif CHARACTERS[v].Type == 'Traveler' then
                 textColor = COLORS_BBC['Green']
             end
-            formattedBluffs[i] = removeUnder(textColor .. v .. '[-]')
+            formattedBluffs[i] = textColor .. v .. '[-]'
         end
     end
-    currentMsg = CHARACTERS['Demon_Info'].Prompt
+    currentMsg = CHARACTERS['Demon Info'].Prompt
     p1 = formattedBluffs[1]
     p2 = formattedBluffs[2]
     p3 = formattedBluffs[3]
@@ -359,7 +359,7 @@ function used(clickedObject, playerColor, i)
     end
 
     local entry = living[i]
-    local char = string.gsub(living[i].char, ' ', '_')
+    local char = living[i].char
     living[i].used = not living[i].used
     if CHARACTERS[char].Ability == true and living[i].used == true then
         for k,v in pairs(order) do
@@ -496,7 +496,7 @@ function sane(clickedObject, playerColor, i)
     end
 
     local entry = living[i]
-    local char = string.gsub(living[i].char, ' ', '_')
+    local char = living[i].char
     local found = false
 
     living[i].sane = not living[i].sane
@@ -589,7 +589,7 @@ function send(clickedObject, playerColor)
         clockControls.call('hideGrimoire')
     end
 
-    if order[1].char == 'Evil_Info' then
+    if order[1].char == 'Evil Info' then
         if demonColor ~= '' then
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColor] .. demonColor .. '[-]: ' .. evilMsg
             table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = evilMsg})
@@ -606,7 +606,7 @@ function send(clickedObject, playerColor)
             end
             printToColor(msg, 'Black', {1,1,1})
         end
-    elseif order[1].char == 'Next_Night' then
+    elseif order[1].char == 'Next Night' then
         if blindAuto then
             for k,v in pairs(unblind) do
                 if players[v] ~= nil then
@@ -624,7 +624,7 @@ function send(clickedObject, playerColor)
         table.insert(dayLog, {})
         table.insert(nightLog, {})
         return
-    elseif order[1].char == 'Lil_Monsta' then
+    elseif order[1].char == 'Lil Monsta' then
         for i = 1, #minionColors do
             msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]:[-] ' .. sendMsg
             table.insert(nightLog[#nightLog], {sender = 'Black', receiver = minionColors[i], message = sendMsg})
@@ -662,7 +662,7 @@ function send(clickedObject, playerColor)
         end
         printToColor(msg, 'Black', {1,1,1})
         table.insert(nightLog[#nightLog], {sender = 'Black', receiver = sendColor, message = sendMsg})
-        if blindAuto and order[1].char ~= 'Lunatic_InfoA' then
+        if blindAuto and order[1].char ~= 'Lunatic InfoA' then
             for k,v in pairs(unblind) do
                 if players[v] ~= nil then
                     players[v].blindfolded = true
@@ -716,10 +716,10 @@ end
 function charInput(obj, color, input, stillEditing)
     if not stillEditing then
         local found = false
-        local formattedInput = addUnder(input)
+        local formattedInput = input
         for k,v in pairs(CHARACTERS) do
             if string.lower(k) == string.lower(formattedInput) and formattedInput ~= '' then
-                charAdd = removeUnder(k)
+                charAdd = k
                 found = true
                 break
             end
@@ -730,7 +730,7 @@ function charInput(obj, color, input, stillEditing)
         end
         for k,v in pairs(CHARACTERS) do
             if string.match(string.lower(k), string.lower(formattedInput)) and formattedInput ~= '' then
-                charAdd = removeUnder(k)
+                charAdd = k
                 break
             end
         end
@@ -773,7 +773,7 @@ function p1Input(obj, color, input, stillEditing)
         end
         if not found then
             for k,v in pairs(CHARACTERS) do
-                if string.match(string.lower(k), string.lower(string.gsub(input,' ', '_'))) then
+                if string.match(string.lower(k), string.lower(input)) then
                     if v.Type == 'Townsfolk' then
                         textColor = COLORS_BBC['Blue']
                     elseif v.Type == 'Outsider' then
@@ -787,7 +787,7 @@ function p1Input(obj, color, input, stillEditing)
                     elseif v.Type == 'Status' then
                         textColor = COLORS_BBC['Purple']
                     end
-                    p1 = removeUnder(textColor .. k .. '[-]')
+                    p1 = textColor .. k .. '[-]'
                     found = true
                     break
                 end
@@ -832,7 +832,7 @@ function p2Input(obj, color, input, stillEditing)
                     else
                         textColor = COLORS_BBC['Red']
                     end
-                    p2 = removeUnder(textColor .. k .. '[-]')
+                    p2 = textColor .. k .. '[-]'
                     found = true
                     break
                 end
@@ -877,7 +877,7 @@ function p3Input(obj, color, input, stillEditing)
                     else
                         textColor = COLORS_BBC['Red']
                     end
-                    p3 = removeUnder(textColor .. k .. '[-]')
+                    p3 = textColor .. k .. '[-]'
                     found = true
                     break
                 end
@@ -922,7 +922,7 @@ function p4Input(obj, color, input, stillEditing)
                     else
                         textColor = COLORS_BBC['Red']
                     end
-                    p4 = removeUnder(textColor .. k .. '[-]')
+                    p4 = textColor .. k .. '[-]'
                     found = true
                     break
                 end
@@ -942,7 +942,7 @@ function editMsg()
     msg = string.gsub(msg, 'P2', p2)
     msg = string.gsub(msg, 'P3', p3)
     msg = string.gsub(msg, 'P4', p4)
-    sendMsg = removeUnder(msg)
+    sendMsg = msg
     refreshUI()
 end
 
@@ -955,7 +955,7 @@ function addChar(clickedObject, playerColor)
         broadcastToColor('ERROR: The character or color field is empty.', playerColor, {1,0,0})
         return
     end
-    local char = addUnder(charAdd)
+    local char = charAdd
     if #living == 0 then
         pos = 1
     else
@@ -970,7 +970,7 @@ function addChar(clickedObject, playerColor)
             pos = #living + 1
         end
     end
-    if char == 'Lil_Monsta' then
+    if char == 'Lil Monsta' then
         pos = #living + 1
         colorAdd = 'Grey'
     end
@@ -1035,13 +1035,13 @@ function addCharToOrder(char, color)
         end
         table.insert(order, orderPos, {char = char, color = color})
         if char == 'Lunatic' then
-            table.insert(order, 1, {char = 'Lunatic_InfoA', color = color})
-            table.insert(order, 2, {char = 'Lunatic_InfoB', color = color})
-            table.insert(order, 3, {char = 'Lunatic_InfoC', color = demonColor})
-            table.insert(order, orderPos+4, {char = 'Lunatic_InfoD', color = demonColor})
+            table.insert(order, 1, {char = 'Lunatic InfoA', color = color})
+            table.insert(order, 2, {char = 'Lunatic InfoB', color = color})
+            table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColor})
+            table.insert(order, orderPos+4, {char = 'Lunatic InfoD', color = demonColor})
             setMsg()
         elseif char == 'Godfather' then
-            table.insert(order, 1, {char = 'Godfather_Info', color = color})
+            table.insert(order, 1, {char = 'Godfather Info', color = color})
         elseif CHARACTERS[char].Response == true then
             table.insert(order, orderPos+1, {char = char .. '2', color = color})
         end
@@ -1209,10 +1209,10 @@ function refreshUI()
     self.createButton(buttonParam)
 
     for i = 1, #living do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(living[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = living[i].char, color = {0,0,0,1}, font_color = COLORS_RGB[living[i].color], position = {COLUMN[1],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
-        char = string.gsub(living[i].char, ' ', '_')
+        char = living[i].char
         if CHARACTERS[char].Ability == true then
             buttonParam = {click_function = 'used'..i, function_owner = self, color = {0,0,0,1}, position = {COLUMN[2],BUTTON_Y,ROW[i]}, width = 3200, height = 2300, font_size = 1200, scale = {0.1,0.1,0.1}}
             if living[i].used == false then
@@ -1260,7 +1260,7 @@ function refreshUI()
     end
 
     if #order > 0 then
-        buttonParam = {click_function = 'send', function_owner = self, label = removeUnder(order[1].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[7],BUTTON_Y,ROW[1]}, width = 1350, height = 230, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'send', function_owner = self, label = order[1].char, color = {0,0,0,1}, font_color = COLORS_RGB[order[1].color], position = {COLUMN[7],BUTTON_Y,ROW[1]}, width = 1350, height = 230, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
         buttonParam = {click_function = 'skip1', function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[8],BUTTON_Y,ROW[1]}, width = 675, height = 230, font_size = FONT_SIZE,}
@@ -1268,7 +1268,7 @@ function refreshUI()
     end
 
     for i = 2, #order do
-        buttonParam = {click_function = 'nullFunc', function_owner = self, label = removeUnder(order[i].char), color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[7],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
+        buttonParam = {click_function = 'nullFunc', function_owner = self, label = order[i].char, color = {0,0,0,1}, font_color = COLORS_RGB[order[i].color], position = {COLUMN[7],BUTTON_Y,ROW[i]}, width = 0, height = 0, font_size = FONT_SIZE,}
         self.createButton(buttonParam)
 
         buttonParam = {click_function = 'skip'..i, function_owner = self, label = 'Skip', color = {0,0,0,1}, font_color = stringColorToRGB('Red'), position = {COLUMN[8],BUTTON_Y,ROW[i]}, width = 675, height = 200, font_size = FONT_SIZE,}
@@ -1359,12 +1359,4 @@ function refreshUI()
         buttonParam.label = 'Auto\nBlindfold\n[FF0000]OFF[-]'
     end
     self.createButton(buttonParam)
-end
-
-function removeUnder(input)
-    return string.gsub(input, '_', ' ')
-end
-
-function addUnder(input)
-    return string.gsub(input, ' ', '_')
 end

@@ -26,7 +26,7 @@
         height="100"
         width="250"
         rectAlignment="LowerCenter"
-        offsetXY="0 7"
+        offsetXY="-75 7"
         visibility="Black"
         />
     <Dropdown
@@ -389,7 +389,7 @@
         <Option>Investigator</Option>
         <Option>Chef</Option>
         <Option>Empath</Option>
-        <Option>Fortune_Teller</Option>
+        <Option>Fortune Teller</Option>
         <Option>Undertaker</Option>
         <Option>Monk</Option>
         <Option>Ravenkeeper</Option>
@@ -403,7 +403,7 @@
         <Option>Saint</Option>
         <Option>Poisoner</Option>
         <Option>Spy</Option>
-        <Option>Scarlet_Woman</Option>
+        <Option>Scarlet Woman</Option>
         <Option>Baron</Option>
         <Option>Imp</Option>
         <Option>Scapegoat</Option>
@@ -442,7 +442,7 @@
         <Option>Courtier</Option>
         <Option>Professor</Option>
         <Option>Minstrel</Option>
-        <Option>Tea_Lady</Option>
+        <Option>Tea Lady</Option>
         <Option>Pacifist</Option>
         <Option>Fool</Option>
         <Option>Tinker</Option>
@@ -450,7 +450,7 @@
         <Option>Goon</Option>
         <Option>Lunatic</Option>
         <Option>Godfather</Option>
-        <Option>Devils_Advocate</Option>
+        <Option>Devils Advocate</Option>
         <Option>Assassin</Option>
         <Option>Mastermind</Option>
         <Option>Zombuul</Option>
@@ -485,10 +485,10 @@
         <Option selected="true">None</Option>
         <Option>Clockmaker</Option>
         <Option>Dreamer</Option>
-        <Option>Snake_Charmer</Option>
+        <Option>Snake Charmer</Option>
         <Option>Mathematician</Option>
         <Option>Flowergirl</Option>
-        <Option>Town_Crier</Option>
+        <Option>Town Crier</Option>
         <Option>Oracle</Option>
         <Option>Savant</Option>
         <Option>Seamstress</Option>
@@ -500,16 +500,16 @@
         <Option>Sweetheart</Option>
         <Option>Barber</Option>
         <Option>Klutz</Option>
-        <Option>Evil_Twin</Option>
+        <Option>Evil Twin</Option>
         <Option>Witch</Option>
         <Option>Cerenovus</Option>
-        <Option>Pit_Hag</Option>
-        <Option>Fang_Gu</Option>
+        <Option>Pit-Hag</Option>
+        <Option>Fang Gu</Option>
         <Option>Vigormortis</Option>
-        <Option>No_Dashii</Option>
+        <Option>No Dashii</Option>
         <Option>Vortox</Option>
         <Option>Butcher</Option>
-        <Option>Bone_Collector</Option>
+        <Option>Bone Collector</Option>
         <Option>Harlot</Option>
         <Option>Barista</Option>
         <Option>Deviant</Option>
@@ -542,7 +542,7 @@
         <Option>Baron</Option>
         <Option>Beggar</Option>
         <Option>Bishop</Option>
-        <Option>Bone_Collector</Option>
+        <Option>Bone Collector</Option>
         <Option>Bureaucrat</Option>
         <Option>Butcher</Option>
         <Option>Butler</Option>
@@ -552,16 +552,16 @@
         <Option>Clockmaker</Option>
         <Option>Courtier</Option>
         <Option>Deviant</Option>
-        <Option>Devils_Advocate</Option>
+        <Option>Devils Advocate</Option>
         <Option>Dreamer</Option>
         <Option>Drunk</Option>
         <Option>Empath</Option>
-        <Option>Evil_Twin</Option>
+        <Option>Evil Twin</Option>
         <Option>Exorcist</Option>
-        <Option>Fang_Gu</Option>
+        <Option>Fang Gu</Option>
         <Option>Flowergirl</Option>
         <Option>Fool</Option>
-        <Option>Fortune_Teller</Option>
+        <Option>Fortune Teller</Option>
         <Option>Gambler</Option>
         <Option>Godfather</Option>
         <Option>Goon</Option>
@@ -585,11 +585,11 @@
         <Option>Monk</Option>
         <Option>Moonchild</Option>
         <Option>Mutant</Option>
-        <Option>No_Dashii</Option>
+        <Option>No Dashii</Option>
         <Option>Oracle</Option>
         <Option>Pacifist</Option>
         <Option>Philosopher</Option>
-        <Option>Pit_Hag</Option>
+        <Option>Pit-Hag</Option>
         <Option>Po</Option>
         <Option>Poisoner</Option>
         <Option>Professor</Option>
@@ -601,18 +601,18 @@
         <Option>Saint</Option>
         <Option>Savant</Option>
         <Option>Scapegoat</Option>
-        <Option>Scarlet_Woman</Option>
+        <Option>Scarlet Woman</Option>
         <Option>Seamstress</Option>
         <Option>Shabaloth</Option>
         <Option>Slayer</Option>
-        <Option>Snake_Charmer</Option>
+        <Option>Snake Charmer</Option>
         <Option>Soldier</Option>
         <Option>Spy</Option>
         <Option>Sweetheart</Option>
-        <Option>Tea_Lady</Option>
+        <Option>Tea Lady</Option>
         <Option>Thief</Option>
         <Option>Tinker</Option>
-        <Option>Town_Crier</Option>
+        <Option>Town Crier</Option>
         <Option>Undertaker</Option>
         <Option>Vigormortis</Option>
         <Option>Virgin</Option>
@@ -1343,6 +1343,46 @@
 	></Image>
 </HorizontalLayout>
 
+<HorizontalLayout
+	id="teamMenuBlack"
+	height="37.5"
+	width="150"
+	offsetXY="125 58"
+	rectAlignment="LowerCenter"
+	childAlignment="MiddleCenter"
+	spacing="0"
+    visibility="Black"
+	>
+	<Image
+		id="Clubs"
+		image="Club"
+		tooltip="Join the Clubs team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
+	></Image>
+		<Image
+		id="Spades"
+		image="Spade"
+		tooltip="Join the Spades team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
+	></Image>
+		<Image
+		id="Diamonds"
+		image="Diamond"
+		tooltip="Join the Diamonds team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
+	></Image>
+		<Image
+		id="Hearts"
+		image="Heart"
+		tooltip="Join the Hearts team to talk privately"
+		tooltipPosition="Above"
+		onClick="joinTeamUI"
+	></Image>
+</HorizontalLayout>
+
 <Button
     height="50"
     width="150"
@@ -1355,6 +1395,20 @@
     fontSize="15"
     offsetXY="325 7"
     visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink"
+></Button>
+
+<Button
+    height="50"
+    width="150"
+    id="leaveTeamBlack"
+    onClick="leaveTeamUI"
+    text="Leave Team"
+    colors="#66666680|#666666FF|#66666680|#66666680"
+    textColor="#FFFFFF"
+	rectAlignment="LowerCenter"
+    fontSize="15"
+    offsetXY="125 7"
+    visibility="Black"
 ></Button>
 
 <TableLayout

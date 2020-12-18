@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.9.1'
+VERSION = '1.10.0'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -148,7 +148,7 @@ for k = 1,40 do
 end
 
 function label(input)
-    return COLORS_BBC[CHARACTERS[input].Type] .. string.gsub(input, '_', ' ')
+    return COLORS_BBC[CHARACTERS[input].Type] .. input
 end
 
 function modeTB(clickedObject, playerColor)
@@ -452,7 +452,7 @@ function dealChars()
     end
 
     for k,v in pairs(selected) do
-        name = string.gsub(v, '_', ' ')
+        name = v
         foundIndex = nil
         bagObjs = bags[CHARACTERS[v].Type].getObjects()
         for k1, v1 in pairs(bagObjs) do
@@ -709,7 +709,7 @@ function updateBatchList(obj, color, input, stillEditing)
             end
         else
             for s in input:gmatch("[^\r\n]+") do
-                entry = string.gsub(s,' ', '_')
+                entry = s
                 table.insert(batchList, entry)
             end
         end
@@ -789,7 +789,7 @@ function editCustomNotebookTab()
         text = text .. '[i]' .. v .. '[/i]\r\n'
         for k1,v1 in pairs(characters) do
             if CHARACTERS[v1].Type == v then
-                text = text .. '\r\n[b]' .. string.gsub(v1,'_',' ') .. '[/b] - ' .. CHARACTERS[v1].Description
+                text = text .. '\r\n[b]' .. v1 .. '[/b] - ' .. CHARACTERS[v1].Description
             end
         end
         text = text .. '\r\n\n\r\n'
@@ -821,7 +821,12 @@ function save(clickedObject, playerColor, index)
 end
 
 function load(clickedObject, playerColor, index)
-    characters = saveFile[index].charList
+    characters = {}
+    for k,v in pairs(saveFile[index].charList) do
+        if CHARACTERS[v] then
+            table.insert(characters,v)
+        end
+    end
     if saveFile[index].imageUrl == '' then
         imageLoaded = false
         customImageUrl = DEFAULT_CUSTOM_IMAGE_URL
@@ -845,6 +850,7 @@ function load(clickedObject, playerColor, index)
         table.insert(unused, v)
     end
     lock = {}
+    spawnSet(characters, saveFile[index].name)
     refreshUI()
 end
 

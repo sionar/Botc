@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.2.2'
+VERSION = '20.3.0'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -323,7 +323,7 @@ function editNotebookTab(tabIndex, charList, title)
         text = text .. '[i]' .. v .. '[/i]\r\n'
         for k1,v1 in pairs(charList) do
             if CHARACTERS[v1].Type == v then
-                text = text .. '\r\n[b]' .. string.gsub(v1, '_', ' ') .. '[/b] - ' .. CHARACTERS[v1].Description
+                text = text .. '\r\n[b]' .. v1 .. '[/b] - ' .. CHARACTERS[v1].Description
             end
         end
         text = text .. '\r\n\n\r\n'
@@ -1095,7 +1095,7 @@ function pruneSeats()
     resizeTable()
     moveTokens()
     moveDecals()
-    
+
     if tableControls ~= nil then
         tableControls.setVar('tableSize', tableSize)
         tableControls.call('refreshUI')
@@ -1335,6 +1335,7 @@ function resetGame()
     if guillotine ~= nil then
         guillotine.setPositionSmooth({-26, 1, 111 + TABLE_OFFSET})
         guillotine.setRotationSmooth({0,0,0})
+        guillotine.setLock(false)
     end
     grabObjectFromBag('Character Token Bag', storageBag, {0,1,125}, false)
     Wait.time(function () grabObjectFromBag('Character Tool', storageBag, {0,0,0}, true) end, 0.1)
@@ -1426,7 +1427,7 @@ function drawCharSheet(object)
 
         for k1,v1 in pairs(customList) do
             if CHARACTERS[v1].Type == v then
-                charLabel = string.gsub(v1, '_', ' ')
+                charLabel = v1
                 params = {click_function = 'nullFunc', color = {1,1,1,1}, function_owner = self,
                     position = {0,0.15,z}, rotation = {0,0,0}, width = 0, height = 0, font_size = 120, scale = {0.25,0.25,0.25}}
                 params.label = COLORS_BBC_ROLE_TYPE[CHARACTERS[v1].Type] .. charLabel .. '[FFFFFF] - ' .. CHARACTERS[v1].Description .. '[-]'
@@ -1560,12 +1561,12 @@ function onChat(message, player)
         for k,v in pairs(players) do
             if v.steam_id == player.steam_id then
                 char = chars[k]
-                formattedChar = removeUnder(char)
+                formattedChar = char
                 if char == nil then
                     player.print('You do not have a character.')
                     return false
                 else
-                    charOut = string.gsub(char, ' ', '_')
+                    charOut = char
                     player.print('Your character is ' .. formattedChar .. '!')
                     player.print(formattedChar .. ' - ' .. CHARACTERS[charOut].Description)
                     return false
@@ -1629,13 +1630,6 @@ function onChat(message, player)
             return false
         end
     end
-end
-
-function removeUnder(input)
-    if input == nil then
-        return
-    end
-    return string.gsub(input, '_', ' ')
 end
 
 function capitalize(str)
@@ -2316,7 +2310,7 @@ function refreshUI()
     for k, v in pairs(COLORS) do
         UI.setAttribute('player' .. v, 'visibility', v)
         if chars[v] then
-            UI.setValue('player' .. v, 'Your character is ' .. removeUnder(chars[v]) .. '!')
+            UI.setValue('player' .. v, 'Your character is ' .. chars[v] .. '!')
         else
             UI.setValue('player' .. v, '')
         end
@@ -2326,7 +2320,7 @@ end
 function setCharText(color)
     if inTable(color, COLORS) then
         UI.setAttribute('player' .. color, 'visibility', color)
-        UI.setValue('player' .. color, 'Your character is ' .. removeUnder(chars[color]) .. '!')
+        UI.setValue('player' .. color, 'Your character is ' .. chars[color] .. '!')
     end
 end
 
@@ -2693,6 +2687,7 @@ function moveGuillotine(params)
     local voteMode = params.voteMode
     local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
     local pos
+    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
 
     if voteMode ~= 'execution' then
         return
@@ -2706,12 +2701,16 @@ function moveGuillotine(params)
         if numVotes == currMostVotes then
             guillotine.setPositionSmooth({0,2,0 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,180,0})
+            guillotine.setLock(true)
+            clockControls.setVar('votesNeeded', numVotes + 1)
         elseif numVotes > currMostVotes then
             currMostVotes = numVotes
             pos = getObjectFromGUID(LIFE_BASE_GUIDS[player]).getPosition()
             pos[2] = 1.6
             guillotine.setPositionSmooth(pos)
             guillotine.setRotationSmooth({0, angle[player], 0})
+            guillotine.setLock(false)
+            clockControls.setVar('votesNeeded', numVotes + 1)
         end
     end
 end
@@ -3342,6 +3341,8 @@ function setUIVisibility()
         UI.setAttribute('whisperUI0', 'visibility', visStr)
     end
     UI.setAttribute('blackWhisperUI'..tableSize, 'visibility', blackStr)
+    UI.setAttribute('teamMenuBlack', 'visibility', blackStr)
+    UI.setAttribute('leaveTeamBlack', 'visibility', blackStr)
     UI.setAttribute('nomMenu', 'visibility', visStr)
     UI.setAttribute('aliveDisplay', 'visibility', visStr)
 end

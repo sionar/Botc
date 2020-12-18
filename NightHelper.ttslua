@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '2.7.0'
+VERSION = '3.0.0'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Grey'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[888888]', Prompt = '[93EB6A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255}, Grey = {136/255, 136/255, 136/255}}
@@ -35,8 +35,8 @@ INPUTS_LAB_Z = 5.775
 INPUT_BUT_Z = 6.45
 PROMPTS_LAB_Z = {4.6, 5.8}
 PROMPTS_INP_Z = {5.25, 6.45}
-BOTTOM_BUT_X = {-5, -2.5, 0, 2.5, 5}
-BOTTOM_BUT_Z = 7.75
+BOTTOM_BUT_X = {-8, -6.5, -5, -3.5}
+BOTTOM_BUT_Z = 8
 
 #include GUIDs.ttslua
 
@@ -60,6 +60,7 @@ p1, p2, p3, p4 = '', '', '', ''
 dayNum = 0
 dayLog = {{}}
 nightLog = {{}}
+currentChar = ''
 
 
 ------------------Load/save
@@ -258,6 +259,8 @@ function setNightOrder(night)
 
     table.insert(order, {char = 'Next Night', color = 'White'})
     sortOrder()
+    currentChar = order[1].char
+    modifyPrompts(currentChar)
     setMsg()
 end
 
@@ -271,6 +274,7 @@ function sortOrder()
         end
     end
     order = sortedOrder
+    currentChar = order[1].char
 end
 
 function setMsg()
@@ -280,7 +284,12 @@ function setMsg()
         refreshUI()
         return
     end
-    local currentChar = order[1].char
+    local char = order[1].char
+    if currentChar ~= char then
+        currentChar = char
+        modifyPrompts(char)
+    end
+
     if currentChar == 'Evil Info' then
         currentMsg = evilMsg
     elseif currentChar == 'Demon Info' then
@@ -752,188 +761,84 @@ function colorInput(obj, color, input, stillEditing)
     end
 end
 
-function p1Input(obj, color, input, stillEditing)
-    if not stillEditing then
-        if input == '' then
-            p1 = 'P1'
-            return
-        end
-        local textColor
-        local found = false
-        for k,v in pairs(COLORS) do
-            if string.match(string.lower(v), string.lower(input)) then
-                p1 = COLORS_BBC[v] .. v .. '[-]'
-                found = true
-                break
-            end
-        end
-        if tonumber(input) ~= nil then
-            p1 = input
-            found = true
-        end
-        if not found then
-            for k,v in pairs(CHARACTERS) do
-                if string.match(string.lower(k), string.lower(input)) then
-                    if v.Type == 'Townsfolk' then
-                        textColor = COLORS_BBC['Blue']
-                    elseif v.Type == 'Outsider' then
-                        textColor = COLORS_BBC['Teal']
-                    elseif v.Type == 'Minion' then
-                        textColor = COLORS_BBC['Orange']
-                    elseif v.Type == 'Demon' then
-                        textColor = COLORS_BBC['Red']
-                    elseif v.Type == 'Traveler' then
-                        textColor = COLORS_BBC['Green']
-                    elseif v.Type == 'Status' then
-                        textColor = COLORS_BBC['Purple']
-                    end
-                    p1 = textColor .. k .. '[-]'
-                    found = true
-                    break
+function modifyPrompts(character)
+    local uiTab = self.UI.getXmlTable()
+    local char_list
+    local mode = Global.getVar('mode')
+    local colors = Global.getTable('colors')
+    if mode == 'TB' then
+        char_list = TB_LIST
+    elseif mode == 'BM' then
+        char_list = BM_LIST
+    elseif mode == 'SV' then
+        char_list = SV_LIST
+    elseif mode == 'CU' then
+        char_list = customList
+    end
+
+    local dropdown, id
+    for i = 1,4 do
+        promptKey = 'P' .. i
+        dropdown = uiTab[i+1].children[1]
+        dropdown.children = {}
+        if PROMPTS[character] and PROMPTS[character][promptKey] ~= nil then
+            uiTab[i+1].attributes.active = true
+            insertOption(dropdown.children, "Prompt ".. i)
+            if PROMPTS[character][promptKey].type == 'Character' then
+                for k,char in pairs(char_list) do
+                    insertOption(dropdown.children, char)
+                end
+            elseif PROMPTS[character][promptKey].type == 'Color' then
+                for k,color in pairs(colors) do
+                    insertOption(dropdown.children, color)
+                end
+            elseif PROMPTS[character][promptKey].type == 'Number' then
+                for j = PROMPTS[character][promptKey].min, PROMPTS[character][promptKey].max do
+                    insertOption(dropdown.children, j)
                 end
             end
+        else
+            uiTab[i+1].attributes.active = false
         end
-        if not found then
-            p1 = input
-        end
-        editMsg()
-        return 1
+
     end
+    self.UI.setXmlTable(uiTab)
 end
 
-function p2Input(obj, color, input, stillEditing)
-    if not stillEditing then
-        if input == '' then
-            p2 = 'P2'
-            return
-        end
-        local textColor
-        local found = false
-        for k,v in pairs(COLORS) do
-            if string.match(string.lower(v), string.lower(input)) then
-                p2 = COLORS_BBC[v] .. v .. '[-]'
-                found = true
-                break
-            end
-        end
-        if tonumber(input) ~= nil then
-            p2 = input
-            found = true
-        end
-        if not found then
-            for k,v in pairs(CHARACTERS) do
-                if string.match(string.lower(k), string.lower(input)) then
-                    if v.Type == 'Townsfolk' then
-                        textColor = COLORS_BBC['Blue']
-                    elseif v.Type == 'Outsider' then
-                        textColor = COLORS_BBC['Teal']
-                    elseif v.Type == 'Minion' then
-                        textColor = COLORS_BBC['Orange']
-                    else
-                        textColor = COLORS_BBC['Red']
-                    end
-                    p2 = textColor .. k .. '[-]'
-                    found = true
-                    break
-                end
-            end
-        end
-        if not found then
-            p2 = input
-        end
-        editMsg()
-        return 1
-    end
+function insertOption(tab, value)
+    local option = {
+        tag = "Option",
+        value = value,
+        attributes = nil,
+        children = nil
+    }
+    table.insert(tab, option)
 end
 
-function p3Input(obj, color, input, stillEditing)
-    if not stillEditing then
-        if input == '' then
-            p3 = ''
-            return
+function promptSelect(player, value, id)
+    local num = string.sub(id, -1, -1)
+    local str = value
+    local textColor
+    if PROMPTS[currentChar]['P'..num].type == 'Color' then
+        str = COLORS_BBC[value] .. value .. '[-]'
+    elseif PROMPTS[currentChar]['P'..num].type == 'Character' then
+        if CHARACTERS[value].Type == 'Townsfolk' then
+            textColor = COLORS_BBC['Blue']
+        elseif CHARACTERS[value].Type == 'Outsider' then
+            textColor = COLORS_BBC['Teal']
+        elseif CHARACTERS[value].Type == 'Minion' then
+            textColor = COLORS_BBC['Orange']
+        elseif CHARACTERS[value].Type == 'Demon' then
+            textColor = COLORS_BBC['Red']
+        elseif CHARACTERS[value].Type == 'Traveler' then
+            textColor = COLORS_BBC['Green']
+        elseif CHARACTERS[value].Type == 'Status' then
+            textColor = COLORS_BBC['Purple']
         end
-        local textColor
-        local found = false
-        for k,v in pairs(COLORS) do
-            if string.match(string.lower(v), string.lower(input)) then
-                p3 = COLORS_BBC[v] .. v .. '[-]'
-                found = true
-                break
-            end
-        end
-        if tonumber(input) ~= nil then
-            p3 = input
-            found = true
-        end
-        if not found then
-            for k,v in pairs(CHARACTERS) do
-                if string.match(string.lower(k), string.lower(input)) then
-                    if v.Type == 'Townsfolk' then
-                        textColor = COLORS_BBC['Blue']
-                    elseif v.Type == 'Outsider' then
-                        textColor = COLORS_BBC['Teal']
-                    elseif v.Type == 'Minion' then
-                        textColor = COLORS_BBC['Orange']
-                    else
-                        textColor = COLORS_BBC['Red']
-                    end
-                    p3 = textColor .. k .. '[-]'
-                    found = true
-                    break
-                end
-            end
-        end
-        if not found then
-            p3 = input
-        end
-        editMsg()
-        return 1
+        str = textColor .. value .. '[-]'
     end
-end
-
-function p4Input(obj, color, input, stillEditing)
-    if not stillEditing then
-        if input == '' then
-            p4 = ''
-            return
-        end
-        local textColor
-        local found = false
-        for k,v in pairs(COLORS) do
-            if string.match(string.lower(v), string.lower(input)) then
-                p4 = COLORS_BBC[v] .. v .. '[-]'
-                found = true
-                break
-            end
-        end
-        if tonumber(input) ~= nil then
-            p4 = input
-            found = true
-        end
-        if not found then
-            for k,v in pairs(CHARACTERS) do
-                if string.match(string.lower(k), string.lower(input)) then
-                    if v.Type == 'Townsfolk' then
-                        textColor = COLORS_BBC['Blue']
-                    elseif v.Type == 'Outsider' then
-                        textColor = COLORS_BBC['Teal']
-                    elseif v.Type == 'Minion' then
-                        textColor = COLORS_BBC['Orange']
-                    else
-                        textColor = COLORS_BBC['Red']
-                    end
-                    p4 = textColor .. k .. '[-]'
-                    found = true
-                    break
-                end
-            end
-        end
-        if not found then
-            p4 = input
-        end
-        editMsg()
-        return 1
-    end
+    _G['p'..num] = str
+    editMsg()
 end
 
 function editMsg()
@@ -1296,22 +1201,6 @@ function refreshUI()
         position = {INPUTS_X[2],BUTTON_Y,INPUTS_LAB_Z}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt 1', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_LAB_Z[1]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt 2', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_LAB_Z[1]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt 3', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_LAB_Z[2]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'nullFunc', label = 'Prompt 4', color = {1,1,1,1}, font_color = stringColorToRGB('White'), function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_LAB_Z[2]}, rotation = {0,0,0}, width = 0, height = 0, font_size = FONT_SIZE,}
-    self.createButton(buttonParam)
-
     buttonParam = {click_function = 'addChar', label = '+', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
     self.createButton(buttonParam)
 
@@ -1323,40 +1212,21 @@ function refreshUI()
         position = {INPUTS_X[2],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 900, height = 260, font_size = FONT_SIZE, value = colorAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
-    inputParam = {input_function = 'p1Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_INP_Z[1]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p1, alignment = 3, validation = 1, tab = 2, label = 'P1'}
-    self.createInput(inputParam)
-
-    inputParam = {input_function = 'p2Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_INP_Z[1]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p2, alignment = 3, validation = 1, tab = 2, label = 'P2'}
-    self.createInput(inputParam)
-
-    inputParam = {input_function = 'p3Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[3],BUTTON_Y,PROMPTS_INP_Z[2]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p3, alignment = 3, validation = 1, tab = 2, label = 'P3'}
-    self.createInput(inputParam)
-
-    inputParam = {input_function = 'p4Input', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[4],BUTTON_Y,PROMPTS_INP_Z[2]}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = p4, alignment = 3, validation = 1, tab = 2, label = 'P4'}
-    self.createInput(inputParam)
-
-    buttonParam = {click_function = 'import', label = 'Start', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Import characters\nfrom game'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor first night'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Set night order\nfor other nights'}
-    self.createButton(buttonParam)
-
-    buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Check if prompts have been filled in'}
+    buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 700, height = 600, font_size = 120, tooltip = 'Check if prompts have been filled in'}
     if not checkPrompts then
         buttonParam.label = 'Check\nPrompts\n[FF0000]OFF[-]'
     end
     self.createButton(buttonParam)
 
-    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[5],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 1125, height = 800, font_size = FONT_SIZE, tooltip = 'Toggle Auto Blindfold'}
+    buttonParam = {click_function = 'toggleBlind', label = 'Auto\nBlindfold\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[2],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 700, height = 600, font_size = 120, tooltip = 'Toggle Auto Blindfold'}
     if not blindAuto then
         buttonParam.label = 'Auto\nBlindfold\n[FF0000]OFF[-]'
     end
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'firstNight', label = 'First\nNight', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[3],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 700, height = 600, font_size = 120, tooltip = 'Set night order\nfor first night'}
+    self.createButton(buttonParam)
+
+    buttonParam = {click_function = 'otherNight', label = 'Other\nNights', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[4],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 700, height = 600, font_size = 120, tooltip = 'Set night order\nfor other nights'}
     self.createButton(buttonParam)
 end

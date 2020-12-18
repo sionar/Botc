@@ -574,6 +574,10 @@ PROMPTS = {
     ['Librarian'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character"}},
     ['Investigator'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character"}},
     ['Chef'] = {P1 = {type = "Number", min = 0, max = 6}},
+    ['Empath'] = {P1 = {type = "Number", min = 0, max = 2}},
+    ['Fortune Teller2'] = {P1 = {type = "Is"}},
+    ['Undertaker'] = {P1 = {type = "Character"}},
+    ['Ravenkeeper2'] = {P1 = {type = "Color"}, P2 = {type = "Character"}},
 }
 
 DECAL_URLS =

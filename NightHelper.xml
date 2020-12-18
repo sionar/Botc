@@ -1,0 +1,40 @@
+<Defaults>
+    <Dropdown class="promptDropdown" width="360" height="60" dropdownHeight="300" itemHeight="60"/>
+    <Panel class="promptPanel" rotation="0 0 180" visibility="Black"/>
+</Defaults>
+
+<Panel class="promptPanel" id="promptPanel1" position="-160 525 1">
+    <Dropdown class="promptDropdown" id="promptDropdown1"
+        >
+        <Option>1</Option>
+        <Option>2</Option>
+        <Option>3</Option>
+    </Dropdown>
+</Panel>
+
+<Panel class="promptPanel" id="promptPanel2" position="-580 525 1">
+    <Dropdown class="promptDropdown" id="promptDropdown2"
+        >
+        <Option>1</Option>
+        <Option>2</Option>
+        <Option>3</Option>
+    </Dropdown>
+</Panel>
+
+<Panel class="promptPanel" id="promptPanel3" position="-160 645 1">
+    <Dropdown class="promptDropdown" id="promptDropdown1"
+        >
+        <Option>1</Option>
+        <Option>2</Option>
+        <Option>3</Option>
+    </Dropdown>
+</Panel>
+
+<Panel class="promptPanel" id="promptPanel4" position="-580 645 1">
+    <Dropdown class="promptDropdown" id="promptDropdown2"
+        >
+        <Option>1</Option>
+        <Option>2</Option>
+        <Option>3</Option>
+    </Dropdown>
+</Panel>

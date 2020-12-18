@@ -568,6 +568,14 @@ CHARACTERS =
     ['Wendigo'] = {Type = 'Demon', Ability = false, Response = false, Prompt = 'Choose who to kill.', Description = 'Each night*, choose 1 or 3 players: if you chose 1, they die; if you chose 3, they are bloodied. Minions start bloodied.'},
 }
 
+PROMPTS = {
+    ['Demon Info'] = {P1 = {type = "Character"}, P2 = {type = "Character"}, P3 = {type = "Character"}},
+    ['Washerwoman'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character"}},
+    ['Librarian'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character"}},
+    ['Investigator'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character"}},
+    ['Chef'] = {P1 = {type = "Number", min = 0, max = 6}},
+}
+
 DECAL_URLS =
 {
     ['Acrobat'] = 'http://cloud-3.steamusercontent.com/ugc/1057730374545997309/BBB98400221B85ABE36B9CCA11DA866C6E593614/',

@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.11.0'
+VERSION = '1.11.2'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -451,11 +451,17 @@ function toggleModeBlind(clickedObject, playerColor)
         return
     end
     mode = 'Blind'
+    local label = 'Blindfold All'
+    local color = {40/255, 47/255, 85/255}
+    if allBlind then
+        label = 'Unblindfold All'
+        color = {1, 0, 0}
+    end
     self.editButton({
     index          = 0,
     click_function = 'blindfoldAll',
-    label          = 'Blindfold All',
-    color          = {40/255, 47/255, 85/255},
+    label          = label,
+    color          = color,
     font_color     = BUTTON_FONT_COLOR,
 })
     for i, c in ipairs(colors) do
@@ -487,11 +493,17 @@ function toggleModeMute(clickedObject, playerColor)
         return
     end
     mode = 'Mute'
+    local label = 'Mute All'
+    local color = {40/255, 47/255, 85/255}
+    if allMuted then
+        label = 'Unmute All'
+        color = {1, 0, 0}
+    end
     self.editButton({
     index          = 0,
     click_function = 'muteAll',
-    label          = 'Mute All',
-    color          = {40/255, 47/255, 85/255},
+    label          = label,
+    color          = color,
     font_color     = BUTTON_FONT_COLOR,
 })
     for i, c in ipairs(colors) do

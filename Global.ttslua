@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.2.1'
+VERSION = '20.2.2'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -42,7 +42,10 @@ HELP_MESSAGE =
 [967BB6]d[-] : Show the day logs.
 [967BB6]w[-] [E29A8A]color[-] [49D5FD]message[-] : Whisper a player.[-]
 [967BB6].color[-] [49D5FD]message[-] : Whisper a player.[-]
+]]
 
+STORYTELLER_MESSAGE =
+[[
 [89C381]Storyteller chat commands:[-]
 [967BB6]n[-] : Show the night logs.
 [967BB6]d[-] : Show the day logs.
@@ -1086,8 +1089,13 @@ function pruneSeats()
             table.insert(usedColors, color)
         end
     end
-
+    setTokenTable()
+    setDecalTable()
     tableSize = numPlayers
+    resizeTable()
+    moveTokens()
+    moveDecals()
+    
     if tableControls ~= nil then
         tableControls.setVar('tableSize', tableSize)
         tableControls.call('refreshUI')
@@ -1098,8 +1106,6 @@ function pruneSeats()
         seatTool.setTable('removedColors', removedColors)
         seatTool.call('render')
     end
-
-    Wait.time(function() resizeTable() end, 1.5)
 end
 
 function toggleLights(params)
@@ -1539,6 +1545,9 @@ function onChat(message, player)
 
     if command == 'c' then
         player.print(HELP_MESSAGE)
+        if player.admin then
+            player.print(STORYTELLER_MESSAGE)
+        end
         return false
     elseif command == 'h' then
         for k,v in pairs(history) do

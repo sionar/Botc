@@ -1,40 +1,56 @@
 <Defaults>
-    <Dropdown class="promptDropdown" width="360" height="60" dropdownHeight="400" itemHeight="60" fontSize="40"/>
+    <Dropdown class="promptDropdown" onValueChanged="promptSelect" width="360" height="60" dropdownHeight="400" itemHeight="60" fontSize="40" />
+    <Dropdown class="colorDropdown"  onValueChanged="colorDropSelect" width="200" height="60" itemHeight="60" dropdownHeight="400" fontSize="40" />
     <Panel class="promptPanel" rotation="0 0 180" visibility="Black" />
 </Defaults>
 
-<Panel class="promptPanel" id="promptPanel1" position="-160 525 -10" active="false">
-    <Dropdown class="promptDropdown" id="promptDropdown1" onValueChanged="promptSelect"
+<Panel class="promptPanel" id="promptPanel1" position="-400 580 -10" active="false">
+    <Dropdown class="promptDropdown" id="promptDropdown1"
         >
-        <Option>1</Option>
-        <Option>2</Option>
-        <Option>3</Option>
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel2" position="-580 525 -10" active="false">
-    <Dropdown class="promptDropdown" id="promptDropdown2" onValueChanged="promptSelect"
+<Panel class="promptPanel" id="promptPanel2" position="-400 650 -10" active="false">
+    <Dropdown class="promptDropdown" id="promptDropdown2"
         >
-        <Option>1</Option>
-        <Option>2</Option>
-        <Option>3</Option>
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel3" position="-160 645 -10" active="false">
-    <Dropdown class="promptDropdown" id="promptDropdown3" onValueChanged="promptSelect"
+<Panel class="promptPanel" id="promptPanel3" position="-400 720 -10" active="false">
+    <Dropdown class="promptDropdown" id="promptDropdown3"
         >
-        <Option>1</Option>
-        <Option>2</Option>
-        <Option>3</Option>
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel4" position="-580 645 -10" active="false">
-    <Dropdown class="promptDropdown" id="promptDropdown4" onValueChanged="promptSelect"
+<Panel class="promptPanel" id="promptPanel4" position="-400 790 -10" active="false">
+    <Dropdown class="promptDropdown" id="promptDropdown4"
         >
-        <Option>1</Option>
-        <Option>2</Option>
-        <Option>3</Option>
+    </Dropdown>
+</Panel>
+
+<Panel id="colorDropPanel" position="230 520 -10" rotation="0 0 180">
+    <Dropdown class="colorDropdown" id="colorDropdown"
+        >
+        <Option selected="true"></Option>
+        <Option>White</Option>
+        <Option>Brown</Option>
+        <Option>Red</Option>
+        <Option>Orange</Option>
+        <Option>Yellow</Option>
+        <Option>Green</Option>
+        <Option>Teal</Option>
+        <Option>Blue</Option>
+        <Option>Purple</Option>
+        <Option>Pink</Option>
+        <Option>Magenta</Option>
+        <Option>Lavender</Option>
+        <Option>Navy</Option>
+        <Option>Cyan</Option>
+        <Option>Mint</Option>
+        <Option>Lime</Option>
+        <Option>Peach</Option>
+        <Option>Coral</Option>
+        <Option>Maroon</Option>
+        <Option>Silver</Option>
     </Dropdown>
 </Panel>

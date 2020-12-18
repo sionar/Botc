@@ -18,21 +18,21 @@ BUTTON_SIZE = 270
 BUTTON_Y = 0.1
 BUTTON_COLOR = {0,0,0}
 BUTTON_FONT_COLOR = {1,1,1}
-COLUMN = {-6, -4, -3.35, -2.70, -2.05, -1.5, 3.6, 6.3}
+COLUMN = {-6, -4, -3.35, -2.70, -2.05, -1.5, 4, 6.3}
 ROW = {}
 for i = 1,40 do
     ROW[i] = ROW_S + i * ROW_W
 end
 LIVING_LAB_Z = -7.75
 NIGHT_LAB_Z = -7.75
-PREVIEW_LAB_Z = 2.35
-PREVIEW_MSG_Z = 3.5
-ADDCHAR_LAB_X = -4.95
-ADDCHAR_LAB_Z = 5.1
-ADD_BUT_X = -1.9
-INPUTS_X = {-6.6, -3.45, 1.6, 5.8}
-INPUTS_LAB_Z = 5.775
-INPUT_BUT_Z = 6.45
+PREVIEW_LAB_Z = 3.35
+PREVIEW_MSG_Z = 4.5
+ADDCHAR_LAB_X = -4
+ADDCHAR_LAB_Z = 3.35
+ADD_BUT_X = -0.8
+INPUTS_X = {-5.5, -2.3}
+INPUTS_LAB_Z = 4.3
+INPUT_BUT_Z = 5.2
 BOTTOM_BUT_X = {-8, -6.5, -5, -3.5}
 BOTTOM_BUT_Z = 8
 
@@ -527,6 +527,8 @@ function sane(clickedObject, playerColor, i)
             sortOrder()
         end
     end
+    currentChar = order[1].char
+    modifyPrompts(currentChar)
     setMsg()
 end
 
@@ -633,7 +635,7 @@ function send(clickedObject, playerColor)
         return
     elseif order[1].char == 'Lil Monsta' then
         for i = 1, #minionColors do
-            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]:[-] ' .. sendMsg
+            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]:[-] ' .. COLORS_BBC['Prompt'] .. sendMsg .. '[-]'
             table.insert(nightLog[#nightLog], {sender = 'Black', receiver = minionColors[i], message = sendMsg})
             if players[minionColors[i]] ~= nil then
                 players[minionColors[i]].print(msg)
@@ -746,17 +748,8 @@ function charInput(obj, color, input, stillEditing)
     end
 end
 
-function colorInput(obj, color, input, stillEditing)
-    if not stillEditing then
-        for k,v in pairs(COLORS) do
-            if string.match(string.lower(v), string.lower(input)) and input ~= '' then
-                colorAdd = v
-                break
-            end
-        end
-        refreshUI()
-        return 1
-    end
+function colorDropSelect(player, value, id)
+    colorAdd = value
 end
 
 function modifyPrompts(character)
@@ -764,6 +757,7 @@ function modifyPrompts(character)
     local char_list
     local mode = Global.getVar('mode')
     local colors = Global.getTable('colors')
+    local customList = Global.getTable('customList')
     if mode == 'TB' then
         char_list = TB_LIST
     elseif mode == 'BM' then
@@ -879,6 +873,7 @@ function promptSelect(player, value, id)
         else
             textColor = COLORS_BBC['Blue']
         end
+        str = textColor .. value .. '[-]'
     end
     _G['p'..num] = str
     editMsg()
@@ -1043,7 +1038,7 @@ function toggleBlind(clickedObject, playerColor)
 end
 
 function format(string)
-    local lineMax = 50
+    local lineMax = 45
     local result
     local lineLen = 0
     local output = ''
@@ -1247,12 +1242,8 @@ function refreshUI()
     buttonParam = {click_function = 'addChar', label = '+', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {ADD_BUT_X,BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 333, height = 333, font_size = FONT_SIZE, tooltip = 'Add character to game'}
     self.createButton(buttonParam)
 
-    inputParam = {input_function = 'charInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
+    inputParam = {input_function = 'charInput', color = {1,1,1}, function_owner = self, font_color = {0,0,0}, function_owner = self,
         position = {INPUTS_X[1],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 1800, height = 260, font_size = FONT_SIZE, value = charAdd, alignment = 3, validation = 1, tab = 2}
-    self.createInput(inputParam)
-
-    inputParam = {input_function = 'colorInput', color = stringColorToRGB('Grey'), function_owner = self, font_color = {0,0,0}, function_owner = self,
-        position = {INPUTS_X[2],BUTTON_Y,INPUT_BUT_Z}, rotation = {0,0,0}, width = 900, height = 260, font_size = FONT_SIZE, value = colorAdd, alignment = 3, validation = 1, tab = 2}
     self.createInput(inputParam)
 
     buttonParam = {click_function = 'toggleCheck', label = 'Check\nPrompts\n[0000FF]ON[-]', color = {0,0,0}, font_color = {1,1,1}, function_owner = self, position = {BOTTOM_BUT_X[1],BUTTON_Y,BOTTOM_BUT_Z}, rotation = {0,0,0}, width = 700, height = 600, font_size = 120, tooltip = 'Check if prompts have been filled in'}

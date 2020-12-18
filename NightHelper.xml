@@ -1,9 +1,9 @@
 <Defaults>
-    <Dropdown class="promptDropdown" width="360" height="60" dropdownHeight="600" itemHeight="120" fontSize="40"/>
+    <Dropdown class="promptDropdown" width="360" height="60" dropdownHeight="400" itemHeight="60" fontSize="40"/>
     <Panel class="promptPanel" rotation="0 0 180" visibility="Black" />
 </Defaults>
 
-<Panel class="promptPanel" id="promptPanel1" position="-160 525 1" active="false">
+<Panel class="promptPanel" id="promptPanel1" position="-160 525 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown1" onValueChanged="promptSelect"
         >
         <Option>1</Option>
@@ -12,7 +12,7 @@
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel2" position="-580 525 1" active="false">
+<Panel class="promptPanel" id="promptPanel2" position="-580 525 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown2" onValueChanged="promptSelect"
         >
         <Option>1</Option>
@@ -21,7 +21,7 @@
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel3" position="-160 645 1" active="false">
+<Panel class="promptPanel" id="promptPanel3" position="-160 645 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown3" onValueChanged="promptSelect"
         >
         <Option>1</Option>
@@ -30,7 +30,7 @@
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel4" position="-580 645 1" active="false">
+<Panel class="promptPanel" id="promptPanel4" position="-580 645 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown4" onValueChanged="promptSelect"
         >
         <Option>1</Option>

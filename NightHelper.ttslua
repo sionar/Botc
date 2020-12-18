@@ -26,15 +26,13 @@ end
 LIVING_LAB_Z = -7.75
 NIGHT_LAB_Z = -7.75
 PREVIEW_LAB_Z = 2.35
-PREVIEW_MSG_Z = 3.2
+PREVIEW_MSG_Z = 3.5
 ADDCHAR_LAB_X = -4.95
 ADDCHAR_LAB_Z = 5.1
 ADD_BUT_X = -1.9
 INPUTS_X = {-6.6, -3.45, 1.6, 5.8}
 INPUTS_LAB_Z = 5.775
 INPUT_BUT_Z = 6.45
-PROMPTS_LAB_Z = {4.6, 5.8}
-PROMPTS_INP_Z = {5.25, 6.45}
 BOTTOM_BUT_X = {-8, -6.5, -5, -3.5}
 BOTTOM_BUT_Z = 8
 
@@ -785,8 +783,28 @@ function modifyPrompts(character)
             uiTab[i+1].attributes.active = true
             insertOption(dropdown.children, "Prompt ".. i)
             if PROMPTS[character][promptKey].type == 'Character' then
-                for k,char in pairs(char_list) do
-                    insertOption(dropdown.children, char)
+                if PROMPTS[character][promptKey].quality == 'All' then
+                    for k,char in pairs(char_list) do
+                        insertOption(dropdown.children, char)
+                    end
+                elseif PROMPTS[character][promptKey].quality == 'Good' then
+                    for k,char in pairs(char_list) do
+                        if CHARACTERS[char].Type == 'Townsfolk' or CHARACTERS[char].Type == 'Outsider' then
+                            insertOption(dropdown.children, char)
+                        end
+                    end
+                elseif PROMPTS[character][promptKey].quality == 'Evil' then
+                    for k,char in pairs(char_list) do
+                        if CHARACTERS[char].Type == 'Minion' or CHARACTERS[char].Type == 'Demon' then
+                            insertOption(dropdown.children, char)
+                        end
+                    end
+                else
+                    for k,char in pairs(char_list) do
+                        if CHARACTERS[char].Type == PROMPTS[character][promptKey].quality then
+                            insertOption(dropdown.children, char)
+                        end
+                    end
                 end
             elseif PROMPTS[character][promptKey].type == 'Color' then
                 for k,color in pairs(colors) do
@@ -796,11 +814,30 @@ function modifyPrompts(character)
                 for j = PROMPTS[character][promptKey].min, PROMPTS[character][promptKey].max do
                     insertOption(dropdown.children, j)
                 end
+            elseif PROMPTS[character][promptKey].type == 'State' then
+                if PROMPTS[character][promptKey].quality == 'Alignment' then
+                    insertOption(dropdown.children, "Good")
+                    insertOption(dropdown.children, "Evil")
+                elseif PROMPTS[character][promptKey].quality == 'Is' then
+                    insertOption(dropdown.children, "is")
+                    insertOption(dropdown.children, "is not")
+                elseif PROMPTS[character][promptKey].quality == 'Are' then
+                    insertOption(dropdown.children, "are")
+                    insertOption(dropdown.children, "are not")
+                elseif PROMPTS[character][promptKey].quality == 'Has' then
+                    insertOption(dropdown.children, "has")
+                    insertOption(dropdown.children, "has not")
+                elseif PROMPTS[character][promptKey].quality == 'Have' then
+                    insertOption(dropdown.children, "have")
+                    insertOption(dropdown.children, "do not have")
+                elseif PROMPTS[character][promptKey].quality == 'Do' then
+                    insertOption(dropdown.children, "do")
+                    insertOption(dropdown.children, "do not")
+                end
             end
         else
             uiTab[i+1].attributes.active = false
         end
-
     end
     self.UI.setXmlTable(uiTab)
 end
@@ -836,6 +873,12 @@ function promptSelect(player, value, id)
             textColor = COLORS_BBC['Purple']
         end
         str = textColor .. value .. '[-]'
+    elseif PROMPTS[currentChar]['P'..num].type == 'State' then
+        if str == 'Evil' or string.match(str, 'not') then
+            textColor = COLORS_BBC['Red']
+        else
+            textColor = COLORS_BBC['Blue']
+        end
     end
     _G['p'..num] = str
     editMsg()

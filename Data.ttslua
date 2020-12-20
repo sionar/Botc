@@ -553,7 +553,7 @@ CHARACTERS =
 }
 
 PROMPTS = {
-    ['Demon Info'] = {P1 = {type = "Character", quality = "Good"}, P2 = {type = "Character", quality = "Good"}, P3 = {type = "Character", quality = "Good"}},
+    ['Demon Info'] = {P1 = {type = "Demon Info"}, P2 = {type = "Demon Info"}, P3 = {type = "Demon Info"}},
     ['Washerwoman'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character", quality = "Townsfolk"}},
     ['Librarian'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character", quality = "Outsider"}},
     ['Investigator'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Character", quality = "Minion"}},
@@ -570,7 +570,7 @@ PROMPTS = {
     ['Lunatic InfoC'] = {P1 = {type = "Color"}, P2 = {type = "Character", quality = "Demon"}},
     ['Lunatic InfoD'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Color"}},
     ['Godfather Info'] = {P1 = {type = "Character", quality = "Outsider"}, P2 = {type = "Character", quality = "Outsider"}, P3 = {type = "Character", quality = "Outsider"}, P4 = {type = "Character", quality = "Outsider"}},
-    ['Clockmaker'] = {P1 = {type = "Number", min = 1, max = 8}},
+    ['Clockmaker'] = {P1 = {type = "Number", min = 1, max = 10}},
     ['Dreamer2'] = {P1 = {type = "Color"}, P2 = {type = "Character", quality = "Good"}, P3 = {type = "Character", quality = "Evil"}},
     ['Mathematician'] = {P1 = {type = "Number", min = 0, max = 12}},
     ['Flowergirl'] = {P1 = {type = "State", quality = "Has"}},

@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '3.0.0'
+VERSION = '3.0.1'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Grey'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[888888]', Prompt = '[93EB6A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255}, Grey = {136/255, 136/255, 136/255}}
@@ -25,14 +25,14 @@ for i = 1,40 do
 end
 LIVING_LAB_Z = -7.75
 NIGHT_LAB_Z = -7.75
-PREVIEW_LAB_Z = 3.35
-PREVIEW_MSG_Z = 4.5
+PREVIEW_LAB_Z = 3.15
+PREVIEW_MSG_Z = 4.3
 ADDCHAR_LAB_X = -4
-ADDCHAR_LAB_Z = 3.35
+ADDCHAR_LAB_Z = 3.15
 ADD_BUT_X = -0.8
 INPUTS_X = {-5.5, -2.3}
-INPUTS_LAB_Z = 4.3
-INPUT_BUT_Z = 5.2
+INPUTS_LAB_Z = 4.1
+INPUT_BUT_Z = 5
 BOTTOM_BUT_X = {-8, -6.5, -5, -3.5}
 BOTTOM_BUT_Z = 8
 
@@ -59,6 +59,7 @@ dayNum = 0
 dayLog = {{}}
 nightLog = {{}}
 currentChar = ''
+demonBluffs = {nil, nil, nil}
 
 
 ------------------Load/save
@@ -258,8 +259,8 @@ function setNightOrder(night)
     table.insert(order, {char = 'Next Night', color = 'White'})
     sortOrder()
     currentChar = order[1].char
-    modifyPrompts(currentChar)
     setMsg()
+    modifyPrompts(currentChar)
 end
 
 function sortOrder()
@@ -292,6 +293,7 @@ function setMsg()
         currentMsg = evilMsg
     elseif currentChar == 'Demon Info' then
         setDemonBluffs()
+        modifyPrompts('Demon Info')
         return
     elseif currentChar == 'Next Night' then
         currentMsg = ''
@@ -305,21 +307,21 @@ end
 function setDemonBluffs()
     local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
     local pos, gmNotes
-    local bluffs = {nil,nil,nil}
     local formattedBluffs = {'P1', 'P2', 'P3'}
     local textColor
+    demonBluffs = {nil,nil,nil}
     for k,v in pairs(zoneObjs) do
         pos = v.getPosition()
         gmNotes = v.getGMNotes()
         if gmNotes == 'Character Token' and math.abs(pos[1] - 4) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[1] = v.getName()
+            demonBluffs[1] = v.getName()
         elseif gmNotes == 'Character Token' and math.abs(pos[1] - 0) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[2] = v.getName()
+            demonBluffs[2] = v.getName()
         elseif gmNotes == 'Character Token' and math.abs(pos[1] + 4) < 1 and math.abs(pos[3] - 129) < 1 then
-            bluffs[3] = v.getName()
+            demonBluffs[3] = v.getName()
         end
     end
-    for i,v in pairs(bluffs) do
+    for i,v in pairs(demonBluffs) do
         if v ~= nil then
             if CHARACTERS[v].Type == 'Townsfolk' then
                 textColor = COLORS_BBC['Blue']
@@ -528,8 +530,8 @@ function sane(clickedObject, playerColor, i)
         end
     end
     currentChar = order[1].char
-    modifyPrompts(currentChar)
     setMsg()
+    modifyPrompts(currentChar)
 end
 
 for k = 1,30 do
@@ -776,7 +778,17 @@ function modifyPrompts(character)
         if PROMPTS[character] and PROMPTS[character][promptKey] ~= nil then
             uiTab[i+1].attributes.active = true
             insertOption(dropdown.children, "Prompt ".. i)
-            if PROMPTS[character][promptKey].type == 'Character' then
+            if PROMPTS[character][promptKey].type == 'Demon Info' then
+                for k,char in pairs(char_list) do
+                    if CHARACTERS[char].Type == 'Townsfolk' or CHARACTERS[char].Type == 'Outsider' then
+                        if char == demonBluffs[i] then
+                            insertOption(dropdown.children, char, true)
+                        else
+                            insertOption(dropdown.children, char, false)
+                        end
+                    end
+                end
+            elseif PROMPTS[character][promptKey].type == 'Character' then
                 if PROMPTS[character][promptKey].quality == 'All' then
                     for k,char in pairs(char_list) do
                         insertOption(dropdown.children, char)
@@ -836,11 +848,15 @@ function modifyPrompts(character)
     self.UI.setXmlTable(uiTab)
 end
 
-function insertOption(tab, value)
+function insertOption(tab, value, selected)
+    local attributes = nil
+    if selected then
+        attributes = {selected = true}
+    end
     local option = {
         tag = "Option",
         value = value,
-        attributes = nil,
+        attributes = attributes,
         children = nil
     }
     table.insert(tab, option)
@@ -850,9 +866,11 @@ function promptSelect(player, value, id)
     local num = string.sub(id, -1, -1)
     local str = value
     local textColor
-    if PROMPTS[currentChar]['P'..num].type == 'Color' then
+    if string.match(str, "Prompt") then
+        str = "P" .. string.sub(str, -1, -1)
+    elseif PROMPTS[currentChar]['P'..num].type == 'Color' then
         str = COLORS_BBC[value] .. value .. '[-]'
-    elseif PROMPTS[currentChar]['P'..num].type == 'Character' then
+    elseif PROMPTS[currentChar]['P'..num].type == 'Character' or PROMPTS[currentChar]['P'..num].type == 'Demon Info' then
         if CHARACTERS[value].Type == 'Townsfolk' then
             textColor = COLORS_BBC['Blue']
         elseif CHARACTERS[value].Type == 'Outsider' then

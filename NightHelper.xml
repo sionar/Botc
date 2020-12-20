@@ -1,10 +1,10 @@
 <Defaults>
-    <Dropdown class="promptDropdown" onValueChanged="promptSelect" width="360" height="60" dropdownHeight="400" itemHeight="60" fontSize="40" />
-    <Dropdown class="colorDropdown"  onValueChanged="colorDropSelect" width="200" height="60" itemHeight="60" dropdownHeight="400" fontSize="40" />
+    <Dropdown class="promptDropdown" onValueChanged="promptSelect" width="500" height="80" dropdownHeight="700" itemHeight="80" fontSize="60" />
+    <Dropdown class="colorDropdown"  onValueChanged="colorDropSelect" width="200" height="60" itemHeight="60" dropdownHeight="500" fontSize="40" />
     <Panel class="promptPanel" rotation="0 0 180" visibility="Black" />
 </Defaults>
 
-<Panel class="promptPanel" id="promptPanel1" position="-400 580 -10" active="false">
+<Panel class="promptPanel" id="promptPanel1" position="-400 560 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown1"
         >
     </Dropdown>
@@ -16,19 +16,19 @@
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel3" position="-400 720 -10" active="false">
+<Panel class="promptPanel" id="promptPanel3" position="-400 740 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown3"
         >
     </Dropdown>
 </Panel>
 
-<Panel class="promptPanel" id="promptPanel4" position="-400 790 -10" active="false">
+<Panel class="promptPanel" id="promptPanel4" position="-400 830 -10" active="false">
     <Dropdown class="promptDropdown" id="promptDropdown4"
         >
     </Dropdown>
 </Panel>
 
-<Panel id="colorDropPanel" position="230 520 -10" rotation="0 0 180">
+<Panel id="colorDropPanel" position="230 500 -10" rotation="0 0 180">
     <Dropdown class="colorDropdown" id="colorDropdown"
         >
         <Option selected="true"></Option>

@@ -5,14 +5,14 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.10.0'
+VERSION = '1.10.1'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
 Z_START = -7
 Z_INC = 0.44
 DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/794260766603642376/C9EF974279D8B421F1784592C5C7D444AD283EFE/'
-DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/794252892468431180/25B1B2642FF953D85BC96ABA6B1D842239739720/'
+DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/1669111897321786410/8A824CC043EDD270040F97F7DACA93A2C9E3CA08/'
 
 #include GUIDs.ttslua
 

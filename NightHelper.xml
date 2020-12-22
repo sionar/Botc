@@ -1,6 +1,6 @@
 <Defaults>
-    <Dropdown class="promptDropdown" onValueChanged="promptSelect" width="500" height="80" dropdownHeight="700" itemHeight="80" fontSize="60" />
-    <Dropdown class="colorDropdown"  onValueChanged="colorDropSelect" width="200" height="60" itemHeight="60" dropdownHeight="500" fontSize="40" />
+    <Dropdown class="promptDropdown" onValueChanged="promptSelect" width="500" height="80" dropdownHeight="1000" itemHeight="80" fontSize="60" />
+    <Dropdown class="colorDropdown"  onValueChanged="colorDropSelect" width="200" height="60" itemHeight="60" dropdownHeight="800" fontSize="40" />
     <Panel class="promptPanel" rotation="0 0 180" visibility="Black" />
 </Defaults>
 

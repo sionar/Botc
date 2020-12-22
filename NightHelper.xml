@@ -28,7 +28,7 @@
     </Dropdown>
 </Panel>
 
-<Panel id="colorDropPanel" position="230 500 -10" rotation="0 0 180">
+<Panel id="colorDropPanel" position="230 500 -10" rotation="0 0 180" visibility="Black">
     <Dropdown class="colorDropdown" id="colorDropdown"
         >
         <Option selected="true"></Option>

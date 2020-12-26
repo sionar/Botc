@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 DIST = {{0,0,0,0,0},{1,0,0,0,1},{2,1,0,0,1},{3,2,0,0,1},{4,3,0,0,1},{5,3,0,1,1},{6,3,1,1,1},{7,5,0,1,1},{8,5,1,1,1},{9,5,2,1,1},{10,7,0,2,1},{11,7,1,2,1},{12,7,2,2,1},{13,9,0,3,1},{14,9,1,3,1},{15,9,2,3,1},{16,9,2,3,1},{17,9,2,3,1},{18,9,2,3,1},{19,9,2,3,1},{20,9,2,3,1}}
 ROW_SPACING = 0.4
 COL_SPACING = 0.4
@@ -51,12 +51,6 @@ function onLoad(saveString)
         alive = save['a']
         showPlayers = save['sh']
     end
-    if showPlayers then
-        displayPlayers()
-    else
-        displayChart()
-    end
-
 end
 
 function onSave()
@@ -138,9 +132,7 @@ end
 function displayPlayers()
     self.clearButtons()
     showPlayers = true
-
     local params
-
     for i = 1, 5 do
         params = {click_function = 'nullFunc', function_owner = self, label = ROW_COLORS[i] .. PLAYER_LABELS[i] .. players[i], color = {0,0,0,1},
             position = {COL_P[1],0.2,ROW_P[i]}, width = 0, height = 0, font_size = 800, scale = {0.15,0.15,0.15}}

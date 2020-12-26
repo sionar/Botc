@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.4.3'
+VERSION = '20.5.0'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -78,10 +78,18 @@ BG_POS = {188, 141, -395}
 ------------------Variables
 tableSize = 10
 storytellerMode = false
-jokersDefault = false
-whispersOn = true
-whisperLengthOn = true
+firstLoad = true
+options = {
+    seatLock = false,
+    tableText = true,
+    decalsEnabled = true,
+    jokersDefault = true,
+    whispersOn = true,
+    whisperLengthOn = true,
+    safetyOn = true
+}
 timerID = 0
+safetyExpired = true
 started = false
 lights = false
 flipTimerExpired = true
@@ -152,7 +160,6 @@ uiWhisperColor['Black'] = 'Black'
 
 uiWhisperInput = {}
 colorTable = false
-decalsEnabled = true
 uiVisibility = {}
 for k,v in pairs(COLORS) do
     uiVisibility[v] = true
@@ -174,9 +181,9 @@ end
 
 ------------------Functions
 function onLoad(saveString)
-    if not (saveString == '') then
+    if saveString ~= nil then
         local save = JSON.decode(saveString)
-        jokersDefault = save['j']
+        options = save['o']
         started = save['s']
         mode = save['m']
         chars = save['r']
@@ -286,7 +293,7 @@ end
 
 function onSave()
     local save = {}
-    save['j'] = jokersDefault
+    save['o'] = options
     save['s'] = started
     save['m'] = mode
     save['r'] = chars
@@ -581,7 +588,8 @@ function handleLifeUI()
         end
     end
     votesNeeded = math.ceil(numAlive/2)
-    if currPlayers ~= numAlive or currVotes ~= numberOfVotes or numTrav ~= currentNumTrav then
+    if firstLoad or currPlayers ~= numAlive or currVotes ~= numberOfVotes or numTrav ~= currentNumTrav then
+        firstLoad = false
         for k,v in pairs(allObjects) do
             if v.getName() == 'Player Distribution Chart' then
                 v.call('updatePlayerDist', {num = numPlayers - currentNumTrav})
@@ -865,7 +873,7 @@ function createSnapPoints()
     table.insert(snapTable, {position = {0,0,0 + TABLE_OFFSET}, rotation = {0,180,0}, rotation_snap = true})
     table.insert(snapTable, {position = {-12,0,0 + TABLE_OFFSET}, rotation = {0,180,0}, rotation_snap = true})
     table.insert(snapTable, {position = {12,0,0 + TABLE_OFFSET}, rotation = {0,180,0}, rotation_snap = true})
-    table.insert(snapTable, {position = {-26,0,111 + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
+    table.insert(snapTable, {position = {26,0,111 + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
     table.insert(snapTable, {position = {-4,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
     table.insert(snapTable, {position = {0,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
     table.insert(snapTable, {position = {4,1.12, STORYTELLER_TABLE_DIST + TABLE_OFFSET}, rotation = {0,0,0}, rotation_snap = true})
@@ -1333,7 +1341,7 @@ function resetGame()
 
     local guillotine = getObjectFromGUID(GUILLOTINE_GUID)
     if guillotine ~= nil then
-        guillotine.setPositionSmooth({-26, 1, 111 + TABLE_OFFSET})
+        guillotine.setPositionSmooth({26, 1, 111 + TABLE_OFFSET})
         guillotine.setRotationSmooth({0,0,0})
         guillotine.setLock(false)
     end
@@ -1456,13 +1464,8 @@ function onPlayerChangeColor(color)
 end
 
 function onPlayerConnect(player)
-    local teamTool, jokersDefault
-    teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    if teamTool ~= nil then
-        jokersDefault = teamTool.getVar('jokersDefault')
-        if jokersDefault then
-            player.team = 'Jokers'
-        end
+    if options.jokersDefault then
+        player.team = 'Jokers'
     end
     Wait.stop(timerID)
     timerID = Wait.time(function ()
@@ -1680,7 +1683,7 @@ function chatWhisper(player, color, message)
         return
     end
 
-    if not whispersOn and playerColor ~= 'Black' and receiverColor ~= 'Black' then
+    if not options.whispersOn and playerColor ~= 'Black' and receiverColor ~= 'Black' then
         player.print('Whispers are disabled. You can only communicate with the Storyteller.', {1,0,0})
         return
     end
@@ -1713,7 +1716,7 @@ function chatWhisper(player, color, message)
             local messageLength = string.len(message) + math.random(-5, 5)
             local messageLengthText = '[-]'
             if messageLength < 2 then messageLength = 2 end
-            if whisperLengthOn then
+            if options.whisperLengthOn then
                 messageLengthText = '[888888]. [' .. messageLength .. ' characters][-]'
             end
             printToAll(COLORS_BBC[playerColor] .. playerColor .. ' [888888]has whispered to ' .. COLORS_BBC[receiverColor] .. receiverColor .. messageLengthText )
@@ -2150,7 +2153,7 @@ function chatSetTeam(playerName, team, player)
         return
     end
     if foundTeam == 'None' or foundTeam == 'Jokers' then
-        if jokersDefault then
+        if options.jokersDefault then
             foundTeam = 'Jokers'
         else
             foundTeam = 'None'
@@ -2553,7 +2556,6 @@ function resetCurrentNominations()
     local nominatorIndex, nominatedIndex
 
     if currentNominator ~= '' and canNominate[currentNominator] == true then
-        print(currentNominator)
         for k,color in pairs(colors) do
             if color == currentNominator then
                 index = k
@@ -2567,7 +2569,6 @@ function resetCurrentNominations()
         getObjectFromGUID(VOTE_PANEL_GUID).editButton(buttonParams)
     end
     if currentNominated ~= '' and canBeNominated[currentNominated] == true then
-        print(currentNominated)
         for k,color in pairs(colors) do
             if color == currentNominated then
                 index = k
@@ -2626,7 +2627,7 @@ function showVoteButtons(params)
             voteButtonsOn[v] = true
             canBeNominated[v] = true
             voted[v] = false
-            if living[v] then
+            if living[v] or voteMode == 'exile' then
                 canNominate[v] = true
             else
                 canNominate[v] = false
@@ -2813,9 +2814,12 @@ function showExtensionUI()
     UI.setAttribute('placeDecalBM', 'active', 'false')
     UI.setAttribute('placeDecalSV', 'active', 'false')
     UI.setAttribute('placeDecalCU', 'active', 'false')
-    if decalsEnabled then
+    if options.decalsEnabled then
         UI.setAttribute('placeDecal'.. mode, 'active', 'true')
         UI.setAttribute('decalText', 'active', 'true')
+    else
+        UI.setAttribute('placeDecal'.. mode, 'active', 'false')
+        UI.setAttribute('decalText', 'active', 'false')
     end
     for i = 5,20 do
         UI.setAttribute('whisperUI'..i, 'active', 'false')
@@ -2834,7 +2838,11 @@ function showExtensionUI()
         UI.setAttribute('tableTextUI', 'visibility', 'White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Grey')
         updateSitUI()
     end
-    if whispersOn then
+
+    if options.tableText == false then
+        UI.setAttribute('tableTextUI', 'active', 'false')
+    end
+    if options.whispersOn then
         UI.setAttribute('whisperUI'..tableSize + #removedColors, 'active', 'true')
         UI.setAttribute('whisperUI0', 'active', 'false')
     else
@@ -2876,39 +2884,48 @@ function enableTableText()
 end
 
 function disableDecals()
-    decalsEnabled = false
-    UI.setAttribute('placeDecalTB', 'active', 'false')
-    UI.setAttribute('placeDecalBM', 'active', 'false')
-    UI.setAttribute('placeDecalSV', 'active', 'false')
-    UI.setAttribute('placeDecalCU', 'active', 'false')
+    options.decalsEnabled = false
+    UI.setAttribute('placeDecal' .. mode, 'active', 'false')
     UI.setAttribute('decalText', 'active', 'false')
     Global.setDecals({})
 end
 
 function enableDecals()
-    decalsEnabled = true
+    options.decalsEnabled = true
     UI.setAttribute('placeDecal' .. mode, 'active', 'true')
-    UI.setAttribute('decalText', 'active', 'false')
+    UI.setAttribute('decalText', 'active', 'true')
 end
 
 function disableWhispers()
-    whispersOn = false
+    options.whispersOn = false
     UI.setAttribute('whisperUI'.. tableSize, 'active', 'false')
     UI.setAttribute('whisperUI'.. 0, 'active', 'true')
 end
 
 function enableWhispers()
-    whispersOn = true
+    options.whispersOn = true
     UI.setAttribute('whisperUI'.. tableSize, 'active', 'true')
     UI.setAttribute('whisperUI'.. 0, 'active', 'false')
 end
 
 function disableWhisperLength()
-    whisperLengthOn = false
+    options.whisperLengthOn = false
 end
 
 function enableWhisperLength()
-    whisperLengthOn = true
+    options.whisperLengthOn = true
+end
+
+function toggleSafety()
+    options.safetyOn = not options.safetyOn
+end
+
+function startSafetyCooldown()
+    if safetyExpired == false then
+        return
+    end
+    safetyExpired = false
+    Wait.time(function() safetyExpired = true end, 2)
 end
 
 function setTableTextUI(player, value, id)
@@ -2951,7 +2968,6 @@ end
 function sitUI(player, value, id)
     local obj, zoneObj
     local gameSettings = getObjectFromGUID(GAME_SETTINGS_GUID)
-    local seatLock = gameSettings.getVar('seatLock')
     local mainTable = getObjectFromGUID(TABLE_GUID)
     local idx = tonumber(string.sub(id, 6, #id))
     local count = 0
@@ -2965,7 +2981,7 @@ function sitUI(player, value, id)
                 return
             end
         end
-        if seatLock then
+        if options.seatLock then
             player.print('Extension seats are locked.')
             return
         end
@@ -3224,9 +3240,8 @@ end
 
 function leaveTeamUI(player, value, id)
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    local jokersDefault = teamTool.getVar('jokersDefault')
     local defaultTeam
-    if jokersDefault then
+    if options.jokersDefault then
         defaultTeam = 'Jokers'
     else
         defaultTeam = 'None'
@@ -3335,7 +3350,7 @@ function setUIVisibility()
     UI.setAttribute('teamMenu', 'visibility', visStr)
     UI.setAttribute('leaveTeam', 'visibility', visStr)
     UI.setAttribute('leaveTeam', 'textColor', '#FFFFFF')
-    if whispersOn then
+    if options.whispersOn then
         UI.setAttribute('whisperUI'..tableSize, 'visibility', visStr)
     else
         UI.setAttribute('whisperUI0', 'visibility', visStr)

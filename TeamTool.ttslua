@@ -16,12 +16,10 @@ joiningPlayer = { -- used to store a player reference that's trying to join a te
     Diamonds = 0,
     Hearts = 0,
 }
-jokersDefault = false
 
 
 ------------------Functions
 function onLoad(saveString)
-    jokersDefault = Global.getVar('jokersDefault')
     started = Global.getVar('started')
     local params
 
@@ -77,38 +75,41 @@ end
 
 function defaultTeamToggle()
     local allPlayers = Player.getPlayers()
-    if jokersDefault == false then
-        jokersDefault = true
+    local options = Global.getTable('options')
+    if options.jokersDefault == false then
+        options.jokersDefault = true
         for k,v in pairs(allPlayers) do
             if v.team == 'None' then
                 v.team = 'Jokers'
             end
         end
     else
-        jokersDefault = false
+        options.jokersDefault = false
         for k,v in pairs(allPlayers) do
             if v.team == 'Jokers' then
                 v.team = 'None'
             end
         end
     end
-    Global.setVar('jokersDefault', jokersDefault)
+    Global.setTable('options', options)
     Wait.time(refreshUI, 1)
 end
 
 function moveAllToDefaultTeam()
     local allPlayers = Player.getPlayers()
+    local options = Global.getTable('options')
     for k,v in pairs(allPlayers) do
-        if jokersDefault and v.team == 'None' then
+        if options.jokersDefault and v.team == 'None' then
             v.team = 'Jokers'
-        elseif not jokersDefault and v.team == 'Jokers' then
+        elseif not options.jokersDefault and v.team == 'Jokers' then
             v.team = 'None'
         end
     end
 end
 
 function leaveTeam(clickedObject, playerColor)
-    if jokersDefault then
+    local options = Global.getTable('options')
+    if options.jokersDefault then
         defaultTeam = 'Jokers'
     else
         defaultTeam = 'None'
@@ -236,7 +237,8 @@ end
 function removeAll()
     local players = Player.getPlayers()
     local defaultTeam
-    if jokersDefault then
+    local options = Global.getTable('options')
+    if options.jokersDefault then
         defaultTeam = 'Jokers'
     else
         defaultTeam = 'None'

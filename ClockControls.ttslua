@@ -5,7 +5,7 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.11.2'
+VERSION = '1.11.3'
 UI_SCALE = {0.5, 0.5, 0.5} -- to resize scale of the buttons all at once
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
@@ -46,10 +46,7 @@ rotationRate = 24
 degreesRotated = 0
 tolerance = 3 -- how few degrees off of the perfect rotation degrees will register for locking the voting cards
 grimShow = false
-tableText = true
-decalUI = true
 extension = false
-seatLock = false
 votingMode = ''
 allMuted = false
 allBlind = false
@@ -65,7 +62,6 @@ votesNeeded = 0
 function onLoad(saveString)
     if not (saveString == '') then
         local save = JSON.decode(saveString)
-        seatLock = save['s']
         allMuted = save['am']
         allBlind = save['ab']
         clockOn = save['co']
@@ -94,7 +90,6 @@ end
 
 function onSave()
     local save = {}
-    save['s'] = seatLock
     save['am'] = allMuted
     save['ab'] = allBlind
     save['co'] = clockOn
@@ -214,7 +209,7 @@ function toggleClock(vm)
             rotating = false
         end
         if vm == 'execution' then
-            guillotine.setPositionSmooth({-26,1,111 + TABLE_OFFSET})
+            guillotine.setPositionSmooth({26,1,111 + TABLE_OFFSET})
             guillotine.setRotationSmooth({0,0,0})
             guillotine.setLock(false)
         end
@@ -237,9 +232,8 @@ function toggleClock(vm)
 
         UI.setAttribute('nomMenu', 'active', 'true')
         UI.setAttribute('colorSelection', 'active', 'false')
-        if votingMode == 'execution' or votingMode == 'Clock' then
-            self.editButton({index = 0, label = 'Hide Clock', color = {1, 0, 0}})
-        end
+
+        self.editButton({index = 0, label = 'Hide Clock', color = {1, 0, 0}})
         self.editButton({index = 1, scale = UI_SCALE})
         self.editButton({index = 8, label = 'Hide\nClock', tooltip = 'Hide the clock.'})
 
@@ -637,7 +631,18 @@ end
 function toggleHiddenZones(clickedObject, playerColor)
     if playerColor == 'Black' then
         if grimShow == false then
-            showGrimoire()
+            local options = Global.getTable('options')
+            local safetyExpired = Global.getVar('safetyExpired')
+            if options.safetyOn then
+                if safetyExpired then
+                    Player['Black'].broadcast('Click again to reveal the grimoire.', {1,0,0})
+                    Global.call('startSafetyCooldown')
+                else
+                    showGrimoire()
+                end
+            else
+                showGrimoire()
+            end
         else
             hideGrimoire()
         end

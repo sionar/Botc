@@ -5,15 +5,13 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.0.1'
+VERSION = '1.2.0'
 BUTTON_Z_OFFSET = 0.25
 #include GUIDs.ttslua
 
 
 ------------------Variables
-seatLock = false
-tableText = true
-decalUI = true
+
 
 
 ------------------Functions
@@ -23,34 +21,37 @@ function onLoad()
 end
 
 function toggleSeatLock(clickedObject, playerColor)
-    if playerColor == 'Black' then
-        if seatLock == false then
-            seatLock = true
-            self.editButton({
-                index          = 1,
-                label          = 'Grey Seats [DA1917]OFF[-]',
-                tooltip        = 'Allow people to sit in the grey seats.',
-            })
-            printToColor('Extension seats are locked.', playerColor, {1,1,1})
-        else
-            seatLock = false
-            self.editButton({
-                index          = 1,
-                label          = 'Grey Seats [1E87FF]ON[-]',
-                tooltip        = 'Prevent people from sitting in the grey seats.',
-            })
-            printToColor('Extension seats are unlocked.', playerColor, {1,1,1})
-        end
+    if playerColor ~= 'Black' then
+        return
     end
+    local options = Global.getTable('options')
+    if options.seatLock == false then
+        options.seatLock = true
+        self.editButton({
+            index          = 1,
+            label          = 'Grey Seats [DA1917]OFF[-]',
+            tooltip        = 'Allow people to sit in the grey seats.',
+        })
+        printToColor('Extension seats are locked.', playerColor, {1,1,1})
+    else
+        options.seatLock = false
+        self.editButton({
+            index          = 1,
+            label          = 'Grey Seats [1E87FF]ON[-]',
+            tooltip        = 'Prevent people from sitting in the grey seats.',
+        })
+        printToColor('Extension seats are unlocked.', playerColor, {1,1,1})
+    end
+    Global.setTable('options', options)
 end
 
 function toggleTableText(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
-    tableText = not tableText
-    if tableText == false then
+    local options = Global.getTable('options')
+    options.tableText = not options.tableText
+    if options.tableText == false then
         Global.call('disableTableText')
         self.editButton({index = 2, label = 'Table Text [DA1917]OFF[-]', tooltip = 'Click this to enable the Table Text UI for all players.'})
         printToColor('The Table text UI is disabled.', playerColor, {1,1,1})
@@ -59,32 +60,33 @@ function toggleTableText(clickedObject, playerColor)
         self.editButton({index = 2, label = 'Table Text [1E87FF]ON[-]', tooltip = 'Click this to disable the Table Text UI for all players.'})
         printToColor('The Table text UI is enabled.', playerColor, {1,1,1})
     end
+    Global.setTable('options', options)
 end
 
 function toggleDecals(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
-    decalUI = not decalUI
-    if decalUI == false then
+    local options = Global.getTable('options')
+    options.decalsEnabled = not options.decalsEnabled
+    if options.decalsEnabled == false then
         Global.call('disableDecals')
         self.editButton({index = 3, label = 'Decal UI [DA1917]OFF[-]', tooltip = 'Click this to enable the Decal UI for all players.'})
         printToColor('The decal UI is disabled.', playerColor, {1,1,1})
     else
         Global.call('enableDecals')
-        self.editButton({index = 8, label = 'Decal UI [1E87FF]ON[-]', tooltip = 'Click this to disable the Decal UI for all players.'})
+        self.editButton({index = 3, label = 'Decal UI [1E87FF]ON[-]', tooltip = 'Click this to disable the Decal UI for all players.'})
         printToColor('The decal UI is enabled.', playerColor, {1,1,1})
     end
+    Global.setTable('options', options)
 end
 
 function toggleWhispers(clickedObjet, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
-    local whispersOn = Global.getVar('whispersOn')
-    if whispersOn == true then
+    local options = Global.getTable('options')
+    if options.whispersOn == true then
         Global.call('disableWhispers')
         self.editButton({index = 4, label = 'Whispers [DA1917]OFF[-]', tooltip = 'Click this to enable whispering for all players.'})
         printToColor('Whispers are disabled.', playerColor, {1,1,1})
@@ -99,9 +101,8 @@ function toggleWhisperLength(clickedObjet, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-
-    local whisperLengthOn = Global.getVar('whisperLengthOn')
-    if whisperLengthOn then
+    local options = Global.getTable('options')
+    if options.whisperLengthOn then
         Global.call('disableWhisperLength')
         self.editButton({index = 5, label = 'Whispers Length [DA1917]OFF[-]', tooltip = 'Click this to show the length of whisper messages.'})
         printToColor('Whisper length is disabled.', playerColor, {1,1,1})
@@ -119,24 +120,40 @@ function callDefaultTeamToggle(clickedObject, playerColor)
     local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
     if teamTool ~= nil then
         teamTool.call('defaultTeamToggle')
+        local options = Global.getTable('options')
+        if options.jokersDefault then
+            Player['Black'].print('The default team is now Jokers.')
+            self.editButton({index = 6, label = 'Default Team [1E87FF]Jokers[-]', tooltip = 'Make None the default team'})
+        else
+            Player['Black'].print('The default team is now None.')
+            self.editButton({index = 6, label = 'Default Team [DA1917]None[-]', tooltip = 'Make Jokers the default team'})
+        end
     end
-    local jokersDefault = Global.getVar('jokersDefault')
-    if jokersDefault then
-        Player['Black'].print('The default team is now Jokers.')
-        self.editButton({index = 6, label = 'Default Team [1E87FF]Jokers[-]', tooltip = 'Make None the default team'})
+end
+
+function callSafetyToggle(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    Global.call('toggleSafety')
+    local options = Global.getTable('options')
+    if options.safetyOn then
+        Player['Black'].print('Safety is now on.')
+        self.editButton({index = 7, label = 'Safety [1E87FF]ON[-]', tooltip = 'Click this to disable safety for revealing the Grimoire and resetting the game.'})
     else
-        Player['Black'].print('The default team is now None.')
-        self.editButton({index = 6, label = 'Default Team [DA1917]None[-]', tooltip = 'Make Jokers the default team'})
+        Player['Black'].print('Safety is now off.')
+        self.editButton({index = 7, label = 'Safety [DA1917]OFF[-]', tooltip = 'Click this to enable safety for revealing the Grimoire and resetting the game.'})
     end
 end
 
 function refreshUI()
     self.clearButtons()
     local num = 0
-    local z_inc = 0.5
+    local z_inc = 0.4
     local z_start = -1.2
     local font_size = 250
     local params
+    local options = Global.getTable('options')
 
     params = {
         click_function = 'nullFunc',
@@ -163,7 +180,7 @@ function refreshUI()
         font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
-    if seatLock then
+    if options.seatLock then
         params.label = 'Grey Seats [DA1917]OFF[-]'
         params.tooltip = 'Allow people to sit in the grey seats.'
     else
@@ -185,7 +202,7 @@ function refreshUI()
         font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
-    if tableText then
+    if options.tableText then
             params.label = 'Table Text [1E87FF]ON[-]'
             params.tooltip = 'Click this to disable the Table Text UI for all players.'
         else
@@ -207,7 +224,7 @@ function refreshUI()
         font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
-    if decalUI then
+    if options.decalsEnabled then
         params.label = 'Decal UI [1E87FF]ON[-]'
         params.tooltip = 'Click this to disable the Decal UI for all players.'
     else
@@ -230,8 +247,8 @@ function refreshUI()
         font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
-    local whispersOn = Global.getVar('whispersOn')
-    if whispersOn then
+
+    if options.whispersOn then
         params.label = 'Whispers [1E87FF]ON[-]'
         params.tooltip = 'Click this to disable whispering for all players.'
     else
@@ -254,8 +271,8 @@ function refreshUI()
         font_size = font_size,
         scale = {0.5,0.5,0.5},
     }
-    local whisperLengthOn = Global.getVar('whisperLengthOn')
-    if whisperLengthOn then
+
+    if options.whisperLengthOn then
         params.label = 'Whisper Length [1E87FF]ON[-]'
         params.tooltip = 'Click this to hide the length of whisper messages.'
     else
@@ -277,14 +294,36 @@ function refreshUI()
         font_size = 250,
         scale = {0.5,0.5,0.5},
     }
-    local jokersDefault = Global.getVar('jokersDefault')
-    if jokersDefault then
+
+    if options.jokersDefault then
         params.label = 'Default Team [1E87FF]Jokers[-]'
         params.tooltip = 'Make None the default team'
     else
         params.label = 'Default Team [DA1917]None[-]'
         params.tooltip = 'Make Jokers the default team'
     end
+    self.createButton(params)
+    num = num + 1
+
+    params = {
+        click_function = 'callSafetyToggle',
+        function_owner = self,
+        position = {0,0.2,z_start + num * z_inc + BUTTON_Z_OFFSET},
+        rotation = {0,0,0},
+        width = 2500,
+        height = 400,
+        color = {0,0,0},
+        font_color = {1,1,1},
+        font_size = font_size,
+        scale = {0.5,0.5,0.5},
+    }
+    if options.safetyOn then
+            params.label = 'Safety [1E87FF]ON[-]'
+            params.tooltip = 'Click this to disable safety for revealing the Grimoire and resetting the game.'
+        else
+            params.label = 'Safety [DA1917]OFF[-]'
+            params.tooltip = 'Click this to enable safety for revealing the Grimoire and resetting the game.'
+        end
     self.createButton(params)
     num = num + 1
 end

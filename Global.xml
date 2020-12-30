@@ -2926,16 +2926,101 @@
     >
 </InputField>
 
-<Button
-    id="toggleUIButton"
-    onClick="toggleUI"
-    text="Toggle UI"
-    height="63"
-    width="63"
+<HorizontalLayout
+    id="toggleButtons"
     rectAlignment="LowerRight"
-    offsetXY="-9 70"
-    colors="#66666680|#666666FF|#66666680|#66666680"
-    textColor="#FFFFFF"
-    visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
+    offsetXY="-75 7"
+    height="60"
+    width="130"
     >
-</Button>
+    <Button
+        id="toggleCharSheetButton"
+        onClick="toggleCharSheetUI"
+        text="Toggle Character Sheet"
+        height="63"
+        width="63"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        textColor="#FFFFFF"
+        fontSize="11"
+        visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
+        active="true"
+        >
+    </Button>
+    <Button
+        id="toggleUIButton"
+        onClick="toggleUI"
+        text="Toggle UI"
+        height="63"
+        width="63"
+        colors="#66666680|#666666FF|#66666680|#66666680"
+        textColor="#FFFFFF"
+        visibility="White|Brown|Red|Orange|Yellow|Green|Teal|Blue|Purple|Pink|Black"
+        >
+    </Button>
+</HorizontalLayout>
+
+<HorizontalLayout
+    id="charSheetLayoutTB"
+    allowDragging="true"
+    returnToOriginalPositionWhenReleased="false"
+    width="763"
+    height="1080"
+    spacing="-50"
+    childAlignment="MiddleCenter"
+    childForceExpandWidth="false"
+    childForceExpandHeight="false"
+    visibility="None"
+    active="false"
+    >
+    <Image
+        id="charSheetTB"
+        image="CharsTB"
+        preserveAspect="true"
+        height="1080"
+        >
+    </Image>
+</HorizontalLayout>
+
+<HorizontalLayout
+    id="charSheetLayoutBM"
+    allowDragging="true"
+    returnToOriginalPositionWhenReleased="false"
+    width="763"
+    height="1080"
+    spacing="-50"
+    childAlignment="MiddleCenter"
+    childForceExpandWidth="false"
+    childForceExpandHeight="false"
+    visibility="None"
+    active="false"
+    >
+    <Image
+        id="charSheetBM"
+        image="CharsBM"
+        preserveAspect="true"
+        height="1080"
+        >
+    </Image>
+</HorizontalLayout>
+
+<HorizontalLayout
+    id="charSheetLayoutSV"
+    allowDragging="true"
+    returnToOriginalPositionWhenReleased="false"
+    width="763"
+    height="1080"
+    spacing="-50"
+    childAlignment="MiddleCenter"
+    childForceExpandWidth="false"
+    childForceExpandHeight="false"
+    visibility="None"
+    active="false"
+    >
+    <Image
+        id="charSheetSV"
+        image="CharsSV"
+        preserveAspect="true"
+        height="1080"
+        >
+    </Image>
+</HorizontalLayout>

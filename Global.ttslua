@@ -154,18 +154,16 @@ end
 
 avatarUrl = ''
 uiWhisperColor = {}
-for k,v in pairs(COLORS_ALL) do
-    uiWhisperColor[v] = 'Black'
-end
-uiWhisperColor['Black'] = 'Black'
-
 uiWhisperInput = {}
 colorTable = false
 uiVisibility = {}
+charSheetActive = {}
 for k,v in pairs(COLORS) do
     uiVisibility[v] = true
+    charSheetActive[v] = false
 end
 uiVisibility['Black'] = true
+charSheetActive['Black'] = false
 
 customSet = false
 imageLoaded = false
@@ -1500,6 +1498,7 @@ function onPlayerDisconnect(player)
     if objects.characterTool ~= nil then
         objects.characterTool.call('refreshMenu')
     end
+    uiWhisperColor[player.steam_id] = 'Black'
 end
 
 function onObjectDrop(playerColor, object)
@@ -1654,7 +1653,6 @@ end
 
 function chatWhisper(player, color, message)
     updatePlayers()
-
     if not message or string.len(message) == 0 then
         return
     end
@@ -2837,6 +2835,12 @@ function showExtensionUI()
         UI.setAttribute('whisperUI0', 'active', 'true')
     end
     UI.setAttribute('blackWhisperUI'..tableSize + #removedColors, 'active', 'true')
+    UI.setAttribute('charSheetLayoutTB', 'active', 'false')
+    UI.setAttribute('charSheetLayoutBM', 'active', 'false')
+    UI.setAttribute('charSheetLayoutSV', 'active', 'false')
+    if mode ~= 'CU' then
+        UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
+    end
     setUIVisibility()
 end
 
@@ -2851,9 +2855,9 @@ function updateSitUI()
     local delayFrames = 300
     for i,color in ipairs(greyColors) do
         if playersEx[color] == nil then
-            UI.setAttributes('sit' .. id .. i, {text = 'Sit in ' .. color, colors = COLORS_UI[color], color = "#FFFFFF"})
+            UI.setAttributes('sit' .. id .. i, {text = 'Sit in ' .. color, colors = COLORS_UI[color], textColor = "#FFFFFF"})
         else
-            UI.setAttributes('sit' .. id .. i, {text = 'Leave ' .. color, colors = COLORS_UI[color], color = "#FFFFFF"})
+            UI.setAttributes('sit' .. id .. i, {text = 'Leave ' .. color, colors = COLORS_UI[color], textColor = "#FFFFFF"})
         end
     end
     UI.setAttribute('sitTable'.. id, 'active', 'true')
@@ -3237,7 +3241,7 @@ function whisperColorUI(player, value, id)
     if not sender then
         return
     end
-	uiWhisperColor[sender] = value
+	uiWhisperColor[player.steam_id] = value
 end
 
 function whisperInputUI(player, value, id)
@@ -3253,7 +3257,7 @@ function sendWhisperUI(player, value, id)
     if not sender then
         return
     end
-    chatWhisper(player, uiWhisperColor[sender], uiWhisperInput[sender])
+    chatWhisper(player, uiWhisperColor[player.steam_id], uiWhisperInput[sender])
     uiWhisperInput[sender] = ''
 end
 
@@ -3292,6 +3296,26 @@ function toggleUI(player, value, id)
         UI.setAttribute('colorSelection', 'visibility', 'none')
     end
     setUIVisibility()
+end
+
+function toggleCharSheetUI(player, value, id)
+    charSheetActive[player.color] = not charSheetActive[player.color]
+    local visString = ""
+    local found = false
+    for color,state in pairs(charSheetActive) do
+        if state == true then
+            found = true
+            visString = visString .. color .. '|'
+        end
+    end
+    if found then
+        visString = string.sub(visString, 1, -2)
+    else
+        visString = "None"
+    end
+    UI.setAttribute('charSheetLayoutTB','visibility',visString)
+    UI.setAttribute('charSheetLayoutBM','visibility',visString)
+    UI.setAttribute('charSheetLayoutSV','visibility',visString)
 end
 
 function setUIVisibility()
@@ -3337,4 +3361,8 @@ function setUIVisibility()
     UI.setAttribute('leaveTeamBlack', 'visibility', blackStr)
     UI.setAttribute('nomMenu', 'visibility', visStr)
     UI.setAttribute('aliveDisplay', 'visibility', visStr)
+    Wait.frames(function()
+        UI.setAttribute('toggleCharSheetButton', 'textColor', '#FFFFFF')
+        UI.setAttribute('leaveTeamBlack', 'textColor', '#FFFFFF')
+    end, 5)
 end

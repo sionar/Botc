@@ -229,6 +229,13 @@ function setMode(state)
     end
     Global.call('showExtensionUI')
     refreshUI()
+    if mode == 'CU' then
+        Global.UI.setAttribute('toggleCharSheetButton', 'active', 'false')
+        Global.UI.setAttribute('toggleButtons', 'width', '65')
+    else
+        Global.UI.setAttribute('toggleCharSheetButton', 'active', 'true')
+        Global.UI.setAttribute('toggleButtons', 'width', '130')
+    end
 end
 
 function random(clickedObject, playerColor)

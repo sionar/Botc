@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.1'
+VERSION = '1.5.2'
 BUTTON_W = 500
 BUTTON_H = 400
 FONT_SIZE = 120
@@ -15,14 +15,16 @@ BUTTON_FONT_COLOR = {1,1,1}
 
 
 ------------------Variables
+objects = {}
 tableSize = 10
-backgroundDelete = false
+backgroundDeleted = false
 maxSeats = 20
 
 
 ------------------Functions
 function onLoad(saveString)
     tableSize = Global.getVar('tableSize')
+    assignObjects()
     refreshUI()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
     if not (saveString == '') then
@@ -36,6 +38,12 @@ function onSave()
     save['m'] = maxSeats
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function assignObjects()
+    objects.bgBox = getObjectFromGUID(BG_BOX_GUID)
+    objects.clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+    objects.toolbag = getObjectFromGUID(TOOL_BAG_GUID)
 end
 
 function decTableSize(clickedObject, playerColor)
@@ -127,9 +135,8 @@ function deleteBackground(clickedObject, playerColor)
             v.destruct()
         end
     end
-    local backgroundBox = getObjectFromGUID(BACKGROUND_BOX_GUID)
-    if backgroundBox ~= nil then
-        backgroundBox.setScale({0.5,0.5,0.5})
+    if objects.bgBox ~= nil then
+        objects.bgBox.setScale({0.5,0.5,0.5})
     end
 end
 
@@ -155,9 +162,8 @@ function callClockStyle1(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    if clockControls ~= nil then
-        clockControls.call('setClockStyle', {style = 1})
+    if objects.clockControls ~= nil then
+        objects.clockControls.call('setClockStyle', {style = 1})
     end
 end
 
@@ -165,9 +171,8 @@ function callClockStyle2(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
-    if clockControls ~= nil then
-        clockControls.call('setClockStyle', {style = 2})
+    if objects.clockControls ~= nil then
+        objects.clockControls.call('setClockStyle', {style = 2})
     end
 end
 
@@ -175,13 +180,12 @@ function modifySeats(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-    local toolbag = getObjectFromGUID(TOOL_BAG_GUID)
-    if toolbag == nil then
+    if objects.toolbag == nil then
         return
     end
-    for k,v in pairs(toolbag.getObjects()) do
+    for k,v in pairs(objects.toolbag.getObjects()) do
         if v.name == 'Seat Tool' then
-            toolbag.takeObject({index = v.index})
+            objects.toolbag.takeObject({index = v.index})
         end
     end
 end

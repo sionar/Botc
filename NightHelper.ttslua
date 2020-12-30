@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '3.0.1'
+VERSION = '3.0.2'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Grey'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[888888]', Prompt = '[93EB6A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255}, Grey = {136/255, 136/255, 136/255}}
@@ -40,6 +40,7 @@ BOTTOM_BUT_Z = 8
 
 
 ------------------Variables
+objects = {}
 living = {}
 order = {}
 orderRef = nil
@@ -65,6 +66,7 @@ demonBluffs = {nil, nil, nil}
 ------------------Load/save
 function onLoad(saveString)
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+    assignObjects()
     moveBoard()
     if not (saveString == '') then
         local save = JSON.decode(saveString)
@@ -80,6 +82,7 @@ function onLoad(saveString)
         dayLog = save['dl']
     end
     refreshUI()
+
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
 end
 
@@ -102,6 +105,13 @@ end
 
 
 ------------------Functions
+function assignObjects()
+    objects.scriptingZone = getObjectFromGUID(SCRIPTING_ZONE_GUID)
+    objects.shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
+    objects.clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
+end
+
+
 function moveBoard()
     local modName = Global.getVar('MOD_NAME')
     local TABLE_OFFSET, STORYTELLER_TABLE_DIST
@@ -305,7 +315,7 @@ function setMsg()
 end
 
 function setDemonBluffs()
-    local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
+    local zoneObjs = objects.scriptingZone.getObjects()
     local pos, gmNotes
     local formattedBluffs = {'P1', 'P2', 'P3'}
     local textColor
@@ -452,10 +462,9 @@ function placeShroud(i)
     local pos = radius(rad, angle[color], 1.25)
     pos['z'] = pos['z'] + 129 + TABLE_OFFSET
     local found = nil
-    local shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
-    local zoneObjs = getObjectFromGUID(SCRIPTING_ZONE_GUID).getObjects()
+    local zoneObjs = objects.scriptingZone.getObjects()
     local vPos
-    if shroudBag == nil then
+    if objects.shroudBag == nil then
         return
     end
 
@@ -471,11 +480,11 @@ function placeShroud(i)
 
     if living[i].alive then
         if found then
-            shroudBag.putObject(found)
+            objects.shroudBag.putObject(found)
         end
     else
         if not found then
-            shroudBag.takeObject({position = pos, rotation = {0,0,0}})
+            objects.shroudBag.takeObject({position = pos, rotation = {0,0,0}})
         end
     end
 end
@@ -591,13 +600,12 @@ function send(clickedObject, playerColor)
         return
     end
 
-    local clockControls = getObjectFromGUID(CLOCK_CONTROLS_GUID)
     local steam_name = Player[playerColor].steam_name
     local sendColor, msg
     local players = Global.call('updatePlayers')
-    local allBlind = clockControls.getVar('allBlind')
-    if clockControls ~= nil then
-        clockControls.call('hideGrimoire')
+    local allBlind = objects.clockControls.getVar('allBlind')
+    if objects.clockControls ~= nil then
+        objects.clockControls.call('hideGrimoire')
     end
 
     if order[1].char == 'Evil Info' then

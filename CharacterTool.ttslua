@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.10.1'
+VERSION = '1.10.2'
 PLAYER_DIST = {{0,0,0,1},{1,0,0,1},{2,0,0,1},{3,0,0,1},{3,0,1,1},{3,1,1,1},{5,0,1,1},{5,1,1,1},{5,2,1,1},{7,0,2,1},{7,1,2,1},{7,2,2,1},{9,0,3,1},{9,1,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1},{9,2,3,1}} --layout: player count = {townsfolk, outsiders, minions, demons}
 COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]', Demon = '[DA1917]', Traveler = '[30B22A]'}
 BUTTON_Y = 0.1
@@ -17,6 +17,7 @@ DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/1669111897321
 #include GUIDs.ttslua
 
 ------------------Variables
+objects = {}
 mode = 'TB'
 numPlayers = ''
 numTrav = 0
@@ -52,6 +53,7 @@ function onLoad(saveString)
         saveCategoryName = save['sc']
         saveLoadPage = save['p']
     end
+    assignObjects()
     moveBoard()
     startMenu()
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
@@ -66,6 +68,10 @@ function onSave()
     save['p'] = saveLoadPage
     local saveString = JSON.encode(save)
     return saveString
+end
+
+function assignObjects()
+    objects.storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 end
 
 function moveBoard()
@@ -427,7 +433,6 @@ function dealChars()
     local bagObjs
     local name, foundIndex
     local objs = getAllObjects()
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
 
     bags.deal = getObjectFromGUID(DEAL_BAG_GUID)
     if bags.deal == nil then
@@ -469,12 +474,10 @@ function dealChars()
 
     Wait.time(function() bags.deal.shuffle() end, 0.5)
     self.clearButtons()
-    storageBag.putObject(self)
+    objects.storageBag.putObject(self)
 end
 
 function import()
-    local objs = getAllObjects()
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     local reminderBagJSON
 
     Global.setTable('customList', characters)

@@ -5,8 +5,10 @@ Made by Unreal_ed, modified by Sionar
 
 
 ------------------Constants
-VERSION = '1.4.0'
+VERSION = '1.4.1'
 TEAMS = {'Clubs', 'Spades', 'Diamonds', 'Hearts'}
+
+#include GUIDs.ttslua
 
 
 ------------------Variables
@@ -70,7 +72,14 @@ function onLoad(saveString)
     if not started then
         moveAllToDefaultTeam()
     end
+
+    assignObjects()
+    Wait.time(function () gameSettings.call('assignObjects') end, 1)
     Wait.time(refreshUI, 1)
+end
+
+function assignObjects()
+    gameSettings = getObjectFromGUID(GAME_SETTINGS_GUID)
 end
 
 function defaultTeamToggle()

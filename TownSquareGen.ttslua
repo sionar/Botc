@@ -5,14 +5,16 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.3'
+VERSION = '1.2.5'
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[AAAAAA]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {0/255,0/255,128/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 
 #include GUIDs.ttslua
 
+
 ------------------Variables
+objects = {}
 colors = {}
 angles = {}
 numPlayers = 10
@@ -24,10 +26,24 @@ end
 
 ------------------Functions()
 function onLoad()
+    assignObjects()
     moveBoard()
     render()
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function assignObjects()
+    objects.tableSizer = getObjectFromGUID(TABLE_CONTROLS_GUID)
+    objects.storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
+    objects.travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
+    objects.toolBag = getObjectFromGUID(TOOL_BAG_GUID)
+end
+
+function destroySelf(clickedObject, playerColor)
+    if Player[playerColor].admin or playerColor == 'Black' then
+        objects.toolBag.putObject(self)
+    end
 end
 
 function moveBoard()
@@ -36,7 +52,7 @@ function moveBoard()
     if modName == 'Blood on the Clocktower' then
         TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
         STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
-        self.setPositionSmooth({21,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 26})
+        self.setPositionSmooth({21,1.2,TABLE_OFFSET + STORYTELLER_TABLE_DIST + 27})
         self.setLock(true)
     end
 end
@@ -52,13 +68,11 @@ function start(clickedObject, playerColor)
         return
     end
     Global.setVar('storytellerMode', true)
-    obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    if obj ~= nil then
-        obj.setVar('tableSize', numPlayers)
-        obj.call('refreshUI')
-        obj.call('callResize')
+    if objects.tableSizer ~= nil then
+        objects.tableSizer.setVar('tableSize', numPlayers)
+        objects.tableSizer.call('refreshUI')
+        objects.tableSizer.call('callResize')
     end
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
     numPlayers = #nameList
     rad = numPlayers * 0.6 + 6
     radGrim = numPlayers * 0.4 + 6
@@ -152,10 +166,9 @@ function setNumPlayers(clickedObject, playerColor, value, stillEditing)
         end
         nameList = newNameList
         Global.setVar('storytellerMode', true)
-        obj = getObjectFromGUID(TABLE_SIZER_GUID)
-        obj.setVar('tableSize', numPlayers)
-        obj.call('refreshUI')
-        obj.call('callResize')
+        objects.tableSizer.setVar('tableSize', numPlayers)
+        objects.tableSizer.call('refreshUI')
+        objects.tableSizer.call('callResize')
         render()
     end
 end
@@ -197,32 +210,28 @@ for i = 1,20 do
 end
 
 function setNormalToken(color)
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
-    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     local lifeTokens = Global.getTable('lifeTokens')
     local pos, objs
     if lifeTokens[color].object and lifeTokens[color].object.getDescription() == 'Traveler' then
         pos = lifeTokens[color].object.getPosition()
-        travelerBag.putObject(lifeTokens[color].object)
-        objs = storageBag.getObjects()
+        objects.travelerBag.putObject(lifeTokens[color].object)
+        objs = objects.storageBag.getObjects()
         for k,v in pairs(objs) do
             if v.guid == LIFE_TOKEN_GUIDS[color] then
-                obj = storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color], position = pos})
+                obj = objects.storageBag.takeObject({guid = LIFE_TOKEN_GUIDS[color], position = pos})
             end
         end
     end
 end
 
 function setTravelerToken(color)
-    local storageBag = getObjectFromGUID(STORAGE_BAG_GUID)
-    local travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     local lifeTokens = Global.getTable('lifeTokens')
     local pos, objs
     if lifeTokens[color].object.getDescription() ~= 'Traveler' then
         pos = lifeTokens[color].object.getPosition()
-        storageBag.putObject(lifeTokens[color].object)
-        objs = storageBag.getObjects()
-        obj = travelerBag.takeObject({position = pos})
+        objects.storageBag.putObject(lifeTokens[color].object)
+        objs = objects.storageBag.getObjects()
+        obj = objects.travelerBag.takeObject({position = pos})
     end
 end
 
@@ -236,11 +245,10 @@ function insertAbove(clickedObject, playerColor, i)
         nameList[j].color = COLORS_ALL[j]
     end
     Global.setVar('storytellerMode', true)
-    local obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    if obj ~= nil then
-        obj.setVar('tableSize', numPlayers)
-        obj.call('refreshUI')
-        obj.call('callResize')
+    if objects.tableSizer ~= nil then
+        objects.tableSizer.setVar('tableSize', numPlayers)
+        objects.tableSizer.call('refreshUI')
+        objects.tableSizer.call('callResize')
     end
     render()
 end
@@ -261,11 +269,10 @@ function removeRow(clickedObject, playerColor, i)
         nameList[j].color = COLORS_ALL[j]
     end
     Global.setVar('storytellerMode', true)
-    local obj = getObjectFromGUID(TABLE_SIZER_GUID)
-    if obj ~= nil then
-        obj.setVar('tableSize', numPlayers)
-        obj.call('refreshUI')
-        obj.call('callResize')
+    if objects.tableSizer ~= nil then
+        objects.tableSizer.setVar('tableSize', numPlayers)
+        objects.tableSizer.call('refreshUI')
+        objects.tableSizer.call('callResize')
     end
     render()
 end
@@ -283,6 +290,8 @@ function render()
     local selectedColor = {0.3,0.3,0.6}
     local unselectedColor = {0,0,0}
     local normalColor, travelerColor
+    local params = {click_function = 'destroySelf', function_owner = self, label = '☒', position = {8,0.1,-8}, scale = {1.5, 1.5, 1.5}, width = 600, height = 600, font_size = 400, font_color = {1,0.4,0.4}, color = {0,0,0,0.6}}
+    self.createButton(params)
     self.createButton({
         click_function = 'nullFunc',
         function_owner = self,

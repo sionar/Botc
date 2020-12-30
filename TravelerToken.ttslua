@@ -2,6 +2,7 @@ VOTE_TOKEN_BAG_GUID = 'aa3ceb'
 
 function onLoad()
     createFlipButtons()
+    voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
 end
 
 function createFlipButtons()
@@ -18,7 +19,7 @@ function flipAliveToDead(clickedObject, playerColor)
         pos['y'] = 1.36
         clickedObject.setPositionSmooth(pos)
         clickedObject.setRotationSmooth({180,0,0})
-        voteToken = getObjectFromGUID(VOTE_TOKEN_BAG_GUID).takeObject({position = pos})
+        voteTokenBag.takeObject({position = pos})
         Wait.time(function () Global.call('checkLiving') end, 1)
     end
 end
@@ -27,7 +28,6 @@ function flipDeadToAlive(clickedObject, playerColor)
     if playerColor == 'Black' then
         local pos = clickedObject.getPosition()
         local objectsFound = Physics.cast({origin = pos, direction = {0, 1, 0}, type = 2, max_distance = 3, debug = false})
-        local voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
         pos['y'] = 1.15
         clickedObject.setPositionSmooth(pos)
         clickedObject.setRotationSmooth({0,0,0})

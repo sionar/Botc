@@ -5,19 +5,24 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 BUTTON_Z_OFFSET = 0.25
 #include GUIDs.ttslua
 
 
 ------------------Variables
-
+objects = {}
 
 
 ------------------Functions
 function onLoad()
     refreshUI()
+    assignObjects()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+end
+
+function assignObjects()
+    objects.teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
 end
 
 function toggleSeatLock(clickedObject, playerColor)
@@ -117,9 +122,8 @@ function callDefaultTeamToggle(clickedObject, playerColor)
     if playerColor ~= 'Black' then
         return
     end
-    local teamTool = getObjectFromGUID(TEAM_TOOL_GUID)
-    if teamTool ~= nil then
-        teamTool.call('defaultTeamToggle')
+    if objects.teamTool ~= nil then
+        objects.teamTool.call('defaultTeamToggle')
         local options = Global.getTable('options')
         if options.jokersDefault then
             Player['Black'].print('The default team is now Jokers.')

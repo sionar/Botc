@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 COLORS_BBC = {Black = '[333333]', White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]'}
 X_DIFF = 3.7
 START_X = X_DIFF * 1.5 * -1
@@ -14,6 +14,7 @@ TOOL_BAG_GUID = '232b20'
 
 
 ------------------Variables
+objects = {}
 time = 0
 currentTimerID = 0
 enableVotes = false
@@ -25,10 +26,16 @@ startButtonLabel = 'Start Vote'
 ------------------Functions
 function onLoad()
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
+    assignObjects()
     moveBoard()
     Wait.time(makeVisible, 2, 1)
     refreshUI()
     self.setDescription('v ' .. VERSION .. '\nMade by Sionar')
+
+end
+
+function assignObjects()
+    objects.storageBag = getObjectFromGUID(TOOL_BAG_GUID)
 end
 
 function moveBoard()
@@ -145,9 +152,8 @@ function vote(player, value, id)
 end
 
 function destroySelf(clickedObject, playerColor)
-    local storageBag = getObjectFromGUID(TOOL_BAG_GUID)
     if Player[playerColor].admin or playerColor == 'Black' then
-        storageBag.putObject(self)
+        objects.storageBag.putObject(self)
     end
 end
 

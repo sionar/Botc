@@ -687,7 +687,7 @@ end
 
 function reloadGrimoire()
     if objects.blackZone ~= nil then
-        objects.blackZone.reload()
+        objects.blackZone = objects.blackZone.reload()
     end
 end
 
@@ -738,6 +738,7 @@ function setClockStyle(params)
     if clockStyle == params.style then
         return
     end
+    local globalObjects = Global.getTable('objects')
     clockStyle = params.style
     objects.clock.setCustomObject({face = CLOCK_IMAGE_URLS[clockStyle].clock, back = CLOCK_IMAGE_URLS[clockStyle].clock})
     if objects.secondHand.getScale()[1] ~= 0 then
@@ -746,15 +747,16 @@ function setClockStyle(params)
         objects.secondHand.setScale(CLOCK_HAND_SCALE[clockStyle].second)
     end
     objects.hourHand.setCustomObject({image = CLOCK_IMAGE_URLS[clockStyle].hour, thickness = 0.1})
-    objects.hourHand.reload()
+    objects.hourHand = objects.hourHand.reload()
+    globalObjects.hourHand = objects.hourHand
     objects.minuteHand.setCustomObject({image = CLOCK_IMAGE_URLS[clockStyle].minute, thickness = 0.1})
-    objects.minuteHand.reload()
+    objects.minuteHand = objects.minuteHand.reload()
+    globalObjects.minuteHand = objects.minuteHand
     objects.secondHand.setCustomObject({image = CLOCK_IMAGE_URLS[clockStyle].second, thickness = 0.1})
-    objects.secondHand.reload()
+    objects.secondHand = objects.secondHand.reload()
+    globalObjects.secondHand = objects.secondHand
+    Global.setTable('objects', globalObjects)
     Wait.time(function()
-        objects.secondHand = getObjectFromGUID(SECOND_HAND_GUID)
-        objects.minuteHand = getObjectFromGUID(MINUTE_HAND_GUID)
-        objects.hourHand = getObjectFromGUID(HOUR_HAND_GUID)
         objects.hourHand.interactable = false
         objects.minuteHand.interactable = false
         objects.secondHand.interactable = false

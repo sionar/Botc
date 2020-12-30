@@ -3024,3 +3024,25 @@
         >
     </Image>
 </HorizontalLayout>
+
+<HorizontalLayout
+    id="charSheetLayoutCU"
+    allowDragging="true"
+    returnToOriginalPositionWhenReleased="false"
+    width="763"
+    height="1080"
+    spacing="-50"
+    childAlignment="MiddleCenter"
+    childForceExpandWidth="false"
+    childForceExpandHeight="false"
+    visibility="None"
+    active="false"
+    >
+    <Image
+        id="charSheetCU"
+        image="CharsCU"
+        preserveAspect="true"
+        height="1080"
+        >
+    </Image>
+</HorizontalLayout>

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.6.0'
+VERSION = '20.6.1'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -2838,9 +2838,8 @@ function showExtensionUI()
     UI.setAttribute('charSheetLayoutTB', 'active', 'false')
     UI.setAttribute('charSheetLayoutBM', 'active', 'false')
     UI.setAttribute('charSheetLayoutSV', 'active', 'false')
-    if mode ~= 'CU' then
-        UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
-    end
+    UI.setAttribute('charSheetLayoutCU', 'active', 'false')
+    UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
     setUIVisibility()
 end
 
@@ -3316,6 +3315,7 @@ function toggleCharSheetUI(player, value, id)
     UI.setAttribute('charSheetLayoutTB','visibility',visString)
     UI.setAttribute('charSheetLayoutBM','visibility',visString)
     UI.setAttribute('charSheetLayoutSV','visibility',visString)
+    UI.setAttribute('charSheetLayoutCU','visibility',visString)
 end
 
 function setUIVisibility()

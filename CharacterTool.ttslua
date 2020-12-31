@@ -11,7 +11,7 @@ COLORS_BBC = {Townsfolk = '[1E87FF]', Outsider = '[20B09A]', Minion = '[F3631C]'
 BUTTON_Y = 0.1
 Z_START = -7
 Z_INC = 0.44
-DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/794260766603642376/C9EF974279D8B421F1784592C5C7D444AD283EFE/'
+DEFAULT_CUSTOM_IMAGE_URL = 'http://cloud-3.steamusercontent.com/ugc/1670238751989216770/8DBF91FC7E2DB8D829AE795A1F53983822ADCED0/'
 DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/1669111897321786410/8A824CC043EDD270040F97F7DACA93A2C9E3CA08/'
 
 #include GUIDs.ttslua
@@ -229,13 +229,6 @@ function setMode(state)
     end
     Global.call('showExtensionUI')
     refreshUI()
-    if mode == 'CU' then
-        Global.UI.setAttribute('toggleCharSheetButton', 'active', 'false')
-        Global.UI.setAttribute('toggleButtons', 'width', '65')
-    else
-        Global.UI.setAttribute('toggleCharSheetButton', 'active', 'true')
-        Global.UI.setAttribute('toggleButtons', 'width', '130')
-    end
 end
 
 function random(clickedObject, playerColor)
@@ -845,6 +838,7 @@ function load(clickedObject, playerColor, index)
         imageLoaded = true
         customImageUrl = saveFile[index].imageUrl
         customNightSheetUrl = saveFile[index].nightSheetUrl
+        Wait.time(loadCharSheetAsset, 1)
     end
     if saveFile[index].nightSheetUrl == '' or saveFile[index].nightSheetUrl == nil then
         customNightSheetUrl = DEFAULT_NIGHT_SHEET_URL
@@ -862,6 +856,17 @@ function load(clickedObject, playerColor, index)
     lock = {}
     spawnSet(characters, saveFile[index].name)
     refreshUI()
+end
+
+function loadCharSheetAsset()
+    local assets = Global.UI.getCustomAssets()
+    for i,v in ipairs(assets) do
+        if v.name == 'CharsCU' then
+            v.url = customImageUrl
+            break
+        end
+    end
+    Global.UI.setCustomAssets(assets)
 end
 
 for k = 1,100 do
@@ -1107,6 +1112,7 @@ function webReqImageCB(req)
                 imageLoaded = true
             end
             Global.setVar('imageLoaded', imageLoaded)
+            Wait.time(loadCharSheetAsset, 1)
         else
             Player['Black'].print('Error: Invalid image URL. Make sure the image type is jpg or png.', {1,0,0})
         end

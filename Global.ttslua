@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.6.2'
+VERSION = '20.7.0'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -887,6 +887,10 @@ function resizeTable()
             objects.playerDist.setScale({2 + 0.2 *(tableSize-5), 1, 2 + 0.2 *(tableSize-5)})
         end
     end
+    if objects.dealBag ~= nil then
+        objects.dealBag.setTable('previewChars', {})
+        objects.dealBag.call('generatePreview')
+    end
 
     Wait.frames(assignDynamicObjects, 5)
     Wait.time(lockObjects, 2)
@@ -1350,7 +1354,7 @@ function resetGame()
     if objects.dealBag ~= nil then
         local bagObjs = objects.dealBag.getObjects()
         for k1, v1 in pairs(bagObjs) do
-            takeObj = dealBag.takeObject()
+            takeObj = objects.dealBag.takeObject()
             bags[takeObj.getDescription()].putObject(takeObj)
         end
     end
@@ -2790,6 +2794,7 @@ end
 ------------------Grey UI
 function showExtensionUI()
     local greySeats = {}
+    local found = false
     for k,color in pairs(colors) do
         if COLORS_TYPE[color] == false then
             table.insert(greySeats, color)
@@ -2839,7 +2844,14 @@ function showExtensionUI()
     UI.setAttribute('charSheetLayoutBM', 'active', 'false')
     UI.setAttribute('charSheetLayoutSV', 'active', 'false')
     UI.setAttribute('charSheetLayoutCU', 'active', 'false')
-    UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
+    for k,v in pairs(charSheetActive) do
+        if v == true then
+            found = true
+        end
+    end
+    if found then
+        UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
+    end
     setUIVisibility()
 end
 

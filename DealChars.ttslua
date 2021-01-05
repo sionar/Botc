@@ -5,14 +5,16 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.7.3'
+VERSION = '1.8.0'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
+COLORS_PREVIEW = {White = {1,1,1,0.25}, Brown = {113/255,59/255,23/255,0.25}, Red = {219/255,26/255,24/255,0.25}, Orange = {244/255,100/255,29/255,0.25}, Yellow = {231/255,229/255,44/255,0.25}, Green = {49/255,179/255,43/255,0.25}, Teal = {33/255,177/255,155/255,0.25}, Blue = {31/255,136/255,255/255,0.25}, Purple = {160/255,32/255,240/255,0.25}, Pink = {245/255,112/255,206/255,0.25}, Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {99/255,109/255,212/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
+
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 BUTTON_COLOR = {0,0,0}
 BUTTON_FONT_COLOR = {1,1,1}
 
-
 #include GUIDs.ttslua
+#include Data.ttslua
 
 
 ------------------Variables
@@ -20,6 +22,12 @@ objects = {}
 autoBluff = false
 autoTint = true
 autoReminderTint = true
+previewOn = true
+previewTimerId = nil
+previewChars = {}
+previewObjs = {}
+players = {}
+
 
 ------------------Functions
 function onLoad(saveString)
@@ -28,11 +36,15 @@ function onLoad(saveString)
         autoBluff = save['b']
         autoTint = save['t']
         autoReminderTint = save['r']
+        previewOn = save['p']
     end
     refreshButtons()
     assignObjects()
     TABLE_OFFSET = Global.getVar('TABLE_OFFSET')
     STORYTELLER_TABLE_DIST = Global.getVar('STORYTELLER_TABLE_DIST')
+    if previewOn then
+        previewTimerId = Wait.time(generatePreview, 2, -1)
+    end
 end
 
 function onSave()
@@ -40,6 +52,7 @@ function onSave()
     save['b'] = autoBluff
     save['t'] = autoTint
     save['r'] = autoReminderTint
+    save['p'] = previewOn
     local saveString = JSON.encode(save)
     return saveString
 end
@@ -63,8 +76,8 @@ function dealToPlayers(clickedObject, playerColor)
     local tableSize = Global.getVar('tableSize')
     local colors = Global.getTable('colors')
     local angle = Global.getTable('angle')
-    local players = Global.call('updatePlayers')
     local allPlayers = Player.getPlayers()
+    local players = Global.call('updatePlayers')
     local numPlayers = Global.call('getNumPlayers')
     local storytellerMode = Global.getVar('storytellerMode')
     local params, obj, char
@@ -182,6 +195,10 @@ function toggleTint(clickedObject, playerColor)
         return
     end
     autoTint = not autoTint
+    if previewOn then
+        previewChars = {}
+        generatePreview()
+    end
     refreshButtons()
 end
 
@@ -201,11 +218,158 @@ function toggleBluff(clickedObject, playerColor)
     refreshButtons()
 end
 
+function togglePreview(clickedObject, playerColor)
+    if playerColor ~= 'Black' then
+        return
+    end
+    previewOn = not previewOn
+    refreshButtons()
+    if previewOn then
+        generatePreview()
+        previewTimerId = Wait.time(generatePreview, 2, -1)
+    else
+        if previewTimerId ~= nil then
+            Wait.stop(previewTimerId)
+        end
+        destroyPreviewObjects()
+        previewChars = {}
+    end
+end
+
+function destroyPreviewObjects()
+    for k,v in pairs(previewObjs) do
+        v.destruct()
+    end
+    previewObjs = {}
+end
+
+function onObjectRandomize(object, playerColor)
+    if object ~= self then
+        return
+    end
+    if previewOn then
+        generatePreview()
+    end
+end
+
+function checkPreviewRefresh()
+    local refreshNeeded = false
+    local newPreviewChars = {}
+    local objs = self.getObjects()
+    for i,v in ipairs(objs) do
+        table.insert(newPreviewChars, 1, v.name)
+    end
+    if #newPreviewChars == #previewChars then
+        for i,v in ipairs(previewChars) do
+            if newPreviewChars[i] ~= previewChars[i] then
+                refreshNeeded = true
+            end
+        end
+    else
+        refreshNeeded = true
+    end
+    previewChars = newPreviewChars
+    return refreshNeeded
+end
+
+function generatePreview()
+    if not previewOn then
+        return
+    end
+
+    local refreshNeeded = checkPreviewRefresh()
+    if not refreshNeeded then
+        return
+    end
+    self.clearButtons()
+    refreshButtons()
+
+    local colors = Global.getTable('colors')
+    local angle = Global.getTable('angle')
+    local tableSize = Global.getVar('tableSize')
+    local globalPlayers = Global.call('updatePlayers')
+    local numPlayers = Global.call('getNumPlayers')
+    local rad = tableSize * 0.4 + 6
+    local previewPos = {}
+    local namePos = {}
+    local seatedColors = {}
+    players = {}
+    for k,v in pairs(globalPlayers) do
+        players[k] = v
+    end
+    destroyPreviewObjects()
+    if numPlayers <= 1 then
+        seatedColors = colors
+    else
+        for k,v in pairs(COLORS_ALL) do
+            if players[v] ~= nil then
+                table.insert(seatedColors, v)
+            end
+        end
+    end
+
+    for k,v in pairs(colors) do
+        previewPos[v] = radius(rad, angle[v], 1.1)
+        previewPos[v][3] = previewPos[v][3] + STORYTELLER_TABLE_DIST
+    end
+
+    local params
+    for i,char in ipairs(previewChars) do
+        spawnToken(char, seatedColors[i], previewPos[seatedColors[i]])
+    end
+end
+
+function spawnToken(character, color, pos)
+    local obj
+    local params = {
+        type = "Custom_Token",
+        position = pos,
+        sound = false,
+        snap_to_grid = false,
+        callback_function = function(obj) spawnTokenCB(obj, color) end
+    }
+
+    local customParams = {
+        image = DECAL_URLS[character],
+        thickness = 0.2,
+        merge_distance = 25,
+        stackable = false
+    }
+    obj = spawnObject(params)
+    obj.setCustomObject(customParams)
+end
+
+function spawnTokenCB(obj, color)
+    if autoTint then
+        obj.setColorTint(COLORS_PREVIEW[color])
+    end
+    obj.setLock(true)
+    obj.interactable = false
+    obj.tooltip = false
+    table.insert(previewObjs,obj)
+    obj.setInvisibleTo({'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Grey'})
+    if players[color] ~= nil then
+        local params = {click_function = 'nil', function_owner = self, position = {0,0,-2}, width = 0, height = 0, font_size = 300, font_color = {1,1,1}, label = players[color].steam_name}
+        obj.createButton(params)
+    end
+end
+
 function refreshButtons()
     self.clearButtons()
 
     local params
-    params = {click_function = 'toggleBluff', function_owner = self, position = {0, 0.4, -3.7}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
+    params = {click_function = 'togglePreview', function_owner = self, position = {-1.1, 0.4, -3.7}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
+    if previewOn then
+        params.label = 'Preview\n[1E87FF]ON'
+        params.tooltip = 'Click to disable the preview of the Grimoire for setup.'
+    else
+        params.label = 'Preview\n[DA1917]OFF'
+        params.tooltip = 'Click to enable the preview of the Grimoire for setup.'
+    end
+    self.createButton(params)
+
+    local params
+    params = {click_function = 'toggleBluff', function_owner = self, position = {1.1, 0.4, -3.7}, scale = {0.5, 0.5, 0.5}, width = 2000, height = 1000, font_size = 400, color = BUTTON_COLOR, font_color = BUTTON_FONT_COLOR,}
     if autoBluff then
         params.label = 'Autobluff\n[1E87FF]ON'
         params.tooltip = 'Click to disable automatically grabbing three random bluffs for the Demon.'

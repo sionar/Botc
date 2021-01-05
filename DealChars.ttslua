@@ -298,8 +298,14 @@ function generatePreview()
         players[k] = v
     end
     destroyPreviewObjects()
+    for k,v in pairs(colors) do
+        previewPos[v] = radius(rad, angle[v], 1.1)
+        previewPos[v][3] = previewPos[v][3] + STORYTELLER_TABLE_DIST
+    end
+
     if numPlayers <= 1 then
         seatedColors = colors
+        numPlayers = #colors
     else
         for k,v in pairs(COLORS_ALL) do
             if players[v] ~= nil then
@@ -308,18 +314,18 @@ function generatePreview()
         end
     end
 
-    for k,v in pairs(colors) do
-        previewPos[v] = radius(rad, angle[v], 1.1)
-        previewPos[v][3] = previewPos[v][3] + STORYTELLER_TABLE_DIST
-    end
 
     local params
-    for i,char in ipairs(previewChars) do
-        spawnToken(char, seatedColors[i], previewPos[seatedColors[i]])
+    for i = 1,numPlayers do
+        spawnToken(previewChars[i], seatedColors[i], previewPos[seatedColors[i]])
     end
 end
 
 function spawnToken(character, color, pos)
+    if character == nil then
+        return
+    end
+
     local obj
     local params = {
         type = "Custom_Token",

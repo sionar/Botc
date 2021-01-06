@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.7.1'
+VERSION = '20.7.2'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -1371,6 +1371,12 @@ function resetGame()
     Wait.time(putVoteTokensInBag, 0.5)
     Wait.time(createFlipButtons, 0.5)
     Wait.time(function() objects.clockControls.call('reloadGrimoire') end, 1)
+    Wait.time(function ()
+        objects.lifeTokens = {}
+        for k,v in pairs(LIFE_TOKEN_GUIDS) do
+            objects.lifeTokens[k] = getObjectFromGUID(v)
+        end
+    end, 1)
 end
 
 function putVoteTokensInBag()

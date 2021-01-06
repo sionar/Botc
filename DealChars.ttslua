@@ -348,6 +348,8 @@ end
 function spawnTokenCB(obj, color)
     if autoTint then
         obj.setColorTint(COLORS_PREVIEW[color])
+    else
+        obj.setColorTint({1,1,1,0.25})
     end
     obj.setLock(true)
     obj.interactable = false

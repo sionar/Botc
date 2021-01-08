@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.7.2'
+VERSION = '20.7.4'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -264,7 +264,6 @@ function assignStaticObjects()
     objects.travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     objects.voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     objects.shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
-    objects.dealBag = getObjectFromGUID(DEAL_BAG_GUID)
     objects.clock = getObjectFromGUID(CLOCK_GUID)
     objects.secondHand = getObjectFromGUID(SECOND_HAND_GUID)
     objects.minuteHand = getObjectFromGUID(MINUTE_HAND_GUID)
@@ -304,6 +303,7 @@ function assignDynamicObjects()
     for k,v in pairs(VOTEHAND_GUIDS) do
         objects.voteHands[k] = getObjectFromGUID(v)
     end
+    objects.dealBag = getObjectFromGUID(DEAL_BAG_GUID)
 end
 
 function setupObjects()
@@ -992,6 +992,7 @@ function moveTokens()
                 for k1,v1 in pairs(tokenTable[v]) do
                     pos = v1.getPosition()
                     v1.setPosition({posTable[v][1], pos[2], posTable[v][3]})
+                    v1.setRotation({0,0,0})
                 end
             end
         end
@@ -1357,6 +1358,7 @@ function resetGame()
             takeObj = objects.dealBag.takeObject()
             bags[takeObj.getDescription()].putObject(takeObj)
         end
+        objects.dealBag.setPositionSmooth({0, 1.2, STORYTELLER_TABLE_DIST + TABLE_OFFSET - 4})
     end
 
     if objects.guillotine ~= nil then
@@ -1364,7 +1366,7 @@ function resetGame()
         objects.guillotine.setRotationSmooth({0,0,0})
         objects.guillotine.setLock(false)
     end
-    grabObjectFromBag('Character Token Bag', objects.storageBag, {0,1,125}, false)
+    grabObjectFromBag('Character Token Bag', objects.storageBag, {0,1,125}, true)
     Wait.time(function () grabObjectFromBag('Character Tool', objects.storageBag, {0,0,0}, true) end, 0.1)
     objects.nightHelper.call('reset')
     objects.clockControls.call('hideGrimoire')
@@ -1377,6 +1379,7 @@ function resetGame()
             objects.lifeTokens[k] = getObjectFromGUID(v)
         end
     end, 1)
+    Wait.time(assignDynamicObjects, 2)
 end
 
 function putVoteTokensInBag()

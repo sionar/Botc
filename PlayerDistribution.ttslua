@@ -51,6 +51,11 @@ function onLoad(saveString)
         alive = save['a']
         showPlayers = save['sh']
     end
+    if showPlayers then
+        displayPlayers()
+    else
+        displayChart()
+    end
 end
 
 function onSave()

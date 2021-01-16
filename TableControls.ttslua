@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.5.2'
+VERSION = '1.5.3'
 BUTTON_W = 500
 BUTTON_H = 400
 FONT_SIZE = 120
@@ -138,6 +138,9 @@ function deleteBackground(clickedObject, playerColor)
     if objects.bgBox ~= nil then
         objects.bgBox.setScale({0.5,0.5,0.5})
     end
+    local objects = Global.getTable('objects')
+    objects.bgLight = nil
+    Global.setTable('objects', objects)
 end
 
 function callReset(clickedObject, playerColor)

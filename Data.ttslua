@@ -345,7 +345,7 @@ CU_LIST = {
     'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief',
     'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop',
     'Clockmaker', 'Dreamer', 'Snake Charmer', 'Mathematician', 'Flowergirl', 'Town Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil Twin', 'Witch', 'Cerenovus', 'Pit-Hag', 'Fang Gu', 'Vigormortis', 'No Dashii', 'Vortox', 'Butcher', 'Bone Collector', 'Harlot', 'Barista', 'Deviant',
-    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta',
+    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta', 'Lycanthrope',
     'Majesty', 'Prince', 'Princess', 'Queen', 'Knight', 'Cardinal', 'Rook', 'Scribe', 'Herald', 'Chamberlain', 'Cup-Bearer', 'Friar', 'Food Taster', 'Pretender', 'Pawn', 'Emissary', 'Concubine', 'Charlatan', 'Conspirator', 'Scoundrel', 'Usurper', 'Ysbaddaden', 'Draco', 'Jabberwocky', 'Morgana',
     'Astrologist', 'Cartographer', 'Censor', 'Child', 'Counterfeiter', 'Cultist', 'Cursebearer', 'Fanatic', 'Hastur', 'Lobotomizer', 'Mother', 'Pomme de Terror', 'Rakshasa', 'Recordkeeper', 'Schizophrenic', 'Turncoat', 'Xolotl',
     'Chieftain','Blasphemer','Diviner','Trapper','Shaman','Stargazer','Soothsayer','Bloodletter','Stalker','Ambusher','Warrior','Medicine Man','Reveler','Wicked','Urchin','Right Hand Man','Apiarist','Eclipse','Viceroy','Effigy','Secondhand','Retrogradus','Bogman','Sasquatch','Wendigo',
@@ -1028,7 +1028,7 @@ REMINDER_TOKENS = {
     },
     ['Lycanthrope'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1683750440225124074/262C26733547BD784F2CB6F66CA1AA3D98680419/'},
-    },    
+    },
     ['Prince'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},
     },

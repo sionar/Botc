@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.7.4'
+VERSION = '20.7.7'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -264,6 +264,7 @@ function assignStaticObjects()
     objects.travelerBag = getObjectFromGUID(TRAVELER_BAG_GUID)
     objects.voteTokenBag = getObjectFromGUID(VOTE_TOKEN_BAG_GUID)
     objects.shroudBag = getObjectFromGUID(SHROUD_BAG_GUID)
+    objects.fabledReminderBag = getObjectFromGUID(FABLED_REMINDER_BAG_GUID)
     objects.clock = getObjectFromGUID(CLOCK_GUID)
     objects.secondHand = getObjectFromGUID(SECOND_HAND_GUID)
     objects.minuteHand = getObjectFromGUID(MINUTE_HAND_GUID)
@@ -1349,6 +1350,9 @@ function resetGame()
         elseif description == 'Reminder Token' then
             v.setColorTint({1,1,1})
             bags.Reminder.putObject(v)
+        elseif description == 'Fabled Reminder Token' then
+            v.setColorTint({1,1,1})
+            objects.fabledReminderBag.putObject(v)
         end
     end
 
@@ -1366,12 +1370,11 @@ function resetGame()
         objects.guillotine.setRotationSmooth({0,0,0})
         objects.guillotine.setLock(false)
     end
-    grabObjectFromBag('Character Token Bag', objects.storageBag, {0,1,125}, true)
+    grabObjectFromBag('Character Token Bag', objects.storageBag, {0,1,125}, false)
     Wait.time(function () grabObjectFromBag('Character Tool', objects.storageBag, {0,0,0}, true) end, 0.1)
     objects.nightHelper.call('reset')
     objects.clockControls.call('hideGrimoire')
     Wait.time(putVoteTokensInBag, 0.5)
-    Wait.time(createFlipButtons, 0.5)
     Wait.time(function() objects.clockControls.call('reloadGrimoire') end, 1)
     Wait.time(function ()
         objects.lifeTokens = {}
@@ -1379,7 +1382,8 @@ function resetGame()
             objects.lifeTokens[k] = getObjectFromGUID(v)
         end
     end, 1)
-    Wait.time(assignDynamicObjects, 2)
+    Wait.time(assignDynamicObjects, 1.1)
+    Wait.time(createFlipButtons, 1.2)
 end
 
 function putVoteTokensInBag()

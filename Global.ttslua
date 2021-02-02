@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.7.8'
+VERSION = '20.7.11'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -422,8 +422,8 @@ end
 function refreshBackground()
     if objects.bgObject ~= nil then
         objects.bgObject.setLock(false)
-        Wait.frames(function() objects.bgObject.setPosition(BG_POS) end, 2)
-        Wait.frames(function() objects.bgObject.setLock(true) end, 5)
+        Wait.frames(function() objects.bgObject.setLock(true) end, 2)
+        Wait.frames(function() objects.bgObject.setPosition(BG_POS) end, 5)
     end
 end
 

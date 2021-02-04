@@ -705,6 +705,7 @@ function skip(clickedObject, playerColor, i)
     end
 
     table.remove(order, i)
+    p1, p2, p3, p4 = 'P1', 'P2', 'P3', 'P4'
     setMsg()
 end
 
@@ -907,10 +908,24 @@ end
 
 function editMsg()
     local msg = currentMsg
-    msg = string.gsub(msg, 'P1', p1)
-    msg = string.gsub(msg, 'P2', p2)
-    msg = string.gsub(msg, 'P3', p3)
-    msg = string.gsub(msg, 'P4', p4)
+    local p1New, p2New, p3New, p4New = '', '', '', ''
+    if p1 ~= 'P1' then
+        p1New = p1
+    end
+    if p2 ~= 'P2' then
+        p2New = p2
+    end
+    if p3 ~= 'P3' then
+        p3New = p3
+    end
+    if p3 ~= 'P3' then
+        p3New = p3
+    end
+
+    msg = string.gsub(msg, 'P1', p1New)
+    msg = string.gsub(msg, 'P2', p2New)
+    msg = string.gsub(msg, 'P3', p3New)
+    msg = string.gsub(msg, 'P4', p4New)
     sendMsg = msg
     refreshUI()
 end

@@ -348,7 +348,7 @@ CU_LIST = {
     'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief',
     'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop',
     'Clockmaker', 'Dreamer', 'Snake Charmer', 'Mathematician', 'Flowergirl', 'Town Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil Twin', 'Witch', 'Cerenovus', 'Pit-Hag', 'Fang Gu', 'Vigormortis', 'No Dashii', 'Vortox', 'Butcher', 'Bone Collector', 'Harlot', 'Barista', 'Deviant',
-    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta', 'Lycanthrope', 'Pixie',
+    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta', 'Lycanthrope', 'Pixie', 'Legion',
     'Majesty', 'Prince', 'Princess', 'Queen', 'Knight', 'Cardinal', 'Rook', 'Scribe', 'Herald', 'Chamberlain', 'Cup-Bearer', 'Friar', 'Food Taster', 'Pretender', 'Pawn', 'Emissary', 'Concubine', 'Charlatan', 'Conspirator', 'Scoundrel', 'Usurper', 'Ysbaddaden', 'Draco', 'Jabberwocky', 'Morgana',
     'Astrologist', 'Cartographer', 'Censor', 'Child', 'Counterfeiter', 'Cultist', 'Cursebearer', 'Fanatic', 'Hastur', 'Lobotomizer', 'Mother', 'Pomme de Terror', 'Rakshasa', 'Recordkeeper', 'Schizophrenic', 'Turncoat', 'Xolotl',
     'Chieftain','Blasphemer','Diviner','Trapper','Shaman','Stargazer','Soothsayer','Bloodletter','Stalker','Ambusher','Warrior','Medicine Man','Reveler','Wicked','Urchin','Right Hand Man','Apiarist','Eclipse','Viceroy','Effigy','Secondhand','Retrogradus','Bogman','Sasquatch','Wendigo',
@@ -476,6 +476,7 @@ CHARACTERS =
     ['Lil Monsta'] = {Type = 'Demon', Ability = false, Response = false, Prompt = 'Choose who to babysit the Lil\' Monsta tonight.', Description = 'Each night, Minions choose who babysits Lil\' Monsta\'s token & "is the Demon". A player dies each night*. [+1 Minion]'},
     ['Lycanthrope'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'Choose a player.', Description = 'Each night*, choose a living player: if good, they die & nobody else can die tonight.'},
     ['Pixie'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'The P1 is in play.', Description = 'You start knowing 1 in-play Townsfolk. If you were mad that you were this character, you gain their ability when they die.'},
+    ['Legion'] = {Type = 'Demon', Ability = false, Response = false, Prompt = '', Description = 'Each night*, a player might die. Executions fail if only evil voted. You register as a Minion too. [Most players are Legion]'},
     ['Astrologist'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = '', Description = 'Each day, visit the Storyteller with a number between 0 & 5 to receive a clue.'},
     ['Censor'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'The censored word is:.', Description = 'You & evils start knowing a word: minions who say it lose. If you are "mad" about being the Censor or say it, you lose this ability.'},
     ['Recordkeeper'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'You learn that the P1 is not in play.', Description = 'Each night, you learn a character not in play.'},
@@ -661,6 +662,7 @@ DECAL_URLS =
     ['Judge'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674450967/1D2E5B17C92B89FC3F1D1FBFA45262527EDEB665/',
     ['Juggler'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674456602/11DA03A165BC1B383D715D6D350AA79193629B89/',
     ['Klutz'] = 'http://cloud-3.steamusercontent.com/ugc/789742488131094101/4A1ACA37DB8E8DD0B1D79E6DCC447080949BF426/',
+    ['Legion'] = 'http://cloud-3.steamusercontent.com/ugc/1773825158296360330/CBE61D1EC567896BA532520776E6EB387616E638/',
     ['Leviathan'] = 'http://cloud-3.steamusercontent.com/ugc/1025073792546114209/B09204026CB43BBA13119E60B73AB882E6D85977/',
     ['Librarian'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674401029/3648688745F5851BF85896C1D1CA7ACBBD76D6FA/',
     ['Lil Monsta'] = 'http://cloud-3.steamusercontent.com/ugc/1504719589256046816/F8491B2371A26A2A55439261F36C9B2AE777D5A4/',
@@ -1038,6 +1040,9 @@ REMINDER_TOKENS = {
     ['Pixie'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1777201292983976947/63E07095F18A11F7885F5374F71BA71E04612B87/'},
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1777201292983977459/7F3464E9E18DB7A085F225A04975CC132F901CAF/'},
+    },
+    ['Legion'] = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1773825158296376098/FB301DC19EAA857762A7D40B51E688D93975E433/'},
     },
     ['Prince'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},

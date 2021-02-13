@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '3.0.6'
+VERSION = '3.0.7'
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver', 'Grey'}
 COLORS_BBC = {White = '[FFFFFF]', Brown = '[703A16]', Red = '[DA1917]', Orange = '[F3631C]', Yellow = '[E6E42B]', Green = '[30B22A]', Teal = '[20B09A]', Blue = '[1E87FF]', Purple = '[9F1FEF]', Pink = '[F46FCD]', Magenta = '[FF007F]', Lavender = '[967BB6]', Navy = '[616BD4]', Cyan = '[49D5FD]', Mint = '[89C381]', Lime = '[B8F161]', Peach = '[F1D4A2]', Coral = '[E29A8A]', Maroon = '[800000]', Silver = '[BEBEBE]', Black = '[3F3F3F]', Grey = '[888888]', Prompt = '[93EB6A]'}
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {97/255,107/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255}, Grey = {136/255, 136/255, 136/255}}
@@ -45,7 +45,7 @@ living = {}
 order = {}
 orderRef = nil
 minionColors = {}
-demonColor = ''
+demonColors = {}
 unblind = {}
 blindAuto = true
 checkPrompts = true
@@ -73,7 +73,7 @@ function onLoad(saveString)
         living = save['l']
         order = save['o']
         orderRef = save['r']
-        demonColor = save['d']
+        demonColors = save['d']
         unblind = save['u']
         checkPrompts = save['c']
         blindAuto = save['b']
@@ -91,7 +91,7 @@ function onSave()
     save['l'] = living
     save['o'] = order
     save['r'] = orderRef
-    save['d'] = demonColor
+    save['d'] = demonColors
     save['u'] = unblind
     save['c'] = checkPrompts
     save['b'] = blindAuto
@@ -148,6 +148,7 @@ function import(clickedObject, playerColor)
     local entry = {}
     living = {}
     minionColors = {}
+    demonColors = {}
     for k,v in pairs(chars) do
         playerChar = v
         entry = {color = k, char = playerChar, used = false, alive = true, sober = true, sane = true}
@@ -164,15 +165,15 @@ function import(clickedObject, playerColor)
                 table.insert(minionColors, entry.color)
             end
         elseif CHARACTERS[playerChar].Type == 'Demon' then
-            demonColor = entry.color
+            table.insert(demonColors, entry.color)
             demonName = entry.char
         end
     end
     for k,v in pairs(living) do
         if v.char == 'Lunatic' then
             lunaticColor = v.color
-            tempDemonColor = demonColor
-            demonColor = lunaticColor
+            tempDemonColor = demonColors[1]
+            demonColors[1] = lunaticColor
             v.char = demonName
             for k1,v1 in pairs(living) do
                 if v1.color == tempDemonColor then
@@ -188,10 +189,14 @@ function import(clickedObject, playerColor)
     for i = 1, #minionColors do
         minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
     end
-    if demonColor == '' then
+    local demonStr = 'Demon:'
+    for i = 1, #demonColors do
+        demonStr = demonStr .. ' ' .. COLORS_BBC[demonColors[i]] .. demonColors[i] .. '[-]'
+    end
+    if #demonColors < 1 then
         evilMsg = 'Demon: , ' .. minionStr
     else
-        evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+        evilMsg = demonStr .. ', ' .. minionStr
     end
     setNightOrder('first')
     setMsg()
@@ -211,7 +216,7 @@ function setNightOrder(night)
     end
     if night == 'first' then
         table.insert(order, {char = 'Evil Info', color = 'White'})
-        table.insert(order, {char = 'Demon Info', color = demonColor})
+        table.insert(order, {char = 'Demon Info', color = demonColors[1]})
         orderRef = FIRST[mode]
     else
         orderRef = OTHER[mode]
@@ -223,11 +228,11 @@ function setNightOrder(night)
                     if v2.char == 'Lunatic' and night == 'first' then
                         table.insert(order, 1, {char = 'Lunatic InfoA', color = v2.color})
                         table.insert(order, 2, {char = 'Lunatic InfoB', color = v2.color})
-                        table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColor})
+                        table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColors[1]})
                         table.insert(order, v2)
                     elseif v2.char == 'Lunatic' and night == 'other' then
                         table.insert(order, v2)
-                        table.insert(order, {char = 'Lunatic InfoD', color = demonColor})
+                        table.insert(order, {char = 'Lunatic InfoD', color = demonColors[1]})
                     elseif v2.char == 'Godfather' and night == 'first' then
                         table.insert(order, {char = 'Godfather Info', color = v2.color})
                     elseif v2.char == 'Rakshasa' and night == 'other' then
@@ -428,7 +433,7 @@ function alive(clickedObject, playerColor, i)
                 orderPos = #order + 1
             end
             if entry.char == 'Barber' or entry.char == 'Cartographer' then
-                entry.color = demonColor
+                entry.color = demonColors[1]
             end
             table.insert(order, orderPos, {color = entry.color, char = entry.char})
             if entry.char == 'Ravenkeeper' then
@@ -576,10 +581,14 @@ function remove(clickedObject, playerColor, i)
                 for i = 1, #minionColors do
                     minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
                 end
-                if demonColor == '' then
+                local demonStr = 'Demon:'
+                for i = 1, #demonColors do
+                    demonStr = demonStr .. ' ' .. COLORS_BBC[demonColors[i]] .. demonColors[i] .. '[-]'
+                end
+                if #demonColors < 1 then
                     evilMsg = 'Demon: , ' .. minionStr
                 else
-                    evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+                    evilMsg = demonStr .. ', ' .. minionStr
                 end
             end
         end
@@ -608,11 +617,11 @@ function send(clickedObject, playerColor)
     end
 
     if order[1].char == 'Evil Info' then
-        if demonColor ~= '' then
-            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColor] .. demonColor .. '[-]: ' .. evilMsg
-            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColor, message = evilMsg})
-            if players[demonColor] ~= nil then
-                players[demonColor].print(msg)
+        for i = 1, #demonColors do
+            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColors[i]] .. demonColors[i] .. '[-]: ' .. evilMsg
+            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColors[i], message = evilMsg})
+            if players[demonColors[i]] ~= nil then
+                players[demonColors[i]].print(msg)
             end
             printToColor(msg, 'Black', {1,1,1})
         end
@@ -623,6 +632,29 @@ function send(clickedObject, playerColor)
                 players[minionColors[i]].print(msg)
             end
             printToColor(msg, 'Black', {1,1,1})
+        end
+    elseif order[1].char == 'Demon Info' then
+        for i = 1, #demonColors do
+            msg = COLORS_BBC['Black'] .. 'Black' .. ' [888888]-> ' .. COLORS_BBC[demonColors[i]] .. demonColors[i] .. '[-]:[-] ' .. COLORS_BBC['Prompt'] .. sendMsg .. '[-]'
+            table.insert(nightLog[#nightLog], {sender = 'Black', receiver = demonColors[i], message = sendMsg})
+            if players[demonColors[i]] ~= nil then
+                players[demonColors[i]].print(msg)
+            end
+            printToColor(msg, 'Black', {1,1,1})
+        end
+        if blindAuto then
+            for k,v in pairs(unblind) do
+                if players[v] ~= nil then
+                    players[v].blindfolded = true
+                end
+            end
+            unblind = {}
+            for i = 1, #demonColors do
+                table.insert(unblind, demonColors[i])
+                if players[demonColors[i]] ~= nil then
+                    players[demonColors[i]].blindfolded = false
+                end
+            end
         end
     elseif order[1].char == 'Next Night' then
         if blindAuto then
@@ -961,7 +993,7 @@ function addChar(clickedObject, playerColor)
     table.insert(living, pos, {color = colorAdd, char = char, used = false, alive = true, sober = true, sane = true})
     if CHARACTERS[char].Type == 'Demon' or CHARACTERS[char].Type == 'Minion' then
         if CHARACTERS[char].Type == 'Demon' then
-            demonColor = colorAdd
+            table.insert(demonColors, colorAdd)
         elseif CHARACTERS[char].Type == 'Minion' then
             found = false
             for k,v in pairs(minionColors) do
@@ -978,10 +1010,14 @@ function addChar(clickedObject, playerColor)
         for i = 1, #minionColors do
             minionStr = minionStr .. ' ' .. COLORS_BBC[minionColors[i]] .. minionColors[i] .. '[-]'
         end
-        if demonColor == '' then
+        local demonStr = 'Demon:'
+        for i = 1, #demonColors do
+            demonStr = demonStr .. ' ' .. COLORS_BBC[demonColors[i]] .. demonColors[i] .. '[-]'
+        end
+        if #demonColors < 1 then
             evilMsg = 'Demon: , ' .. minionStr
         else
-            evilMsg = 'Demon: ' .. COLORS_BBC[demonColor] .. demonColor .. '[-], ' .. minionStr
+            evilMsg = demonStr .. ', ' .. minionStr
         end
     end
     if char == 'Ravenkeeper' or char == 'Sage' or char == 'Barber' then
@@ -1021,8 +1057,8 @@ function addCharToOrder(char, color)
         if char == 'Lunatic' then
             table.insert(order, 1, {char = 'Lunatic InfoA', color = color})
             table.insert(order, 2, {char = 'Lunatic InfoB', color = color})
-            table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColor})
-            table.insert(order, orderPos+4, {char = 'Lunatic InfoD', color = demonColor})
+            table.insert(order, 3, {char = 'Lunatic InfoC', color = demonColors[1]})
+            table.insert(order, orderPos+4, {char = 'Lunatic InfoD', color = demonColors[1]})
             setMsg()
         elseif char == 'Godfather' then
             table.insert(order, 1, {char = 'Godfather Info', color = color})
@@ -1168,7 +1204,7 @@ function reset()
     living = {}
     order = {}
     orderRef = {}
-    demonColor = ''
+    demonColors = {}
     blind = {}
     dayNum = 0
     nightLog = {{}}

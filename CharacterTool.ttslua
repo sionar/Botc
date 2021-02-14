@@ -19,7 +19,7 @@ DEFAULT_NIGHT_SHEET_URL = 'http://cloud-3.steamusercontent.com/ugc/1669111897321
 ------------------Variables
 objects = {}
 mode = 'TB'
-numPlayers = ''
+numPlayers = 0
 numTrav = 0
 menu = 'start'
 dist = {}
@@ -245,7 +245,7 @@ function random(clickedObject, playerColor)
         return
     end
 
-    if numPlayers == '' then
+    if numPlayers == 0 then
         numPlayers = Global.call('getNumPlayers')
         if numPlayers <= 1 then
             numPlayers = 5
@@ -253,7 +253,6 @@ function random(clickedObject, playerColor)
     end
 
     unused = {}
-
     for k,v in pairs(characters) do
         table.insert(unused, v)
     end
@@ -322,6 +321,10 @@ function random(clickedObject, playerColor)
     end
 
     for k,v in pairs(lockedChars['Demon']) do
+        if v == 'Legion' then
+            setRandomLegionGame()
+            return
+        end
         adjustOutsiders(v)
     end
 
@@ -344,6 +347,10 @@ function random(clickedObject, playerColor)
             end
         end
         currentChar = unusedChars.Demon[i]
+        if currentChar == 'Legion' then
+            setRandomLegionGame()
+            return
+        end
         table.insert(selected, currentChar)
         for k,v in pairs(unused) do
             if v == currentChar and v ~= 'Legion' then
@@ -408,6 +415,55 @@ function random(clickedObject, playerColor)
         end
     end
 
+    refreshUI()
+end
+
+function setRandomLegionGame()
+    local numLegion = math.ceil((numPlayers+1)/2)
+    local numLockedLegion = 0
+    local numNonLegion = 0
+    local newSelected = {}
+    local shuffledUnused = {}
+    unused = {}
+    for k,v in pairs(characters) do
+        table.insert(unused, v)
+    end
+    for i,v in ipairs(selected) do
+        if lock[selected[i]] == true then
+            table.insert(newSelected, selected[i])
+            if selected[i] ~= 'Legion' then
+                numNonLegion = numNonLegion + 1
+                for k2, v2 in pairs(unused) do
+                    if v2 == selected[i] then
+                        table.remove(unused, k2)
+                    end
+                end
+            else
+                numLockedLegion = numLockedLegion + 1
+            end
+        end
+    end
+    if numNonLegion > numPlayers - numLegion then
+        numLegion = numPlayers - numNonLegion
+        Player['Black'].print('Warning: Too many non Legion characters are locked.', {1,0,0})
+    end
+    for i = 1, numLegion - numLockedLegion do
+        table.insert(selected, 'Legion')
+    end
+    for k,v in pairs(unused) do
+        if CHARACTERS[v].Type ~= 'Demon' then
+            table.insert(shuffledUnused, v)
+        end
+    end
+    shuffleTable(shuffledUnused)
+    for i = 1, numPlayers - numLegion - numNonLegion do
+        table.insert(selected, shuffledUnused[i])
+        for k,v in pairs(unused) do
+            if v == shuffledUnused[i] then
+                table.remove(unused, k)
+            end
+        end
+    end
     refreshUI()
 end
 
@@ -1180,7 +1236,7 @@ function updateNightSheet()
 end
 
 function updateNightSheetCB(obj)
-    obj.Book.setPage(1, false)
+    Wait.time(function() obj.Book.setPage(1, false) end, 1)
 end
 
 function importLists(clickedObject, playerColor)
@@ -1344,7 +1400,7 @@ function refreshUI()
 
         buttonParam = {click_function = 'toggleLock' .. i, color = {0,0,0,1}, function_owner = self,
             position = {7.5,BUTTON_Y,z}, rotation = {0,0,0}, width = 500, height = 250, font_size = 110,}
-        if lock[selected[k]] == true then
+        if lock[selected[i]] == true then
             buttonParam.label = 'Locked'
             buttonParam.font_color = {1,0,0}
             buttonParam.tooltip = 'Allow this character to be discarded from a random selection.'

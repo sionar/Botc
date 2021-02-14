@@ -5,7 +5,7 @@ Made by Sionar
 
 
 ------------------Constants
-VERSION = '1.8.3'
+VERSION = '1.8.4'
 COLORS_RGB = {White = {1,1,1}, Brown = {113/255,59/255,23/255}, Red = {219/255,26/255,24/255}, Orange = {244/255,100/255,29/255}, Yellow = {231/255,229/255,44/255}, Green = {49/255,179/255,43/255}, Teal = {33/255,177/255,155/255}, Blue = {31/255,136/255,255/255}, Purple = {160/255,32/255,240/255}, Pink = {245/255,112/255,206/255}, Magenta = {255/255,0/255,127/255}, Lavender = {150/255,123/255,182/255}, Navy = {99/255,109/255,212/255}, Cyan = {73/255,213/255,253/255}, Mint = {137/255,195/255,129/255}, Lime = {184/255,241/255,97/255}, Peach = {241/255,212/255,162/255}, Coral = {226/255,154/255,138/255}, Maroon = {128/255,0,0}, Silver = {190/255,190/255,190/255},}
 COLORS_PREVIEW = {White = {1,1,1,0.25}, Brown = {113/255,59/255,23/255,0.25}, Red = {219/255,26/255,24/255,0.25}, Orange = {244/255,100/255,29/255,0.25}, Yellow = {231/255,229/255,44/255,0.25}, Green = {49/255,179/255,43/255,0.25}, Teal = {33/255,177/255,155/255,0.25}, Blue = {31/255,136/255,255/255,0.25}, Purple = {160/255,32/255,240/255,0.25}, Pink = {245/255,112/255,206/255,0.25}, Magenta = {255/255,0/255,127/255,0.25}, Lavender = {150/255,123/255,182/255,0.25}, Navy = {99/255,109/255,212/255,0.25}, Cyan = {73/255,213/255,253/255,0.25}, Mint = {137/255,195/255,129/255,0.25}, Lime = {184/255,241/255,97/255,0.25}, Peach = {241/255,212/255,162/255,0.25}, Coral = {226/255,154/255,138/255,0.25}, Maroon = {128/255,0,0,0.25}, Silver = {190/255,190/255,190/255,0.25},}
 
@@ -72,6 +72,14 @@ function dealToPlayers(clickedObject, playerColor)
     if playerColor ~= 'Black' and not debug then
         return
     end
+    local bagObjs = self.getObjects()
+    for k,v in pairs(bagObjs) do
+        if v.name == 'Drunk' then
+            Player['Black'].broadcast('Error: Remove the Drunk token from the bag before dealing the character tokens.', {1,0,0})
+            return
+        end
+    end
+
     local debug = Global.getVar('DEBUG')
     local tableSize = Global.getVar('tableSize')
     local colors = Global.getTable('colors')

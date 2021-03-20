@@ -57,6 +57,23 @@
         lineType="MultiLineNewLine"
         />
     <Cell dontUseTableCellBackground="true"/>
+    <HorizontalLayout
+        class="charSheetLayout"
+        allowDragging="true"
+        returnToOriginalPositionWhenReleased="false"
+        width="763"
+        height="1080"
+        spacing="-50"
+        childAlignment="MiddleCenter"
+        childForceExpandWidth="false"
+        childForceExpandHeight="false"
+        active="false"
+        />
+    <Image
+        class="charSheet"
+        preserveAspect="true"
+        height="1080"
+        />
 </Defaults>
 
 <Panel id="teamConfirmationClubs" class="panels" visibility="Clubs" active="false">
@@ -2959,90 +2976,14 @@
     </Button>
 </HorizontalLayout>
 
-<HorizontalLayout
-    id="charSheetLayoutTB"
-    allowDragging="true"
-    returnToOriginalPositionWhenReleased="false"
-    width="763"
-    height="1080"
-    spacing="-50"
-    childAlignment="MiddleCenter"
-    childForceExpandWidth="false"
-    childForceExpandHeight="false"
-    visibility="None"
-    active="false"
-    >
-    <Image
-        id="charSheetTB"
-        image="CharsTB"
-        preserveAspect="true"
-        height="1080"
-        >
-    </Image>
+<HorizontalLayout id="charSheetLayoutTB" class="charSheetLayout" visibility="None">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
 </HorizontalLayout>
 
-<HorizontalLayout
-    id="charSheetLayoutBM"
-    allowDragging="true"
-    returnToOriginalPositionWhenReleased="false"
-    width="763"
-    height="1080"
-    spacing="-50"
-    childAlignment="MiddleCenter"
-    childForceExpandWidth="false"
-    childForceExpandHeight="false"
-    visibility="None"
-    active="false"
-    >
-    <Image
-        id="charSheetBM"
-        image="CharsBM"
-        preserveAspect="true"
-        height="1080"
-        >
-    </Image>
+<HorizontalLayout id="charSheetLayoutBM" class="charSheetLayout" visibility="None">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
 </HorizontalLayout>
 
-<HorizontalLayout
-    id="charSheetLayoutSV"
-    allowDragging="true"
-    returnToOriginalPositionWhenReleased="false"
-    width="763"
-    height="1080"
-    spacing="-50"
-    childAlignment="MiddleCenter"
-    childForceExpandWidth="false"
-    childForceExpandHeight="false"
-    visibility="None"
-    active="false"
-    >
-    <Image
-        id="charSheetSV"
-        image="CharsSV"
-        preserveAspect="true"
-        height="1080"
-        >
-    </Image>
-</HorizontalLayout>
-
-<HorizontalLayout
-    id="charSheetLayoutCU"
-    allowDragging="true"
-    returnToOriginalPositionWhenReleased="false"
-    width="763"
-    height="1080"
-    spacing="-50"
-    childAlignment="MiddleCenter"
-    childForceExpandWidth="false"
-    childForceExpandHeight="false"
-    visibility="None"
-    active="false"
-    >
-    <Image
-        id="charSheetCU"
-        image="CharsCU"
-        preserveAspect="true"
-        height="1080"
-        >
-    </Image>
+<HorizontalLayout id="charSheetLayoutSV" class="charSheetLayout" visibility="None">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
 </HorizontalLayout>

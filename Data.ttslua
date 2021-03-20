@@ -482,6 +482,7 @@ CHARACTERS =
     ['Legion'] = {Type = 'Demon', Ability = false, Response = false, Prompt = '', Description = 'Each night*, a player might die. Executions fail if only evil voted. You register as a Minion too. [Most players are Legion]'},
     ['Snitch'] = {Type = 'Outsider', Ability = true, Response = false, Prompt = 'Three not-in-play characters: P1, P2, P3.', Description = 'Minions start knowing 3 not-in-play characters.'},
     ['Mephit'] = {Type = 'Minion', Ability = false, Response = false, Prompt = 'The secret word is:', Description = 'You start knowing a secret word. The 1st good player to say this word becomes evil that night.'},
+    ['Poppy Grower'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = '', Description = 'Minions & Demons do not know each other. If you die, they learn who each other are that night.'},
     ['Astrologist'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = '', Description = 'Each day, visit the Storyteller with a number between 0 & 5 to receive a clue.'},
     ['Censor'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'The censored word is:.', Description = 'You & evils start knowing a word: minions who say it lose. If you are "mad" about being the Censor or say it, you lose this ability.'},
     ['Recordkeeper'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'You learn that the P1 is not in play.', Description = 'Each night, you learn a character not in play.'},
@@ -692,6 +693,7 @@ DECAL_URLS =
     ['Po'] = 'http://cloud-3.steamusercontent.com/ugc/1770450397896854263/31FF069EBB7DCD92A27FDB363D35DAB92A112A00/',
     ['Poisoner'] = 'http://cloud-3.steamusercontent.com/ugc/1770450397896857497/B8B99724D4299C059C18989BFB2A154D1A920663/',
     ['Politician'] = 'http://cloud-3.steamusercontent.com/ugc/1504719589256046002/D3FBC9364727189EC65F485690AFCD397651FCCD/',
+    ['Poppy Grower'] = 'http://cloud-3.steamusercontent.com/ugc/1761443812501940419/3B1EEB504E1AA92B3D81B7F9593EF901ECCB4398/',
     ['Preacher'] = 'http://cloud-3.steamusercontent.com/ugc/1504719589256335843/12DCE9547F807F2C73B7EF1CDC64F976F5FC74CB/',
     ['Professor'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674427650/5C4955938EC7B2983018440B22CB5922AE20BFA8/',
     ['Pukka'] = 'http://cloud-3.steamusercontent.com/ugc/1770450397896853652/D7559E05C875899874D6EE254FC4A2E54C1240BF/',
@@ -1055,6 +1057,9 @@ REMINDER_TOKENS = {
     ['Mephit'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1771575654816736958/254B29AB7F7657093D9C8452A2B45D66C171B84D/'},
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1771575654816737382/3BCD54FDA278EF0A02DE9CA796FC87B3B20AC68E/'},
+    },
+    ['Poppy Grower'] = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1761443812501941036/A37157EF87D87D8A8B03EB05487D7E91534F858A/'},
     },
     ['Prince'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},

@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.9.1'
+VERSION = '20.10.0'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -59,6 +59,7 @@ STORYTELLER_MESSAGE =
 TABLE_OFFSET = 0
 STORYTELLER_TABLE_DIST = 129
 COLORS = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink'}
+COLORS_SEATABLE = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Black'}
 COLORS_EX = {'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_ALL = {'White', 'Brown', 'Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Pink', 'Magenta', 'Lavender', 'Navy', 'Cyan', 'Mint', 'Lime', 'Peach', 'Coral', 'Maroon', 'Silver'}
 COLORS_TYPE = {White = true, Brown = true, Red = true, Orange = true, Yellow = true, Green = true, Teal = true, Blue = true, Purple = true, Pink = true, Magenta = false, Lavender = false, Navy = false, Cyan = false, Mint = false, Lime = false, Peach = false, Coral = false, Maroon = false, Silver = false}
@@ -2853,18 +2854,6 @@ function showExtensionUI()
         UI.setAttribute('whisperUI0', 'active', 'true')
     end
     UI.setAttribute('blackWhisperUI'..tableSize + #removedColors, 'active', 'true')
-    UI.setAttribute('charSheetLayoutTB', 'active', 'false')
-    UI.setAttribute('charSheetLayoutBM', 'active', 'false')
-    UI.setAttribute('charSheetLayoutSV', 'active', 'false')
-    UI.setAttribute('charSheetLayoutCU', 'active', 'false')
-    for k,v in pairs(charSheetActive) do
-        if v == true then
-            found = true
-        end
-    end
-    if found then
-        UI.setAttribute('charSheetLayout'..mode, 'active', 'true')
-    end
     setUIVisibility()
 end
 
@@ -3324,24 +3313,14 @@ end
 
 function toggleCharSheetUI(player, value, id)
     charSheetActive[player.color] = not charSheetActive[player.color]
-    local visString = ""
-    local found = false
-    for color,state in pairs(charSheetActive) do
-        if state == true then
-            found = true
-            visString = visString .. color .. '|'
-        end
-    end
-    if found then
-        UI.setAttribute('charSheetLayout'..mode, 'active', true)
-        visString = string.sub(visString, 1, -2)
+    if charSheetActive[player.color] then
+        UI.setAttribute('charSheetLayout'..mode..player.color, 'active', true)
     else
-        UI.setAttribute('charSheetLayout'..mode, 'active', false)
+        UI.setAttribute('charSheetLayout'..'TB'..player.color, 'active', false)
+        UI.setAttribute('charSheetLayout'..'BM'..player.color, 'active', false)
+        UI.setAttribute('charSheetLayout'..'SV'..player.color, 'active', false)
+        UI.setAttribute('charSheetLayout'..'CU'..player.color, 'active', false)
     end
-    UI.setAttribute('charSheetLayoutTB','visibility',visString)
-    UI.setAttribute('charSheetLayoutBM','visibility',visString)
-    UI.setAttribute('charSheetLayoutSV','visibility',visString)
-    UI.setAttribute('charSheetLayoutCU','visibility',visString)
 end
 
 function setUIVisibility()

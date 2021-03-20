@@ -2976,14 +2976,138 @@
     </Button>
 </HorizontalLayout>
 
-<HorizontalLayout id="charSheetLayoutTB" class="charSheetLayout" visibility="None">
+<HorizontalLayout id="charSheetLayoutTBBlack" class="charSheetLayout" visibility="Black">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBWhite" class="charSheetLayout" visibility="White">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBBrown" class="charSheetLayout" visibility="Brown">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBRed" class="charSheetLayout" visibility="Red">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBOrange" class="charSheetLayout" visibility="Orange">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBYellow" class="charSheetLayout" visibility="Yellow">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBGreen" class="charSheetLayout" visibility="Green">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBTeal" class="charSheetLayout" visibility="Teal">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBBlue" class="charSheetLayout" visibility="Blue">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBPurple" class="charSheetLayout" visibility="Purple">
+    <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutTBPink" class="charSheetLayout" visibility="Pink">
     <Image id="charSheetTB" class="charSheet" image="CharsTB"></Image>
 </HorizontalLayout>
 
-<HorizontalLayout id="charSheetLayoutBM" class="charSheetLayout" visibility="None">
+<HorizontalLayout id="charSheetLayoutBMBlack" class="charSheetLayout" visibility="Black">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMWhite" class="charSheetLayout" visibility="White">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMBrown" class="charSheetLayout" visibility="Brown">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMRed" class="charSheetLayout" visibility="Red">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMOrange" class="charSheetLayout" visibility="Orange">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMYellow" class="charSheetLayout" visibility="Yellow">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMGreen" class="charSheetLayout" visibility="Green">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMTeal" class="charSheetLayout" visibility="Teal">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMBlue" class="charSheetLayout" visibility="Blue">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMPurple" class="charSheetLayout" visibility="Purple">
+    <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutBMPink" class="charSheetLayout" visibility="Pink">
     <Image id="charSheetBM" class="charSheet" image="CharsBM"></Image>
 </HorizontalLayout>
 
-<HorizontalLayout id="charSheetLayoutSV" class="charSheetLayout" visibility="None">
+<HorizontalLayout id="charSheetLayoutSVBlack" class="charSheetLayout" visibility="Black">
     <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVWhite" class="charSheetLayout" visibility="White">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVBrown" class="charSheetLayout" visibility="Brown">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVRed" class="charSheetLayout" visibility="Red">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVOrange" class="charSheetLayout" visibility="Orange">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVYellow" class="charSheetLayout" visibility="Yellow">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVGreen" class="charSheetLayout" visibility="Green">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVTeal" class="charSheetLayout" visibility="Teal">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVBlue" class="charSheetLayout" visibility="Blue">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVPurple" class="charSheetLayout" visibility="Purple">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutSVPink" class="charSheetLayout" visibility="Pink">
+    <Image id="charSheetSV" class="charSheet" image="CharsSV"></Image>
+</HorizontalLayout>
+
+<HorizontalLayout id="charSheetLayoutCUBlack" class="charSheetLayout" visibility="Black">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUWhite" class="charSheetLayout" visibility="White">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUBrown" class="charSheetLayout" visibility="Brown">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCURed" class="charSheetLayout" visibility="Red">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUOrange" class="charSheetLayout" visibility="Orange">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUYellow" class="charSheetLayout" visibility="Yellow">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUGreen" class="charSheetLayout" visibility="Green">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUTeal" class="charSheetLayout" visibility="Teal">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUBlue" class="charSheetLayout" visibility="Blue">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUPurple" class="charSheetLayout" visibility="Purple">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
+</HorizontalLayout>
+<HorizontalLayout id="charSheetLayoutCUPink" class="charSheetLayout" visibility="Pink">
+    <Image id="charSheetCU" class="charSheet" image="CharsCU"></Image>
 </HorizontalLayout>

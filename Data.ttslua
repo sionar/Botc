@@ -678,6 +678,7 @@ DECAL_URLS =
     ['Lil Monsta'] = 'http://cloud-3.steamusercontent.com/ugc/1504719589256046816/F8491B2371A26A2A55439261F36C9B2AE777D5A4/',
     ['Lunatic'] = 'http://cloud-3.steamusercontent.com/ugc/1770450397896851445/9AA6177FC76F6C8E038DED25A692E41D4E3296FB/',
     ['Lycanthrope'] = 'http://cloud-3.steamusercontent.com/ugc/1683750440225113391/3B8DA3640C7FABDE284103A7396D31E164B99320/',
+    ['Marionette'] = 'http://cloud-3.steamusercontent.com/ugc/1771579475950827863/0AAAD7E0CDE88886199434E72D031F021AAF2D07/',
     ['Mastermind'] = 'http://cloud-3.steamusercontent.com/ugc/1770450397896853109/3A4E740C238D41281BE6431EB2EF849F3F961850/',
     ['Mathematician'] = 'http://cloud-3.steamusercontent.com/ugc/776234316549503644/93F8A4E74DD96989856C01F8CE29DE66BAB99497/',
     ['Matron'] = 'http://cloud-3.steamusercontent.com/ugc/789742127007897394/B7F9B7F61703BF5FB3E5938EAD00F9DA00D954AB/',
@@ -1063,6 +1064,9 @@ REMINDER_TOKENS = {
     },
     ['Poppy Grower'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1761443812501941036/A37157EF87D87D8A8B03EB05487D7E91534F858A/'},
+    },
+    ['Marionette'] = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1771579475950849447/97AC3D684F5FD3D8D17CD7B46D7C90D94B1A14A2/'},
     },
     ['Prince'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},

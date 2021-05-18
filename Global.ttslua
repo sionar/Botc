@@ -7,7 +7,7 @@ UI code borrowed from Lost Savage and SilentxDream
 
 ------------------Constants
 MOD_NAME = 'Blood on the Clocktower'
-VERSION = '20.10.2'
+VERSION = '20.10.4'
 LANGUAGE = 'ENG'
 DEBUG = false
 START_MESSAGE = 'Blood on the Clocktower\n Version [00FF00]'  .. VERSION .. '[-]\n\n' ..
@@ -1597,7 +1597,7 @@ function onChat(message, player)
                 else
                     charOut = char
                     player.print('Your character is ' .. formattedChar .. '!')
-                    player.print(formattedChar .. ' - ' .. CHARACTERS[charOut].Description)
+                    player.print(formattedChar .. ' (' CHARACTERS[charOut].Type .. ') ' .. ' - ' .. CHARACTERS[charOut].Description)
                     return false
                 end
             end

@@ -1597,7 +1597,7 @@ function onChat(message, player)
                 else
                     charOut = char
                     player.print('Your character is ' .. formattedChar .. '!')
-                    player.print(formattedChar .. ' (' CHARACTERS[charOut].Type .. ') ' .. ' - ' .. CHARACTERS[charOut].Description)
+                    player.print(formattedChar .. ' (' .. CHARACTERS[charOut].Type .. ') ' .. ' - ' .. CHARACTERS[charOut].Description)
                     return false
                 end
             end

@@ -231,7 +231,7 @@ function setNightOrder(night)
     end
     for k1,v1 in pairs(orderRef) do
         for k2,v2 in pairs(living) do
-            if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' and v2.char ~= 'Cartographer' then
+            if v2.char == v1 and v2.char ~= 'Ravenkeeper' and v2.char ~= 'Sage' and v2.char ~= 'Barber' and v2.char ~= 'Choirboy' and v2.char ~= 'Cartographer'then
                 if v2.alive and (CHARACTERS[v2.char].Ability == false or (CHARACTERS[v2.char].Ability == true and v2.used == false)) then
                     if v2.char == 'Lunatic' and night == 'first' then
                         table.insert(order, 1, {char = 'Lunatic InfoA', color = v2.color})
@@ -249,6 +249,8 @@ function setNightOrder(night)
                                 table.insert(order, {char = 'Snitch', color = v3.color})
                             end
                         end
+                    elseif v2.char == 'King' and night == 'first' then
+                        table.insert(order, {char = 'King Info', color = demonColors[1]})
                     elseif v2.char == 'Rakshasa' and night == 'other' then
                         table.insert(order, v2)
                         table.insert(order, {char = 'Rakshasa Kill', color = v2.color})
@@ -431,7 +433,7 @@ function alive(clickedObject, playerColor, i)
     local entry = {color = living[i].color, char = living[i].char}
     living[i].alive = not living[i].alive
 
-    if not living[i].alive and (entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' or entry.char == 'Cartographer') then
+    if not living[i].alive and (entry.char == 'Ravenkeeper' or entry.char == 'Sage' or entry.char == 'Barber' or entry.char == 'King' or entry.char == 'Cartographer') then
         if orderRef ~= nil then
             orderIndex = getKey(orderRef, entry.char)
             if orderIndex == nil then
@@ -449,8 +451,21 @@ function alive(clickedObject, playerColor, i)
             end
             if entry.char == 'Barber' or entry.char == 'Cartographer' then
                 entry.color = demonColors[1]
+            elseif entry.char == 'King' then
+                entry.color = nil
+                entry.char = 'Choirboy'
+                for j, value in ipairs(living) do
+                    if value.char == 'Choirboy' and value.alive then
+                        entry.color = value.color
+                        break
+                    end
+                end
+                removeCharFromOrder(living[i].char, living[i].color)
+                orderPos = orderPos - 1
             end
-            table.insert(order, orderPos, {color = entry.color, char = entry.char})
+            if entry.color ~= nil then
+                table.insert(order, orderPos, {color = entry.color, char = entry.char})
+            end
             if entry.char == 'Ravenkeeper' then
                 table.insert(order, orderPos + 1, {color = entry.color, char = 'Ravenkeeper2'})
             end
@@ -1089,7 +1104,8 @@ function addCharToOrder(char, color)
             setMsg()
         elseif char == 'Godfather' then
             table.insert(order, 1, {char = 'Godfather Info', color = color})
-
+        elseif char == 'King' then
+            table.insert(order, 1, {char = 'King Info', color = demonColors[1]})
         elseif CHARACTERS[char].Response == true then
             table.insert(order, orderPos+1, {char = char .. '2', color = color})
         end
@@ -1107,6 +1123,13 @@ function removeCharFromOrder(char, color)
         if char == 'Lunatic' then
             for i = #order,1,-1 do
                 if string.match(order[i].char, 'Lunatic') then
+                    table.remove(order, i)
+                end
+            end
+        end
+        if char == 'King' then
+            for i = #order,1,-1 do
+                if string.match(order[i].char, 'King') or string.match(order[i].char, 'Choirboy') then
                     table.remove(order, i)
                 end
             end

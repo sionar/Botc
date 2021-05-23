@@ -174,7 +174,11 @@ function spawnSet(characters, name)
 
     for k,v in pairs(characters) do
         table.insert(chars[CHARACTERS[v].Type], v)
-        if v == 'Legion' then
+        if v == 'Farmer' then
+            for i = 1,12 do
+                table.insert(chars[CHARACTERS[v].Type], v)
+            end
+        elseif v == 'Legion' then
             for i = 1,14 do
                 table.insert(chars[CHARACTERS[v].Type], v)
             end

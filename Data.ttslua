@@ -81,6 +81,7 @@ FIRST =
         'Viceroy',
         'Conspirator',
         'Philosopher',
+        'Alchemist',
         'Rakshasa',
         'Food Taster',
         'Sailor',
@@ -365,7 +366,7 @@ CU_LIST = {
     'Washerwoman', 'Librarian', 'Investigator', 'Chef', 'Empath', 'Fortune Teller', 'Undertaker', 'Monk', 'Ravenkeeper', 'Virgin', 'Slayer', 'Soldier', 'Mayor', 'Butler', 'Drunk', 'Recluse', 'Saint', 'Poisoner', 'Spy', 'Scarlet Woman', 'Baron', 'Imp', 'Scapegoat', 'Gunslinger', 'Beggar', 'Bureaucrat', 'Thief',
     'Grandmother', 'Sailor', 'Chambermaid', 'Exorcist', 'Innkeeper', 'Gambler', 'Gossip', 'Courtier', 'Professor', 'Minstrel', 'Tea Lady', 'Pacifist', 'Fool', 'Tinker', 'Moonchild', 'Goon', 'Lunatic', 'Godfather', 'Devils Advocate', 'Assassin', 'Mastermind', 'Zombuul', 'Pukka', 'Shabaloth', 'Po', 'Apprentice', 'Matron', 'Voudon', 'Judge', 'Bishop',
     'Clockmaker', 'Dreamer', 'Snake Charmer', 'Mathematician', 'Flowergirl', 'Town Crier', 'Oracle', 'Savant', 'Seamstress', 'Philosopher', 'Artist', 'Juggler', 'Sage', 'Mutant', 'Sweetheart', 'Barber', 'Klutz', 'Evil Twin', 'Witch', 'Cerenovus', 'Pit-Hag', 'Fang Gu', 'Vigormortis', 'No Dashii', 'Vortox', 'Butcher', 'Bone Collector', 'Harlot', 'Barista', 'Deviant',
-    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta', 'Lycanthrope', 'Pixie', 'Legion', 'Snitch', 'Mezepheles', 'Poppy Grower', 'Heretic', 'Marionette', 'King', 'Choirboy', 'Farmer', 'Magician', 'Lleech', 'Boomdandy', 'Damsel', 'Huntsman', 'Noble', 'Al-Hadikhia', 'Golem', 'Fearmonger', 'Puzzlemaster', 'Gangster',
+    'Amnesiac', 'Balloonist', 'Cannibal', 'Fisherman', 'Goblin', 'Leviathan', 'Widow', 'Acrobat', 'General', 'Bounty Hunter', 'Cult Leader', 'Preacher', 'Politician', 'Lil Monsta', 'Lycanthrope', 'Pixie', 'Legion', 'Snitch', 'Mezepheles', 'Poppy Grower', 'Heretic', 'Marionette', 'King', 'Choirboy', 'Farmer', 'Magician', 'Lleech', 'Boomdandy', 'Damsel', 'Huntsman', 'Noble', 'Al-Hadikhia', 'Golem', 'Fearmonger', 'Puzzlemaster', 'Gangster', 'Alchemist',
     'Majesty', 'Prince', 'Princess', 'Queen', 'Knight', 'Cardinal', 'Rook', 'Scribe', 'Herald', 'Chamberlain', 'Cup-Bearer', 'Friar', 'Food Taster', 'Pretender', 'Pawn', 'Emissary', 'Concubine', 'Charlatan', 'Conspirator', 'Scoundrel', 'Usurper', 'Ysbaddaden', 'Draco', 'Jabberwocky', 'Morgana',
     'Astrologist', 'Cartographer', 'Censor', 'Child', 'Counterfeiter', 'Cultist', 'Cursebearer', 'Fanatic', 'Hastur', 'Lobotomizer', 'Mother', 'Pomme de Terror', 'Rakshasa', 'Recordkeeper', 'Schizophrenic', 'Turncoat', 'Xolotl',
     'Chieftain','Blasphemer','Diviner','Trapper','Shaman','Stargazer','Soothsayer','Bloodletter','Stalker','Ambusher','Warrior','Medicine Man','Reveler','Wicked','Urchin','Right Hand Man','Apiarist','Eclipse','Viceroy','Effigy','Secondhand','Retrogradus','Bogman','Sasquatch','Wendigo',
@@ -514,6 +515,7 @@ CHARACTERS =
     ['Fearmonger'] = {Type = 'Minion', Ability = false, Response = false, Prompt = 'Choose a player.', Description = 'Each night, choose a player: if you nominate & execute them, their team loses. All players know if you choose a new player.'},
     ['Puzzlemaster'] = {Type = 'Outsider', Ability = true, Response = false, Prompt = '', Description = '1 player is drunk, even if you die. If you guess (once) who it is, learn the Demon player, but guess wrong & get false info.'},
     ['Gangster'] = {Type = 'Traveler', Ability = false, Response = false, Prompt = '', Description = 'Once per day, you may choose to kill an alive neighbor, if your other alive neighbor agrees.'},
+    ['Alchemist'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'You have the ability of a P1.', Description = 'You have a not-in-play Minion ability.'},
     ['Astrologist'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = '', Description = 'Each day, visit the Storyteller with a number between 0 & 5 to receive a clue.'},
     ['Censor'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'The censored word is:.', Description = 'You & evils start knowing a word: minions who say it lose. If you are "mad" about being the Censor or say it, you lose this ability.'},
     ['Recordkeeper'] = {Type = 'Townsfolk', Ability = false, Response = false, Prompt = 'You learn that the P1 is not in play.', Description = 'Each night, you learn a character not in play.'},
@@ -632,6 +634,7 @@ PROMPTS = {
     ['King Info'] = {P1 = {type = "Color"}},
     ['Choirboy'] = {P1 = {type = "Color"}},
     ['Noble'] = {P1 = {type = "Color"}, P2 = {type = "Color"}, P3 = {type = "Color"}},
+    ['Alchemist'] = {P1 = {type = "Character", quality = "Minion"}},
     ['Recordkeeper'] = {P1 = {type = "Character", quality = "All"}},
     ['Turncoat'] = {P1 = {type = "State", quality = "Alignment"}},
     ['Princess2'] = {P1 = {type = "Color"}, P2 = {type = "Character", quality = "Good"}},
@@ -656,6 +659,7 @@ DECAL_URLS =
 {
     ['Acrobat'] = 'http://cloud-3.steamusercontent.com/ugc/1057730374545997309/BBB98400221B85ABE36B9CCA11DA866C6E593614/',
     ['Al-Hadikhia'] = 'http://cloud-3.steamusercontent.com/ugc/1638738285981847972/537781E384432DF3266823BA6C9076572FE4D292/',
+    ['Alchemist'] = 'http://cloud-3.steamusercontent.com/ugc/1773847942320331250/4845D1E94935F118F18BAEAE24A88D17B888255B/',
     ['Amnesiac'] = 'http://cloud-3.steamusercontent.com/ugc/1707413312871282884/E57A19CBD11CA5669D6959455199F8E9B6A9C55F/',
     ['Apprentice'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674448162/48ABB3342C8ED7A1D60185C2960B5A6867755B10/',
     ['Artist'] = 'http://cloud-3.steamusercontent.com/ugc/913575713674453549/907AC5B8B144F692D8A83294A5CF53B178227440/',
@@ -1138,6 +1142,9 @@ REMINDER_TOKENS = {
     ['Puzzlemaster'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1638738285982146641/221C37E2317C6BA7CFA66FA339D4952C7A8AC7C7/'},
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1638738285982146702/3EA11FB88B66C74B59D6AD4C743A321E0312BE08/'},
+    },
+    ['Alchemist'] = {
+        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1773847942320323809/6EF24128AC9BBB2639515F719DA9CF091CB1136C/'},
     },
     ['Prince'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/776234316541027627/F30FDB024714BFC77A228A7869E7CF67933A755B/'},

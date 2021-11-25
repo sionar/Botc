@@ -1066,7 +1066,7 @@ REMINDER_TOKENS = {
         {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/779613284193822264/74CDE0F1BE038B826869C66B2F0F10EBF25076D0/'},
     },
     ['Amnesiac'] = {
-        {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134466/D64FF8F31B59D3AE6ED6A11C70FD46541F08D649/'},
+        {num = 2, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134466/D64FF8F31B59D3AE6ED6A11C70FD46541F08D649/'},
     },
     ['Balloonist'] = {
         {num = 1, url = 'http://cloud-3.steamusercontent.com/ugc/1025073792546134726/46FB4F4D8B0FA5E9F5E66EF67B2DF123360F7EBA/'},

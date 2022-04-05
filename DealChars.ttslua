@@ -80,6 +80,9 @@ function dealToPlayers(clickedObject, playerColor)
         elseif v.name == 'Marionette' then
             Player['Black'].broadcast('Error: Remove the Marionette token from the bag before dealing the character tokens.', {1,0,0})
             return
+        elseif v.name == 'Patient Zero' then
+            Player['Black'].broadcast('Error: Remove the Patient Zero token from the bag before dealing the character tokens.', {1,0,0})
+            return
         end
     end
 

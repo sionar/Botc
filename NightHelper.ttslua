@@ -964,6 +964,9 @@ function modifyPrompts(character)
                 elseif PROMPTS[character][promptKey].quality == 'Do' then
                     insertOption(dropdown.children, "do")
                     insertOption(dropdown.children, "do not")
+                elseif PROMPTS[character][promptKey].quality == 'Clockwise' then
+                    insertOption(dropdown.children, "clockwise")
+                    insertOption(dropdown.children, "anti-clockwise")
                 end
             end
         else
